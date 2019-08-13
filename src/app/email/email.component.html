@@ -1,0 +1,44 @@
+<div class="jumbotron jumbotron-fluid mb-0 bg-primary text-white">
+    <div class="container">
+        <h2 class="h4">
+            <!-- <img src="./assets/images/at-solid.svg" height="40rem" width="40rem"> -->
+            Email Enquiry
+        </h2>
+        <form class="row mt-3">
+            <div class="col-md-6 col-sm-12">
+                <label for="mesage">your message</label>
+                <textarea class="form-control" id="message" rows="9" placeholder="Required example textarea"
+                    required></textarea>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <label for="validationCustom01">purpose of enquiry</label>
+                <select class="form-control" id="validationCustom01">
+                    <option>Information Enquiry</option>
+                    <option>Collaboration</option>
+                    <option>Commission Work</option>
+                    <option>Event Attendance</option>
+                    <option>Tutoring</option>
+                </select>
+                <label for="validationCustom02">a bit about yourself</label>
+                <select class="form-control" id="validationCustom02">
+                    <option>Manager / representative</option>
+                    <option>Business Owner</option>
+                    <option>Fellow Musician</option>
+                    <option>Creative Individual</option>
+                    <option>Others</option>
+                </select>
+                <label for="validationCustom03">your email</label>
+                <input class="form-control" type="email" id="validationCustom03" placeholder="your@email.com...">
+
+                <button class="btn btn-secondary mt-2 shadow" (click)="changeSuccessMessage()">Submit form</button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="position: fixed; top: 5px; left: 0; width: 100%; z-index: 3; margin: auto; text-align: center;">
+    <ngb-alert *ngIf="successMessage" type="info" (close)="successMessage = null">
+        {{ successMessage }}
+    </ngb-alert>
+</div>

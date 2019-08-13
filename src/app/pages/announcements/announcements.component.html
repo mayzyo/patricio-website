@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 50vh;">
+        <div class="col-8">
+            <blockquote class="blockquote text-right">
+                <h1 class="mb-3 text-white h3">"Quote that makes you ponder about the meaning of life."</h1>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+<div class="banner-background"></div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-lg-9 col-md-12" [@fadeIn]>
+
+            <h2 class="h4 mb-5">Latest Announcements</h2>
+
+            <div class="tester" *ngFor="let announcement of latest$ | async">
+                <div class="media my-3">
+
+                    <img *ngIf="announcement.type != 'Event'" src="./assets/images/bullhorn-solid.svg" class="mr-3"
+                        height="60px" width="60px">
+
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1" [ngClass]="announcement.type == 'Event' && 'd-none d-md-block'">
+                            {{ announcement.title }}
+                        </h5>
+                        {{ announcement.description }}
+                    </div>
+
+                    <img *ngIf="announcement.type == 'Event'" src="{{ announcement.img }}" class="ml-3 border border-dark"
+                        height="60px" width="180px" style="object-fit: cover;">
+
+                </div>
+
+                <hr />
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-12">
+
+            <h2 class="display-4 mb-5 ml-4">History</h2>
+
+            <ul class="history-list">
+                <li class="history-item">Cras justo odio</li>
+                <li class="history-item">Dapibus ac facilisis in</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<app-email></app-email>

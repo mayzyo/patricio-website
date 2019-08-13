@@ -1,0 +1,30 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 50vh;">
+        <div class="col-8">
+            <blockquote class="blockquote text-right">
+                <h1 class="mb-3 text-white h3">"Quote that makes you ponder about the meaning of life."</h1>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+<div class="banner-background"></div>
+
+<div class="container" [@fadeIn]>
+    <div class="row mb-5">
+
+        <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let work of workList$ | async">
+            <div class="card bg-dark text-white w-100" style="height: 15rem;">
+                <img src="{{ work.img }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ work.title }}</h5>
+                    <p class="card-text">{{ work.subtitle }}</p>
+                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<app-email></app-email>

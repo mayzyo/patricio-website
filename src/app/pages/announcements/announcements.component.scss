@@ -1,0 +1,23 @@
+@import "../../../styles.scss";
+
+.banner-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 50vh;
+    width: 100%;
+    z-index: -1;
+
+    background: url('../../../assets/images/bg-1.jpg');
+    background-size: cover;
+    // filter:blur(5px);
+}
+
+.history-list {
+    list-style: none;
+}
+
+.history-item {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

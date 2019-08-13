@@ -1,0 +1,128 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+        <div class="col-auto">
+            <blockquote class="blockquote text-right">
+                <h1 class="mb-3 text-white display-4">"Beer is a gift to humanity"</h1>
+                <footer class="blockquote-footer">Kaze Patricio Chan</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+<a class="landing-slide" (click)="scrolldown()">
+    <div class="d-block text-white">Blogs & Events</div>
+    <img src="./assets/images/arrow-down-solid.svg" height="24px" width="24px">
+</a>
+
+<div class="landing-background"></div>
+
+<div class="jumbotron mb-0">
+    <div class="container">
+
+        <h2 #blogSection>Latest Blogs</h2>
+
+        <div class="row my-3" *ngIf="(postsXL$ | async) as firstPost" [@fadeInBlog]="loadBlog">
+            <!-- One large block -->
+            <div class="col-md-8 col-sm-12 p-3" *ngIf="firstPost">
+                <a class="card bg-dark text-white w-100 card-big" style="height:20rem;" routerLink="/blogs"
+                    [@fadeObjBlog]="loadBlog">
+                    <img src="{{ firstPost.img }}" class="card-img">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">{{ firstPost.title }}</h5>
+                        <p class="card-text">{{ firstPost.brief }}</p>
+                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                    </div>
+                </a>
+            </div>
+
+            <!-- Second large block -->
+            <div class="col-md-4 col-sm-12 p-3" *ngIf="(postsL$ | async) as post">
+                <a class="card bg-dark text-white w-100 card-big" style="height: 20rem;" routerLink="/blogs"
+                    [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.img }}" class="card-img">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.brief }}</p>
+                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                    </div>
+                </a>
+            </div>
+
+            <!-- Medium sized blocks -->
+            <div class="col-md-4 col-sm-12 p-3" *ngFor="let post of postsM$ | async">
+                <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;" routerLink="/blogs"
+                    [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.img }}" class="card-img">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.brief }}</p>
+                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                    </div>
+                </a>
+            </div>
+
+            <!-- Small blocks, all remaining -->
+            <div class="col-md-3 col-sm-6 p-3" *ngFor="let post of postsS$ | async">
+                <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;" routerLink="/blogs"
+                    [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.img }}" class="card-img">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.brief }}</p>
+                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <hr #eventSection />
+
+        <div [@fadeInEvent]="loadEvent">
+            <h2 class="text-center w-100 lead">Upcoming Events</h2>
+
+            <div class="tester" *ngFor="let event of events$ | async">
+                <a class="media my-5" routerLink="/announcements" [@fadeObjEvent]="loadEvent">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1 d-none d-md-block">
+                            {{ event.title }}
+                        </h5>
+                        {{ event.description }}
+                    </div>
+                    <img src="{{ event.img }}" class="ml-3 border border-dark" height="60px" width="180px"
+                        style="object-fit: cover;">
+                </a>
+
+                <hr />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div #bioSection class="jumbotron jumbotron-fluid mb-0 bg-dark text-white">
+    <div class="container px-3" [@fadeInBio]="loadBio">
+
+        <h2 class="h3 mb-4">
+            <img src="./assets/images/portrait-solid.svg" height="40rem" width="40rem">
+            Biography
+        </h2>
+
+        <div class="row mx-n3">
+
+            <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBio]="loadBio">
+                Lorem ipsum dolor sit amet consectetur adipiscing elit, duis integer nostra augue eleifend primis
+                facilisis, aptent nibh felis scelerisque dis libero. Euismod eros est feugiat aliquet interdum fermentum
+                mauris mollis imperdiet integer potenti,
+            </p>
+
+            <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBio]="loadBio">
+                viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate cras
+                cursus parturient platea fusce. Mollis sem metus mi mauris fames neque himenaeos dictumst, imperdiet
+                arcu erat vehicula litora ullamcorper senectus, aliquet donec augue congue condimentum accumsan vitae.
+            </p>
+        </div>
+    </div>
+</div>
+
+<app-email></app-email>
