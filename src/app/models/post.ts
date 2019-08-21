@@ -1,14 +1,7 @@
-
-export interface PostPreview extends PostBase {
-    img: any;
-    brief?: string;
-}
-
-export interface PostInfo extends PostBase {
-    article: string;
-}
-
-interface PostBase {
-    title: string;
-    createDate: Date;
-}
+﻿
+    export interface Post { 
+        title: string;
+        thumbnail: string;
+        document: string;
+        create_date: Date;
+    }

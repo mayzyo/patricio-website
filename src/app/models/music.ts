@@ -1,8 +1,8 @@
-
-export interface Music {
-    title: string;
-    img: any;
-    url: string;
-    createDate: Date;
-    subtitle?: string;
-}
+﻿
+    export interface Music { 
+        title: string;
+        genre: string;
+        create_date: Date;
+        link: string;
+        image: string;
+    }
