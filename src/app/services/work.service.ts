@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { Music } from '../models/music';
+import { MusicLegacy } from '../models/music-legacy';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkService {
 
-  collection$ = of<Music[]>([
+  collection$ = of<MusicLegacy[]>([
     {
       img: `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`,
       title: 'Music Piece A',

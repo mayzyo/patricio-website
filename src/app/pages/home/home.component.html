@@ -1,9 +1,11 @@
 <div class="container-fluid">
     <div class="row justify-content-center align-items-center" style="height: 100vh;">
         <div class="col-auto">
-            <blockquote class="blockquote text-right">
-                <h1 class="mb-3 text-white display-4">"Beer is a gift to humanity"</h1>
-                <footer class="blockquote-footer">Kaze Patricio Chan</footer>
+            <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+                <h1 class="mb-3 text-white display-4">"{{ quote.text }}"</h1>
+                <footer class="blockquote-footer" *ngIf="quote.author">
+                    {{ quote.author }}
+                </footer>
             </blockquote>
         </div>
     </div>
@@ -108,18 +110,14 @@
             Biography
         </h2>
 
-        <div class="row mx-n3">
+        <div class="row mx-n3" *ngIf="(biography$ | async) as biography">
 
             <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBio]="loadBio">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit, duis integer nostra augue eleifend primis
-                facilisis, aptent nibh felis scelerisque dis libero. Euismod eros est feugiat aliquet interdum fermentum
-                mauris mollis imperdiet integer potenti,
+                {{ biography | column : 1 : 2 }}
             </p>
 
             <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBio]="loadBio">
-                viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate cras
-                cursus parturient platea fusce. Mollis sem metus mi mauris fames neque himenaeos dictumst, imperdiet
-                arcu erat vehicula litora ullamcorper senectus, aliquet donec augue congue condimentum accumsan vitae.
+                {{ biography | column : 2 : 2 }}
             </p>
         </div>
     </div>

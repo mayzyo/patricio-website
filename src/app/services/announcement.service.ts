@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { EventAnnouncement, Announcement } from '../models/announcement';
+import { EventAnnouncement, AnnouncementLegacy } from '../models/announcement-legacy';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnnouncementService {
 
-  collection$ = of<Announcement[]>([
+  collection$ = of<AnnouncementLegacy[]>([
     {
       title: 'I am going to Japan',
       description: 'viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate cras',

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PostPreview } from '../models/post';
+import { PostPreview } from '../models/post-legacy';
 import { of } from 'rxjs';
 
 @Injectable({

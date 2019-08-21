@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +14,7 @@ import { AnnouncementsComponent } from './pages/announcements/announcements.comp
 import { WorksComponent } from './pages/works/works.component';
 import { BlogsComponent } from './pages/blogs/blogs.component';
 import { MediaComponent } from './pages/media/media.component';
+import { ColumnPipe } from './utils/column.pipe';
 
 @NgModule({
   declarations: [
@@ -24,10 +26,12 @@ import { MediaComponent } from './pages/media/media.component';
     AnnouncementsComponent,
     WorksComponent,
     BlogsComponent,
-    MediaComponent
+    MediaComponent,
+    ColumnPipe
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     NgbModule,
     AppRoutingModule

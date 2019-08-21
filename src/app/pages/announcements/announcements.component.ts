@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AnnouncementService } from 'src/app/services/announcement.service';
 import { trigger } from '@angular/animations';
 import { fadeIn } from 'src/app/animations/fade-in';
+import { ContentService } from 'src/app/services/content.service';
 
 @Component({
   selector: 'app-announcements',
@@ -14,8 +15,9 @@ import { fadeIn } from 'src/app/animations/fade-in';
 export class AnnouncementsComponent implements OnInit {
 
   latest$ = this.announcements.collection$;
+  readonly quote$ = this.contents.randomQuote$;
 
-  constructor(private announcements: AnnouncementService) { }
+  constructor(private announcements: AnnouncementService, private contents: ContentService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);

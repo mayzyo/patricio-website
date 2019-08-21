@@ -4,6 +4,7 @@ import { pluck, map } from 'rxjs/operators';
 import { AnnouncementService } from 'src/app/services/announcement.service';
 import { fadeIn, fadeObject } from 'src/app/animations/fade-in';
 import { trigger } from '@angular/animations';
+import { ContentService } from 'src/app/services/content.service';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +42,10 @@ export class HomeComponent implements OnInit {
   loadEvent = false;
   loadBio = false;
 
-  constructor(private blogs: BlogService, private announcements: AnnouncementService) { }
+  readonly biography$ = this.contents.biography$;
+  readonly quote$ = this.contents.homeQuote$;
+
+  constructor(private blogs: BlogService, private announcements: AnnouncementService, private contents: ContentService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);
@@ -51,7 +55,6 @@ export class HomeComponent implements OnInit {
   onScrollEvent($event) {
 
     if(window.scrollY >= this.blogSection.nativeElement.offsetTop - (window.innerHeight / 1.35)) {
-      console.log('triggered')
       this.loadBlog = true;
     }
 
