@@ -10,11 +10,16 @@
 
     background: url('../../../assets/images/bg-1.jpg');
     background-size: cover;
-    // filter:blur(5px);
 }
 
 .history-list {
     list-style: none;
+    height: 14rem;
+    overflow-y: hidden;
+}
+
+.history-list:hover {
+    overflow-y: scroll;
 }
 
 .history-item {

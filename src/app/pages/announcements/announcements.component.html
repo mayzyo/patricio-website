@@ -15,7 +15,8 @@
 
 <div class="container">
     <div class="row mb-5">
-        <div class="col-lg-9 col-md-12" [@fadeIn]>
+        <!-- <div class="col-lg-9 col-md-12" [@fadeIn]> -->
+            <div class="col-lg-9 col-md-12">
 
             <h2 class="h4 mb-5">Latest Announcements</h2>
 
@@ -45,10 +46,22 @@
 
             <h2 class="display-4 mb-5 ml-4">History</h2>
 
-            <ul class="history-list">
+            <ul
+            class="history-list"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            [scrollWindow]="false"
+            (scrolled)="onScroll()"
+            >
+                <li class="history-item" *ngFor="let announcement of history$ | async">
+                    {{ announcement.title }}
+                </li>
+            </ul>
+            <!-- <ul class="history-list">
                 <li class="history-item">Cras justo odio</li>
                 <li class="history-item">Dapibus ac facilisis in</li>
-            </ul>
+            </ul> -->
 
         </div>
 
