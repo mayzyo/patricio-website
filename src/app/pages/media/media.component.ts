@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ImageService } from 'src/app/services/image.service';
 import { trigger } from '@angular/animations';
 import { fadeIn } from 'src/app/animations/fade-in';
+import { ContentService } from 'src/app/services/content.service';
+import { ImageService } from 'src/app/services/image.service';
+import { Moment } from 'src/app/models/Moment';
+import { switchMap, scan, tap, map } from 'rxjs/operators';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-media',
@@ -14,18 +18,32 @@ import { fadeIn } from 'src/app/animations/fade-in';
 })
 export class MediaComponent implements OnInit {
 
-  thumbnails$ = this.images.galleryThumbnails$;
-  currentImg: string;
+  readonly momentList$ = this.contents.momentPreview$.pipe(
+    switchMap(res => 
+      merge(...res.slice(0, 10).map(el => 
+        this.images.imageBypass(el.image).pipe(
+          map(x => {
+            el.thumbnail = x;
+            return el;
+          })
+        )
+      ))
+    ),
+    scan((acc, cur:Moment) => acc.concat(cur), new Array<Moment>())
+  );
+
+  current: Moment;
   closeResult: string;
 
-  constructor(private modals: NgbModal, private images: ImageService) { }
+  constructor(private modals: NgbModal, private contents: ContentService, private images: ImageService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);
   }
 
-  async open(content, img) {
-    this.currentImg = img;
+  async open(content:any, moment: Moment) {
+    this.current = moment;
+
     try {
       const result = await this.modals.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'xl' }).result
       this.closeResult = `Closed with: ${result}`;

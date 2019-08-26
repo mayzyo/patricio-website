@@ -20,9 +20,9 @@
         <hr />
 
         <div class="row m-n1 justify-content-center" [@fadeIn]>
-            <a class="col-lg-2 col-md-3 col-sm-6 p-1 thumbnail" (click)="open(content, thumbnail.img)"
-                *ngFor="let thumbnail of thumbnails$ | async">
-                <img src="{{ thumbnail.img }}" class="thumbnail-img">
+            <a class="col-lg-2 col-md-3 col-sm-6 p-1 thumbnail" (click)="open(content, moment)"
+                *ngFor="let moment of momentList$ | async">
+                <img src="{{ moment.thumbnail }}" class="thumbnail-img">
             </a>
         </div>
 
@@ -33,7 +33,7 @@
     <a aria-label="Close" (click)="modal.dismiss('Cross click')" class="modal-close">
         <span aria-hidden="true">&times;</span>
     </a>
-    <img src="{{ currentImg }}" class="img-fluid">
+    <img src="{{ current.thumbnail }}" class="img-fluid">
     <!-- <ngb-carousel *ngIf="images">
         <ng-template ngbSlide>
             <div class="picsum-img-wrapper">

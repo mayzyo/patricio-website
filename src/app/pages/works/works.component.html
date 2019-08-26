@@ -13,13 +13,13 @@
 <div class="container" [@fadeIn]>
     <div class="row mb-5">
 
-        <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let work of workList$ | async">
+        <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of workList$ | async">
             <div class="card bg-dark text-white w-100" style="height: 15rem;">
-                <img src="{{ work.img }}" class="card-img">
+                <img src="{{ music.image }}" class="card-img">
                 <div class="card-img-overlay">
-                    <h5 class="card-title">{{ work.title }}</h5>
-                    <p class="card-text">{{ work.subtitle }}</p>
-                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                    <h5 class="card-title">{{ music.title }}</h5>
+                    <p class="card-text">{{ music.genre }}</p>
+                    <!-- <p class="card-text">{{ music.create_date }}</p> -->
                 </div>
             </div>
         </div>

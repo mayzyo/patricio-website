@@ -1,7 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { BlogService } from 'src/app/services/blog.service';
-import { pluck, map } from 'rxjs/operators';
-import { AnnouncementService } from 'src/app/services/announcement.service';
+import { pluck, map, share } from 'rxjs/operators';
 import { fadeIn, fadeObject } from 'src/app/animations/fade-in';
 import { trigger } from '@angular/animations';
 import { ContentService } from 'src/app/services/content.service';
@@ -31,21 +29,27 @@ export class HomeComponent implements OnInit {
   @ViewChild('eventSection', { static:true }) eventSection: ElementRef;
   @ViewChild('bioSection', { static:true }) bioSection: ElementRef;
 
-  postsXL$ = this.blogs.latest$.pipe(pluck('0'));
-  postsL$ = this.blogs.latest$.pipe(pluck('1'));
-  postsM$ = this.blogs.latest$.pipe(map(res => [...res].splice(2, 3)));
-  postsS$ = this.blogs.latest$.pipe(map(res => [...res].splice(5, res.length - 5)));
+  readonly blog$ = this.contents.blogPreview('1', '13').pipe(
+    map(res =>  res.map(el => {
+      !el.thumbnail && (el.thumbnail = `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`);
+      return el;
+    })),
+    share()
+  );
+  readonly events$ = this.contents.eventAnnouncement('1', '4');
+  readonly biography$ = this.contents.biography$;
+  readonly quote$ = this.contents.homeQuote$;
 
-  events$ = this.announcements.latestEvents$;
+  postsXL$ = this.blog$.pipe(pluck('0'));
+  postsL$ = this.blog$.pipe(pluck('1'));
+  postsM$ = this.blog$.pipe(map(res => [...res].splice(2, 3)));
+  postsS$ = this.blog$.pipe(map(res => [...res].splice(5, res.length - 5)));
 
   loadBlog = false;
   loadEvent = false;
   loadBio = false;
 
-  readonly biography$ = this.contents.biography$;
-  readonly quote$ = this.contents.homeQuote$;
-
-  constructor(private blogs: BlogService, private announcements: AnnouncementService, private contents: ContentService) { }
+  constructor(private contents: ContentService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);

@@ -1,5 +1,11 @@
 .history-list {
     list-style: none;
+    height: 14rem;
+    overflow-y: hidden;
+}
+
+.history-list:hover {
+    overflow-y: scroll;
 }
 
 .history-item {

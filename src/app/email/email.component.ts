@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
+import { Email, Sender, Purpose } from '../models/Email';
 
 @Component({
   selector: 'app-email',
@@ -11,6 +12,14 @@ export class EmailComponent implements OnInit, OnDestroy {
   private _success = new Subject<string>();
   private subscription = new Subscription();
   successMessage: string;
+
+  submitted = false;
+  model: Email = {
+    message: '',
+    sender: '',
+    senderType: Sender.OTHER,
+    purpose: Purpose.OTHER
+  };
 
   constructor() { }
 
@@ -24,6 +33,8 @@ export class EmailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+  onSubmit() { this.submitted = true; }
 
   public changeSuccessMessage() {
     this._success.next(`Thanks for your enquiry, I'll get back to you soon`);

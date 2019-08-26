@@ -32,56 +32,9 @@
 
             </div>
 
-            <div class="card w-100 my-3">
+            <div class="card w-100 my-3" *ngIf="(current$ | async) as current">
                 <div class="card-body">
-
-                    <h2 class="h3 mx-3 my-4">Lorem ipsum !</h2>
-
-                    <p class="card-text mx-3">
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit, duis integer nostra augue eleifend
-                        primis
-                        facilisis, aptent nibh felis scelerisque dis libero. Euismod eros est feugiat aliquet interdum
-                        fermentum
-                        mauris mollis imperdiet integer potenti,
-                    </p>
-                    <p class="card-text mx-3">
-                        viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate
-                        cras
-                        cursus parturient platea fusce. Mollis sem metus mi mauris fames neque himenaeos dictumst,
-                        imperdiet
-                        arcu erat vehicula litora ullamcorper senectus, aliquet donec augue congue condimentum accumsan
-                        vitae.
-                    </p>
-                    <p class="card-text mx-3">
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit, duis integer nostra augue eleifend
-                        primis
-                        facilisis, aptent nibh felis scelerisque dis libero. Euismod eros est feugiat aliquet interdum
-                        fermentum
-                        mauris mollis imperdiet integer potenti,
-                    </p>
-                    <p class="card-text mx-3">
-                        viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate
-                        cras
-                        cursus parturient platea fusce. Mollis sem metus mi mauris fames neque himenaeos dictumst,
-                        imperdiet
-                        arcu erat vehicula litora ullamcorper senectus, aliquet donec augue congue condimentum accumsan
-                        vitae.
-                    </p>
-                    <p class="card-text mx-3">
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit, duis integer nostra augue eleifend
-                        primis
-                        facilisis, aptent nibh felis scelerisque dis libero. Euismod eros est feugiat aliquet interdum
-                        fermentum
-                        mauris mollis imperdiet integer potenti,
-                    </p>
-                    <p class="card-text mx-3">
-                        viverra ad cubilia arcu velit iaculis hac primis nam suscipit, lacinia et nascetur dui vulputate
-                        cras
-                        cursus parturient platea fusce. Mollis sem metus mi mauris fames neque himenaeos dictumst,
-                        imperdiet
-                        arcu erat vehicula litora ullamcorper senectus, aliquet donec augue congue condimentum accumsan
-                        vitae.
-                    </p>
+                    <div class="mx-3" [innerHTML]="current"></div>
                 </div>
             </div>
 
@@ -91,13 +44,17 @@
 
             <h2 class="h4 ml-4">Past Posts</h2>
 
-            <ul class="history-list">
-                <li class="history-item">Cras justo odio</li>
-                <li class="history-item">Dapibus ac facilisis in</li>
-                <li class="history-item">Cras justo odio</li>
-                <li class="history-item">Dapibus ac facilisis in</li>
-                <li class="history-item">Cras justo odio</li>
-                <li class="history-item">Dapibus ac facilisis in</li>
+            <ul
+            class="history-list"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            [scrollWindow]="false"
+            (scrolled)="onScroll()"
+            >
+                <li class="history-item" *ngFor="let post of history$ | async">
+                    <a (click)="postArticle(post)">{{ post.title }}</a>               
+                </li>
             </ul>
 
         </div>

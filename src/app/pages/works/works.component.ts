@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkService } from 'src/app/services/work.service';
 import { trigger } from '@angular/animations';
 import { fadeIn } from 'src/app/animations/fade-in';
+import { ContentService } from 'src/app/services/content.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-works',
@@ -13,9 +14,14 @@ import { fadeIn } from 'src/app/animations/fade-in';
 })
 export class WorksComponent implements OnInit {
 
-  workList$ = this.works.collection$;
+  readonly workList$ = this.contents.workList$.pipe(
+    map(res =>  res.map(el => {
+      !el.image && (el.image = `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`);
+      return el;
+    }))
+  );
 
-  constructor(private works: WorkService) { }
+  constructor(private contents: ContentService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);

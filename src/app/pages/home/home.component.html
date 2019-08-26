@@ -26,9 +26,9 @@
         <div class="row my-3" *ngIf="(postsXL$ | async) as firstPost" [@fadeInBlog]="loadBlog">
             <!-- One large block -->
             <div class="col-md-8 col-sm-12 p-3" *ngIf="firstPost">
-                <a class="card bg-dark text-white w-100 card-big" style="height:20rem;" routerLink="/blogs"
-                    [@fadeObjBlog]="loadBlog">
-                    <img src="{{ firstPost.img }}" class="card-img">
+                <a class="card bg-dark text-white w-100 card-big" style="height:20rem;" 
+                [routerLink]="['/blogs', firstPost.title]" [@fadeObjBlog]="loadBlog">
+                    <img src="{{ firstPost.thumbnail }}" class="card-img">
                     <div class="card-img-overlay">
                         <h5 class="card-title">{{ firstPost.title }}</h5>
                         <p class="card-text">{{ firstPost.brief }}</p>
@@ -39,9 +39,8 @@
 
             <!-- Second large block -->
             <div class="col-md-4 col-sm-12 p-3" *ngIf="(postsL$ | async) as post">
-                <a class="card bg-dark text-white w-100 card-big" style="height: 20rem;" routerLink="/blogs"
-                    [@fadeObjBlog]="loadBlog">
-                    <img src="{{ post.img }}" class="card-img">
+                <a class="card bg-dark text-white w-100 card-big" style="height: 20rem;" [routerLink]="['/blogs', post.title]" [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.thumbnail }}" class="card-img">
                     <div class="card-img-overlay">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text">{{ post.brief }}</p>
@@ -52,9 +51,8 @@
 
             <!-- Medium sized blocks -->
             <div class="col-md-4 col-sm-12 p-3" *ngFor="let post of postsM$ | async">
-                <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;" routerLink="/blogs"
-                    [@fadeObjBlog]="loadBlog">
-                    <img src="{{ post.img }}" class="card-img">
+                <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;" [routerLink]="['/blogs', post.title]" [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.thumbnail }}" class="card-img">
                     <div class="card-img-overlay">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text">{{ post.brief }}</p>
@@ -65,9 +63,8 @@
 
             <!-- Small blocks, all remaining -->
             <div class="col-md-3 col-sm-6 p-3" *ngFor="let post of postsS$ | async">
-                <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;" routerLink="/blogs"
-                    [@fadeObjBlog]="loadBlog">
-                    <img src="{{ post.img }}" class="card-img">
+                <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;" [routerLink]="['/blogs', post.title]" [@fadeObjBlog]="loadBlog">
+                    <img src="{{ post.thumbnail }}" class="card-img">
                     <div class="card-img-overlay">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text">{{ post.brief }}</p>
@@ -84,16 +81,18 @@
             <h2 class="text-center w-100 lead">Upcoming Events</h2>
 
             <div class="tester" *ngFor="let event of events$ | async">
-                <a class="media my-5" routerLink="/announcements" [@fadeObjEvent]="loadEvent">
+                <div class="media my-5"  [@fadeObjEvent]="loadEvent">
                     <div class="media-body">
                         <h5 class="mt-0 mb-1 d-none d-md-block">
                             {{ event.title }}
                         </h5>
-                        {{ event.description }}
+                        {{ event.brief }}
                     </div>
-                    <img src="{{ event.img }}" class="ml-3 border border-dark" height="60px" width="180px"
-                        style="object-fit: cover;">
-                </a>
+                    <a href="{{ event.link }}">
+                        <img src="{{ event.image }}" class="ml-3 border border-dark" height="60px" width="180px"
+                            style="object-fit: cover;">
+                    </a>
+                </div>
 
                 <hr />
             </div>

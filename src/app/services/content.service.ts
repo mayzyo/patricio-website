@@ -6,11 +6,23 @@ import { Profile } from '../models/Profile';
 import { Quote } from '../models/Quote';
 import { Post } from '../models/Post';
 import { Announcement } from '../models/Announcement';
+import { Music } from '../models/Music';
+import { Moment } from '../models/Moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentService {
+
+  readonly workList$ = this.http.get<Music[]>('/api/work').pipe(
+    shareReplay(1)
+  );
+  readonly momentPreview$ = this.http.get<Moment[]>(
+    '/api/image/moments', 
+    { params: { page: '1', size: '100' } }
+  ).pipe(
+    shareReplay(1)
+  );
 
   private readonly profile$ = this.http.get<Profile>('/api/profile').pipe(
     shareReplay(1)
@@ -52,10 +64,10 @@ export class ContentService {
     return this.http.get<Post[]>('/api/blog/latest', { params: { page, size } });
   }
 
-  blogArticle(post: Post): Observable<string> {
-    return this.http.get<string>(
+  blogArticle(post: { title: string }): Observable<string> {
+    return this.http.get(
       '/api/blog/article', 
-      { params: { title: post.document } }
+      { params: { title: post.title }, responseType: 'text' },
     );
   }
 

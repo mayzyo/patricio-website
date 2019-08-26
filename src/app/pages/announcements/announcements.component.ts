@@ -40,7 +40,7 @@ export class AnnouncementsComponent implements OnInit {
   }
 
   private setupPagination(update$: Subject<void>) {
-    return merge(of(14), update$).pipe(
+    return merge(of(null), update$).pipe(
       scan(acc => acc + 1, 0), 
       switchMap(res => this.contents.announcement(res.toString(), '10')),
       scan((acc, cur) => acc.concat(cur), new Array<Announcement>()),

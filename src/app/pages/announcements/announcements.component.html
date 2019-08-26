@@ -23,17 +23,17 @@
             <div class="tester" *ngFor="let announcement of latest$ | async">
                 <div class="media my-3">
 
-                    <img *ngIf="announcement.type != 'Event'" src="./assets/images/bullhorn-solid.svg" class="mr-3"
+                    <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3"
                         height="60px" width="60px">
 
                     <div class="media-body">
-                        <h5 class="mt-0 mb-1" [ngClass]="announcement.type == 'Event' && 'd-none d-md-block'">
+                        <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">
                             {{ announcement.title }}
                         </h5>
-                        {{ announcement.description }}
+                        {{ announcement.brief }}
                     </div>
 
-                    <img *ngIf="announcement.type == 'Event'" src="{{ announcement.img }}" class="ml-3 border border-dark"
+                    <img *ngIf="announcement.link" src="{{ announcement.image }}" class="ml-3 border border-dark"
                         height="60px" width="180px" style="object-fit: cover;">
 
                 </div>
@@ -58,10 +58,6 @@
                     {{ announcement.title }}
                 </li>
             </ul>
-            <!-- <ul class="history-list">
-                <li class="history-item">Cras justo odio</li>
-                <li class="history-item">Dapibus ac facilisis in</li>
-            </ul> -->
 
         </div>
 

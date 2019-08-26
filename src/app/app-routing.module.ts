@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'announcements', component: AnnouncementsComponent },
   { path: 'works', component: WorksComponent },
   { path: 'blogs', component: BlogsComponent },
+  { path: 'blogs/:title', component: BlogsComponent },
   { path: 'media', component: MediaComponent },
   { path: '',
     redirectTo: '/home',
