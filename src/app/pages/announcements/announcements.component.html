@@ -13,54 +13,52 @@
 
 <div class="banner-background"></div>
 
-<div class="container">
+<div class="container" style="min-height: 200px">
     <div class="row mb-5">
-        <!-- <div class="col-lg-9 col-md-12" [@fadeIn]> -->
-            <div class="col-lg-9 col-md-12">
 
+        <div class="col-lg-9 col-md-12">
             <h2 class="h4 mb-5">Latest Announcements</h2>
+            <div *ngIf="(latest$ | async) as latest" [@fadeIn]>
+                <ng-container *ngFor="let announcement of latest">
+                    <div class="media my-3">
 
-            <div class="tester" *ngFor="let announcement of latest$ | async">
-                <div class="media my-3">
+                        <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3"
+                            height="60px" width="60px">
 
-                    <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3"
-                        height="60px" width="60px">
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">
+                                {{ announcement.title }}
+                            </h5>
+                            {{ announcement.brief }}
+                        </div>
 
-                    <div class="media-body">
-                        <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">
-                            {{ announcement.title }}
-                        </h5>
-                        {{ announcement.brief }}
+                        <img *ngIf="announcement.link" src="{{ announcement.image }}" class="ml-3 border border-dark"
+                            height="60px" width="180px" style="object-fit: cover;">
+
                     </div>
 
-                    <img *ngIf="announcement.link" src="{{ announcement.image }}" class="ml-3 border border-dark"
-                        height="60px" width="180px" style="object-fit: cover;">
-
-                </div>
-
-                <hr />
+                    <hr />
+                </ng-container>
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-12">
-
-            <h2 class="display-4 mb-5 ml-4">History</h2>
-
-            <ul
-            class="history-list"
-            infiniteScroll
-            [infiniteScrollDistance]="2"
-            [infiniteScrollThrottle]="50"
-            [scrollWindow]="false"
-            (scrolled)="onScroll()"
-            >
-                <li class="history-item" *ngFor="let announcement of history$ | async">
-                    {{ announcement.title }}
-                </li>
-            </ul>
-
+        <div class="col-lg-3 col-md-12" *ngIf="(history$ | async) as history" [@fadeInOpt]>
+            <div class="anim-obj">
+                <h2 class="display-4 mb-5 ml-4">History</h2>
+                <ul
+                class="history-list"
+                infiniteScroll
+                [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="50"
+                [scrollWindow]="false"
+                (scrolled)="onScroll()"        
+                >
+                    <li class="history-item" *ngFor="let announcement of history">
+                        {{ announcement.title }}
+                    </li>
+                </ul>
+            </div>
         </div>
-
     </div>
 
 </div>

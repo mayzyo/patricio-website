@@ -19,9 +19,9 @@
 
         <hr />
 
-        <div class="row m-n1 justify-content-center" [@fadeIn]>
+        <div class="row m-n1 justify-content-center">
             <a class="col-lg-2 col-md-3 col-sm-6 p-1 thumbnail" (click)="open(content, moment)"
-                *ngFor="let moment of momentList$ | async">
+                *ngFor="let moment of momentList$ | async" [@fadeIn]>
                 <img src="{{ moment.thumbnail }}" class="thumbnail-img">
             </a>
         </div>

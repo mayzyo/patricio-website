@@ -1,7 +1,7 @@
 import { animation, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
 
 const fadeInList = (targetCSS: string, options?: { params?: any, state?: string }) => [
-    transition(`${options && options.state || 'void'} => *`, [
+    transition(`* => ${options && options.state || '*'}`, [
         query(targetCSS, [
             style(options && options.params || {
                 opacity: '0',
@@ -19,7 +19,7 @@ const fadeInList = (targetCSS: string, options?: { params?: any, state?: string 
 ];
 
 const fadeInQueried = (targetCSS: string[], options?: { params?: any, state?: string }) => [
-    transition(`${options.state} => *`, [
+    transition(`* => ${options && options.state || '*'}`, [
         group(targetCSS.map(el =>
             query(el, [
                 style(options && options.params || {

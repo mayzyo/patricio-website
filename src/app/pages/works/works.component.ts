@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './works.component.html',
   styleUrls: ['./works.component.scss'],
   animations: [
-    trigger('fadeIn', fadeIn('.row')),
+    trigger('fadeIn', fadeIn('.card')),
   ]
 })
 export class WorksComponent implements OnInit {

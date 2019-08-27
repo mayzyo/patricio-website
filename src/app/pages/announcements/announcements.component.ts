@@ -11,7 +11,8 @@ import { Announcement } from 'src/app/models/Announcement';
   templateUrl: './announcements.component.html',
   styleUrls: ['./announcements.component.scss'],
   animations: [
-    trigger('fadeIn', fadeIn('.tester')),
+    trigger('fadeIn', fadeIn('.media')),
+    trigger('fadeInOpt', fadeIn('.anim-obj')),
   ],
 })
 export class AnnouncementsComponent implements OnInit {

@@ -5,7 +5,7 @@ import { fadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { ImageService } from 'src/app/services/image.service';
 import { Moment } from 'src/app/models/Moment';
-import { switchMap, scan, tap, map } from 'rxjs/operators';
+import { switchMap, scan, map } from 'rxjs/operators';
 import { merge } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ import { merge } from 'rxjs';
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss'],
   animations: [
-    trigger('fadeIn', fadeIn('.thumbnail')),
+    trigger('fadeIn', fadeIn('.thumbnail-img')),
   ]
 })
 export class MediaComponent implements OnInit {

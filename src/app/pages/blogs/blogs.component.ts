@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./blogs.component.scss'],
   animations: [
     trigger('fadeIn', fadeIn('.card')),
+    trigger('fadeInOpt', fadeIn('.anim-obj')),
   ]
 })
 export class BlogsComponent implements OnInit {

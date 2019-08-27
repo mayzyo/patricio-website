@@ -1,50 +1,58 @@
 <div class="jumbotron jumbotron-fluid mb-0 bg-primary text-white">
     <div class="container">
+
         <h2 class="h4">
             <!-- <img src="./assets/images/at-solid.svg" height="40rem" width="40rem"> -->
             Email Enquiry
         </h2>
+
         <form class="row mt-3" (ngSubmit)="onSubmit()" #contactForm="ngForm">
             <div class="col-md-6 col-sm-12">
 
-                <label for="message">your message</label>
+                <label for="message">Your message</label>
                 <textarea 
                 class="form-control" 
-                id="message" 
-                name="message"
                 rows="9" 
                 placeholder="Required example textarea"
+                id="message" 
+                name="message"
+                #message="ngModel"
                 [(ngModel)]="model.message"
                 required
                 >
                 </textarea>
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && message.invalid">
+                    Please leave a quick message for me
+                </div>
                 
             </div>
             <div class="col-md-6 col-sm-12">
 
-                <label for="purpose">purpose of enquiry</label>
+                <label for="purpose">Purpose of enquiry</label>
                 <select 
                 class="form-control" 
                 id="purpose"
                 name="purpose"
                 [(ngModel)]="model.purpose"
                 >
+                    <option [value]="null">Select an option</option>
                     <!-- <option [value]="pow">Information Enquiry</option>
                     <option>Collaboration</option>
                     <option>Commission Work</option>
                     <option>Event Attendance</option>
                     <option>Tutoring</option> -->
-                    <option [value]="0">Deail</option>
+                    <option [value]="0">Deal</option>
                     <option [value]="1">Others</option>
                 </select>
 
-                <label for="senderType">a bit about yourself</label>
+                <label for="senderType">A bit about yourself</label>
                 <select 
                 class="form-control" 
                 id="senderType"
                 name="senderType"
                 [(ngModel)]="model.senderType"
                 >
+                    <option [value]="null">Select an option</option>
                     <option [value]="0">Manager / representative</option>
                     <!-- <option [value]="1">Business Owner</option> -->
                     <option [value]="1">Fellow Musician</option>
@@ -52,27 +60,29 @@
                     <option [value]="2">Others</option>
                 </select>
 
-                <label for="sender">your email</label>
+                <label for="sender">Your email</label>
                 <input 
                 class="form-control" 
                 type="email" 
                 id="sender" 
                 name="sender"
+                #sender="ngModel"
                 [(ngModel)]="model.sender"
                 placeholder="your@email.com..."
                 required
+                email
                 >
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid">
+                    Please provide a valid email address
+                </div>
 
-                <button 
-                class="btn btn-secondary mt-2 shadow" 
-                [disabled]="!contactForm.form.valid"
-                (click)="changeSuccessMessage()"
-                >
+                <button class="btn btn-secondary mt-2 shadow" type="submit">
                     Submit form
                 </button>
 
             </div>
         </form>
+        
     </div>
 </div>
 
