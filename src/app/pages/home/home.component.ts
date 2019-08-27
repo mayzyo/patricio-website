@@ -1,20 +1,79 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { pluck, map, share, tap } from 'rxjs/operators';
-import { fadeIn, fadeObject } from 'src/app/animations/fade-in';
-import { trigger } from '@angular/animations';
+import { map } from 'rxjs/operators';
+import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
+import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  // animations: [
+  //   trigger('fadeInBlog', fadeIn('.card', { state: 'true' })),
+  //   trigger('fadeObjBlog', fadeObject('*', 'true')),
+  //   trigger('fadeInEvent', fadeIn('.media', { state: 'true' })),
+  //   trigger('fadeObjEvent', fadeObject('*', 'true')),
+  //   trigger('fadeInBiography', fadeIn('.row', { state: 'true' })),
+  //   trigger('fadeObjBiography', fadeObject('*', 'true'))
+  // ]
   animations: [
-    trigger('fadeInBlog', fadeIn('.card', { state: 'true' })),
-    trigger('fadeObjBlog', fadeObject('*', 'true')),
-    trigger('fadeInEvent', fadeIn('.media', { state: 'true' })),
-    trigger('fadeObjEvent', fadeObject('*', 'true')),
-    trigger('fadeInBiography', fadeIn('.row', { state: 'true' })),
-    trigger('fadeObjBiography', fadeObject('*', 'true'))
+    trigger('fadeInBlog', [
+      transition(`* => true`, [
+        query('.card', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeObjBlog', [
+      state('*', style({ visibility: 'hidden' })),
+      state('true', style({ visibility: 'visible' }))
+    ]),
+    trigger('fadeInEvent', [
+      transition(`* => true`, [
+        query('.media', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeObjEvent', [
+      state('*', style({ visibility: 'hidden' })),
+      state('true', style({ visibility: 'visible' }))
+    ]),
+    trigger('fadeInBiography', [
+      transition(`* => true`, [
+        query('.row', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeObjBiography', [
+      state('*', style({ visibility: 'hidden' })),
+      state('true', style({ visibility: 'visible' }))
+    ])
   ]
 })
 export class HomeComponent implements OnInit {

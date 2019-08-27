@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger } from '@angular/animations';
-import { fadeIn } from 'src/app/animations/fade-in';
+import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
+import { landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { map } from 'rxjs/operators';
 
@@ -8,8 +8,25 @@ import { map } from 'rxjs/operators';
   selector: 'app-works',
   templateUrl: './works.component.html',
   styleUrls: ['./works.component.scss'],
+  // animations: [
+  //   trigger('fadeIn', fadeIn('.card')),
+  // ]
   animations: [
-    trigger('fadeIn', fadeIn('.card')),
+    trigger('fadeIn', [
+      transition(`* => true`, [
+        query('.card', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
   ]
 })
 export class WorksComponent implements OnInit {

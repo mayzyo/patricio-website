@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger } from '@angular/animations';
-import { fadeIn } from 'src/app/animations/fade-in';
+import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
+import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { Subject, Observable, merge, of } from 'rxjs';
 import { Post } from 'src/app/models/Post';
@@ -12,9 +12,58 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-blogs',
   templateUrl: './blogs.component.html',
   styleUrls: ['./blogs.component.scss'],
+  // animations: [
+  //   trigger('fadeIn', fadeIn(['.card-title', '.card-subtitle', '.card-link'])),
+  //   trigger('fadeInCard', fadeIn('.card')),
+  //   trigger('fadeInOpt', fadeIn('.anim-obj')),
+  // ]
   animations: [
-    trigger('fadeIn', fadeIn('.card')),
-    trigger('fadeInOpt', fadeIn('.anim-obj')),
+    trigger('fadeIn', [
+      transition(`* => *`, [
+        group(['.card-title', '.card-subtitle', '.card-link'].map(el =>
+          query(el, [
+            style({ opacity: '0' }),
+          ])
+        )),
+        sequence(['.card-title', '.card-subtitle', '.card-link'].map(el =>
+          query(el, [
+            useAnimation(landingFadeIn, {
+              params: { transform: 'translateY(20px)', opacity: '0' }
+            })
+          ])
+        ))
+      ])
+    ]),
+    trigger('fadeInCard', [
+      transition(`* => true`, [
+        query('.card', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeInOpt', [
+      transition(`* => true`, [
+        query('.anim-obj', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
   ]
 })
 export class BlogsComponent implements OnInit {
@@ -23,10 +72,12 @@ export class BlogsComponent implements OnInit {
   readonly history$: Observable<Post[]>;
   readonly updateCurrent$: Subject<Post>;
   readonly current$: Observable<SafeHtml>;
+  readonly profile$ = this.contents.profile$;
 
   constructor(private contents: ContentService, private sanitizer: DomSanitizer, route: ActivatedRoute) {
     this.updateHistory$ = new Subject();
     this.updateCurrent$ = new Subject();
+
     this.history$ = this.setupPagination(this.updateHistory$);
     this.current$ = this.setupPostArticle(
       this.updateCurrent$, 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger } from '@angular/animations';
-import { fadeIn } from 'src/app/animations/fade-in';
+import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
+import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { Subject, merge, of, Observable } from 'rxjs';
 import { switchMap, scan, tap, share, map } from 'rxjs/operators';
@@ -10,9 +10,41 @@ import { Announcement } from 'src/app/models/Announcement';
   selector: 'app-announcements',
   templateUrl: './announcements.component.html',
   styleUrls: ['./announcements.component.scss'],
+  // animations: [
+  //   trigger('fadeIn', fadeIn('.media')),
+  //   trigger('fadeInOpt', fadeIn('.anim-obj')),
+  // ],
   animations: [
-    trigger('fadeIn', fadeIn('.media')),
-    trigger('fadeInOpt', fadeIn('.anim-obj')),
+    trigger('fadeIn', [
+      transition(`* => true`, [
+        query('.media', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeInOpt', [
+      transition(`* => true`, [
+        query('.anim-obj', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
   ],
 })
 export class AnnouncementsComponent implements OnInit {

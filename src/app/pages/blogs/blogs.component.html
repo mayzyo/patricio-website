@@ -5,7 +5,7 @@
 
         <div class="col-md-8 col-sm-12">
 
-            <div class="card w-100">
+            <div class="card w-100" *ngIf="(profile$ | async) as profile" [@fadeIn]>
                 <img src="./assets/images/stock-2.jpg" class="card-img-top" height="180px" style="object-fit: cover">
 
                 <div class="card-body">
@@ -33,7 +33,7 @@
 
             </div>
 
-            <div *ngIf="(current$ | async) as current" [@fadeIn]>
+            <div *ngIf="(current$ | async) as current" [@fadeInCard]>
                 <div class="card w-100 my-3">
                     <div class="card-body">
                         <div class="mx-3" [innerHTML]="current"></div>

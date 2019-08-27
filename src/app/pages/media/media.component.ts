@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { trigger } from '@angular/animations';
-import { fadeIn } from 'src/app/animations/fade-in';
+import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { ImageService } from 'src/app/services/image.service';
 import { Moment } from 'src/app/models/Moment';
@@ -12,8 +12,25 @@ import { merge } from 'rxjs';
   selector: 'app-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss'],
+  // animations: [
+  //   trigger('fadeIn', fadeIn('.thumbnail-img')),
+  // ]
   animations: [
-    trigger('fadeIn', fadeIn('.thumbnail-img')),
+    trigger('fadeIn', [
+      transition(`* => true`, [
+        query('.thumbnail-img', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
   ]
 })
 export class MediaComponent implements OnInit {
