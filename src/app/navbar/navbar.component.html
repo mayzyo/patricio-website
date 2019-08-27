@@ -11,20 +11,25 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link text-white" [ngClass]="currentUrl == '/announcements' && 'shadow'"
-                    routerLink="/announcements">Announcements</a>
+                    routerLink="/announcements" i18n>Announcements</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/works' && 'shadow'" routerLink="/works">Works</a>
+                <a class="nav-link text-white" [ngClass]="currentUrl == '/works' && 'shadow'" routerLink="/works" i18n>Works</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/media' && 'shadow'" routerLink="/media">Media</a>
+                <a class="nav-link text-white" [ngClass]="currentUrl == '/media' && 'shadow'" routerLink="/media" i18n>Media</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/blogs' && 'shadow'" routerLink="/blogs">Blogs</a>
+                <a class="nav-link text-white" [ngClass]="currentUrl == '/blogs' && 'shadow'" routerLink="/blogs" i18n>Blogs</a>
             </li>
         </ul>
-        <div class="my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search..." placeholder="Search" aria-label="Search">
+        <div class="my-2 my-lg-0 row align-items-center">
+            <div class="col-md-auto col-sm-12 text-white">
+                <button class="btn btn-link" (click)="setEnglish()">English</button> | <button class="btn btn-link" (click)="setChinese()">中文</button>
+            </div>
+            <div class="col-md-auto col-sm-12">
+                <input class="form-control mr-sm-2" type="search..." placeholder="Search" aria-label="Search">
+            </div>
         </div>
     </div>
 </nav>
