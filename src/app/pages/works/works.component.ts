@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
   // ]
   animations: [
     trigger('fadeIn', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.card', [
           style({ opacity: '0' }),
           stagger(300, [
@@ -31,6 +31,7 @@ import { map } from 'rxjs/operators';
 })
 export class WorksComponent implements OnInit {
 
+  readonly quote$ = this.contents.randomQuote$;
   readonly workList$ = this.contents.workList$.pipe(
     map(res =>  res.map(el => {
       !el.image && (el.image = `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`);

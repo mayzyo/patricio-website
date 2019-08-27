@@ -16,7 +16,7 @@ import { Announcement } from 'src/app/models/Announcement';
   // ],
   animations: [
     trigger('fadeIn', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.media', [
           style({ opacity: '0' }),
           stagger(300, [
@@ -31,7 +31,7 @@ import { Announcement } from 'src/app/models/Announcement';
       ])
     ]),
     trigger('fadeInOpt', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.anim-obj', [
           style({ opacity: '0' }),
           stagger(300, [
@@ -50,7 +50,6 @@ import { Announcement } from 'src/app/models/Announcement';
 export class AnnouncementsComponent implements OnInit {
 
   readonly quote$ = this.contents.randomQuote$;
-
   readonly updateHistory$: Subject<void>;
   readonly history$: Observable<Announcement[]>;
   readonly latest$: Observable<Announcement[]>;

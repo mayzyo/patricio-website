@@ -12,7 +12,7 @@
 </div>
 
 <a class="landing-slide" (click)="scrolldown()">
-    <div class="d-block text-white">Blogs & Events</div>
+    <div class="d-block text-white" i18n>Blogs & Events</div>
     <img src="./assets/images/arrow-down-solid.svg" height="24px" width="24px">
 </a>
 
@@ -21,7 +21,7 @@
 <div class="jumbotron mb-0">
     <div class="container">
 
-        <h2 #blogSection>Latest Blogs</h2>
+        <h2 #blogSection i18n>Latest Blogs</h2>
 
         <div class="row my-3" *ngIf="(blog$ | async) as blog" [@fadeInBlog]="blogAnim">
             <!-- One large block -->
@@ -93,7 +93,7 @@
         <hr />
 
         <div >
-            <h2 class="text-center w-100 lead" #eventSection>Upcoming Events</h2>
+            <h2 class="text-center w-100 lead" #eventSection i18n>Upcoming Events</h2>
 
             <div [@fadeInEvent]="eventAnim" *ngIf="(events$ | async) as eventList">
                 <ng-container *ngFor="let event of eventList">
@@ -123,7 +123,7 @@
 
         <h2 class="h3 mb-4">
             <img src="./assets/images/portrait-solid.svg" height="40rem" width="40rem">
-            Biography
+            <span i18n>Biography</span>
         </h2>
 
         <div class="row mx-n3">

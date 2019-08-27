@@ -17,7 +17,7 @@ import { merge } from 'rxjs';
   // ]
   animations: [
     trigger('fadeIn', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.thumbnail-img', [
           style({ opacity: '0' }),
           stagger(300, [
@@ -35,6 +35,7 @@ import { merge } from 'rxjs';
 })
 export class MediaComponent implements OnInit {
 
+  readonly quote$ = this.contents.randomQuote$;
   readonly momentList$ = this.contents.momentPreview$.pipe(
     switchMap(res => 
       merge(...res.slice(0, 10).map(el => 

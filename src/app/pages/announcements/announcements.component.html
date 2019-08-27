@@ -17,7 +17,7 @@
     <div class="row mb-5">
 
         <div class="col-lg-9 col-md-12">
-            <h2 class="h4 mb-5">Latest Announcements</h2>
+            <h2 class="h4 mb-5" i18n>Latest Announcements</h2>
             <div *ngIf="(latest$ | async) as latest" [@fadeIn]>
                 <ng-container *ngFor="let announcement of latest">
                     <div class="media my-3">
@@ -44,7 +44,7 @@
 
         <div class="col-lg-3 col-md-12" *ngIf="(history$ | async) as history" [@fadeInOpt]>
             <div class="anim-obj">
-                <h2 class="display-4 mb-5 ml-4">History</h2>
+                <h2 class="display-4 mb-5 ml-4" i18n>History</h2>
                 <ul
                 class="history-list"
                 infiniteScroll

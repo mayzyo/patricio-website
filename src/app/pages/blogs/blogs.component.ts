@@ -35,7 +35,7 @@ import { ActivatedRoute } from '@angular/router';
       ])
     ]),
     trigger('fadeInCard', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.card', [
           style({ opacity: '0' }),
           stagger(300, [
@@ -50,7 +50,7 @@ import { ActivatedRoute } from '@angular/router';
       ])
     ]),
     trigger('fadeInOpt', [
-      transition(`* => true`, [
+      transition(`* => *`, [
         query('.anim-obj', [
           style({ opacity: '0' }),
           stagger(300, [

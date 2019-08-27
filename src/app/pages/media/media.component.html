@@ -1,11 +1,12 @@
 <div class="container-fluid">
     <div class="row justify-content-center align-items-center" style="height: 42vh; transition-delay: 3s all;">
         <div class="col-8">
-            <blockquote class="blockquote text-right">
-                <h1 class="mb-3 text-white h3">
-                    "Quote that makes you ponder about the meaning of life."
-                </h1>
-            </blockquote>
+                <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+                    <h1 class="mb-3 text-white h3">"{{ quote.text }}"</h1>
+                    <footer class="blockquote-footer" *ngIf="quote.author">
+                        {{ quote.author }}
+                    </footer>
+                </blockquote>
         </div>
     </div>
 </div>
@@ -15,7 +16,7 @@
 <div class="jumbotron mb-0">
     <div class="container p-1">
 
-        <h2>Image Gallery</h2>
+        <h2 i18n>Image Gallery</h2>
 
         <hr />
 
