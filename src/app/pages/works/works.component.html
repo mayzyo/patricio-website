@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row justify-content-center align-items-center" style="height: 50vh;">
+    <div class="banner row justify-content-center align-items-center">
         <div class="col-8">
             <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
                 <h1 class="mb-3 text-white h3">"{{ quote.text }}"</h1>
@@ -11,13 +11,21 @@
     </div>
 </div>
 
-<div class="banner-background"></div>
-
-<div class="container" style="min-height: 200px">
-    <div class="row mb-5" *ngIf="(workList$ | async) as workList" [@fadeIn]>
+<div class="container">
+    <div class="row my-5" *ngIf="(workList$ | async) as workList" [@fadeIn]>
 
         <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of workList">
-            <div class="card bg-dark text-white w-100" style="height: 15rem;">
+
+            <a *ngIf="music.link" class="card bg-dark text-white w-100" href="{{ music.link }}">
+                <img src="{{ music.image }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ music.title }}</h5>
+                    <p class="card-text">{{ music.genre }}</p>
+                    <!-- <p class="card-text">{{ music.create_date }}</p> -->
+                </div>
+            </a>
+
+            <div *ngIf="!music.link" class="card bg-dark text-white w-100">
                 <img src="{{ music.image }}" class="card-img">
                 <div class="card-img-overlay">
                     <h5 class="card-title">{{ music.title }}</h5>

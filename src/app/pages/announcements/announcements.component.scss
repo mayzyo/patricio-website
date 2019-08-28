@@ -1,15 +1,13 @@
 @import "../../../styles.scss";
 
-.banner-background {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 50vh;
-    width: 100%;
-    z-index: -1;
+.container {
+    min-height: 45vh;
+}
 
+.banner {
     background: url('../../../assets/images/bg-1.jpg');
     background-size: cover;
+    height: 50vh;
 }
 
 .history-list {
