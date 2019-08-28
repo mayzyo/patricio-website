@@ -13,12 +13,13 @@
                 <textarea 
                 class="form-control" 
                 rows="9" 
-                placeholder="Required example textarea"
+                placeholder="Leave a brief message for me here..."
                 id="message" 
                 name="message"
                 #message="ngModel"
                 [(ngModel)]="model.message"
                 required
+                i18n-placeholder
                 >
                 </textarea>
                 <div class="text-danger font-italic" *ngIf="attemptedSubmit && message.invalid" i18n>
@@ -71,6 +72,7 @@
                 placeholder="your@email.com..."
                 required
                 email
+                i18n-placeholder
                 >
                 <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid" i18n>
                     Please provide a valid email address
