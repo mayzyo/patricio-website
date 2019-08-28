@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ContentService } from '../services/content.service';
+import { pluck } from 'rxjs/operators';
 
 @Component({
   selector: 'app-footer',
@@ -7,7 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  readonly instagram$ = this.contents.profile$.pipe(
+    pluck('instagram')
+  );
+  readonly linkedin$ = this.contents.profile$.pipe(
+    pluck('linkedin')
+  );
+
+  constructor(private contents: ContentService) { }
 
   ngOnInit() {
   }

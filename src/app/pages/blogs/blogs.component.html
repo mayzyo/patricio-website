@@ -13,11 +13,11 @@
                         <div class="col-lg-9 col-md-12">
                             <h5 class="card-title">Kaze Patricio Chan</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ profile.occupation }}</h6>
-                            <a href="www.instagram.com" class="card-link">
+                            <a href="{{ link }}" class="card-link" *ngIf="(instagram$ | async) as link">
                                 <img src="./assets/images/instagram-brands.svg" height="20rem" height="20rem">
                                 <span i18n>Instagram</span>
                             </a>
-                            <a href="www.linkedin.com" class="card-link">
+                            <a href="{{ link }}" class="card-link" *ngIf="(linkedin$ | async) as link">
                                 <img src="./assets/images/linkedin-brands.svg" height="20rem" height="20rem">
                                 <span i18n>LinkedIn</span>
                             </a>
@@ -43,21 +43,23 @@
 
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 text-white" *ngIf="(history$ | async) as history" [@fadeInOpt]>
-            <div class="anim-obj">
-                <h2 class="h4 ml-4" i18n>Past Posts</h2>
-                <ul
-                class="history-list"
-                infiniteScroll
-                [infiniteScrollDistance]="2"
-                [infiniteScrollThrottle]="50"
-                [scrollWindow]="false"
-                (scrolled)="onScroll()"
-                >
-                    <li class="history-item" *ngFor="let post of history">
-                        <a (click)="postArticle(post)">{{ post.title }}</a>               
-                    </li>
-                </ul>
+        <div class="col-lg-3 col-md-4 col-sm-12 text-white">
+            <div *ngIf="(history$ | async) as history" [@fadeInOpt]>
+                <div class="anim-obj">
+                    <h2 class="h4 ml-4" i18n>Past Posts</h2>
+                    <ul
+                    class="history-list"
+                    infiniteScroll
+                    [infiniteScrollDistance]="2"
+                    [infiniteScrollThrottle]="50"
+                    [scrollWindow]="false"
+                    (scrolled)="onScroll()"
+                    >
+                        <li class="history-item" *ngFor="let post of history">
+                            <a (click)="postArticle(post)">{{ post.title }}</a>               
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 

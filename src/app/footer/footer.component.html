@@ -28,14 +28,14 @@
                 <div class="col-md-3 col-sm-12">
                     <h1 class="h4 ml-3" i18n>Social Media</h1>
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="www.instagram.com">
+                        <li class="nav-item" *ngIf="(instagram$ | async) as link">
+                            <a class="nav-link" href="{{ link }}">
                                 <img src="./assets/images/instagram-brands.svg" height="20rem" height="20rem">
                                 <span i18n>Instagram</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="www.linkedin.com">
+                        <li class="nav-item" *ngIf="(linkedin$ | async) as link">
+                            <a class="nav-link" href="{{ link }}">
                                 <img src="./assets/images/linkedin-brands.svg" height="20rem" height="20rem">
                                 <span i18n>LinkedIn</span>
                             </a>

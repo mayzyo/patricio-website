@@ -73,6 +73,12 @@ export class BlogsComponent implements OnInit {
   readonly updateCurrent$: Subject<Post>;
   readonly current$: Observable<SafeHtml>;
   readonly profile$ = this.contents.profile$;
+  readonly instagram$ = this.contents.profile$.pipe(
+    pluck('instagram')
+  );
+  readonly linkedin$ = this.contents.profile$.pipe(
+    pluck('linkedin')
+  );
 
   constructor(private contents: ContentService, private sanitizer: DomSanitizer, route: ActivatedRoute) {
     this.updateHistory$ = new Subject();
