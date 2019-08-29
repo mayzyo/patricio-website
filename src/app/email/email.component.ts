@@ -3,6 +3,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { Email, Sender, Purpose } from '../models/Email';
 import { NgForm } from '@angular/forms';
+import { ContactService } from '../services/contact.service';
 
 @Component({
   selector: 'app-email',
@@ -18,7 +19,7 @@ export class EmailComponent implements OnInit, OnDestroy {
   successMessage: string;
 
   attemptedSubmit = false;
-  submitted = false;
+  submitting = false;
   model: Email = {
     message: '',
     sender: '',
@@ -26,12 +27,12 @@ export class EmailComponent implements OnInit, OnDestroy {
     purpose: null
   };
 
-  constructor() { }
+  constructor(private contacts: ContactService) { }
 
   ngOnInit() {
     this.subscription.add(this._success.subscribe((message) => this.successMessage = message));
     this.subscription.add(this._success.pipe(
-      debounceTime(2500)
+      debounceTime(2000)
     ).subscribe(() => this.successMessage = null));
   }
 
@@ -40,16 +41,19 @@ export class EmailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.attemptedSubmit = true;
-    console.log(this.form)
-    if(this.form.valid) {
-      this.changeSuccessMessage();
-      this.form.reset();
-      this.attemptedSubmit = false;
-    }
-  }
 
-  private changeSuccessMessage() {
-    this._success.next(`Thanks for your enquiry, I'll get back to you soon`);
+    this.attemptedSubmit = true;
+
+    if(this.form.valid && !this.submitting) {
+      this._success.next(`message sending...`);
+
+      this.submitting = true;
+      this.contacts.sendEmail(this.model).subscribe(res => {
+        this._success.next(`${res}, thanks for your enquiry!`);
+        this.form.reset();
+        this.submitting = false;
+        this.attemptedSubmit = false;
+      });
+    }
   }
 }
