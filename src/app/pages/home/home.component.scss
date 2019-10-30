@@ -1,34 +1,5 @@
 @import "../../../custom.scss";
 
-.landing-background {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 110vh;
-    width: 100%;
-    z-index: -1;
-
-    background:
-        linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
-        linear-gradient(to right, map-get($theme-colors, 'tertiary') 0%, yellow 90%), 
-        url('../../../assets/images/landing-bg.jpg') 30px,
-        url('../../../assets/images/landing-bg.jpg') 20px;
-    background-blend-mode: screen, difference, lighten;
-    background-size: cover;
-
-    filter:blur(5px);
-}
-
-.landing-slide {
-    position: absolute;
-    top: 88vh;
-    width: 100%;
-    margin: auto;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 1.2rem;
-}
-
 .card-img {
     object-fit: cover; 
     height: 100%;

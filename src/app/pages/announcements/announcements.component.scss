@@ -4,16 +4,11 @@
     min-height: 45vh;
 }
 
-.banner {
-    background: url('../../../assets/images/bg-1.jpg');
-    background-size: cover;
-    height: 50vh;
-}
-
 .history-list {
     list-style: none;
     height: 14rem;
     overflow-y: hidden;
+    padding-left: 0;
 }
 
 .history-list:hover {

@@ -1,7 +1,17 @@
+p {
+    // font-size: 1rem;
+    line-height: 200%;
+}
+
+.container {
+    min-height: 100vh;
+}
+
 .history-list {
     list-style: none;
     height: 14rem;
     overflow-y: hidden;
+    padding-left: 0;
 }
 
 .history-list:hover {
@@ -11,9 +21,4 @@
 .history-item {
     padding-top: 10px;
     padding-bottom: 10px;
-}
-
-p {
-    // font-size: 1rem;
-    line-height: 200%;
 }

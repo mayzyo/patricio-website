@@ -1,0 +1,14 @@
+<div class="background position-absolute"></div>
+
+<div class="quotes">
+    <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+        <h1 class="mb-3 text-white display-4">"{{ quote.message }}"</h1>
+        <footer class="blockquote-footer" *ngIf="quote.author">
+            {{ quote.author }}
+        </footer>
+    </blockquote>
+</div>
+
+<a class="landing-scroll" (click)="scrolldown()">
+    <img src="./assets/images/arrow-down-solid.svg" height="24px" width="24px">
+</a>

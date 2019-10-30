@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
+import { ImageService } from 'src/app/services/image.service';
 
 @Component({
   selector: 'app-home',
@@ -83,10 +84,12 @@ export class HomeComponent implements OnInit {
   @ViewChild('biographySection', { static:true }) biographySection: ElementRef;
 
   readonly blog$ = this.contents.blogPreview('1', '13').pipe(
-    map(res =>  res.map(el => {
-      !el.thumbnail && (el.thumbnail = `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`);
-      return el;
-    })),
+    map(res =>  
+      res.map(el => ({
+        ...el,
+        thumbnail: this.images.stockGallery()
+      }))
+    ),
     map(res => {
       return {
         postsXL: res[0],
@@ -98,13 +101,13 @@ export class HomeComponent implements OnInit {
   );
   readonly events$ = this.contents.eventAnnouncement('1', '4');
   readonly biography$ = this.contents.biography$;
-  readonly quote$ = this.contents.homeQuote$;
+  readonly quote$ = this.contents.randomQuote$;
 
   blogAnim = false;
   eventAnim = false;
   biographyAnim = false;
 
-  constructor(private contents: ContentService) { }
+  constructor(private contents: ContentService, private images: ImageService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);

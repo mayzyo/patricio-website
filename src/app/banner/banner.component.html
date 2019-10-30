@@ -1,0 +1,22 @@
+<div 
+class="background position-absolute" 
+[ngStyle]="{ background: 'url(../../assets/images/' + background + ')', 'background-size': 'cover' }"
+>
+</div>
+
+<div class="carousel position-absolute">
+    <div class="wrapper">
+        <div class="d-inline-block d-lg-block m-3" *ngFor="let moment of carousel$ | async">
+            <img src="{{ moment.image }}" class="img-thumbnail">
+        </div>
+    </div>
+</div>
+
+<div class="quotes">
+    <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+        <h1 class="mb-3 text-white h3">"{{ quote.message }}"</h1>
+        <footer class="blockquote-footer" *ngIf="quote.author">
+            {{ quote.author }}
+        </footer>
+    </blockquote>
+</div>

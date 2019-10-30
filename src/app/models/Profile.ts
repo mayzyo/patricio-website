@@ -7,11 +7,13 @@ export interface Profile {
 
     portrait: string
 
-    banner: string
+    facebook: string
 
-    email: string
+    linkedin: string
 
     instagram: string
 
-    linkedin: string
+    wechat: string
+
+    weibo: string
 }

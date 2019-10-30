@@ -7,7 +7,7 @@ export interface Music {
 
     create_date: Date
 
-    link: string
-
     image: string
+
+    sound_cloud: string
 }

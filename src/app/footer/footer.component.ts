@@ -9,11 +9,20 @@ import { pluck } from 'rxjs/operators';
 })
 export class FooterComponent implements OnInit {
 
-  readonly instagram$ = this.contents.profile$.pipe(
-    pluck('instagram')
+  readonly facebook$ = this.contents.profile$.pipe(
+    pluck('facebook')
   );
   readonly linkedin$ = this.contents.profile$.pipe(
     pluck('linkedin')
+  );
+  readonly instagram$ = this.contents.profile$.pipe(
+    pluck('instagram')
+  );
+  readonly wechat$ = this.contents.profile$.pipe(
+    pluck('wechat')
+  );
+  readonly weibo$ = this.contents.profile$.pipe(
+    pluck('weibo')
   );
 
   constructor(private contents: ContentService) { }

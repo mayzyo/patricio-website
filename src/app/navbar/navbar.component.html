@@ -1,35 +1,44 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-    <a class="navbar-brand text-secondary" routerLink="/home">Kaze Patricio</a>
+    <a class="navbar-brand text-secondary mr-3" routerLink="/home">Kaze Patricio Chan</a>
 
     <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
-        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" aria-label="Toggle navigation">
+        [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="collapseExample" [ngbCollapse]="isCollapsed">
-        <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" [ngbCollapse]="isCollapsed">
+        <ul class="navbar-nav ml-auto">
+
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/announcements' && 'shadow'"
-                    routerLink="/announcements" i18n>Announcements</a>
+                <a class="nav-link text-white text-lg-center px-3" [ngClass]="currentUrl == '/announcements' && 'shadow'" routerLink="/announcements">
+                    <div class="d-inline d-lg-block label">动态</div>
+                    <div class="d-inline d-lg-block text-monospace sub-label">Updates</div>
+                </a>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/works' && 'shadow'" routerLink="/works" i18n>Works</a>
+                <a class="nav-link text-white text-lg-center px-3" [ngClass]="currentUrl == '/works' && 'shadow'" routerLink="/works">
+                    <div class="d-inline d-lg-block label">作品</div>
+                    <div class="d-inline d-lg-block text-monospace sub-label">Works</div>
+                </a>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/media' && 'shadow'" routerLink="/media" i18n>Media</a>
+                <a class="nav-link text-white text-lg-center px-3" [ngClass]="currentUrl == '/blogs' && 'shadow'" routerLink="/blogs"
+                >
+                    <div class="d-inline d-lg-block label">博客</div>
+                    <div class="d-inline d-lg-block text-monospace sub-label">Blogs</div>
+                </a>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link text-white" [ngClass]="currentUrl == '/blogs' && 'shadow'" routerLink="/blogs" i18n>Blogs</a>
+                <a class="nav-link text-white text-lg-center px-3" [ngClass]="currentUrl == '/media' && 'shadow'" routerLink="/media">
+                    <div class="d-inline d-lg-block label">媒体</div>
+                    <div class="d-inline d-lg-block text-monospace sub-label">Media</div>
+                </a>
             </li>
+            
         </ul>
-        <div class="my-2 my-lg-0 row align-items-center">
-            <div class="col-md-auto col-sm-12 text-white">
-                <button class="btn btn-link" (click)="setEnglish()">English</button> | <button class="btn btn-link" (click)="setChinese()">中文</button>
-            </div>
-            <!-- <div class="col-md-auto col-sm-12">
-                <input class="form-control mr-sm-2" type="search..." placeholder="Search" aria-label="Search">
-            </div> -->
-        </div>
     </div>
 </nav>

@@ -23,18 +23,27 @@
             height: 12px;
             border-radius: 50px;
             margin: 0 16px;
-            float:left;
 
             animation-name: loading;
             animation-duration: 0.5s;
             animation-direction: alternate;
             animation-iteration-count: infinite;
         }
+        .load-container {
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: 0;
+          position:absolute;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+        }
     </style>
-    <div style="position:absolute;top:50%;right:48%;">
-        <div class="load-circle" style="background:#A69B2B;"></div>
-        <div class="load-circle" style="background:#DF6795; animation-delay: 0.2s"></div>
-        <div class="load-circle" style="background:#A69B2B; animation-delay: 0.4s"></div>
+    <div class="load-container">
+      <div class="load-circle" style="background:#A69B2B;"></div>
+      <div class="load-circle" style="background:#DF6795; animation-delay: 0.2s"></div>
+      <div class="load-circle" style="background:#A69B2B; animation-delay: 0.4s"></div>
     </div>
     <p></p>
   </app-root>

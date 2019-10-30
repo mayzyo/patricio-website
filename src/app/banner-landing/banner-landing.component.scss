@@ -1,0 +1,49 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/_breakpoints";
+@import "../../custom.scss";
+
+.quotes {
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0 50px;
+}
+
+.background {
+    background:
+        linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
+        linear-gradient(to right, map-get($theme-colors, 'tertiary') 0%, yellow 90%), 
+        url('../../assets/images/home-banner.jpg') 30px,
+        url('../../assets/images/home-banner.jpg') 20px;
+    background-blend-mode: screen, difference, lighten;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    z-index: -2;
+}
+
+.landing-scroll {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.2rem;
+}
+
+@include media-breakpoint-up(lg) {
+    .quotes {
+        height: 90vh;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .display-4 {
+        font-size: 2rem;
+    }
+}

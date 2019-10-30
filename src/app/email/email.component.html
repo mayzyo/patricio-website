@@ -1,67 +1,56 @@
 <div class="jumbotron jumbotron-fluid mb-0 bg-primary text-white">
     <div class="container">
 
-        <h2 class="h4" i18n>
-            <!-- <img src="./assets/images/at-solid.svg" height="40rem" width="40rem"> -->
-            Email Enquiry
-        </h2>
+        <h2 class="h4">Email Me | 联系我</h2>
 
         <form class="row mt-3" (ngSubmit)="onSubmit()" #contactForm="ngForm">
             <div class="col-md-6 col-sm-12">
 
-                <label for="message" i18n>Your message</label>
+                <label for="message">Your message - 信息内容</label>
                 <textarea 
                 class="form-control" 
                 rows="9" 
-                placeholder="Leave a brief message for me here..."
+                placeholder="write your message here thanks..."
                 id="message" 
                 name="message"
                 #message="ngModel"
                 [(ngModel)]="model.message"
                 required
-                i18n-placeholder
                 >
                 </textarea>
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && message.invalid" i18n>
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && message.invalid">
                     Please leave a quick message for me
                 </div>
                 
             </div>
             <div class="col-md-6 col-sm-12">
 
-                <label for="purpose" i18n>Purpose of enquiry</label>
+                <label for="purpose">Purpose of enquiry - 消息主题</label>
                 <select 
                 class="form-control" 
                 id="purpose"
                 name="purpose"
                 [(ngModel)]="model.purpose"
                 >
-                    <option [value]="null" i18n>Select an option</option>
-                    <!-- <option [value]="pow">Information Enquiry</option>
-                    <option>Collaboration</option>
-                    <option>Commission Work</option>
-                    <option>Event Attendance</option>
-                    <option>Tutoring</option> -->
+                    <option [value]="null" i18n>Select an option - 选择主题</option>
                     <option [value]="0" i18n>Deal</option>
                     <option [value]="1" i18n>Others</option>
                 </select>
 
-                <label for="senderType" i18n>A bit about yourself</label>
+                <label for="senderType">A bit about yourself - 如何描述您</label>
                 <select 
                 class="form-control" 
                 id="senderType"
                 name="senderType"
                 [(ngModel)]="model.senderType"
                 >
-                    <option [value]="null" i18n>Select an option</option>
+                    <option [value]="null" i18n>Select an option - 选择描述</option>
                     <option [value]="0" i18n>Manager / representative</option>
-                    <!-- <option [value]="1">Business Owner</option> -->
                     <option [value]="1" i18n>Fellow Musician</option>
-                    <!-- <option>Creative Individual</option> -->
                     <option [value]="2" i18n>Others</option>
                 </select>
 
-                <label for="sender" i18n>Your email</label>
+                <label for="sender">Your email - 您的邮箱</label>
                 <input 
                 class="form-control" 
                 type="email" 
@@ -69,17 +58,17 @@
                 name="sender"
                 #sender="ngModel"
                 [(ngModel)]="model.sender"
-                placeholder="your@email.com..."
+                placeholder="e.g. email_address@provider.com..."
                 required
                 email
                 i18n-placeholder
                 >
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid" i18n>
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid">
                     Please provide a valid email address
                 </div>
 
-                <button class="btn btn-secondary mt-2 shadow" type="submit" [disabled]="submitting" i18n>
-                    Submit form
+                <button class="btn btn-secondary mt-2 shadow" type="submit" [disabled]="submitting">
+                    Submit form | 发送
                 </button>
 
             </div>

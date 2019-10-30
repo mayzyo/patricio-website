@@ -17,6 +17,9 @@ import { WorksComponent } from './pages/works/works.component';
 import { BlogsComponent } from './pages/blogs/blogs.component';
 import { MediaComponent } from './pages/media/media.component';
 import { ColumnPipe } from './utils/column.pipe';
+import { BannerComponent } from './banner/banner.component';
+import { BannerLandingComponent } from './banner-landing/banner-landing.component';
+import { ImagePreloadDirective } from './utils/image-preload.directive';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { ColumnPipe } from './utils/column.pipe';
     WorksComponent,
     BlogsComponent,
     MediaComponent,
-    ColumnPipe
+    ColumnPipe,
+    BannerComponent,
+    BannerLandingComponent,
+    ImagePreloadDirective
   ],
   imports: [
     BrowserModule,

@@ -1,129 +1,104 @@
-<div class="container-fluid">
-    <div class="row justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-auto">
-            <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
-                <h1 class="mb-3 text-white display-4">"{{ quote.text }}"</h1>
-                <footer class="blockquote-footer" *ngIf="quote.author">
-                    {{ quote.author }}
-                </footer>
-            </blockquote>
-        </div>
-    </div>
-</div>
+<app-banner-landing (onScrolldown)="scrolldown()"></app-banner-landing>
 
-<a class="landing-slide" (click)="scrolldown()">
-    <div class="d-block text-white" i18n>Blogs & Events</div>
-    <img src="./assets/images/arrow-down-solid.svg" height="24px" width="24px">
-</a>
+<div class="container my-5">
 
-<div class="landing-background"></div>
+    <h2 #blogSection>Latest Blogs | 博客更新</h2>
 
-<div class="jumbotron mb-0">
-    <div class="container">
-
-        <h2 #blogSection i18n>Latest Blogs</h2>
-
-        <div class="row my-3" *ngIf="(blog$ | async) as blog" [@fadeInBlog]="blogAnim">
-            <!-- One large block -->
-            <div class="col-md-8 col-sm-12 p-3" *ngIf="blog.postsXL">
-                <a class="card bg-dark text-white w-100 card-big" 
-                style="height:20rem;" 
-                [routerLink]="['/blogs', blog.postsXL.title]" 
-                [@fadeObjBlog]="blogAnim"
-                >
-                    <img src="{{ blog.postsXL.thumbnail }}" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">{{ blog.postsXL.title }}</h5>
-                        <p class="card-text">{{ blog.postsXL.brief }}</p>
-                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
-                    </div>
-                </a>
-            </div>
-
-            <!-- Second large block -->
-            <div class="col-md-4 col-sm-12 p-3" *ngIf="blog.postsL">
-                <a class="card bg-dark text-white w-100 card-big" 
-                style="height: 20rem;" 
-                [routerLink]="['/blogs', blog.postsL.title]" 
-                [@fadeObjBlog]="blogAnim"
-                >
-                    <img src="{{ blog.postsL.thumbnail }}" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">{{ blog.postsL.title }}</h5>
-                        <p class="card-text">{{ blog.postsL.brief }}</p>
-                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
-                    </div>
-                </a>
-            </div>
-
-            <!-- Medium sized blocks -->
-            <div class="col-md-4 col-sm-12 p-3" *ngFor="let post of blog.postsM">
-                <a class="card bg-dark text-white w-100 card-mid" 
-                style="height: 8rem;" 
-                [routerLink]="['/blogs', post.title]" 
-                [@fadeObjBlog]="blogAnim"
-                >
-                    <img src="{{ post.thumbnail }}" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.brief }}</p>
-                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
-                    </div>
-                </a>
-            </div>
-
-            <!-- Small blocks, all remaining -->
-            <div class="col-md-3 col-sm-6 p-3" *ngFor="let post of blog.postsS">
-                <a class="card bg-dark text-white w-100 card-small" 
-                style="height: 12rem;" 
-                [routerLink]="['/blogs', post.title]" 
-                [@fadeObjBlog]="blogAnim"
-                >
-                    <img src="{{ post.thumbnail }}" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.brief }}</p>
-                        <!-- <p class="card-text">Last updated 3 mins ago</p> -->
-                    </div>
-                </a>
-            </div>
-
+    <div class="row my-3" *ngIf="(blog$ | async) as blog" [@fadeInBlog]="blogAnim">
+        <!-- One large block -->
+        <div class="col-md-8 col-sm-12 p-3" *ngIf="blog.postsXL">
+            <a class="card bg-dark text-white w-100 card-big" style="height:20rem;"
+                [routerLink]="['/blogs', blog.postsXL.title]" [@fadeObjBlog]="blogAnim">
+                <img src="{{ blog.postsXL.thumbnail }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ blog.postsXL.title }}</h5>
+                    <p class="card-text">{{ blog.postsXL.brief }}</p>
+                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                </div>
+            </a>
         </div>
 
-        <hr />
+        <!-- Second large block -->
+        <div class="col-md-4 col-sm-12 p-3" *ngIf="blog.postsL">
+            <a class="card bg-dark text-white w-100 card-big" style="height: 20rem;"
+                [routerLink]="['/blogs', blog.postsL.title]" [@fadeObjBlog]="blogAnim">
+                <img src="{{ blog.postsL.thumbnail }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ blog.postsL.title }}</h5>
+                    <p class="card-text">{{ blog.postsL.brief }}</p>
+                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                </div>
+            </a>
+        </div>
 
-        <div >
-            <h2 class="text-center w-100 lead" #eventSection i18n>Upcoming Events</h2>
+        <!-- Medium sized blocks -->
+        <div class="col-md-4 col-sm-12 p-3" *ngFor="let post of blog.postsM">
+            <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;"
+                [routerLink]="['/blogs', post.title]" [@fadeObjBlog]="blogAnim">
+                <img src="{{ post.thumbnail }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.brief }}</p>
+                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                </div>
+            </a>
+        </div>
 
-            <div [@fadeInEvent]="eventAnim" *ngIf="(events$ | async) as eventList">
-                <ng-container *ngFor="let event of eventList">
-                    <div class="media my-5" [@fadeObjEvent]="eventAnim">
-                        <div class="media-body">
-                            <h5 class="mt-0 mb-1 d-none d-md-block">
-                                {{ event.title }}
-                            </h5>
-                            {{ event.brief }}
-                        </div>
-                        <a href="{{ event.link }}">
-                            <img src="{{ event.image }}" class="ml-3 border border-dark" height="60px" width="180px"
-                                style="object-fit: cover;">
-                        </a>
-                    </div>
-
-                    <hr />
-                </ng-container>
-            </div>
+        <!-- Small blocks, all remaining -->
+        <div class="col-md-3 col-sm-6 p-3" *ngFor="let post of blog.postsS">
+            <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;"
+                [routerLink]="['/blogs', post.title]" [@fadeObjBlog]="blogAnim">
+                <img src="{{ post.thumbnail }}" class="card-img">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.brief }}</p>
+                    <!-- <p class="card-text">Last updated 3 mins ago</p> -->
+                </div>
+            </a>
         </div>
 
     </div>
+
+    <hr />
+
+    <div>
+        <h2 class="text-center w-100 lead" #eventSection>Upcoming Events | 最新动态</h2>
+
+        <div [@fadeInEvent]="eventAnim" *ngIf="(events$ | async) as eventList">
+            <ng-container *ngFor="let event of eventList">
+                <div class="media my-5" [@fadeObjEvent]="eventAnim">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1 d-none d-md-block">
+                            {{ event.title }}
+                        </h5>
+                        {{ event.brief }}
+                    </div>
+                    <a href="{{ event.link }}">
+                        <img 
+                        src="{{ event.image }}" 
+                        default="../../assets/images/stock-1.jpg"
+                        class="ml-3 border border-dark" 
+                        height="60px" 
+                        width="180px"
+                        style="object-fit: cover;"
+                        >
+                    </a>
+                </div>
+
+                <hr />
+            </ng-container>
+        </div>
+    </div>
+
 </div>
+
 
 <div #biographySection class="jumbotron jumbotron-fluid mb-0 bg-dark text-white">
     <div class="container px-3" *ngIf="(biography$ | async) as biography" [@fadeInBiography]="biographyAnim">
 
         <h2 class="h3 mb-4">
             <img src="./assets/images/portrait-solid.svg" height="40rem" width="40rem">
-            <span i18n>Biography</span>
+            <span>Biography | 简介</span>
         </h2>
 
         <div class="row mx-n3">

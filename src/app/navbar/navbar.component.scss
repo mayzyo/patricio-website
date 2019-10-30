@@ -1,0 +1,35 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/_breakpoints";
+
+.label {
+    font-size: 1.4rem;
+}
+
+.sub-label {
+    font-size: 1.2rem;
+    border-left: 2px solid map-get($theme-colors, 'white');
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+
+@include media-breakpoint-up(lg) {
+    .sub-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        border-left: none;
+        padding-left: 0;
+        margin-left: auto;
+    }
+}
+
+// Avoid pushing the quotes down when in mobile mode
+@include media-breakpoint-down(md) {
+    nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        z-index: 10;
+    }
+}

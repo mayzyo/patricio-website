@@ -36,19 +36,7 @@ import { merge } from 'rxjs';
 export class MediaComponent implements OnInit {
 
   readonly quote$ = this.contents.randomQuote$;
-  readonly momentList$ = this.contents.momentPreview$.pipe(
-    switchMap(res => 
-      merge(...res.slice(0, 10).map(el => 
-        this.images.imageBypass(el.image).pipe(
-          map(x => {
-            el.thumbnail = x;
-            return el;
-          })
-        )
-      ))
-    ),
-    scan((acc, cur:Moment) => acc.concat(cur), new Array<Moment>())
-  );
+  readonly momentList$ = this.images.gallery$;
 
   current: Moment;
   closeResult: string;

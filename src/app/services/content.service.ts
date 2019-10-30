@@ -40,18 +40,9 @@ export class ContentService {
     );
   }
 
-  get homeQuote$(): Observable<Quote> {
-    return this.quoteList$.pipe(
-      map(res => res.find(el => el.is_home != null))
-    );
-  }
-
   get randomQuote$(): Observable<Quote> {
     return this.quoteList$.pipe(
-      map(res => {
-        const val = res.filter(el => !el.is_home);
-        return val[Math.floor(Math.random() * val.length)]
-      })
+      map(res => res[Math.floor(Math.random() * res.length)])
     );
   }
 

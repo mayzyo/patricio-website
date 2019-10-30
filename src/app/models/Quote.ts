@@ -1,11 +1,17 @@
 ﻿
 export interface Quote { 
 
-    text: string
+    message: string
 
     author: string
 
-    link: string
+    keywords: string
 
-    is_home: string
+    profession: string
+
+    nationality: string
+
+    authorBirth: string
+
+    authorDeath: string
 }

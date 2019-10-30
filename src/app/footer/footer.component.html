@@ -5,55 +5,79 @@
             <div class="row justify-content-end my-5">
 
                 <div class="col-md-3 col-sm-12">
-                    <h1 class="h4 ml-3" i18n>Navigation</h1>
+                    <h1 class="h4 ml-3">Navigation</h1>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/home" i18n>Home</a>
+                            <a class="nav-link" routerLink="/home">主页 | Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/announcements" i18n>Announcements</a>
+                            <a class="nav-link" routerLink="/announcements">动态 | Updates</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/works" i18n>Works</a>
+                            <a class="nav-link" routerLink="/works">作品 | Works</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/blogs" i18n>Blogs</a>
+                            <a class="nav-link" routerLink="/blogs">博客 | Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/media" i18n>Media</a>
+                            <a class="nav-link" routerLink="/media">媒体 | Media</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="col-md-3 col-sm-12">
-                    <h1 class="h4 ml-3" i18n>Social Media</h1>
+                    <h1 class="h4 ml-3">Social Media</h1>
                     <ul class="nav flex-column">
-                        <li class="nav-item" *ngIf="(instagram$ | async) as link">
+
+                        <li class="nav-item" *ngIf="(facebook$ | async) as link">
                             <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/instagram-brands.svg" height="20rem" height="20rem">
-                                <span i18n>Instagram</span>
+                                <img src="./assets/images/facebook-square-brands.svg" height="20rem" height="20rem">
+                                <div class="align-middle d-inline ml-3">Facebook</div>
                             </a>
                         </li>
+
                         <li class="nav-item" *ngIf="(linkedin$ | async) as link">
                             <a class="nav-link" href="{{ link }}">
                                 <img src="./assets/images/linkedin-brands.svg" height="20rem" height="20rem">
-                                <span i18n>LinkedIn</span>
+                                <div class="align-middle d-inline ml-3">LinkedIn</div>
                             </a>
                         </li>
+
+                        <li class="nav-item" *ngIf="(instagram$ | async) as link">
+                            <a class="nav-link" href="{{ link }}">
+                                <img src="./assets/images/instagram-brands.svg" height="20rem" height="20rem">
+                                <div class="align-middle d-inline ml-3">Instagram</div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item" *ngIf="(wechat$ | async) as link">
+                            <a class="nav-link" href="{{ link }}">
+                                <img src="./assets/images/weixin-brands.svg" height="20rem" height="20rem">
+                                <div class="align-middle d-inline ml-3">微信</div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item" *ngIf="(weibo$ | async) as link">
+                            <a class="nav-link" href="{{ link }}">
+                                <img src="./assets/images/weibo-brands.svg" height="20rem" height="20rem">
+                                <div class="align-middle d-inline ml-3">新浪微博</div>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
 
                 <div class="col-md-3 col-sm-12">
-                    <h1 class="h4 ml-3" i18n>Legals</h1>
+                    <h1 class="h4 ml-3">Legals</h1>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" i18n>Privacy Policy</a>
+                            <a class="nav-link" href="#">Privacy Policy | 隐私条款</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" i18n>Terms & Conditions</a>
+                            <a class="nav-link" href="#">Cookie Policy | Cookie 条款</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" i18n>Cookie Policy</a>
+                            <a class="nav-link" href="#">Terms & Conditions</a>
                         </li>
                     </ul>
                 </div>

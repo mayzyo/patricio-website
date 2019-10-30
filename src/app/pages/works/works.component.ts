@@ -3,6 +3,7 @@ import { trigger, group, transition, animate, style, query, useAnimation, sequen
 import { landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { map } from 'rxjs/operators';
+import { ImageService } from 'src/app/services/image.service';
 
 @Component({
   selector: 'app-works',
@@ -33,13 +34,16 @@ export class WorksComponent implements OnInit {
 
   readonly quote$ = this.contents.randomQuote$;
   readonly workList$ = this.contents.workList$.pipe(
-    map(res =>  res.map(el => {
-      !el.image && (el.image = `./assets/images/stock-${Math.floor(Math.random() * 4 + 1)}.jpg`);
-      return el;
-    }))
+    map(res => 
+      res.map(el => ({
+        ...el,
+        // image$: el.image ? this.images.imageFromGoogleDrive(el.image) : this.images.stockGallery()
+        image$: el.image ? this.images.imageBypass('work', el.image) : this.images.stockGallery$()
+      }))
+    )
   );
 
-  constructor(private contents: ContentService) { }
+  constructor(private contents: ContentService, private images: ImageService) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);

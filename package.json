@@ -1,6 +1,6 @@
 {
-  "name": "patricio-portfolio",
-  "version": "0.0.0",
+  "name": "patricio-personal",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "locale": "ng xi18n --output-path src/locale",
-    "analyse": "rmdir /Q /S dist && ng build --prod --source-map && node_modules/.bin/source-map-explorer dist/patricio-portfolio/main-*.js"
+    "analyse": "rmdir /Q /S dist && ng build --prod --source-map && npx source-map-explorer dist/patricio-personal/main-*.js"
   },
   "private": true,
   "dependencies": {
