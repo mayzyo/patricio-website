@@ -101,12 +101,13 @@
             <span>Biography | 简介</span>
         </h2>
 
-        <div class="row mx-n3">
+        <!-- When there are 2 languages, use them, otherwise split the English using column pipe -->
+        <div class="row mx-n3" style="white-space: pre-line;">
             <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBiography]="biographyAnim">
-                {{ biography | column : 1 : 2 }}
+                {{ biography[1] ? biography[0] : biography[0] | column : 1 : 2 }}
             </p>
             <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBiography]="biographyAnim">
-                {{ biography | column : 2 : 2 }}
+                {{ biography[1] ? biography[1] : biography[0] | column : 2 : 2 }}
             </p>
         </div>
     </div>

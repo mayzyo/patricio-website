@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
@@ -99,9 +99,16 @@ export class HomeComponent implements OnInit {
       }
     }),
   );
-  readonly events$ = this.contents.eventAnnouncement('1', '4');
-  readonly biography$ = this.contents.biography$;
   readonly quote$ = this.contents.randomQuote$;
+  readonly events$ = this.contents.eventAnnouncement('1', '4');
+  readonly biography$ = this.contents.biography$.pipe(
+    map(res => {
+      const cutoff = this.languageCut(res)
+      return cutoff != -1
+      ? [res.slice(0, cutoff), res.slice(cutoff, res.length)]
+      : [res]
+    })
+  );
 
   blogAnim = false;
   eventAnim = false;
@@ -133,5 +140,17 @@ export class HomeComponent implements OnInit {
   scrolldown() {
     this.blogSection.nativeElement.scrollIntoView({behavior:"smooth"});
     // el.scrollIntoView({behavior:"smooth"});
+  }
+
+  languageCut(msg: string) {
+    for (var i = 0, n = msg.length; i < n; i++) {
+      // Chinese is above the 30,000 range in Unicode
+      if (msg.charCodeAt(i) > 30000) { 
+        console.log(msg.charCodeAt(i))
+        return i;
+      }
+    }
+
+    return -1;
   }
 }
