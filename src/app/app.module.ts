@@ -20,6 +20,7 @@ import { ColumnPipe } from './utils/column.pipe';
 import { BannerComponent } from './banner/banner.component';
 import { BannerLandingComponent } from './banner-landing/banner-landing.component';
 import { ImagePreloadDirective } from './utils/image-preload.directive';
+import { UpcomingEventsComponent } from './upcoming-events/upcoming-events.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ImagePreloadDirective } from './utils/image-preload.directive';
     ColumnPipe,
     BannerComponent,
     BannerLandingComponent,
-    ImagePreloadDirective
+    ImagePreloadDirective,
+    UpcomingEventsComponent
   ],
   imports: [
     BrowserModule,

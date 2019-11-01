@@ -1,0 +1,22 @@
+<div *ngIf="(latest$ | async) as latest" [@fadeIn]>
+    <ng-container *ngFor="let announcement of latest">
+        <div class="media my-3">
+
+            <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3" height="60px"
+                width="60px">
+
+            <div class="media-body">
+                <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">
+                    {{ announcement.title }}
+                </h5>
+                {{ announcement.brief }}
+            </div>
+
+            <img *ngIf="announcement.link" src="{{ announcement.image }}" default="../../assets/images/stock-1.jpg"
+                class="ml-3 border border-dark" height="60px" width="180px" style="object-fit: cover;">
+
+        </div>
+
+        <hr />
+    </ng-container>
+</div>

@@ -63,31 +63,7 @@
 
     <div>
         <h2 class="text-center w-100 lead" #eventSection>Upcoming Events | 最新动态</h2>
-
-        <div [@fadeInEvent]="eventAnim" *ngIf="(events$ | async) as eventList">
-            <ng-container *ngFor="let event of eventList">
-                <div class="media my-5" [@fadeObjEvent]="eventAnim">
-                    <div class="media-body">
-                        <h5 class="mt-0 mb-1 d-none d-md-block">
-                            {{ event.title }}
-                        </h5>
-                        {{ event.brief }}
-                    </div>
-                    <a href="{{ event.link }}">
-                        <img 
-                        src="{{ event.image }}" 
-                        default="../../assets/images/stock-1.jpg"
-                        class="ml-3 border border-dark" 
-                        height="60px" 
-                        width="180px"
-                        style="object-fit: cover;"
-                        >
-                    </a>
-                </div>
-
-                <hr />
-            </ng-container>
-        </div>
+        <app-upcoming-events></app-upcoming-events>
     </div>
 
 </div>

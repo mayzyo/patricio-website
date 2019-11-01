@@ -9,14 +9,6 @@ import { ImageService } from 'src/app/services/image.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  // animations: [
-  //   trigger('fadeInBlog', fadeIn('.card', { state: 'true' })),
-  //   trigger('fadeObjBlog', fadeObject('*', 'true')),
-  //   trigger('fadeInEvent', fadeIn('.media', { state: 'true' })),
-  //   trigger('fadeObjEvent', fadeObject('*', 'true')),
-  //   trigger('fadeInBiography', fadeIn('.row', { state: 'true' })),
-  //   trigger('fadeObjBiography', fadeObject('*', 'true'))
-  // ]
   animations: [
     trigger('fadeInBlog', [
       transition(`* => true`, [
@@ -37,25 +29,25 @@ import { ImageService } from 'src/app/services/image.service';
       state('*', style({ visibility: 'hidden' })),
       state('true', style({ visibility: 'visible' }))
     ]),
-    trigger('fadeInEvent', [
-      transition(`* => true`, [
-        query('.media', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-    trigger('fadeObjEvent', [
-      state('*', style({ visibility: 'hidden' })),
-      state('true', style({ visibility: 'visible' }))
-    ]),
+    // trigger('fadeInEvent', [
+    //   transition(`* => true`, [
+    //     query('.media', [
+    //       style({ opacity: '0' }),
+    //       stagger(300, [
+    //         useAnimation(landingFadeIn, {
+    //           params: {
+    //             transform: 'translateY(20px)',
+    //             opacity: '0',
+    //           }
+    //         })
+    //       ])
+    //     ]),
+    //   ])
+    // ]),
+    // trigger('fadeObjEvent', [
+    //   state('*', style({ visibility: 'hidden' })),
+    //   state('true', style({ visibility: 'visible' }))
+    // ]),
     trigger('fadeInBiography', [
       transition(`* => true`, [
         query('.row', [
@@ -80,7 +72,7 @@ import { ImageService } from 'src/app/services/image.service';
 export class HomeComponent implements OnInit {
 
   @ViewChild('blogSection', { static:true }) blogSection: ElementRef;
-  @ViewChild('eventSection', { static:true }) eventSection: ElementRef;
+  // @ViewChild('eventSection', { static:true }) eventSection: ElementRef;
   @ViewChild('biographySection', { static:true }) biographySection: ElementRef;
 
   readonly blog$ = this.contents.blogPreview('1', '13').pipe(
@@ -126,8 +118,8 @@ export class HomeComponent implements OnInit {
     if(!this.blogAnim && this.scrollOffset(this.blogSection))
       this.blogAnim = true;
 
-    if(!this.eventAnim && this.scrollOffset(this.eventSection))
-      this.eventAnim = true;
+    // if(!this.eventAnim && this.scrollOffset(this.eventSection))
+    //   this.eventAnim = true;
 
     if(!this.biographyAnim && this.scrollOffset(this.biographySection))
       this.biographyAnim = true;

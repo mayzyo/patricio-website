@@ -5,40 +5,7 @@
 
         <div class="col-lg-9 col-md-12">
             <h2 class="h4 mb-5 lead">Latest Announcements | 最新动态</h2>
-            <div *ngIf="(latest$ | async) as latest" [@fadeIn]>
-                <ng-container *ngFor="let announcement of latest">
-                    <div class="media my-3">
-
-                        <img 
-                        *ngIf="!announcement.link" 
-                        src="./assets/images/bullhorn-solid.svg" 
-                        class="mr-3"
-                        height="60px" 
-                        width="60px"
-                        >
-
-                        <div class="media-body">
-                            <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">
-                                {{ announcement.title }}
-                            </h5>
-                            {{ announcement.brief }}
-                        </div>
-
-                        <img 
-                        *ngIf="announcement.link" 
-                        src="{{ announcement.image }}" 
-                        default="../../assets/images/stock-1.jpg"
-                        class="ml-3 border border-dark"
-                        height="60px" 
-                        width="180px" 
-                        style="object-fit: cover;"
-                        >
-
-                    </div>
-
-                    <hr />
-                </ng-container>
-            </div>
+            <app-upcoming-events [latest$]="latest$"></app-upcoming-events>
         </div>
 
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as history" [@fadeInOpt]>
@@ -47,18 +14,20 @@
                     <div class="display-4">历史动态</div>
                     <div class="h1 text-monospace text-uppercase">History</div>
                 </h2>
-                <ul
-                class="history-list"
-                infiniteScroll
-                [infiniteScrollDistance]="2"
-                [infiniteScrollThrottle]="50"
-                [scrollWindow]="false"
-                (scrolled)="onScroll()"        
-                >
-                    <li class="history-item" *ngFor="let announcement of history">
-                        {{ announcement.title }}
-                    </li>
-                </ul>
+                <div class="history-list-wrapper">
+                    <ul
+                    class="history-list"
+                    infiniteScroll
+                    [infiniteScrollDistance]="2"
+                    [infiniteScrollThrottle]="50"
+                    [scrollWindow]="false"
+                    (scrolled)="onScroll()"        
+                    >
+                        <li class="history-item" *ngFor="let announcement of history">
+                            {{ announcement.title }}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
