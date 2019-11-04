@@ -29,25 +29,6 @@ import { ImageService } from 'src/app/services/image.service';
     //   state('*', style({ visibility: 'hidden' })),
     //   state('true', style({ visibility: 'visible' }))
     // ]),
-    // trigger('fadeInEvent', [
-    //   transition(`* => true`, [
-    //     query('.media', [
-    //       style({ opacity: '0' }),
-    //       stagger(300, [
-    //         useAnimation(landingFadeIn, {
-    //           params: {
-    //             transform: 'translateY(20px)',
-    //             opacity: '0',
-    //           }
-    //         })
-    //       ])
-    //     ]),
-    //   ])
-    // ]),
-    // trigger('fadeObjEvent', [
-    //   state('*', style({ visibility: 'hidden' })),
-    //   state('true', style({ visibility: 'visible' }))
-    // ]),
     trigger('fadeInBiography', [
       transition(`* => true`, [
         query('.row', [
@@ -71,33 +52,17 @@ import { ImageService } from 'src/app/services/image.service';
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild('WorkRef', { static:true }) workRef: ElementRef;
-  // @ViewChild('eventSection', { static:true }) eventSection: ElementRef;
-  @ViewChild('biographySection', { static:true }) biographySection: ElementRef;
+  @ViewChild('HighlightRef', { static:true }) highlightRef: ElementRef;
+  @ViewChild('UpcomingRef', { static:true }) upcomingRef: ElementRef;
+  @ViewChild('BiographyRef', { static:true }) biographyRef: ElementRef;
 
-  readonly blog$ = this.contents.blogPreview('1', '13').pipe(
-    map(res =>  
-      res.map(el => ({
-        ...el,
-        thumbnail: this.images.stockGallery()
-      }))
-    ),
-    map(res => {
-      return {
-        postsXL: res[0],
-        postsL: res[1],
-        postsM: [...res].splice(2, 3),
-        postsS: [...res].splice(5, res.length - 5)
-      }
-    }),
-  );
+  readonly quote$ = this.contents.randomQuote$;
   readonly works$ = this.contents.workList$.pipe(
     map(res => 
       res.map(el => ({ ...el, brief: new Date(el.create_date).toDateString(), link: el.sound_cloud }))
     ),
   );
-  readonly quote$ = this.contents.randomQuote$;
-  readonly events$ = this.contents.eventAnnouncement('1', '4');
+  readonly announcement$ = this.contents.eventAnnouncement('1', '4');
   readonly biography$ = this.contents.biography$.pipe(
     map(res => {
       const cutoff = this.languageCut(res)
@@ -107,8 +72,8 @@ export class HomeComponent implements OnInit {
     })
   );
 
-  blogAnim = false;
-  eventAnim = false;
+  highlightAnim = false;
+  upcomingAnim = false;
   biographyAnim = false;
 
   constructor(private contents: ContentService, private images: ImageService) { }
@@ -119,33 +84,32 @@ export class HomeComponent implements OnInit {
   @HostListener('window:scroll', ['$event']) 
   onScrollEvent($event) {
 
-    // if(!this.blogAnim && this.scrollOffset(this.blogSection))
-    //   this.blogAnim = true;
+    if(!this.highlightAnim && this.scrollOffset(this.highlightRef))
+      this.highlightAnim = true;
 
-    // if(!this.eventAnim && this.scrollOffset(this.eventSection))
-    //   this.eventAnim = true;
+    if(!this.upcomingAnim && this.scrollOffset(this.upcomingRef))
+      this.upcomingAnim = true;
 
-    if(!this.biographyAnim && this.scrollOffset(this.biographySection))
+    if(!this.biographyAnim && this.scrollOffset(this.biographyRef))
       this.biographyAnim = true;
   }
 
-  scrollOffset(elRef: ElementRef) {
-    return window.scrollY >= elRef.nativeElement.offsetTop - (window.innerHeight / 1.35)
-  }
-
   scrolldown() {
-    this.workRef.nativeElement.scrollIntoView({behavior:"smooth"});
-    // el.scrollIntoView({behavior:"smooth"});
+    this.highlightRef.nativeElement.scrollIntoView({behavior:"smooth"});
   }
 
   languageCut(msg: string) {
     for (var i = 0, n = msg.length; i < n; i++) {
-      // Chinese is above the 30,000 range in Unicode
+      // Chinese characters are above the 30,000 range in Unicode
       if (msg.charCodeAt(i) > 30000) { 
         return i;
       }
     }
 
     return -1;
+  }
+
+  private scrollOffset(elRef: ElementRef) {
+    return window.scrollY >= elRef.nativeElement.offsetTop - (window.innerHeight / 1.35)
   }
 }

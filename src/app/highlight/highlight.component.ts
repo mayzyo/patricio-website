@@ -1,23 +1,48 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { trigger, transition, query, style, stagger, useAnimation, state } from '@angular/animations';
 import { Observable, of } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
 import { ImageService } from '../services/image.service';
+import { landingFadeIn } from '../animations/fade-in';
 
 @Component({
   selector: 'app-highlight',
   templateUrl: './highlight.component.html',
-  styleUrls: ['./highlight.component.scss']
+  styleUrls: ['./highlight.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(`* => true`, [
+        query('.card', [
+          style({ opacity: '0' }),
+          stagger(300, [
+            useAnimation(landingFadeIn, {
+              params: {
+                transform: 'translateY(20px)',
+                opacity: '0',
+              }
+            })
+          ])
+        ]),
+      ])
+    ]),
+    trigger('fadeObj', [
+      state('*', style({ visibility: 'hidden' })),
+      state('true', style({ visibility: 'visible' }))
+    ]),
+  ]
 })
 export class HighlightComponent implements OnInit {
 
   @Input() datasource$: Observable<HighlightItem[]>;
+  @Input() animState: boolean = true;
+
   highlights$: Observable<any>;
 
   constructor(private images: ImageService) { }
 
   ngOnInit() {
     this.highlights$ = this.datasource$.pipe(
-      map(res =>  
+      map(res =>
         res.map(el => ({
           ...el,
           thumbnail: this.images.stockGallery()

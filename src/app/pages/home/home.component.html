@@ -2,21 +2,21 @@
 
 <div class="container my-5">
 
-    <h2 #WorkRef>
+    <h2 #HighlightRef>
         <img src="./assets/images/record-vinyl-solid.svg" height="40rem" width="40rem">
         Highlights | 作品一览
     </h2>
-    <app-highlight [datasource$]="works$"></app-highlight>
+    <app-highlight [animState]="highlightAnim" [datasource$]="works$"></app-highlight>
 
     <hr />
 
-    <h2 class="text-center w-100 lead" #eventSection>Upcoming Events | 最新动态</h2>
-    <app-upcoming-events></app-upcoming-events>
+    <h2 class="text-center w-100 lead" #UpcomingRef>Upcoming Events | 最新动态</h2>
+    <app-upcoming-events [animState]="upcomingAnim" [latest$]="announcement$"></app-upcoming-events>
 
 </div>
 
 
-<div #biographySection class="jumbotron jumbotron-fluid mb-0 bg-dark text-white">
+<div #BiographyRef class="jumbotron jumbotron-fluid mb-0 bg-dark text-white">
     <div class="container px-3" *ngIf="(biography$ | async) as biography" [@fadeInBiography]="biographyAnim">
 
         <h2 class="h3 mb-4">

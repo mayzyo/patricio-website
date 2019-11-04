@@ -15,21 +15,6 @@ import { Announcement } from 'src/app/models/Announcement';
   //   trigger('fadeInOpt', fadeIn('.anim-obj')),
   // ],
   animations: [
-    trigger('fadeIn', [
-      transition(`* => *`, [
-        query('.media', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
     trigger('fadeInOpt', [
       transition(`* => *`, [
         query('.anim-obj', [
@@ -54,6 +39,8 @@ export class AnnouncementsComponent implements OnInit {
   readonly history$: Observable<Announcement[]>;
   readonly latest$: Observable<Announcement[]>;
 
+  animState = false;
+
   constructor(private contents: ContentService) {
     
     this.updateHistory$ = new Subject();
@@ -64,7 +51,7 @@ export class AnnouncementsComponent implements OnInit {
   }
 
   ngOnInit() {
-    window.scrollTo(0, 0);
+    this.animState = true;
   }
 
   onScroll() {

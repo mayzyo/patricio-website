@@ -1,6 +1,6 @@
-<div *ngIf="(latest$ | async) as latest" [@fadeIn]>
+<div *ngIf="(latest$ | async) as latest" [@fadeIn]="animState">
     <ng-container *ngFor="let announcement of latest">
-        <div class="media my-3">
+        <div class="media my-3" [@fadeObj]="animState">
 
             <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3" height="60px"
                 width="60px">

@@ -5,7 +5,7 @@
 
         <div class="col-lg-9 col-md-12">
             <h2 class="h4 mb-5 lead">Latest Announcements | 最新动态</h2>
-            <app-upcoming-events [latest$]="latest$"></app-upcoming-events>
+            <app-upcoming-events [latest$]="latest$" [animState]="animState"></app-upcoming-events>
         </div>
 
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as history" [@fadeInOpt]>
