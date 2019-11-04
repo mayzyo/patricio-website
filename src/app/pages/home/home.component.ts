@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck } from 'rxjs/operators';
+import { map, pluck, tap } from 'rxjs/operators';
 import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
@@ -10,25 +10,25 @@ import { ImageService } from 'src/app/services/image.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
-    trigger('fadeInBlog', [
-      transition(`* => true`, [
-        query('.card', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-    trigger('fadeObjBlog', [
-      state('*', style({ visibility: 'hidden' })),
-      state('true', style({ visibility: 'visible' }))
-    ]),
+    // trigger('fadeInBlog', [
+    //   transition(`* => true`, [
+    //     query('.card', [
+    //       style({ opacity: '0' }),
+    //       stagger(300, [
+    //         useAnimation(landingFadeIn, {
+    //           params: {
+    //             transform: 'translateY(20px)',
+    //             opacity: '0',
+    //           }
+    //         })
+    //       ])
+    //     ]),
+    //   ])
+    // ]),
+    // trigger('fadeObjBlog', [
+    //   state('*', style({ visibility: 'hidden' })),
+    //   state('true', style({ visibility: 'visible' }))
+    // ]),
     // trigger('fadeInEvent', [
     //   transition(`* => true`, [
     //     query('.media', [
@@ -71,7 +71,7 @@ import { ImageService } from 'src/app/services/image.service';
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild('blogSection', { static:true }) blogSection: ElementRef;
+  @ViewChild('WorkRef', { static:true }) workRef: ElementRef;
   // @ViewChild('eventSection', { static:true }) eventSection: ElementRef;
   @ViewChild('biographySection', { static:true }) biographySection: ElementRef;
 
@@ -91,6 +91,11 @@ export class HomeComponent implements OnInit {
       }
     }),
   );
+  readonly works$ = this.contents.workList$.pipe(
+    map(res => 
+      res.map(el => ({ ...el, brief: new Date(el.create_date).toDateString(), link: el.sound_cloud }))
+    ),
+  );
   readonly quote$ = this.contents.randomQuote$;
   readonly events$ = this.contents.eventAnnouncement('1', '4');
   readonly biography$ = this.contents.biography$.pipe(
@@ -109,14 +114,13 @@ export class HomeComponent implements OnInit {
   constructor(private contents: ContentService, private images: ImageService) { }
 
   ngOnInit() {
-    window.scrollTo(0, 0);
   }
   
   @HostListener('window:scroll', ['$event']) 
   onScrollEvent($event) {
 
-    if(!this.blogAnim && this.scrollOffset(this.blogSection))
-      this.blogAnim = true;
+    // if(!this.blogAnim && this.scrollOffset(this.blogSection))
+    //   this.blogAnim = true;
 
     // if(!this.eventAnim && this.scrollOffset(this.eventSection))
     //   this.eventAnim = true;
@@ -130,7 +134,7 @@ export class HomeComponent implements OnInit {
   }
 
   scrolldown() {
-    this.blogSection.nativeElement.scrollIntoView({behavior:"smooth"});
+    this.workRef.nativeElement.scrollIntoView({behavior:"smooth"});
     // el.scrollIntoView({behavior:"smooth"});
   }
 
@@ -138,7 +142,6 @@ export class HomeComponent implements OnInit {
     for (var i = 0, n = msg.length; i < n; i++) {
       // Chinese is above the 30,000 range in Unicode
       if (msg.charCodeAt(i) > 30000) { 
-        console.log(msg.charCodeAt(i))
         return i;
       }
     }

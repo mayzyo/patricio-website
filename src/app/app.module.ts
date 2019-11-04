@@ -21,6 +21,7 @@ import { BannerComponent } from './banner/banner.component';
 import { BannerLandingComponent } from './banner-landing/banner-landing.component';
 import { ImagePreloadDirective } from './utils/image-preload.directive';
 import { UpcomingEventsComponent } from './upcoming-events/upcoming-events.component';
+import { HighlightComponent } from './highlight/highlight.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { UpcomingEventsComponent } from './upcoming-events/upcoming-events.compo
     BannerComponent,
     BannerLandingComponent,
     ImagePreloadDirective,
-    UpcomingEventsComponent
+    UpcomingEventsComponent,
+    HighlightComponent
   ],
   imports: [
     BrowserModule,
