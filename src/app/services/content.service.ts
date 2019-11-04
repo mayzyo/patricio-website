@@ -8,7 +8,6 @@ import { Post } from '../models/Post';
 import { Announcement } from '../models/Announcement';
 import { Music } from '../models/Music';
 import { Moment } from '../models/Moment';
-import { LanguageService } from './language.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,19 +19,19 @@ export class ContentService {
   );
   readonly momentPreview$ = this.http.get<Moment[]>(
     '/api/image/moments', 
-    { params: { page: '1', size: '100', lang: this.languages.locale } }
+    { params: { page: '1', size: '100' } }
   ).pipe(
     shareReplay(1)
   );
 
-  readonly profile$ = this.http.get<Profile>('/api/profile', this.languages.localeParam).pipe(
+  readonly profile$ = this.http.get<Profile>('/api/profile').pipe(
     shareReplay(1)
   );
-  private readonly quoteList$ = this.http.get<Quote[]>('/api/profile/quotes', this.languages.localeParam).pipe(
+  private readonly quoteList$ = this.http.get<Quote[]>('/api/profile/quotes').pipe(
     shareReplay(1)
   );
 
-  constructor(private http: HttpClient, private languages: LanguageService) { }
+  constructor(private http: HttpClient) { }
 
   get biography$(): Observable<string> {
     return this.profile$.pipe(
@@ -49,7 +48,7 @@ export class ContentService {
   blogPreview(page: string, size: string): Observable<Post[]> {
     return this.http.get<Post[]>(
       '/api/blog/latest', 
-      { params: { page, size, lang: this.languages.locale } }
+      { params: { page, size } }
     );
   }
 
@@ -57,7 +56,7 @@ export class ContentService {
     return this.http.get(
       '/api/blog/article', 
       { 
-        params: { title: post.title, lang: this.languages.locale }, 
+        params: { title: post.title }, 
         responseType: 'text' 
       },
     );
@@ -66,14 +65,14 @@ export class ContentService {
   announcement(page: string, size: string) {
     return this.http.get<Announcement[]>(
       '/api/announcement/latest', 
-      { params: { page, size, lang: this.languages.locale } }
+      { params: { page, size } }
     );
   }
 
   eventAnnouncement(page: string, size: string) {
     return this.http.get<Announcement[]>(
       '/api/announcement/events', 
-      { params: { page, size, lang: this.languages.locale } }
+      { params: { page, size } }
     );
   }
 }
