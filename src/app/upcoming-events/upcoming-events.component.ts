@@ -33,7 +33,7 @@ import { landingFadeIn } from '../animations/fade-in';
 })
 export class UpcomingEventsComponent implements OnInit {
 
-  @Input() latest$?: Observable<Announcement[]> = this.contents.announcement('1', '10');
+  @Input() datasource$?: Observable<Announcement[]> = this.contents.announcement('1', '10');
   @Input() animState?: boolean = true;
 
   constructor(private contents: ContentService) { }
