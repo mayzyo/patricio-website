@@ -79,4 +79,8 @@ export class ImageService {
     const end = url.lastIndexOf('/view');
     return of(googleApi.concat(url.substring(start, end)));
   }
+
+  audioSource$() {
+    return this.http.get('api/work/audio');
+  }
 }
