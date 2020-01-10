@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { trigger, transition, query, style, stagger, useAnimation, state } from '@angular/animations';
 import { Observable, of } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
-import { ImageService } from '../services/image.service';
-import { landingFadeIn } from '../animations/fade-in';
+import { ImageService } from '../../services/image.service';
+import { landingFadeIn } from '../../animations/fade-in';
 
 @Component({
   selector: 'app-highlight',

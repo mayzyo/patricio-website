@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentService } from '../services/content.service';
+import { ContentService } from '../../services/content.service';
 import { switchMap, merge, map, scan } from 'rxjs/operators';
-import { Moment } from '../models/Moment';
-import { ImageService } from '../services/image.service';
+import { Moment } from '../../models/Moment';
+import { ImageService } from '../../services/image.service';
 import { combineLatest } from 'rxjs';
 
 @Component({

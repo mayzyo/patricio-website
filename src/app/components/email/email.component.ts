@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
-import { Email, Sender, Purpose } from '../models/Email';
+import { Email, Sender, Purpose } from '../../models/Email';
 import { NgForm } from '@angular/forms';
-import { ContactService } from '../services/contact.service';
+import { ContactService } from '../../services/contact.service';
 
 @Component({
   selector: 'app-email',

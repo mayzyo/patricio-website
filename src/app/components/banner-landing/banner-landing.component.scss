@@ -1,7 +1,7 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins/_breakpoints";
-@import "../../custom.scss";
+@import "../../../custom.scss";
 
 .quotes {
     top: 0;
@@ -16,8 +16,8 @@
     background:
         linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
         linear-gradient(to right, map-get($theme-colors, 'tertiary') 0%, yellow 90%), 
-        url('../../assets/images/home-banner.jpg') 30px,
-        url('../../assets/images/home-banner.jpg') 20px;
+        url('../../../assets/images/home-banner.jpg') 30px,
+        url('../../../assets/images/home-banner.jpg') 20px;
     background-blend-mode: screen, difference, lighten;
     background-size: cover;
     height: 100vh;

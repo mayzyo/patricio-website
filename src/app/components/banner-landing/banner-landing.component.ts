@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ContentService } from '../services/content.service';
+import { ContentService } from '../../services/content.service';
 
 @Component({
   selector: 'app-banner-landing',

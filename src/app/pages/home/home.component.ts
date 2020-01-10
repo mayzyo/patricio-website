@@ -4,7 +4,6 @@ import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { ContentService } from 'src/app/services/content.service';
 import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
 import { ImageService } from 'src/app/services/image.service';
-import { Howl, Howler } from 'howler';
 
 @Component({
   selector: 'app-home',
@@ -80,10 +79,7 @@ export class HomeComponent implements OnInit {
   constructor(private contents: ContentService, private images: ImageService) {}
 
   ngOnInit() {
-    var sound = new Howl({
-      src: ['assets/I Have A Dream.mp3'],
-      onload: () => sound.play()
-    });
+
   }
   
   @HostListener('window:scroll', ['$event']) 
