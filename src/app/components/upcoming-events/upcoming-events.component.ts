@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { trigger, transition, query, style, stagger, useAnimation, state } from '@angular/animations';
 import { Observable } from 'rxjs';
 import { Announcement } from '../../models/Announcement';
-import { ContentService } from '../../services/content.service';
 import { landingFadeIn } from '../../animations/fade-in';
 
 @Component({
@@ -33,12 +32,11 @@ import { landingFadeIn } from '../../animations/fade-in';
 })
 export class UpcomingEventsComponent implements OnInit {
 
-  @Input() datasource$?: Observable<Announcement[]> = this.contents.announcement('1', '10');
+  @Input() datasource$?: Observable<Announcement[]>;
   @Input() animState?: boolean = true;
 
-  constructor(private contents: ContentService) { }
+  constructor() { }
 
   ngOnInit() {
   }
-
 }

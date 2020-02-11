@@ -1,34 +1,18 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck, tap } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
-import { ContentService } from 'src/app/services/content.service';
-import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
-import { ImageService } from 'src/app/services/image.service';
+import { trigger, transition, style, query, useAnimation, stagger, state } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
+import { Music } from 'src/app/models/Music';
+import { Announcement } from 'src/app/models/Announcement';
+import { Profile } from 'src/app/models/Profile';
+import { QuotesService } from 'src/app/services/quotes.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
-    // trigger('fadeInBlog', [
-    //   transition(`* => true`, [
-    //     query('.card', [
-    //       style({ opacity: '0' }),
-    //       stagger(300, [
-    //         useAnimation(landingFadeIn, {
-    //           params: {
-    //             transform: 'translateY(20px)',
-    //             opacity: '0',
-    //           }
-    //         })
-    //       ])
-    //     ]),
-    //   ])
-    // ]),
-    // trigger('fadeObjBlog', [
-    //   state('*', style({ visibility: 'hidden' })),
-    //   state('true', style({ visibility: 'visible' }))
-    // ]),
     trigger('fadeInBiography', [
       transition(`* => true`, [
         query('.row', [
@@ -56,14 +40,27 @@ export class HomeComponent implements OnInit {
   @ViewChild('UpcomingRef', { static:true }) upcomingRef: ElementRef;
   @ViewChild('BiographyRef', { static:true }) biographyRef: ElementRef;
 
-  readonly quote$ = this.contents.randomQuote$;
-  readonly works$ = this.contents.workList$.pipe(
+  readonly quote$ = this.quotes.procedure$('home');
+
+  readonly works$ = this.http.get<Music[]>('/api/music').pipe(
     map(res => 
-      res.map(el => ({ ...el, brief: new Date(el.create_date).toDateString(), link: el.sound_cloud }))
+      res.map(el => 
+        ({ 
+          ...el, 
+          brief: new Date(el.create_date).toDateString(), 
+          link: el.sound_cloud 
+        })
+      )
     ),
   );
-  readonly announcement$ = this.contents.eventAnnouncement('1', '4');
-  readonly biography$ = this.contents.biography$.pipe(
+
+  readonly announcement$ = this.http.get<Announcement[]>(
+    '/api/announcement', 
+    { params: { page: '1', size: '4', fitler: 'event' } }
+  );
+
+  readonly biography$ = this.http.get<Profile>('/api/profile').pipe(
+    pluck<Profile, string>('biography'),
     map(res => {
       const cutoff = this.languageCut(res)
       return cutoff != -1
@@ -76,15 +73,17 @@ export class HomeComponent implements OnInit {
   upcomingAnim = false;
   biographyAnim = false;
 
-  constructor(private contents: ContentService, private images: ImageService) {}
+  constructor(
+    private http: HttpClient,
+    private quotes: QuotesService
+  ) { }
 
   ngOnInit() {
 
   }
   
   @HostListener('window:scroll', ['$event']) 
-  onScrollEvent($event) {
-
+  onScrollEvent($event: unknown) {
     if(!this.highlightAnim && this.scrollOffset(this.highlightRef))
       this.highlightAnim = true;
 

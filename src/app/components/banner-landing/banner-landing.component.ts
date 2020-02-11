@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ContentService } from '../../services/content.service';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Quote } from 'src/app/models/Quote';
 
 @Component({
   selector: 'app-banner-landing',
@@ -8,10 +9,10 @@ import { ContentService } from '../../services/content.service';
 })
 export class BannerLandingComponent implements OnInit {
 
+  @Input() quote$: Observable<Quote>;
   @Output() onScrolldown = new EventEmitter();
-  readonly quote$ = this.contents.randomQuote$;
 
-  constructor(private contents: ContentService) { }
+  constructor() { }
 
   ngOnInit() {
   }

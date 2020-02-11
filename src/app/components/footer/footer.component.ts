@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentService } from '../../services/content.service';
-import { pluck } from 'rxjs/operators';
+import { pluck, map, share } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Profile } from 'src/app/models/Profile';
 
 @Component({
   selector: 'app-footer',
@@ -9,23 +10,29 @@ import { pluck } from 'rxjs/operators';
 })
 export class FooterComponent implements OnInit {
 
-  readonly facebook$ = this.contents.profile$.pipe(
+  private readonly profile$ = this.http.get<Profile>('/api/profile').pipe(
+    share()
+  );
+
+  readonly facebook$ = this.profile$.pipe(
     pluck('facebook')
   );
-  readonly linkedin$ = this.contents.profile$.pipe(
+  readonly linkedin$ = this.profile$.pipe(
     pluck('linkedin')
   );
-  readonly instagram$ = this.contents.profile$.pipe(
+  readonly instagram$ = this.profile$.pipe(
     pluck('instagram')
   );
-  readonly wechat$ = this.contents.profile$.pipe(
+  readonly wechat$ = this.profile$.pipe(
     pluck('wechat')
   );
-  readonly weibo$ = this.contents.profile$.pipe(
+  readonly weibo$ = this.profile$.pipe(
     pluck('weibo')
   );
 
-  constructor(private contents: ContentService) { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
   ngOnInit() {
   }

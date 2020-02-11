@@ -6,15 +6,16 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
+import { cacheProvider } from './utils/cache.interceptor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { EmailComponent } from './components/email/email.component';
-import { AnnouncementsComponent } from './pages/announcements/announcements.component';
-import { WorksComponent } from './pages/works/works.component';
-import { BlogsComponent } from './pages/blogs/blogs.component';
+import { AnnouncementComponent } from './pages/announcement/announcement.component';
+import { MusicComponent } from './pages/music/music.component';
 import { MediaComponent } from './pages/media/media.component';
 import { ColumnPipe } from './utils/column.pipe';
 import { BannerComponent } from './components/banner/banner.component';
@@ -31,9 +32,8 @@ import { MusicPlayerComponent } from './components/music-player/music-player.com
     HomeComponent,
     FooterComponent,
     EmailComponent,
-    AnnouncementsComponent,
-    WorksComponent,
-    BlogsComponent,
+    AnnouncementComponent,
+    MusicComponent,
     MediaComponent,
     ColumnPipe,
     BannerComponent,
@@ -52,7 +52,7 @@ import { MusicPlayerComponent } from './components/music-player/music-player.com
     InfiniteScrollModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [cacheProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

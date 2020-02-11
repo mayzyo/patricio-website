@@ -1,13 +1,13 @@
 <div 
 class="background position-absolute" 
-[ngStyle]="{ background: 'url(../../assets/images/' + background + ')', 'background-size': 'cover' }"
+[ngStyle]="{ background: 'url(../../assets/images/' + backgroundUrl + ')', 'background-size': 'cover' }"
 >
 </div>
 
 <div class="carousel position-absolute">
     <div class="wrapper">
-        <div class="d-inline-block d-lg-block m-3" *ngFor="let moment of carousel$ | async">
-            <img src="{{ moment.image }}" class="img-thumbnail">
+        <div class="d-inline-block d-lg-block m-3" *ngFor="let preview of previews$ | async">
+            <img src="{{ preview }}" class="img-thumbnail">
         </div>
     </div>
 </div>

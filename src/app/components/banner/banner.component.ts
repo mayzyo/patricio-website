@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentService } from '../../services/content.service';
-import { switchMap, merge, map, scan } from 'rxjs/operators';
-import { Moment } from '../../models/Moment';
-import { ImageService } from '../../services/image.service';
-import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Quote } from 'src/app/models/Quote';
+import { Moment } from 'src/app/models/Moment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-banner',
@@ -12,21 +12,16 @@ import { combineLatest } from 'rxjs';
 })
 export class BannerComponent implements OnInit {
 
-  @Input() background: string;
+  @Input() quote$: Observable<Quote>;
+  @Input() backgroundUrl: string;
 
-  readonly quote$ = this.contents.randomQuote$;
-  // readonly carousel$ = combineLatest(
-  //   this.images.stockGallery(),
-  //   this.images.stockGallery(),
-  //   this.images.stockGallery(),
-  //   this.images.stockGallery(),
-  //   this.images.stockGallery()
-  // )
-  readonly carousel$ = this.images.gallery$;
+  readonly previews$ = this.http.get<Moment[]>('/api/media/gallery').pipe(
+    map(res => res.map(el => el.image))
+  );
 
-  constructor(private contents: ContentService, private images: ImageService) {
-    
-  }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
   ngOnInit() {
   }

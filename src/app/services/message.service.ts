@@ -5,7 +5,7 @@ import { Email, Purpose, Sender } from '../models/Email';
 @Injectable({
   providedIn: 'root'
 })
-export class ContactService {
+export class MessageService {
 
   constructor(private http: HttpClient) { }
 

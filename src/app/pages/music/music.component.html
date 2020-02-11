@@ -1,8 +1,8 @@
-<app-banner [background]="'banner-2.jpg'"></app-banner>
+<app-banner [quote$]="quote$" [backgroundUrl]="'banner-2.jpg'"></app-banner>
 
 <div class="container">
-    <div class="row my-5" *ngIf="(workList$ | async) as workList" [@fadeIn]>
-        <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of workList">
+    <div class="row my-5" *ngIf="(musics$ | async) as musics" [@fadeIn]>
+        <div class="col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of musics">
 
             <a 
             *ngIf="music.sound_cloud" 

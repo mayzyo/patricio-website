@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { AnnouncementsComponent } from './pages/announcements/announcements.component';
-import { WorksComponent } from './pages/works/works.component';
-import { BlogsComponent } from './pages/blogs/blogs.component';
+import { AnnouncementComponent } from './pages/announcement/announcement.component';
+import { MusicComponent } from './pages/music/music.component';
 import { MediaComponent } from './pages/media/media.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'announcements', component: AnnouncementsComponent },
-  { path: 'works', component: WorksComponent },
-  // { path: 'blogs', component: BlogsComponent },
-  // { path: 'blogs/:title', component: BlogsComponent },
+  { path: 'announcements', component: AnnouncementComponent },
+  { path: 'works', component: MusicComponent },
   { path: 'media', component: MediaComponent },
   { path: '',
     redirectTo: '/home',
