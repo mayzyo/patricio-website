@@ -64,7 +64,7 @@ export class HighlightComponent implements OnInit {
 
 export interface HighlightItem {
   title: string;
-  link: string;
-  brief?: string;
+  url: string;
+  description?: string;
   thumbnail: any;
 }

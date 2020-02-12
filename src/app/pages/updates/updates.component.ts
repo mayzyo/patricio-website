@@ -3,14 +3,14 @@ import { trigger, group, transition, animate, style, query, useAnimation, stagge
 import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
 import { Subject, merge, of, Observable } from 'rxjs';
 import { switchMap, scan, tap, share, map } from 'rxjs/operators';
-import { Announcement } from 'src/app/models/Announcement';
+import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-announcement',
-  templateUrl: './announcement.component.html',
-  styleUrls: ['./announcement.component.scss'],
+  selector: 'app-updates',
+  templateUrl: './updates.component.html',
+  styleUrls: ['./updates.component.scss'],
   // animations: [
   //   trigger('fadeIn', fadeIn('.media')),
   //   trigger('fadeInOpt', fadeIn('.anim-obj')),
@@ -33,12 +33,12 @@ import { HttpClient } from '@angular/common/http';
     ]),
   ],
 })
-export class AnnouncementComponent implements OnInit {
+export class UpdatesComponent implements OnInit {
 
-  readonly quote$ = this.quotes.procedure$('announcements');
+  readonly quote$ = this.quotes.procedure$('updates');
   readonly updateHistory$ = new Subject<void>();
-  readonly history$: Observable<Announcement[]> = this.setupPagination(this.updateHistory$);
-  readonly latest$: Observable<Announcement[]> = this.history$.pipe(
+  readonly history$: Observable<Update[]> = this.setupPagination(this.updateHistory$);
+  readonly latest$: Observable<Update[]> = this.history$.pipe(
     map(res => [...res].splice(0, 4))
   );
 
@@ -63,11 +63,11 @@ export class AnnouncementComponent implements OnInit {
       update$
     ).pipe(
       scan(acc => acc + 1, 0), 
-      switchMap(res => this.http.get<Announcement[]>(
-        '/api/announcement', 
+      switchMap(res => this.http.get<Update[]>(
+        '/api/updates', 
         { params: { page: res.toString(), size: '10', filter: 'latest' } }
       )),
-      scan((acc, cur) => acc.concat(cur), new Array<Announcement>()),
+      scan((acc, cur) => acc.concat(cur), new Array<Update>()),
       share()
     );
   }

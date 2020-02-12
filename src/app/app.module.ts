@@ -14,7 +14,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { EmailComponent } from './components/email/email.component';
-import { AnnouncementComponent } from './pages/announcement/announcement.component';
+import { UpdatesComponent } from './pages/updates/updates.component';
 import { MusicComponent } from './pages/music/music.component';
 import { MediaComponent } from './pages/media/media.component';
 import { ColumnPipe } from './utils/column.pipe';
@@ -24,6 +24,7 @@ import { ImagePreloadDirective } from './utils/image-preload.directive';
 import { UpcomingEventsComponent } from './components/upcoming-events/upcoming-events.component';
 import { HighlightComponent } from './components/highlight/highlight.component';
 import { MusicPlayerComponent } from './components/music-player/music-player.component';
+import { EditorComponent } from './administration/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -32,16 +33,17 @@ import { MusicPlayerComponent } from './components/music-player/music-player.com
     HomeComponent,
     FooterComponent,
     EmailComponent,
-    AnnouncementComponent,
+    UpdatesComponent,
     MusicComponent,
     MediaComponent,
     ColumnPipe,
     BannerComponent,
     BannerLandingComponent,
     ImagePreloadDirective,
-    UpcomingEventsComponent,
     HighlightComponent,
-    MusicPlayerComponent
+    UpcomingEventsComponent,
+    MusicPlayerComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,

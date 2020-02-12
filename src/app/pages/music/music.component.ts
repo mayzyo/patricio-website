@@ -35,9 +35,9 @@ import { QuotesService } from 'src/app/services/quotes.service';
 })
 export class MusicComponent implements OnInit {
 
-  readonly quote$ = this.quotes.procedure$('media');
-  readonly musics$ = this.http.get<Music[]>('/api/music').pipe(
-    map(res => this.setupImageStreams(res))
+  readonly quote$ = this.quotes.procedure$('music');
+  readonly musics$ = this.http.get<Music[]>('/api/musics').pipe(
+    map(res => this.setupFileStreams(res))
   );
 
   constructor(
@@ -50,17 +50,18 @@ export class MusicComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  private setupImageStreams(musics: Music[]): MusicViewModel[] {
-    return musics.map((el, i) => ({ 
+  private setupFileStreams(musics: Music[]): MusicViewModel[] {
+    return musics.map(el => ({ 
       ...el, 
-      image$: this.images.readAsBase64$(
+      cover$: this.images.readAsBase64$(
         this.http.get(
-          '/api/music/cover', 
-          { params: { index: i.toString() }, responseType: 'blob' }
+          `/api/musics/covers${el.coverKey}`, 
+          { responseType: 'blob' }
         )
-      )
+      ),
+      audio$: null // WIP
     }))
   }
 }
 
-type MusicViewModel = Music & { image$: Observable<unknown> }
+type MusicViewModel = Music & { cover$: Observable<unknown>, audio$: Observable<unknown> }

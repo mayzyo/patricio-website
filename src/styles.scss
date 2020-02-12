@@ -1,3 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./custom.scss";
 @import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/_breakpoints";
+
+.full-bg.jumbotron-fluid {
+    background:
+        linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
+        linear-gradient(to right, map-get($theme-colors, 'tertiary') 0%, yellow 90%), 
+        url('assets/images/home-banner.jpg') 30px,
+        url('assets/images/home-banner.jpg') 20px;
+    background-blend-mode: screen, difference, lighten;
+    background-size: cover;
+}
+
+@include media-breakpoint-down(md) {
+    .quote.display-4 {
+        font-size: 2rem;
+    }
+}

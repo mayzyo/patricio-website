@@ -9,8 +9,8 @@
 
         <div class="row m-n1 justify-content-center">
             <a class="col-lg-2 col-md-3 col-sm-6 p-1 thumbnail" (click)="open(content, moment)"
-                *ngFor="let moment of momentList$ | async" [@fadeIn]>
-                <img src="{{ moment.image }}" class="thumbnail-img">
+                *ngFor="let moment of previews$ | async" [@fadeIn]>
+                <img src="{{ moment.thumbnail }}" class="thumbnail-img">
             </a>
         </div>
 
@@ -21,5 +21,5 @@
     <a aria-label="Close" (click)="modal.dismiss('Cross click')" class="modal-close">
         <span aria-hidden="true">&times;</span>
     </a>
-    <img src="{{ current.image }}" class="img-fluid">
+    <img src="{{ current.image$ | async }}" class="img-fluid">
 </ng-template>

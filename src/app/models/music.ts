@@ -1,13 +1,19 @@
 ﻿
-export interface Music { 
+export interface Music {
 
-    title: string
+	id: number
 
-    genre: string
+	title: string
 
-    create_date: Date
+	genre: string
 
-    image: string
+	date: Date
 
-    sound_cloud: string
+	thumbnail: string
+
+	externalUrl: string
+
+	coverKey: string
+
+	audioKey: string
 }

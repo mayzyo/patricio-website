@@ -15,9 +15,9 @@ export class BannerComponent implements OnInit {
   @Input() quote$: Observable<Quote>;
   @Input() backgroundUrl: string;
 
-  readonly previews$ = this.http.get<Moment[]>('/api/media/gallery').pipe(
-    map(res => res.map(el => el.image))
-  );
+  //readonly previews$ = this.http.get<Moment[]>('/api/media/gallery').pipe(
+  //  map(res => res.map(el => el.image))
+  //);
 
   constructor(
     private http: HttpClient,

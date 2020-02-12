@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\models",
+    "\\src\\app\\pages",
+    "\\src\\app\\services"
+  ],
+  "SelectedNode": "\\src\\app\\models\\Email.ts",
+  "PreviewInSolutionExplorer": false
+}

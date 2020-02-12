@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 })
 export class QuotesService {
 
-  private readonly quotes$ = this.http.get<Quote[]>('/api/quote');
+  private readonly quotes$ = this.http.get<Quote[]>('/api/quotes/random');
   private readonly tracker = new Map<string, Quote>();
 
   constructor(private http: HttpClient) { }

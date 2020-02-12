@@ -1,26 +1,26 @@
 ﻿
-export interface Email { 
+export interface Email {
 
-    message: string
+	message: string
 
-    sender: string
+	sender: string
 
-    purpose: Purpose
+	purpose: Purpose
 
-    senderType: Sender
+	senderType: Sender
 }
 
-export enum Purpose { 
+export enum Purpose {
 
-    DEAL,
+	DEAL,
 
-    OTHER,
+	OTHER,
 }
-export enum Sender { 
+export enum Sender {
 
-    DIRECTOR,
+	DIRECTOR,
 
-    MUSICIAN,
+	MUSICIAN,
 
-    OTHER,
+	OTHER,
 }

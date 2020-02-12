@@ -2,8 +2,7 @@
     <ng-container *ngFor="let announcement of datasource">
         <div class="media my-3" [@fadeObj]="animState">
 
-            <img *ngIf="!announcement.link" src="./assets/images/bullhorn-solid.svg" class="mr-3" height="60px"
-                width="60px">
+            <img *ngIf="!announcement.link" class="mr-3" src="./assets/images/bullhorn-solid.svg" height="60" width="60">
 
             <div class="media-body">
                 <h5 class="mt-0 mb-1" [ngClass]="announcement.link && 'd-none d-md-block'">

@@ -35,7 +35,7 @@ import { HttpClient } from '@angular/common/http';
 export class MediaComponent implements OnInit {
 
   readonly quote$ = this.quotes.procedure$('media');
-  readonly previews$: Observable<Moment[]> = this.http.get<Moment[]>('/api/media/gallery');
+  readonly previews$: Observable<Moment[]> = this.http.get<Moment[]>('/api/media/moments');
 
   current: Moment;
   closeResult: string;

@@ -1,9 +1,13 @@
 ﻿
-export interface Moment { 
+export interface Moment {
 
-    image: string
+	id: number
 
-    brief: string
+	thumbnail: string
 
-    create_date: Date
+	description: string
+
+	date: Date
+
+	imageKey: string
 }

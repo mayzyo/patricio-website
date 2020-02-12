@@ -2,12 +2,12 @@
     <!-- One large block -->
     <div class="col-md-8 col-sm-12 p-3" *ngIf="items.cardXL">
         <a class="card bg-dark text-white w-100 card-big" style="height:20rem;"
-            [href]="items.cardXL.link" [@fadeObj]="animState">
+            [href]="items.cardXL.url" [@fadeObj]="animState">
             <img src="{{ items.cardXL.thumbnail }}" class="card-img">
             <div class="card-img-overlay d-flex flex-column">
                 <h5 class="card-title">{{ items.cardXL.title }}</h5>
                 <div class="card-text flex-grow-1 d-flex justify-content-end align-items-end">
-                    <p>{{ items.cardXL.brief }}</p>
+                    <p>{{ items.cardXL.description }}</p>
                     <!-- <p class="card-text">Last updated 3 mins ago</p> -->
                 </div>
             </div>
@@ -17,12 +17,12 @@
     <!-- Second large block -->
     <div class="col-md-4 col-sm-12 p-3" *ngIf="items.cardL">
         <a class="card bg-dark text-white w-100 card-big" style="height: 20rem;"
-            [href]="items.cardL.link" [@fadeObj]="animState">
+            [href]="items.cardL.url" [@fadeObj]="animState">
             <img src="{{ items.cardL.thumbnail }}" class="card-img">
             <div class="card-img-overlay d-flex flex-column">
                 <h5 class="card-title">{{ items.cardL.title }}</h5>
                 <div class="card-text flex-grow-1 d-flex justify-content-end align-items-end">
-                    <p>{{ items.cardL.brief }}</p>
+                    <p>{{ items.cardL.description }}</p>
                     <!-- <p class="card-text">Last updated 3 mins ago</p> -->
                 </div>
             </div>
@@ -31,12 +31,12 @@
 
     <!-- Medium sized blocks -->
     <div class="col-md-4 col-sm-12 p-3" *ngFor="let card of items.cardM">
-        <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;" [href]="card.link" [@fadeObj]="animState">
+        <a class="card bg-dark text-white w-100 card-mid" style="height: 8rem;" [href]="card.url" [@fadeObj]="animState">
             <img src="{{ card.thumbnail }}" class="card-img">
             <div class="card-img-overlay">
                 <h5 class="card-title">{{ card.title }}</h5>
                 <div class="card-text">
-                    <p>{{ card.brief }}</p>
+                    <p>{{ card.description }}</p>
                     <!-- <p class="card-text">Last updated 3 mins ago</p> -->
                 </div>
             </div>
@@ -45,12 +45,12 @@
 
     <!-- Small blocks, all remaining -->
     <div class="col-md-3 col-sm-6 p-3" *ngFor="let card of items.cardS">
-        <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="card.link" [@fadeObj]="animState">
+        <a class="card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="card.url" [@fadeObj]="animState">
             <img src="{{ card.thumbnail }}" class="card-img">
             <div class="card-img-overlay d-flex flex-column">
                 <h5 class="card-title">{{ card.title }}</h5>
                 <div class="card-text flex-grow-1 d-flex align-items-end">
-                    <p>{{ card.brief }}</p>
+                    <p>{{ card.description }}</p>
                     <!-- <p class="card-text">Last updated 3 mins ago</p> -->
                 </div>
             </div>

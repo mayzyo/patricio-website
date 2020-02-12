@@ -16,9 +16,6 @@
                         <li class="nav-item">
                             <a class="nav-link" routerLink="/works">作品 | Works</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" routerLink="/blogs">博客 | Blogs</a>
-                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" routerLink="/media">媒体 | Media</a>
                         </li>
@@ -26,45 +23,45 @@
                 </div>
 
                 <div class="col-md-3 col-sm-12">
-                    <h1 class="h4 ml-3">Social Media</h1>
-                    <ul class="nav flex-column">
+                  <h1 class="h4 ml-3">Social Media</h1>
+                  <ul class="nav flex-column" *ngIf="(socialMedia$ | async) as socialMedia">
 
-                        <li class="nav-item" *ngIf="(facebook$ | async) as link">
-                            <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/facebook-square-brands.svg" height="20rem" height="20rem">
-                                <div class="align-middle d-inline ml-3">Facebook</div>
-                            </a>
-                        </li>
+                    <li class="nav-item" *ngIf="socialMedia.facebook">
+                      <a class="nav-link" href="{{ socialMedia.facebook }}">
+                        <img src="./assets/images/facebook-square-brands.svg" height="20" width="20">
+                        <div class="align-middle d-inline ml-3">Facebook</div>
+                      </a>
+                    </li>
 
-                        <li class="nav-item" *ngIf="(linkedin$ | async) as link">
-                            <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/linkedin-brands.svg" height="20rem" height="20rem">
-                                <div class="align-middle d-inline ml-3">LinkedIn</div>
-                            </a>
-                        </li>
+                    <li class="nav-item" *ngIf="socialMedia.linkedin">
+                      <a class="nav-link" href="{{ socialMedia.linkedin }}">
+                        <img src="./assets/images/linkedin-brands.svg" height="20" width="20">
+                        <div class="align-middle d-inline ml-3">LinkedIn</div>
+                      </a>
+                    </li>
 
-                        <li class="nav-item" *ngIf="(instagram$ | async) as link">
-                            <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/instagram-brands.svg" height="20rem" height="20rem">
-                                <div class="align-middle d-inline ml-3">Instagram</div>
-                            </a>
-                        </li>
+                    <li class="nav-item" *ngIf="socialMedia.instagram">
+                      <a class="nav-link" href="{{ socialMedia.instagram }}">
+                        <img src="./assets/images/instagram-brands.svg" height="20" width="20">
+                        <div class="align-middle d-inline ml-3">Instagram</div>
+                      </a>
+                    </li>
 
-                        <li class="nav-item" *ngIf="(wechat$ | async) as link">
-                            <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/weixin-brands.svg" height="20rem" height="20rem">
-                                <div class="align-middle d-inline ml-3">微信</div>
-                            </a>
-                        </li>
+                    <li class="nav-item" *ngIf="socialMedia.wechat">
+                      <a class="nav-link" href="{{ socialMedia.wechat }}">
+                        <img src="./assets/images/weixin-brands.svg" height="20" width="20">
+                        <div class="align-middle d-inline ml-3">微信</div>
+                      </a>
+                    </li>
 
-                        <li class="nav-item" *ngIf="(weibo$ | async) as link">
-                            <a class="nav-link" href="{{ link }}">
-                                <img src="./assets/images/weibo-brands.svg" height="20rem" height="20rem">
-                                <div class="align-middle d-inline ml-3">新浪微博</div>
-                            </a>
-                        </li>
+                    <li class="nav-item" *ngIf="socialMedia.weibo">
+                      <a class="nav-link" href="{{ socialMedia.weibo }}">
+                        <img src="./assets/images/weibo-brands.svg" height="20" width="20">
+                        <div class="align-middle d-inline ml-3">新浪微博</div>
+                      </a>
+                    </li>
 
-                    </ul>
+                  </ul>
                 </div>
 
                 <div class="col-md-3 col-sm-12"></div>

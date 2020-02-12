@@ -1,43 +1,40 @@
-<app-banner-landing
-[quote$]="quote$"
-(onScrolldown)="scrolldown()"
->
-</app-banner-landing>
+<app-banner-landing [quote$]="quote$" (onScrolldown)="scrolldown()"></app-banner-landing>
 
-<div class="container my-5">
+<div class="jumbotron jumbotron-fluid mb-0 bg-white" style="min-height: 50vh;" #HighlightRef>
+  <div class="container">
 
-    <h2 #HighlightRef>
-        <img src="./assets/images/record-vinyl-solid.svg" height="40rem" width="40rem">
-        Highlights | 作品一览
+    <h2>
+      <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
+      Highlights | 作品一览
     </h2>
-    <app-highlight [animState]="highlightAnim" [datasource$]="works$"></app-highlight>
+    <!--<app-highlight [animState]="highlightAnim" [datasource$]="musics$"></app-highlight>-->
 
     <hr />
 
     <h2 class="text-center w-100 lead" #UpcomingRef>Upcoming Events | 最新动态</h2>
-    <app-upcoming-events [animState]="upcomingAnim" [datasource$]="announcement$"></app-upcoming-events>
+    <!--<app-upcoming-events [animState]="upcomingAnim" [datasource$]="updates$"></app-upcoming-events>-->
 
+  </div>
 </div>
 
 
-<div #BiographyRef class="jumbotron jumbotron-fluid mb-0 bg-dark text-white">
-    <div class="container px-3" *ngIf="(biography$ | async) as biography" [@fadeInBiography]="biographyAnim">
+<div class="jumbotron jumbotron-fluid mb-0 bg-dark text-white" style="min-height: 30vh;" #BiographyRef>
+  <div class="container px-3">
 
-        <h2 class="h3 mb-4">
-            <img src="./assets/images/portrait-solid.svg" height="40rem" width="40rem">
-            <span>Biography | 简介</span>
-        </h2>
+    <h2 class="h3 mb-4">
+      <img src="assets/images/portrait-solid.svg" height="40" width="40">
+      <span>Biography | 简介</span>
+    </h2>
 
-        <!-- When there are 2 languages, use them, otherwise split the English using column pipe -->
-        <div class="row mx-n3" style="white-space: pre-line;">
-            <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBiography]="biographyAnim">
-                {{ biography[1] ? biography[0] : biography[0] | column : 1 : 2 }}
-            </p>
-            <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObjBiography]="biographyAnim">
-                {{ biography[1] ? biography[1] : biography[0] | column : 2 : 2 }}
-            </p>
-        </div>
+    <div *ngIf="(biography$ | async) as biography" class="row mx-n3" style="white-space: pre-line;" [@fadeIn]="animState">
+      <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObj]="biographyAnim">
+        {{ biography[1] ? biography[0] : biography[0] | column : 1 : 2 }}
+      </p>
+      <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObj]="biographyAnim">
+        {{ biography[1] ? biography[1] : biography[0] | column : 2 : 2 }}
+      </p>
     </div>
+  </div>
 </div>
 
 <app-email></app-email>

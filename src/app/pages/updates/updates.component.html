@@ -11,8 +11,8 @@
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as history" [@fadeInOpt]>
             <div class="anim-obj">
                 <h2>
-                    <div class="display-4">历史动态</div>
-                    <div class="h1 text-monospace text-uppercase">History</div>
+                    <span class="display-4">历史动态</span>
+                    <span class="h1 text-monospace text-uppercase">History</span>
                 </h2>
                 <div class="history-list-wrapper">
                     <ul
@@ -23,9 +23,9 @@
                     [scrollWindow]="false"
                     (scrolled)="onScroll()"        
                     >
-                        <li class="history-item" *ngFor="let announcement of history">
-                            {{ announcement.title }}
-                        </li>
+                      <li class="history-item" *ngFor="let update of history">
+                        {{ update.title }}
+                      </li>
                     </ul>
                 </div>
             </div>

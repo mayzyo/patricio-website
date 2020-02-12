@@ -1,17 +1,17 @@
 ﻿
-export interface Quote { 
+export interface Quote {
 
-    message: string
+	message: string
 
-    author: string
+	author: string
 
-    keywords: string
+	keywords: string
 
-    profession: string
+	profession: string
 
-    nationality: string
+	nationality: string
 
-    authorBirth: string
+	authorBirth: Date
 
-    authorDeath: string
+	authorDeath: Date
 }

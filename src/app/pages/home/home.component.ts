@@ -1,19 +1,20 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck } from 'rxjs/operators';
+import { map, pluck, tap } from 'rxjs/operators';
 import { fadeIn, fadeObject, landingFadeIn } from 'src/app/animations/fade-in';
 import { trigger, transition, style, query, useAnimation, stagger, state } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Music } from 'src/app/models/Music';
-import { Announcement } from 'src/app/models/Announcement';
-import { Profile } from 'src/app/models/Profile';
+import { Update } from 'src/app/models/Update';
+import { Owner } from 'src/app/models/Owner';
 import { QuotesService } from 'src/app/services/quotes.service';
+import { SocialMedia } from 'src/app/models/SocialMedia';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
-    trigger('fadeInBiography', [
+    trigger('fadeIn', [
       transition(`* => true`, [
         query('.row', [
           style({ opacity: '0' }),
@@ -28,7 +29,7 @@ import { QuotesService } from 'src/app/services/quotes.service';
         ]),
       ])
     ]),
-    trigger('fadeObjBiography', [
+    trigger('fadeObj', [
       state('*', style({ visibility: 'hidden' })),
       state('true', style({ visibility: 'visible' }))
     ])
@@ -36,37 +37,28 @@ import { QuotesService } from 'src/app/services/quotes.service';
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild('HighlightRef', { static:true }) highlightRef: ElementRef;
-  @ViewChild('UpcomingRef', { static:true }) upcomingRef: ElementRef;
-  @ViewChild('BiographyRef', { static:true }) biographyRef: ElementRef;
+  @ViewChild('HighlightRef', { static: true }) highlightRef: ElementRef;
+  @ViewChild('UpcomingRef', { static: true }) upcomingRef: ElementRef;
+  @ViewChild('BiographyRef', { static: true }) biographyRef: ElementRef;
 
   readonly quote$ = this.quotes.procedure$('home');
 
-  readonly works$ = this.http.get<Music[]>('/api/music').pipe(
-    map(res => 
-      res.map(el => 
-        ({ 
-          ...el, 
-          brief: new Date(el.create_date).toDateString(), 
-          link: el.sound_cloud 
-        })
+  readonly musics$ = this.http.get<Music[]>('/api/musics').pipe(
+    tap(res =>
+      res.forEach(el =>
+        el.date && (el.date = new Date(el.date))
       )
-    ),
+    )
   );
 
-  readonly announcement$ = this.http.get<Announcement[]>(
-    '/api/announcement', 
+  readonly updates$ = this.http.get<Update[]>(
+    '/api/updates',
     { params: { page: '1', size: '4', fitler: 'event' } }
   );
 
-  readonly biography$ = this.http.get<Profile>('/api/profile').pipe(
-    pluck<Profile, string>('biography'),
-    map(res => {
-      const cutoff = this.languageCut(res)
-      return cutoff != -1
-      ? [res.slice(0, cutoff), res.slice(cutoff, res.length)]
-      : [res]
-    })
+  readonly biography$ = this.http.get<Owner>('/api/profile').pipe(
+    pluck<Owner, SocialMedia>('socialMedia'),
+    pluck<SocialMedia, string>('biography'),
   );
 
   highlightAnim = false;
@@ -81,32 +73,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
 
   }
-  
-  @HostListener('window:scroll', ['$event']) 
+
+  @HostListener('window:scroll', ['$event'])
   onScrollEvent($event: unknown) {
-    if(!this.highlightAnim && this.scrollOffset(this.highlightRef))
+    if (!this.highlightAnim && this.scrollOffset(this.highlightRef))
       this.highlightAnim = true;
 
-    if(!this.upcomingAnim && this.scrollOffset(this.upcomingRef))
+    if (!this.upcomingAnim && this.scrollOffset(this.upcomingRef))
       this.upcomingAnim = true;
 
-    if(!this.biographyAnim && this.scrollOffset(this.biographyRef))
+    if (!this.biographyAnim && this.scrollOffset(this.biographyRef))
       this.biographyAnim = true;
   }
 
   scrolldown() {
-    this.highlightRef.nativeElement.scrollIntoView({behavior:"smooth"});
-  }
-
-  languageCut(msg: string) {
-    for (var i = 0, n = msg.length; i < n; i++) {
-      // Chinese characters are above the 30,000 range in Unicode
-      if (msg.charCodeAt(i) > 30000) { 
-        return i;
-      }
-    }
-
-    return -1;
+    this.highlightRef.nativeElement.scrollIntoView({ behavior: "smooth" });
   }
 
   private scrollOffset(elRef: ElementRef) {
