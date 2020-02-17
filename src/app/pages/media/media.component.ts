@@ -27,7 +27,8 @@ export class MediaComponent implements OnInit {
     interval(300)
   ).pipe(
     pluck('0'),
-    map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) }))
+    map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) })),
+    scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
   );
 
   current: Moment;
