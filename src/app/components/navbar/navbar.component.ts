@@ -11,7 +11,9 @@ export class NavbarComponent implements OnInit {
   isCollapsed = true;
   currentUrl: string;
   
-  constructor(private location: Location) {
+  constructor(
+    private location: Location,
+  ) {
     this.location.onUrlChange(res => {
       this.currentUrl = res;
       this.isCollapsed = true;

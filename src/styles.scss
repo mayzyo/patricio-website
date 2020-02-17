@@ -5,6 +5,10 @@
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins/_breakpoints";
 
+textarea {
+    resize: none;
+}
+
 .full-bg.jumbotron-fluid {
     background:
         linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
@@ -13,6 +17,35 @@
         url('assets/images/home-banner.jpg') 20px;
     background-blend-mode: screen, difference, lighten;
     background-size: cover;
+}
+
+.infinite.progress-bar {
+    animation: infinite 3s linear infinite;
+}
+
+@keyframes infinite {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+}
+
+.fade-in {
+    animation: fade-in .8s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fade-in {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: none;
+        opacity: 1;
+    }
 }
 
 @include media-breakpoint-down(md) {

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { pluck, share } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Owner } from 'src/app/models/Owner';
 import { SocialMedia } from 'src/app/models/SocialMedia';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-footer',
@@ -18,9 +19,36 @@ export class FooterComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private admin: AdminService
   ) { }
 
   ngOnInit() {
   }
 
+  login() { 
+    localStorage.setItem('AUTH', 'true');
+    //creating an invisible element 
+    var element = document.createElement('a'); 
+    element.setAttribute('href', '/.auth/login/google?post_login_redirect_url=/home'); 
+    document.body.appendChild(element); 
+    //onClick property 
+    element.click(); 
+    document.body.removeChild(element); 
+  }
+
+  logout() { 
+    localStorage.removeItem('AUTH');
+    //creating an invisible element 
+    var element = document.createElement('a'); 
+    element.setAttribute('href', '/.auth/logout?post_logout_redirect_uri=/home'); 
+    document.body.appendChild(element); 
+    //onClick property 
+    element.click(); 
+    document.body.removeChild(element); 
+  }
+
+  loggedIn = this.admin.loggedIn;
+  edit(editorType: string) {
+    this.admin.open(editorType);
+  }
 }

@@ -1,1 +1,15 @@
-<p>editor works!</p>
+<ng-template #ContentRef let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" [ngSwitch]="editorType">
+    <app-songs *ngSwitchCase="'songs'"></app-songs>
+    <app-biography *ngSwitchCase="'biography'"></app-biography>
+    <app-social-media *ngSwitchCase="'social-media'"></app-social-media>
+    <app-posts *ngSwitchCase="'posts'"></app-posts>
+    <app-moments *ngSwitchCase="'moments'"></app-moments>
+  </div>
+</ng-template>

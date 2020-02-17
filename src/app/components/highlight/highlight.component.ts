@@ -1,70 +1,67 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { trigger, transition, query, style, stagger, useAnimation, state } from '@angular/animations';
-import { Observable, of } from 'rxjs';
-import { map, tap, switchMap } from 'rxjs/operators';
-import { ImageService } from '../../services/image.service';
-import { landingFadeIn } from '../../animations/fade-in';
+import { Observable, zip, interval, of, merge } from 'rxjs';
+import { take, skip, scan, pluck, share, switchMap } from 'rxjs/operators';
+import { ContentService } from '../../services/image.service';
 
 @Component({
   selector: 'app-highlight',
   templateUrl: './highlight.component.html',
   styleUrls: ['./highlight.component.scss'],
-  animations: [
-    trigger('fadeIn', [
-      transition(`* => true`, [
-        query('.card', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-    trigger('fadeObj', [
-      state('*', style({ visibility: 'hidden' })),
-      state('true', style({ visibility: 'visible' }))
-    ]),
-  ]
 })
 export class HighlightComponent implements OnInit {
 
-  @Input() datasource$: Observable<HighlightItem[]>;
-  @Input() animState: boolean = true;
+  @Input() datasource$: Observable<Highlight>;
+  @Input() animTrigger$?: Observable<void>;
+  readonly stockImage$ = this.contents.stockGallery$();
 
-  highlights$: Observable<any>;
+  oversizeItem$: Observable<Highlight>;
+  largeItem$: Observable<Highlight>;
+  wideItems$: Observable<Highlight[]>;
+  items$: Observable<Highlight[]>; 
 
-  constructor(private images: ImageService) { }
+  private collection$: Observable<Highlight>;
+
+  constructor(
+    private contents: ContentService
+  ) { }
 
   ngOnInit() {
-    this.highlights$ = this.datasource$.pipe(
-      map(res =>
-        res.map(el => ({
-          ...el,
-          thumbnail: this.images.stockGallery()
-        }))
-      ),
-      map(res => this.divideItems(res)),
+    this.collection$ = zip(
+      this.datasource$, 
+      this.animTrigger$
+      ? this.animTrigger$.pipe(
+        take(1),
+        switchMap(() => merge(of(null), interval(300)))
+      )
+      : interval(300)
+    ).pipe(
+      pluck('0'),
+      share(),
     );
-  }
 
-  private divideItems(items: HighlightItem[]) {
-    return {
-      cardXL: items[0],
-      cardL: items[1],
-      cardM: items.length > 3 && [...items].splice(2, 3),
-      cardS: items.length > 5 && [...items].splice(5, items.length - 5)
-    }
+    this.oversizeItem$ = this.collection$.pipe(
+      take(1)
+    );
+    this.largeItem$ = this.collection$.pipe(
+      skip(1),
+      take(1),
+    );
+    this.wideItems$ = this.collection$.pipe(
+      skip(2),
+      scan<Highlight, Highlight[]>((acc, cur) => [ ...acc, cur ], []),
+      take(3),
+    );
+    this.items$ = this.collection$.pipe(
+      skip(5),
+      scan<Highlight, Highlight[]>((acc, cur) => [ ...acc, cur ], []),
+      take(4)
+    );
   }
 }
 
-export interface HighlightItem {
+export interface Highlight {
   title: string;
   url: string;
   description?: string;
-  thumbnail: any;
+  image$?: unknown;
 }

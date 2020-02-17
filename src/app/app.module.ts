@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { cacheProvider } from './utils/cache.interceptor';
+import { authProvider } from './utils/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,10 +22,15 @@ import { ColumnPipe } from './utils/column.pipe';
 import { BannerComponent } from './components/banner/banner.component';
 import { BannerLandingComponent } from './components/banner-landing/banner-landing.component';
 import { ImagePreloadDirective } from './utils/image-preload.directive';
-import { UpcomingEventsComponent } from './components/upcoming-events/upcoming-events.component';
+import { ListingComponent } from './components/listing/listing.component';
 import { HighlightComponent } from './components/highlight/highlight.component';
-import { MusicPlayerComponent } from './components/music-player/music-player.component';
 import { EditorComponent } from './administration/editor/editor.component';
+import { SocialMediaComponent } from './administration/social-media/social-media.component';
+import { BiographyComponent } from './administration/biography/biography.component';
+import { SongsComponent } from './administration/songs/songs.component';
+import { MomentsComponent } from './administration/moments/moments.component';
+import { PostsComponent } from './administration/posts/posts.component';
+import { LegalComponent } from './pages/legal/legal.component';
 
 @NgModule({
   declarations: [
@@ -41,9 +47,14 @@ import { EditorComponent } from './administration/editor/editor.component';
     BannerLandingComponent,
     ImagePreloadDirective,
     HighlightComponent,
-    UpcomingEventsComponent,
-    MusicPlayerComponent,
+    ListingComponent,
     EditorComponent,
+    SocialMediaComponent,
+    BiographyComponent,
+    SongsComponent,
+    MomentsComponent,
+    PostsComponent,
+    LegalComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +65,7 @@ import { EditorComponent } from './administration/editor/editor.component';
     InfiniteScrollModule,
     AppRoutingModule
   ],
-  providers: [cacheProvider],
+  providers: [authProvider, cacheProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

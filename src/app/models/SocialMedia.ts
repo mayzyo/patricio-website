@@ -1,12 +1,10 @@
-import { Owner } from './Owner';
+﻿import { Owner } from './Owner';
 
 export interface SocialMedia {
 
 	id: number
 
 	biography: string
-
-	portrait: number[]
 
 	facebook: string
 

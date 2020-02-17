@@ -1,22 +1,12 @@
-<div 
-class="background position-absolute" 
-[ngStyle]="{ background: 'url(../../assets/images/' + backgroundUrl + ')', 'background-size': 'cover' }"
->
-</div>
-
-<!--<div class="carousel position-absolute">
-    <div class="wrapper">
-        <div class="d-inline-block d-lg-block m-3" *ngFor="let preview of previews$ | async">
-            <img src="{{ preview }}" class="img-thumbnail">
-        </div>
+<div class="jumbotron jumbotron-fluid mb-0" [ngStyle]="{ background: 'url(../../assets/images/' + backgroundUrl + ')', 'background-size': 'cover', height: '55vh' }">
+    <div class="container h-100 d-flex flex-column justify-content-end">
+  
+        <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+            <h1 class="mb-3 text-white h3">"{{ quote.message }}"</h1>
+            <footer class="blockquote-footer" *ngIf="quote.author">
+                {{ quote.author }}
+            </footer>
+        </blockquote>
+  
     </div>
-</div>-->
-
-<div class="quotes">
-    <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
-        <h1 class="mb-3 text-white h3">"{{ quote.message }}"</h1>
-        <footer class="blockquote-footer" *ngIf="quote.author">
-            {{ quote.author }}
-        </footer>
-    </blockquote>
 </div>

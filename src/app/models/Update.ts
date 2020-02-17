@@ -7,9 +7,9 @@ export interface Update {
 
 	description: string
 
-	url: string
+	link: string
 
-	thumbnailUrl: string
+	thumbnail: string
 
 	date: Date
 }

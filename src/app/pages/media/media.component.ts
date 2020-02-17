@@ -1,41 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, group, transition, animate, style, query, useAnimation, sequence, stagger, state } from '@angular/animations';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
 import { Moment } from 'src/app/models/Moment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, from, interval, zip } from 'rxjs';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';
+import { AdminService } from 'src/app/services/admin.service';
+import { map, switchMap, withLatestFrom, scan, pluck } from 'rxjs/operators';
 
 @Component({
   selector: 'app-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss'],
-  // animations: [
-  //   trigger('fadeIn', fadeIn('.thumbnail-img')),
-  // ]
-  animations: [
-    trigger('fadeIn', [
-      transition(`* => *`, [
-        query('.thumbnail-img', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-  ]
 })
 export class MediaComponent implements OnInit {
-
   readonly quote$ = this.quotes.procedure$('media');
-  readonly previews$: Observable<Moment[]> = this.http.get<Moment[]>('/api/media/moments');
+  readonly updateBacklog$ = new BehaviorSubject<number>(1);
+  readonly backlog$ = this.updateBacklog$.pipe(
+    map(res => ({ page: res.toString(), size: '10' })),
+    switchMap(res => this.http.get<Moment[]>('/api/media/moments', { params: res })),
+    withLatestFrom(this.updateBacklog$),
+    scan<[Moment[], number], Moment[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
+    switchMap(res => from(res)),
+  );
+  readonly previews$ = zip(
+    this.backlog$,
+    interval(300)
+  ).pipe(
+    pluck('0'),
+    map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) }))
+  );
 
   current: Moment;
   closeResult: string;
@@ -44,17 +37,21 @@ export class MediaComponent implements OnInit {
     private http: HttpClient,
     private modals: NgbModal, 
     private quotes: QuotesService,
+    private admin: AdminService
   ) { }
 
   ngOnInit() {
-    window.scrollTo(0, 0);
+  }
+
+  loggedIn = this.admin.loggedIn;
+  edit(editorType: string) {
+    this.admin.open(editorType);
   }
 
   async open(content: unknown, moment: Moment) {
     this.current = moment;
-
     try {
-      const result = await this.modals.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'xl' }).result
+      const result = await this.modals.open(content, { centered: true, size: 'xl' }).result
       this.closeResult = `Closed with: ${result}`;
     } catch(rej) {
       this.closeResult = `Dismissed ${this.getDismissReason(rej)}`;

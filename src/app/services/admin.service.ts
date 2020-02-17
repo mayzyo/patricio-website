@@ -1,11 +1,23 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  public loggedIn: boolean = true;
+  public loggedIn: boolean = false;
+  private readonly updateToggle$ = new Subject<string>();
 
-  constructor() { }
+  get toggle$(): Observable<string> {
+    return this.updateToggle$;
+  }
+
+  constructor() {
+    localStorage.getItem('AUTH') && (this.loggedIn = true);
+  }
+
+  public open(editorType: string) {
+    this.updateToggle$.next(editorType);
+  }
 }

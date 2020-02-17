@@ -1,74 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, group, transition, animate, style, query, useAnimation, stagger } from '@angular/animations';
-import { fadeIn, landingFadeIn } from 'src/app/animations/fade-in';
-import { Subject, merge, of, Observable } from 'rxjs';
-import { switchMap, scan, tap, share, map } from 'rxjs/operators';
+import { of, Observable, BehaviorSubject, from, Subject } from 'rxjs';
+import { switchMap, scan, map, withLatestFrom } from 'rxjs/operators';
 import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';
+import { AdminService } from 'src/app/services/admin.service';
+import { Listing } from 'src/app/components/listing/listing.component';
 
 @Component({
   selector: 'app-updates',
   templateUrl: './updates.component.html',
   styleUrls: ['./updates.component.scss'],
-  // animations: [
-  //   trigger('fadeIn', fadeIn('.media')),
-  //   trigger('fadeInOpt', fadeIn('.anim-obj')),
-  // ],
-  animations: [
-    trigger('fadeInOpt', [
-      transition(`* => *`, [
-        query('.anim-obj', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-  ],
 })
 export class UpdatesComponent implements OnInit {
 
   readonly quote$ = this.quotes.procedure$('updates');
-  readonly updateHistory$ = new Subject<void>();
-  readonly history$: Observable<Update[]> = this.setupPagination(this.updateHistory$);
-  readonly latest$: Observable<Update[]> = this.history$.pipe(
-    map(res => [...res].splice(0, 4))
+  readonly updateHistory$ = new BehaviorSubject<number>(1);
+  readonly history$ = this.updateHistory$.pipe(
+    map(res => ({ page: res.toString(), size: '10' })),
+    switchMap(res => this.http.get<Update[]>('/api/updates', { params: res })),
+    withLatestFrom(this.updateHistory$),
+    scan<[Update[], number], Update[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
+  );
+  readonly latest$: Observable<Listing> = this.history$.pipe(
+    map(res => [...res].splice(0, 10)),
+    switchMap(res => from(res)),
+    map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) })),
   );
 
-  animState = false;
+  readonly animTrigger$ = new Subject();
 
   constructor(
     private http: HttpClient,
     private quotes: QuotesService,
+    private admin: AdminService
   ) { }
 
   ngOnInit() {
-    this.animState = true;
+    this.animTrigger$.next();
   }
 
   onScroll() {
-    this.updateHistory$.next();
+    this.updateHistory$.next(this.updateHistory$.value + 1);
   }
-
-  private setupPagination(update$: Subject<void>) {
-    return merge(
-      of(null), 
-      update$
-    ).pipe(
-      scan(acc => acc + 1, 0), 
-      switchMap(res => this.http.get<Update[]>(
-        '/api/updates', 
-        { params: { page: res.toString(), size: '10', filter: 'latest' } }
-      )),
-      scan((acc, cur) => acc.concat(cur), new Array<Update>()),
-      share()
-    );
+  
+  loggedIn = this.admin.loggedIn;
+  edit(editorType: string) {
+    this.admin.open(editorType);
   }
 }

@@ -32,9 +32,9 @@
                 name="purpose"
                 [(ngModel)]="model.purpose"
                 >
-                    <option [value]="null" i18n>Select an option - 选择主题</option>
-                    <option [value]="0" i18n>Deal</option>
-                    <option [value]="1" i18n>Others</option>
+                    <option [value]="null">Select an option - 选择主题</option>
+                    <option [value]="0">Deal</option>
+                    <option [value]="1">Others</option>
                 </select>
 
                 <label for="senderType">A bit about yourself - 如何描述您</label>
@@ -44,10 +44,10 @@
                 name="senderType"
                 [(ngModel)]="model.senderType"
                 >
-                    <option [value]="null" i18n>Select an option - 选择描述</option>
-                    <option [value]="0" i18n>Manager / representative</option>
-                    <option [value]="1" i18n>Fellow Musician</option>
-                    <option [value]="2" i18n>Others</option>
+                    <option [value]="null">Select an option - 选择描述</option>
+                    <option [value]="0">Manager / representative</option>
+                    <option [value]="1">Fellow Musician</option>
+                    <option [value]="2">Others</option>
                 </select>
 
                 <label for="sender">Your email - 您的邮箱</label>
@@ -61,7 +61,6 @@
                 placeholder="e.g. email_address@provider.com..."
                 required
                 email
-                i18n-placeholder
                 >
                 <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid">
                     Please provide a valid email address

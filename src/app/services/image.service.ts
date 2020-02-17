@@ -2,32 +2,35 @@ import { Injectable } from '@angular/core';
 import { of, fromEvent, merge, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, pluck, map, scan, shareReplay, take } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ImageService {
+export class ContentService {
 
-  readonly portrait$ = this.http.get('api/image/portrait', { responseType: 'blob' }).pipe(
-    switchMap(res => {
-      const reader = new FileReader();
-      const ob$ = fromEvent(reader, 'load');
-      reader.readAsDataURL(res);
-      return ob$;
-    }),
-    pluck<ProgressEvent, string>('currentTarget', 'result')
-  );
+  readonly portrait$ = this.get('api/image/portrait');
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
   ) { }
+
+  get(url: string) {
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      map(res => window.URL.createObjectURL(res)),
+      map(res => this.sanitizer.bypassSecurityTrustUrl(res))
+    )
+  }
 
   stockGallery(index?: number) {
     return `./assets/images/stock-${index || Math.floor(Math.random() * 4 + 1)}.jpg`;
   }
 
   stockGallery$(index?: number) {
-    return of(this.stockGallery(index));
+    return of(index).pipe(
+      switchMap(res => of(this.stockGallery(res)))
+    );
   }
 
   readAsBase64$(ob$: Observable<Blob>) {

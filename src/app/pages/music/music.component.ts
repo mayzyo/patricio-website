@@ -1,67 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition, style, query, useAnimation, stagger } from '@angular/animations';
-import { landingFadeIn } from 'src/app/animations/fade-in';
-import { map } from 'rxjs/operators';
-import { ImageService } from 'src/app/services/image.service';
+import { map, switchMap, scan, pluck, withLatestFrom } from 'rxjs/operators';
+import { ContentService } from 'src/app/services/image.service';
 import { HttpClient } from '@angular/common/http';
 import { Music } from 'src/app/models/Music';
-import { Observable } from 'rxjs';
+import { Observable, merge, of, from, zip, interval, BehaviorSubject } from 'rxjs';
 import { QuotesService } from 'src/app/services/quotes.service';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-music',
   templateUrl: './music.component.html',
-  styleUrls: ['./music.component.scss'],
-  // animations: [
-  //   trigger('fadeIn', fadeIn('.card')),
-  // ]
-  animations: [
-    trigger('fadeIn', [
-      transition(`* => *`, [
-        query('.card', [
-          style({ opacity: '0' }),
-          stagger(300, [
-            useAnimation(landingFadeIn, {
-              params: {
-                transform: 'translateY(20px)',
-                opacity: '0',
-              }
-            })
-          ])
-        ]),
-      ])
-    ]),
-  ]
+  styleUrls: ['./music.component.scss']
 })
 export class MusicComponent implements OnInit {
-
   readonly quote$ = this.quotes.procedure$('music');
-  readonly musics$ = this.http.get<Music[]>('/api/musics').pipe(
-    map(res => this.setupFileStreams(res))
+  readonly updateBacklog$ = new BehaviorSubject<number>(1);
+  readonly backlog$ = this.updateBacklog$.pipe(
+    map(res => ({ page: res.toString(), size: '10' })),
+    switchMap(res => this.http.get<Music[]>('/api/musics', { params: res })),
+    withLatestFrom(this.updateBacklog$),
+    scan<[Music[], number], Music[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
+    switchMap(res => from(res)),
   );
+  readonly musics$ = zip(
+    this.backlog$,
+    interval(300)
+  ).pipe(
+    pluck('0'),
+    map(res => ({
+      ...res,
+      date: res.date && new Date(res.date).toDateString(),
+      active: false,
+      playing: false,
+      audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`),
+      cover$: res.thumbnail && merge(
+        of(res.thumbnail),
+        this.contents.get(`/api/musics/covers/${res.coverKey}`)
+      )
+    })),
+    scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
+  );
+
+  playing: Music;
 
   constructor(
     private http: HttpClient,
     private quotes: QuotesService,
-    private images: ImageService
+    private contents: ContentService,
+    private admin: AdminService,
   ) { }
 
   ngOnInit() {
-    window.scrollTo(0, 0);
-  }
+  }  
 
-  private setupFileStreams(musics: Music[]): MusicViewModel[] {
-    return musics.map(el => ({ 
-      ...el, 
-      cover$: this.images.readAsBase64$(
-        this.http.get(
-          `/api/musics/covers${el.coverKey}`, 
-          { responseType: 'blob' }
-        )
-      ),
-      audio$: null // WIP
-    }))
+  loggedIn = this.admin.loggedIn;
+  edit(editorType: string) {
+    this.admin.open(editorType);
   }
 }
-
-type MusicViewModel = Music & { cover$: Observable<unknown>, audio$: Observable<unknown> }

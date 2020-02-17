@@ -3,14 +3,19 @@
 <div class="jumbotron mb-0">
     <div class="container p-1">
 
-        <h2>Image Gallery | 媒体库</h2>
+        <h2>
+            Image Gallery | 媒体库
+            <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('moments')">
+                <img src="assets/images/edit-regular.svg" height="30" width="30">
+            </button>
+        </h2>
 
         <hr />
 
         <div class="row m-n1 justify-content-center">
-            <a class="col-lg-2 col-md-3 col-sm-6 p-1 thumbnail" (click)="open(content, moment)"
-                *ngFor="let moment of previews$ | async" [@fadeIn]>
-                <img src="{{ moment.thumbnail }}" class="thumbnail-img">
+            <a class="fade-in thumbnail col-lg-2 col-md-3 col-sm-6 p-1" (click)="open(content, moment)"
+                *ngFor="let moment of previews$ | async">
+                <img [src]="moment.thumbnail" class="thumbnail-img">
             </a>
         </div>
 

@@ -1,4 +1,4 @@
-import { SocialMedia } from './SocialMedia';
+﻿import { SocialMedia } from './SocialMedia';
 
 export interface Owner {
 

@@ -11,9 +11,11 @@ export interface Music {
 
 	thumbnail: string
 
-	externalUrl: string
+	soundCloud: string
 
 	coverKey: string
 
 	audioKey: string
+
+	favourite: boolean
 }

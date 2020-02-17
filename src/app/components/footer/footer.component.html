@@ -11,7 +11,7 @@
                             <a class="nav-link" routerLink="/home">主页 | Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/announcements">动态 | Updates</a>
+                            <a class="nav-link" routerLink="/updates">动态 | Updates</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" routerLink="/works">作品 | Works</a>
@@ -23,7 +23,12 @@
                 </div>
 
                 <div class="col-md-3 col-sm-12">
-                  <h1 class="h4 ml-3">Social Media</h1>
+                  <h1 class="h4 ml-3">
+                    Social Media
+                    <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('social-media')">
+                      <img src="assets/images/edit-regular.svg" height="30" width="30">
+                    </button>
+                  </h1>
                   <ul class="nav flex-column" *ngIf="(socialMedia$ | async) as socialMedia">
 
                     <li class="nav-item" *ngIf="socialMedia.facebook">
@@ -33,8 +38,8 @@
                       </a>
                     </li>
 
-                    <li class="nav-item" *ngIf="socialMedia.linkedin">
-                      <a class="nav-link" href="{{ socialMedia.linkedin }}">
+                    <li class="nav-item" *ngIf="socialMedia.linkedIn">
+                      <a class="nav-link" href="{{ socialMedia.linkedIn }}">
                         <img src="./assets/images/linkedin-brands.svg" height="20" width="20">
                         <div class="align-middle d-inline ml-3">LinkedIn</div>
                       </a>
@@ -47,8 +52,8 @@
                       </a>
                     </li>
 
-                    <li class="nav-item" *ngIf="socialMedia.wechat">
-                      <a class="nav-link" href="{{ socialMedia.wechat }}">
+                    <li class="nav-item" *ngIf="socialMedia.weChat">
+                      <a class="nav-link" href="{{ socialMedia.weChat }}">
                         <img src="./assets/images/weixin-brands.svg" height="20" width="20">
                         <div class="align-middle d-inline ml-3">微信</div>
                       </a>
@@ -64,21 +69,25 @@
                   </ul>
                 </div>
 
-                <div class="col-md-3 col-sm-12"></div>
-                <!-- <div class="col-md-3 col-sm-12">
+                <div class="col-md-3 col-sm-12">
                     <h1 class="h4 ml-3">Legals</h1>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Privacy Policy | 隐私条款</a>
+                            <a class="nav-link" routerLink="/privacy-policy">Privacy Policy | 隐私条款</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Cookie Policy | Cookie 条款</a>
+                            <a class="nav-link" routerLink="/terms-and-conditions">Terms & Conditions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Terms & Conditions</a>
+                            <button class="nav-link btn btn-link" *ngIf="!loggedIn" (click)="login()">
+                              Admin Portal
+                            </button>
+                            <button class="nav-link btn btn-link" *ngIf="loggedIn" (click)="logout()">
+                              Sign out
+                            </button>
                         </li>
                     </ul>
-                </div> -->
+                </div>
             </div>
 
             <div class="row justify-content-around">

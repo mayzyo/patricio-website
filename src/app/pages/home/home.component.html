@@ -2,21 +2,19 @@
 
 <div class="jumbotron jumbotron-fluid mb-0 bg-white" style="min-height: 50vh;" #HighlightRef>
   <div class="container">
-
     <h2>
       <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
       Highlights | 作品一览
+      <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('songs')">
+        <img src="assets/images/edit-regular.svg" height="30" width="30">
+      </button>
     </h2>
-    <!--<app-highlight [animState]="highlightAnim" [datasource$]="musics$"></app-highlight>-->
-
+    <app-highlight [animTrigger$]="highlightTrigger$" [datasource$]="musics$"></app-highlight>
     <hr />
-
     <h2 class="text-center w-100 lead" #UpcomingRef>Upcoming Events | 最新动态</h2>
-    <!--<app-upcoming-events [animState]="upcomingAnim" [datasource$]="updates$"></app-upcoming-events>-->
-
+    <app-listing [animTrigger$]="listingTrigger$" [datasource$]="updates$"></app-listing>
   </div>
 </div>
-
 
 <div class="jumbotron jumbotron-fluid mb-0 bg-dark text-white" style="min-height: 30vh;" #BiographyRef>
   <div class="container px-3">
@@ -24,16 +22,20 @@
     <h2 class="h3 mb-4">
       <img src="assets/images/portrait-solid.svg" height="40" width="40">
       <span>Biography | 简介</span>
+      <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('biography')">
+        <img src="assets/images/edit-regular.svg" height="30" width="30">
+      </button>
     </h2>
 
-    <div *ngIf="(biography$ | async) as biography" class="row mx-n3" style="white-space: pre-line;" [@fadeIn]="animState">
-      <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObj]="biographyAnim">
+    <div *ngIf="(biography$ | async) as biography" class="row mx-n3" style="white-space: pre-line;">
+      <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
         {{ biography[1] ? biography[0] : biography[0] | column : 1 : 2 }}
       </p>
-      <p class="col-md-6 col-sm-12 px-3 biography lead" [@fadeObj]="biographyAnim">
+      <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
         {{ biography[1] ? biography[1] : biography[0] | column : 2 : 2 }}
       </p>
     </div>
+    
   </div>
 </div>
 
