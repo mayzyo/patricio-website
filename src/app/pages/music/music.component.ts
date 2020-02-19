@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { map, switchMap, scan, pluck, withLatestFrom } from 'rxjs/operators';
+import { map, scan, switchMap, tap } from 'rxjs/operators';
 import { ContentService } from 'src/app/services/image.service';
 import { HttpClient } from '@angular/common/http';
 import { Music } from 'src/app/models/Music';
-import { Observable, merge, of, from, zip, interval, BehaviorSubject } from 'rxjs';
+import { merge, of, BehaviorSubject, from } from 'rxjs';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { rapidFire } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-music',
@@ -13,35 +14,32 @@ import { AdminService } from 'src/app/services/admin.service';
   styleUrls: ['./music.component.scss']
 })
 export class MusicComponent implements OnInit {
-  readonly quote$ = this.quotes.procedure$('music');
-  readonly updateBacklog$ = new BehaviorSubject<number>(1);
-  readonly backlog$ = this.updateBacklog$.pipe(
-    map(res => ({ page: res.toString(), size: '10' })),
+  readonly quote$ = this.quotes.unique$('music');
+
+  readonly updateMusics$ = new BehaviorSubject<number>(1);
+  readonly musics$ = this.updateMusics$.pipe(
+    map(res => ({ page: res.toString(), size: '8' })),
     switchMap(res => this.http.get<Music[]>('/api/musics', { params: res })),
-    withLatestFrom(this.updateBacklog$),
-    scan<[Music[], number], Music[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
-    switchMap(res => from(res)),
-  );
-  readonly musics$ = zip(
-    this.backlog$,
-    interval(300)
-  ).pipe(
-    pluck('0'),
-    map(res => ({
-      ...res,
-      date: res.date && new Date(res.date).toDateString(),
-      active: false,
-      playing: false,
-      audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`),
-      cover$: res.thumbnail && merge(
-        of(res.thumbnail),
-        this.contents.get(`/api/musics/covers/${res.coverKey}`)
-      )
-    })),
+    tap(res => setTimeout(() => this.more = res.length >= 8, 2700)),
+    switchMap(res => from(res).pipe(
+      map(res => ({
+        ...res,
+        date: res.date && new Date(res.date).toDateString(),
+        active: false,
+        playing: false,
+        audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`),
+        cover$: res.thumbnail && merge(
+          of(res.thumbnail),
+          this.contents.get(`/api/musics/covers/${res.coverKey}`)
+        )
+      })),
+      rapidFire(300),
+    )),
     scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
   );
-
+  
   playing: Music;
+  more: boolean;
 
   constructor(
     private http: HttpClient,
@@ -52,6 +50,11 @@ export class MusicComponent implements OnInit {
 
   ngOnInit() {
   }  
+
+  showMore() {
+    this.more = false;
+    this.updateMusics$.next(this.updateMusics$.value + 1);
+  }
 
   loggedIn = this.admin.loggedIn;
   edit(editorType: string) {

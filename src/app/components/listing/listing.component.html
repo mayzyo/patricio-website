@@ -1,22 +1,20 @@
-<div>
-    <ng-container *ngFor="let item of collection$ | async">
-        <div class="fade-in media my-3">
+<ng-container *ngFor="let item of collection$ | async">
+    <div class="fade-in media my-3">
 
-            <img *ngIf="!item.link" class="mr-3" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
+        <img *ngIf="!item.link" class="mr-3" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
 
-            <div class="media-body">
-                <h5 class="mt-0 mb-1" [ngClass]="item.link && 'd-none d-md-block'">
-                    {{ item.title }}
-                </h5>
-                <p>{{ item.description }}</p>
-            </div>
-
-            <a *ngIf="item.link" [href]="item.link">
-                <img class="ml-3 border border-dark" [src]="(item.images$ | async) || ''" [default]="stockImage$ | async" height="60" width="180" style="object-fit: cover;">
-            </a>
-
+        <div class="media-body">
+            <h5 class="mt-0 mb-1" [ngClass]="item.link && 'd-none d-md-block'">
+                {{ item.title }}
+            </h5>
+            <p>{{ item.description }}</p>
         </div>
 
-        <hr />
-    </ng-container>
-</div>
+        <a *ngIf="item.link" [href]="item.link">
+            <img class="ml-3 border border-dark" [src]="(item.images$ | async) || ''" [default]="stockImage$ | async" height="60" width="180" style="object-fit: cover;">
+        </a>
+
+    </div>
+
+    <hr />
+</ng-container>

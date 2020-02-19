@@ -7,22 +7,21 @@
             <h2>
                 Latest Announcements | 最新动态
                 <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('posts')">
-                    <img src="assets/images/edit-regular.svg" height="30" width="30">
+                    <img src="assets/images/edit-regular.svg" height="40" width="40">
                 </button>
             </h2>
             <app-listing [datasource$]="latest$"></app-listing>
         </div>
 
-        <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as history">
+        <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as updates">
             <div class="anim-obj">
                 <h2>
                     <span class="display-4">历史动态</span>
                     <span class="h1 text-monospace text-uppercase">History</span>
                 </h2>
                 <div class="history-list-wrapper">
-                    <ul class="history-list" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-                        [scrollWindow]="false" (scrolled)="onScroll()">
-                        <li class="history-item" *ngFor="let update of history">
+                    <ul class="history-list" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+                        <li class="history-item" *ngFor="let update of updates">
                             {{ update.title }}
                         </li>
                     </ul>

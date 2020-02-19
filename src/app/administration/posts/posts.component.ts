@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Update } from 'src/app/models/Update';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, map, withLatestFrom, scan } from 'rxjs/operators';
 import { Status } from '../status';
+import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-posts',
@@ -20,10 +20,7 @@ export class PostsComponent implements OnInit {
 
   readonly updateSelection$ = new BehaviorSubject<number>(1);
   readonly selection$ = this.updateSelection$.pipe(
-    map(res => ({ page: res.toString(), size: '10' })),
-    switchMap(res => this.http.get<Update[]>('/api/updates', { params: res })),
-    // withLatestFrom(this.updateSelection$),
-    // scan<unknown, Update[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), new Array<Update>()),
+    continuous(res => this.http.get<Update[]>('/api/updates', { params: res }), 5),
   );
 
   constructor(
@@ -52,11 +49,17 @@ export class PostsComponent implements OnInit {
       this.submitting = true;
       this.thumbnail.status = Status.UPLOAD;
 
-      this.http.post('/api/updates/covers', file, { responseType: 'text' }).subscribe(res => {
-        this.thumbnail.status = res ? file.name : Status.FAIL;
-        this.thumbnail.value = res;
-        this.submitting = false;
-      });
+      this.http.post('/api/updates/covers', file, { responseType: 'text' }).subscribe(
+        res => {
+          this.thumbnail.status = res ? file.name : Status.FAIL;
+          this.thumbnail.value = res;
+        }, 
+        (err: unknown) => {
+          this.resetFile(this.thumbnail);
+          alert(`Something Went Wrong! ${err}`);
+        },
+        () => this.submitting = false
+      );
     }
   }
 
@@ -77,36 +80,44 @@ export class PostsComponent implements OnInit {
     if(this.form.valid && !this.submitting) {
       this.submitting = true;
       this.current = { ...this.current, ...this.model, thumbnail: this.thumbnail.value };
+      this.current.date = this.current.date || new Date();
 
-      (this.current.id 
-        ? this.http.put(`/api/updates/${this.current.id}`, this.current) 
-        : this.http.post('/api/updates', this.current)
-      ).subscribe(res => {
-        if(res) {
-          this.form.reset();
-          this.current = null;
-          this.resetFile(this.thumbnail);
-  
+      var method: Observable<unknown>;
+      if(this.current.id)
+        method = this.http.put(`/api/updates/${this.current.id}`, this.current);
+      else
+        method = this.http.post('/api/updates', this.current);
+
+      method.subscribe(
+        () => {
+            this.form.reset();
+            this.current = null;
+            this.resetFile(this.thumbnail);
+        }, 
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
           this.submitting = false;
           this.updateSelection$.next(1);
-        } else {
-          alert('Not Authorised! Piss off');
         }
-      }, err => alert(`NO!${err}`));
+      );
     }
   }
 
   onRemove() {
     if(confirm(`Are you sure want to remove this Announcement?`)) {
       this.submitting = true;
-      this.http.delete(`/api/updates/${this.current.id}`).subscribe(res => {
-        this.form.reset();
-        this.current = null;
-        this.resetFile(this.thumbnail);
-
-        this.submitting = false;
-        this.updateSelection$.next(1);
-      })
+      this.http.delete(`/api/updates/${this.current.id}`).subscribe(
+        () => {
+          this.form.reset();
+          this.current = null;
+          this.resetFile(this.thumbnail);
+        },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.updateSelection$.next(1);
+        }
+      )
     }
   }
 

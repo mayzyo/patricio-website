@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { pluck, map, share, tap, switchMap, take } from 'rxjs/operators';
+import { pluck, map, share, tap, switchMap } from 'rxjs/operators';
 import { Owner } from 'src/app/models/Owner';
 import { SocialMedia } from 'src/app/models/SocialMedia';
 import { NgForm } from '@angular/forms';
-import { Subject, Subscription, merge, of } from 'rxjs';
+import { Subject, merge, of } from 'rxjs';
 
 @Component({
   selector: 'app-social-media',
@@ -63,13 +63,16 @@ export class SocialMediaComponent implements OnInit {
   onSubmit() {
     if(this.form.valid && !this.submitting) {
       this.submitting = true;
-      this.current[this.model.type] = this.model.link;
+      this.current[this.model.type] = this.model.link || null;
 
-      this.http.put('/api/profile/media', this.current).subscribe(res => {
-        this.form.resetForm();
-        this.submitting = false;
-        this.updateSocialMedia$.next();
-      });
+      this.http.put('/api/profile/media', this.current).subscribe(
+        () => this.form.resetForm(),
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.updateSocialMedia$.next();
+        }
+      );
     }
   }
 }

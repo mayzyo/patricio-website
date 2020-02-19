@@ -19,6 +19,30 @@ textarea {
     background-size: cover;
 }
 
+.infinite-scroll {
+    overflow: hidden;
+    position: relative;
+}
+
+.infinite-scroll > ul {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll;
+    /* Increase/Decrease this value for cross-browser compatibility */
+    left: -17px;
+    right: -17px;
+    padding-left: 17px;
+    padding-right: 17px;
+
+    list-style: none;
+}
+
+.infinite-scroll > ul > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .infinite.progress-bar {
     animation: infinite 3s linear infinite;
 }

@@ -13,7 +13,7 @@ export class QuotesService {
 
   constructor(private http: HttpClient) { }
 
-  procedure$(pageName: string) {
+  unique$(pageName: string) {
     return this.quotes$.pipe(
       map(res => this.allocateQuote(pageName, res))
     );

@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
   @ViewChild('UpcomingRef', { static: true }) upcomingRef: ElementRef;
   @ViewChild('BiographyRef', { static: true }) biographyRef: ElementRef;
 
-  readonly quote$ = this.quotes.procedure$('home');
-  readonly musics$: Observable<Highlight> = this.http.get<Music[]>('/api/musics').pipe(
+  readonly quote$ = this.quotes.unique$('home');
+  readonly musics$: Observable<Highlight> = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
     switchMap(res => from(res)),
     map(res => ({ 
       ...res, 

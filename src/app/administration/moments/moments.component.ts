@@ -3,9 +3,9 @@ import { NgForm } from '@angular/forms';
 import { Moment } from 'src/app/models/Moment';
 import { Status } from '../status';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, of } from 'rxjs';
-import { switchMap, map, scan, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { ContentService } from 'src/app/services/image.service';
+import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-moments',
@@ -21,10 +21,7 @@ export class MomentsComponent implements OnInit {
 
   readonly updateSelection$ = new BehaviorSubject<number>(1);
   readonly selection$ = this.updateSelection$.pipe(
-    map(res => ({ page: res.toString(), size: '10' })),
-    switchMap(res => this.http.get<Moment[]>('/api/media/moments', { params: res })),
-    // withLatestFrom(this.updateSelection$),
-    // scan<unknown, Moment[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), new Array<Moment>()),
+    continuous(res => this.http.get<Moment[]>('/api/media/moments', { params: res }), 5),
   );
 
   constructor(
@@ -54,14 +51,20 @@ export class MomentsComponent implements OnInit {
       this.submitting = true;
       this.image.status = Status.UPLOAD;
 
-      this.http.post('/api/media/images', file, { responseType: 'text' }).subscribe(res => {
-        this.image.status = res ? file.name : Status.FAIL;
-        this.image.value = res;
-        this.contents.readAsBase64$(of(file)).subscribe(res => {
-          this.image.preview = res;
-        });
-        this.submitting = false;
-      });
+      this.http.post('/api/media/images', file, { responseType: 'text' }).subscribe(
+        res => {
+          this.image.status = res ? file.name : Status.FAIL;
+          this.image.value = res;
+          this.contents.readAsBase64$(of(file)).subscribe(res => {
+            this.image.preview = res;
+          });
+        },
+        (err: unknown) => {
+          this.resetFile(this.image);
+          alert(`Something Went Wrong! ${err}`);
+        },
+        () => this.submitting = false
+      );
     }
   }
 
@@ -82,32 +85,44 @@ export class MomentsComponent implements OnInit {
     if(this.form.valid && !this.submitting) {
       this.submitting = true;
       this.current = { ...this.current, ...this.model, imageKey: this.image.value };
+      this.current.date = this.current.date || new Date();
 
-      (this.current.id 
-        ? this.http.put(`/api/media/moments/${this.current.id}`, this.current) 
-        : this.http.post('/api/media/moments', this.current)
-      ).subscribe(res => {
-        this.form.resetForm();
-        this.current = null;
-        this.resetFile(this.image);
+      var method: Observable<unknown>;
+      if(this.current.id)
+        method = this.http.put(`/api/media/moments/${this.current.id}`, this.current);
+      else
+        method = this.http.post('/api/media/moments', this.current);
 
-        this.submitting = false;
-        this.updateSelection$.next(1);
-      });
+      method.subscribe(
+        () => {
+          this.form.resetForm();
+          this.current = null;
+          this.resetFile(this.image);
+        },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.updateSelection$.next(1);
+        }
+      );
     }
   }
 
   onRemove() {
     if(confirm(`Are you sure want to remove this Photo?`)) {
       this.submitting = true;
-      this.http.delete(`/api/media/moments/${this.current.id}`).subscribe(res => {
-        this.form.resetForm();
-        this.current = null;
-        this.resetFile(this.image);
-
-        this.submitting = false;
-        this.updateSelection$.next(1);
-      })
+      this.http.delete(`/api/media/moments/${this.current.id}`).subscribe(
+        () => {
+          this.form.resetForm();
+          this.current = null;
+          this.resetFile(this.image);
+        },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.updateSelection$.next(1);
+        }
+      );
     }
   }
 

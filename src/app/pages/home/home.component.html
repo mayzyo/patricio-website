@@ -3,11 +3,13 @@
 <div class="jumbotron jumbotron-fluid mb-0 bg-white" style="min-height: 50vh;" #HighlightRef>
   <div class="container">
     <h2>
-      <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
-      Highlights | 作品一览
-      <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('songs')">
-        <img src="assets/images/edit-regular.svg" height="30" width="30">
-      </button>
+      <img *ngIf="!loggedIn; else SongEditor" src="assets/images/record-vinyl-solid.svg" height="40" width="40">
+      <ng-template #SongEditor>
+        <button class="btn btn-link" (click)="edit('songs')">
+          <img src="assets/images/edit-regular.svg" height="40" width="40">
+        </button>
+      </ng-template>
+      <span>Highlights | 作品一览</span>
     </h2>
     <app-highlight [animTrigger$]="highlightTrigger$" [datasource$]="musics$"></app-highlight>
     <hr />
@@ -20,11 +22,13 @@
   <div class="container px-3">
 
     <h2 class="h3 mb-4">
-      <img src="assets/images/portrait-solid.svg" height="40" width="40">
+      <img *ngIf="!loggedIn; else BioEditor" src="assets/images/portrait-solid.svg" height="40" width="40">
+      <ng-template #BioEditor>
+        <button class="btn btn-link" (click)="edit('songs')">
+          <img src="assets/images/edit-regular.svg" height="40" width="40">
+        </button>
+      </ng-template>
       <span>Biography | 简介</span>
-      <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('biography')">
-        <img src="assets/images/edit-regular.svg" height="30" width="30">
-      </button>
     </h2>
 
     <div *ngIf="(biography$ | async) as biography" class="row mx-n3" style="white-space: pre-line;">

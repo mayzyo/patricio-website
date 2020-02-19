@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { of, Observable, BehaviorSubject, from, Subject } from 'rxjs';
-import { switchMap, scan, map, withLatestFrom } from 'rxjs/operators';
+import { of, Observable, BehaviorSubject, from, Subject, combineLatest, merge } from 'rxjs';
+import { switchMap, scan, map, withLatestFrom, tap, share, skipWhile, take } from 'rxjs/operators';
 import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';
@@ -13,22 +13,24 @@ import { Listing } from 'src/app/components/listing/listing.component';
   styleUrls: ['./updates.component.scss'],
 })
 export class UpdatesComponent implements OnInit {
+  readonly quote$ = this.quotes.unique$('updates');
 
-  readonly quote$ = this.quotes.procedure$('updates');
-  readonly updateHistory$ = new BehaviorSubject<number>(1);
-  readonly history$ = this.updateHistory$.pipe(
+  readonly updateUpdates$ = new BehaviorSubject<number>(1);
+  readonly updates$ = this.updateUpdates$.pipe(
     map(res => ({ page: res.toString(), size: '10' })),
     switchMap(res => this.http.get<Update[]>('/api/updates', { params: res })),
-    withLatestFrom(this.updateHistory$),
-    scan<[Update[], number], Update[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
-  );
-  readonly latest$: Observable<Listing> = this.history$.pipe(
-    map(res => [...res].splice(0, 10)),
-    switchMap(res => from(res)),
-    map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) })),
+    share()
   );
 
-  readonly animTrigger$ = new Subject();
+  readonly history$ = this.updates$.pipe(
+    scan<Update[], Update[]>((acc, cur) => acc.concat(cur), []),
+  );
+
+  readonly latest$: Observable<Listing> = this.updates$.pipe(
+    switchMap(res => from(res)),
+    take(6),
+    map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) })),
+  );
 
   constructor(
     private http: HttpClient,
@@ -37,11 +39,10 @@ export class UpdatesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.animTrigger$.next();
   }
 
   onScroll() {
-    this.updateHistory$.next(this.updateHistory$.value + 1);
+    this.updateUpdates$.next(this.updateUpdates$.value + 1);
   }
   
   loggedIn = this.admin.loggedIn;

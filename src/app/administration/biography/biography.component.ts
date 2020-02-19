@@ -39,11 +39,15 @@ export class BiographyComponent implements OnInit {
       this.submitting = true;
       this.current.biography = this.model.content;
 
-      this.http.put('/api/profile/media', this.current).subscribe(res => {
-        this.submitting = false;
-        this.editing = false;
-        this.updateContent();
-      });
+      this.http.put('/api/profile/media', this.current).subscribe(
+        () => { },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.editing = false;
+          this.updateContent();
+        }
+      );
     }
   }
 }

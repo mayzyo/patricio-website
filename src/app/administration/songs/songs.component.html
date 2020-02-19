@@ -1,30 +1,35 @@
 <div class="d-flex">
-    <!-- <ul class="list-group flex-grow-1 w-100 m-2" infiniteScroll [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()"> -->
-    <ul class="list-group flex-grow-1 w-100 m-2">
-        <li 
-        class="list-group-item list-group-item-action d-flex" 
-        *ngFor="let item of selection$ | async"
-        (click)="onSelect(item)"
-        [ngClass]="current && current.id == item.id ? 'active' : ''" 
-        >
-            <img [src]="item.thumbnail" height="100" width="100" default="../../assets/images/record-vinyl-solid.svg">
-            <div class="flex-1 mx-2">
-                <h4>{{ item.title }}</h4>
-                <p>{{ item.genre }}</p>
-            </div>
-        </li>
-    </ul>
+
+    <div class="infinite-scroll flex-grow-1 w-100 m-2">
+        <ul class="list-group" infiniteScroll [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+            <li
+            class="list-group-item list-group-item-action d-flex" 
+            *ngFor="let item of selection$ | async"
+            (click)="onSelect(item)"
+            [ngClass]="current && current.id == item.id ? 'active' : ''" 
+            >
+                <img [src]="item.thumbnail || ''" height="60" width="60" default="assets/images/record-vinyl-solid.svg">
+                <div class="flex-1 mx-2">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.genre }} - {{ item.favourite ? 'Favourited' : '' }}</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
     <form class="card flex-grow-1 w-100 m-2 py-2 px-4" (ngSubmit)="onSubmit()" #editorForm="ngForm">
 
         <div class="form-group">
             <label for="title">Song Title</label>
             <input type="text" class="form-control" id="title" placeholder="...Symphony No. 40" name="title" [(ngModel)]="model.title" required>
         </div>
+
         <div class="form-group">
             <label for="genre">Music Genre</label>
             <input type="text" class="form-control" id="genre" placeholder="...Classical" name="genre" [(ngModel)]="model.genre">
         </div>
+
         <div class="form-group">
             <label for="date">Date of Conception</label>
             <input type="date" class="form-control" id="date" name="date" [(ngModel)]="model.date">
@@ -50,6 +55,11 @@
             <div class="progress" style="height: 2px;">
                 <div class="progress-bar" [ngClass]="progressState(audio.status)" role="progressbar"></div>
             </div>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="favourite" name="favourite" [(ngModel)]="model.favourite">
+            <label class="form-check-label" for="favourite">Show On Home Page</label>
         </div>
 
         <div class="d-flex w-100 mt-2">

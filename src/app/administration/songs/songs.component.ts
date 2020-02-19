@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Music } from 'src/app/models/Music';
-import { Subject, merge, BehaviorSubject } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Status } from '../status';
+import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-songs',
@@ -14,15 +14,14 @@ import { Status } from '../status';
 export class SongsComponent implements OnInit {
   @ViewChild('editorForm', { static:true }) form: NgForm;
   submitting = false;
-  model: Partial<Music> = {};
+  model: Partial<Music> = { favourite: false };
   current: Music;
   cover = { status: Status.NONE || '', value: null };
   audio = { status: Status.NONE || '', value: null };
 
   readonly updateSelection$ = new BehaviorSubject<number>(1);
   readonly selection$ = this.updateSelection$.pipe(
-    map(res => ({ page: res.toString(), size: '10' })),
-    switchMap(res => this.http.get<Music[]>('/api/musics', { params: res }))
+    continuous(res => this.http.get<Music[]>('/api/musics', { params: res }), 10),
   );
 
   constructor(
@@ -51,11 +50,17 @@ export class SongsComponent implements OnInit {
       this.submitting = true;
       this.cover.status = Status.UPLOAD;
 
-      this.http.post('/api/musics/covers', file, { responseType: 'text' }).subscribe(res => {
-        this.cover.status = res ? file.name : Status.FAIL;
-        this.cover.value = res;
-        this.submitting = false;
-      });
+      this.http.post('/api/musics/covers', file, { responseType: 'text' }).subscribe(
+        res => {
+          this.cover.status = res ? file.name : Status.FAIL;
+          this.cover.value = res;
+        },
+        (err: unknown) => {
+          this.resetFile(this.cover);
+          alert(`Something Went Wrong! ${err}`);
+        },
+        () => this.submitting = false
+      );
     }
   }
 
@@ -65,11 +70,17 @@ export class SongsComponent implements OnInit {
       this.submitting = true;
       this.audio.status = Status.UPLOAD;
 
-      this.http.post('/api/musics/audios', file, { responseType: 'text' }).subscribe(res => {
-        this.audio.status = res ? file.name : Status.FAIL;
-        this.audio.value = res;
-        this.submitting = false;
-      });
+      this.http.post('/api/musics/audios', file, { responseType: 'text' }).subscribe(
+        res => {
+          this.audio.status = res ? file.name : Status.FAIL;
+          this.audio.value = res;
+        },
+        (err: unknown) => {
+          this.resetFile(this.audio);
+          alert(`Something Went Wrong! ${err}`);
+        },
+        () => this.submitting = false
+      );
     }
   }
 
@@ -92,39 +103,51 @@ export class SongsComponent implements OnInit {
     if(this.form.valid && !this.submitting) {
       this.submitting = true;
       this.current = { ...this.current, ...this.model, coverKey: this.cover.value, audioKey: this.audio.value };
+      this.current.date = this.current.date || new Date();
 
-      (this.current.id 
-        ? this.http.put(`/api/musics/${this.current.id}`, this.current) 
-        : this.http.post('/api/musics', this.current)
-      ).subscribe(res => {
-        if(res) {
+      var method: Observable<unknown>;
+      if(this.current.id)
+        method = this.http.put(`/api/musics/${this.current.id}`, this.current);
+      else
+        method = this.http.post('/api/musics', this.current);
+
+      method.subscribe(
+        () => {
           this.form.resetForm();
           this.current = null;
           this.resetFile(this.cover);
           this.resetFile(this.audio);
-          
+        },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
           this.submitting = false;
           this.updateSelection$.next(1);
-        } else {
-          alert('Not Authorised! Piss off');
         }
-      }, err => alert(`NO!${err}`));
+      );
     }
   }
 
   onRemove() {
     if(confirm(`Are you sure want to remove this Song?`)) {
       this.submitting = true;
-      this.http.delete(`/api/musics/${this.current.id}`).subscribe(res => {
-        this.form.resetForm();
-        this.current = null;
-        this.resetFile(this.cover);
-        this.resetFile(this.audio);
-
-        this.submitting = false;
-        this.updateSelection$.next(1);
-      })
+      this.http.delete(`/api/musics/${this.current.id}`).subscribe(
+        () => {
+          this.form.resetForm();
+          this.current = null;
+          this.resetFile(this.cover);
+          this.resetFile(this.audio);
+        },
+        (err: unknown) => alert(`Something Went Wrong! ${err}`), 
+        () => {
+          this.submitting = false;
+          this.updateSelection$.next(1);
+        }
+      );
     }
+  }
+
+  onScroll() {
+    this.updateSelection$.next(this.updateSelection$.value + 1);
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'src/app/models/Moment';
-import { BehaviorSubject, from, interval, zip } from 'rxjs';
+import { BehaviorSubject, from } from 'rxjs';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';
 import { AdminService } from 'src/app/services/admin.service';
-import { map, switchMap, withLatestFrom, scan, pluck } from 'rxjs/operators';
+import { map, scan, switchMap } from 'rxjs/operators';
+import { rapidFire } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-media',
@@ -13,23 +14,16 @@ import { map, switchMap, withLatestFrom, scan, pluck } from 'rxjs/operators';
   styleUrls: ['./media.component.scss'],
 })
 export class MediaComponent implements OnInit {
-  readonly quote$ = this.quotes.procedure$('media');
-  readonly updateBacklog$ = new BehaviorSubject<number>(1);
-  readonly backlog$ = this.updateBacklog$.pipe(
+  readonly quote$ = this.quotes.unique$('media');
+  readonly updateMoments$ = new BehaviorSubject<number>(1);
+  readonly moments$ = this.updateMoments$.pipe(
     map(res => ({ page: res.toString(), size: '10' })),
     switchMap(res => this.http.get<Moment[]>('/api/media/moments', { params: res })),
-    withLatestFrom(this.updateBacklog$),
-    scan<[Moment[], number], Moment[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), []),
     switchMap(res => from(res)),
-  );
-  readonly previews$ = zip(
-    this.backlog$,
-    interval(300)
-  ).pipe(
-    pluck('0'),
     map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) })),
-    scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
-  );
+    rapidFire(300),
+    scan<Moment, Moment[]>((acc, cur) => [ ...acc, cur ], [])
+  )
 
   current: Moment;
   closeResult: string;

@@ -6,7 +6,7 @@
         <h2>
             Image Gallery | 媒体库
             <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('moments')">
-                <img src="assets/images/edit-regular.svg" height="30" width="30">
+                <img src="assets/images/edit-regular.svg" height="40" width="40">
             </button>
         </h2>
 
@@ -14,7 +14,7 @@
 
         <div class="row m-n1 justify-content-center">
             <a class="fade-in thumbnail col-lg-2 col-md-3 col-sm-6 p-1" (click)="open(content, moment)"
-                *ngFor="let moment of previews$ | async">
+                *ngFor="let moment of moments$ | async">
                 <img [src]="moment.thumbnail" class="thumbnail-img">
             </a>
         </div>
