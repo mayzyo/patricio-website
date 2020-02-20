@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
   readonly musics$: Observable<Highlight> = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
     switchMap(res => from(res)),
     map(res => ({ 
-      ...res, 
+      ...res,
+      subtitle: res.genre,
       url: `/works`,
       image$: res.thumbnail && merge(
         of(res.thumbnail),

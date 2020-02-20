@@ -20,6 +20,7 @@ export class HighlightComponent implements OnInit {
   items$: Observable<Highlight[]>; 
 
   private collection$: Observable<Highlight>;
+  hover: Highlight;
 
   constructor(
     private contents: ContentService
@@ -62,6 +63,6 @@ export class HighlightComponent implements OnInit {
 export interface Highlight {
   title: string;
   url: string;
-  description?: string;
+  subtitle?: string;
   image$?: unknown;
 }

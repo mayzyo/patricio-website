@@ -9,37 +9,63 @@
     <div class="row my-5">
         <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of musics$ | async">
 
-            <div class="card bg-dark text-white w-100">
-                <img [src]="(music.cover$ | async) || ''" default="assets/images/record-vinyl-solid.svg"
-                    style="object-fit: cover; height: 100%; transition: all .3s ease; filter: blur(2px);">
-                <div class="card-img-overlay">
-                    <div class="d-flex flex-column justify-content-between h-100">
+            <div class="card bg-dark text-white w-100" (mouseenter)="hover = music" (mouseleave)="hover = null">
+                <img
+                class="h-100"
+                style="object-fit: cover; transition: all .3s ease;"
+                [src]="(music.cover$ | async) || ''"
+                default="assets/images/record-vinyl-solid.svg"
+                [ngStyle]="{ filter: onHover(music) }"
+                >
+                <div class="card-img-overlay" [ngSwitch]="music.state">
+
+                    <!-- Neutral State -->
+                    <div class="d-flex flex-column justify-content-between h-100" *ngSwitchCase="State.INACTIVE" (click)="activate(music)">
+                        <div [ngClass]="hover == music ? 'd-none' : ''">
+                            <h5 class="card-title">{{ music.title }}</h5>
+                            <p class="card-text my-2">{{ music.genre }}</p>
+                        </div>
+                        <p class="card-text" [ngClass]="hover == music ? 'd-none' : ''">{{ music.date }}</p>
+                    </div>
+
+                    <!-- Active State -->
+                    <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.ACTIVE">
+                        <button class="btn btn-link" (click)="window.open(music.soundCloud, '_blank')" [hidden]="!music.soundCloud">
+                            <img src="assets/images/soundcloud-brands.svg" height="40" width="40">
+                        </button>
+                        <button class="btn btn-link" (click)="play(music)" [hidden]="!music.audioKey">
+                            <img src="assets/images/play-circle-regular.svg" height="40" width="40">
+                        </button>
+                        <button class="btn btn-link" (click)="back(music)">
+                            <img src="assets/images/undo-alt-solid.svg" height="35" width="35">
+                        </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.LOADING" (click)="back(music)">
+                        <div class="spinner-grow text-primary" role="status"></div>
+                        <div class="spinner-grow text-primary" role="status"></div>
+                        <div class="spinner-grow text-primary" role="status"></div>
+                    </div>
+
+                    <!-- Playing State -->
+                    <div class="flex-column justify-content-between h-100" [ngClass]="music.state == State.LOADING ? 'd-none' : 'd-flex'" *ngIf="music.state == State.LOADING || music.state == State.PLAYING">
                         <div>
                             <h5 class="card-title">{{ music.title }}</h5>
-                            <div class="d-flex justify-content-between align-items-bottom">
+                            <div class="d-flex justify-content-between">
                                 <p class="card-text my-2">{{ music.genre }}</p>
                                 <div>
-                                    <button class="btn btn-link shadow" (click)="window.open(music.soundCloud, '_blank')"
-                                        [hidden]="!music.soundCloud">
+                                    <button class="btn btn-link" (click)="window.open(music.soundCloud, '_blank')" [hidden]="!music.soundCloud">
                                         <img src="assets/images/soundcloud-brands.svg" height="20" width="20">
                                     </button>
-                                    <button class="btn btn-link shadow" (click)="playing = music"
-                                        [hidden]="!music.audioKey || playing == music">
-                                        <img src="assets/images/play-circle-regular.svg" height="20" width="20">
-                                    </button>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
-
                         <div>
-                            <audio *ngIf="playing == music" [src]="music.audio$ | async" controls
-                                style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
-
-                            <p class="card-text" *ngIf="music.date" [hidden]="playing == music">
-                                {{ music.date }}
-                            </p>
+                            <audio [src]="(music.audio$ | async) || ''" controls style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
                         </div>
                     </div>
+
                 </div>
             </div>
 

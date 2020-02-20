@@ -14,6 +14,7 @@ import { rapidFire } from 'src/app/utils/custom-operators';
   styleUrls: ['./music.component.scss']
 })
 export class MusicComponent implements OnInit {
+  State = State;
   readonly quote$ = this.quotes.unique$('music');
 
   readonly updateMusics$ = new BehaviorSubject<number>(1);
@@ -24,10 +25,17 @@ export class MusicComponent implements OnInit {
     switchMap(res => from(res).pipe(
       map(res => ({
         ...res,
+        state: State.INACTIVE,
         date: res.date && new Date(res.date).toDateString(),
-        active: false,
-        playing: false,
-        audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`),
+        audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`).pipe(
+          tap(() => {
+            const music = this.loading.get(res.audioKey);
+            if (music) {
+              music.state = State.PLAYING;
+              this.loading.delete(res.audioKey);
+            }
+          })
+        ),
         cover$: res.thumbnail && merge(
           of(res.thumbnail),
           this.contents.get(`/api/musics/covers/${res.coverKey}`)
@@ -37,8 +45,10 @@ export class MusicComponent implements OnInit {
     )),
     scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
   );
-  
-  playing: Music;
+
+  // A list of music that is currently loading.
+  loading = new Map<string, Music & { state: State }>();
+  hover: Music;
   more: boolean;
 
   constructor(
@@ -49,7 +59,33 @@ export class MusicComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  }  
+  }
+
+  onHover(music: Music & { state: State }) {
+    if (music.state != State.INACTIVE) {
+      return 'opacity(.5) blur(5px)';
+    } else if (this.hover == music) {
+      return '';
+    } else {
+      return 'opacity(.5)';
+    }
+  }
+
+  activate(music: Music & { state: State }) {
+    if (music.soundCloud || music.audioKey) {
+      music.state = State.ACTIVE;
+    }
+  }
+
+  play(music: Music & { state: State }) {
+    music.state = State.LOADING;
+    this.loading.set(music.audioKey, music);
+  }
+
+  back(music: Music & { state: State }) {
+    music.state = State.INACTIVE;
+    this.loading.delete(music.audioKey);
+  }
 
   showMore() {
     this.more = false;
@@ -60,4 +96,11 @@ export class MusicComponent implements OnInit {
   edit(editorType: string) {
     this.admin.open(editorType);
   }
+}
+
+enum State {
+  INACTIVE,
+  ACTIVE,
+  LOADING,
+  PLAYING
 }
