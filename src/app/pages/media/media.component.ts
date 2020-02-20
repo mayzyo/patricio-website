@@ -19,9 +19,10 @@ export class MediaComponent implements OnInit {
   readonly moments$ = this.updateMoments$.pipe(
     map(res => ({ page: res.toString(), size: '10' })),
     switchMap(res => this.http.get<Moment[]>('/api/media/moments', { params: res })),
-    switchMap(res => from(res)),
-    map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) })),
-    rapidFire(300),
+    switchMap(res => from(res).pipe(
+      map(res => ({ ...res, image$: this.http.get(`/api/media/images/${res.imageKey}`) })),
+      rapidFire(300),
+    )),
     scan<Moment, Moment[]>((acc, cur) => [ ...acc, cur ], [])
   )
 
