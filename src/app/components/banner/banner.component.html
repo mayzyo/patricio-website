@@ -1,4 +1,4 @@
-<div class="jumbotron jumbotron-fluid mb-0" [ngStyle]="{ background: 'url(../../assets/images/' + backgroundUrl + ')', 'background-size': 'cover', height: '55vh' }">
+<div class="jumbotron jumbotron-fluid mb-0" [ngStyle]="onStyle()">
     <div class="container h-100 d-flex flex-column justify-content-end">
   
         <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
