@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-absolute w-100">
 
-    <a class="navbar-brand text-secondary ml-3" style="clip-path: inset(2rem 20rem);" routerLink="/home">
+    <a class="navbar-brand text-secondary ml-3" routerLink="/home">
       <div class="name" [ngClass]="!(animState$ | async) ? '' : 'reverse'">Kaze Patricio Chan</div>
-      <div class="name" [ngClass]="(animState$ | async) ? '' : 'reverse'">陈 蔚 风</div>
+      <div class="name" [ngClass]="(animState$ | async) ? '' : 'reverse'">陈 蔚 风 | OFFICIAL</div>
     </a>
 
     <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
