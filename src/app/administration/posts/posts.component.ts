@@ -20,7 +20,7 @@ export class PostsComponent implements OnInit {
 
   readonly updateSelection$ = new BehaviorSubject<number>(1);
   readonly selection$ = this.updateSelection$.pipe(
-    continuous(res => this.http.get<Update[]>('/api/updates', { params: res }), 5),
+    continuous(res => this.http.get<Update[]>('/api/updates', { params: res }), 10),
   );
 
   constructor(
@@ -49,7 +49,7 @@ export class PostsComponent implements OnInit {
       this.submitting = true;
       this.thumbnail.status = Status.UPLOAD;
 
-      this.http.post('/api/updates/covers', file, { responseType: 'text' }).subscribe(
+      this.http.post('/api/updates/previews', file, { responseType: 'text' }).subscribe(
         res => {
           this.thumbnail.status = res ? file.name : Status.FAIL;
           this.thumbnail.value = res;

@@ -1,30 +1,46 @@
 <app-banner [quote$]="quote$" [backgroundUrl]="'banner-3.jpg'"></app-banner>
 
-<div class="jumbotron mb-0">
-    <div class="container p-1">
+<div class="container my-5 pt-5" style="min-height: 50vh;">
 
-        <h2>
-            Image Gallery | 媒体库
-            <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('moments')">
-                <img src="assets/images/edit-regular.svg" height="40" width="40">
-            </button>
-        </h2>
+    <div class="d-flex align-items-center">
+        <h1 class="h2">Image Gallery | 媒体库</h1>
+        <button class="btn btn-link ml-2" *ngIf="loggedIn" (click)="edit('moments')">
+            <img src="assets/images/edit-regular.svg" height="40" width="40">
+        </button>
+    </div>
 
-        <hr />
+    <hr />
 
-        <div class="row m-n1 justify-content-center">
-            <a class="fade-in thumbnail col-lg-2 col-md-3 col-sm-6 p-1" (click)="open(content, moment)"
-                *ngFor="let moment of moments$ | async">
-                <img [src]="moment.thumbnail" class="thumbnail-img">
-            </a>
+    <div class="row justify-content-center">
+        <!-- Main image display -->
+        <div class="col-10">
+            <img class="w-100" style="object-fit: cover; transition: all .3s ease;" [src]="current.image$ | async" *ngIf="current">
+        </div>
+        <!-- Image preview strip -->
+        <div class="infinite-scroll col-2">
+            <ul class="list-group list-group-flush" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+                <li *ngFor="let moment of moments$ | async">
+                    <button class="fade-in btn btn-link w-100" (click)="onSelect(moment)">
+                        <img class="w-100" [ngClass]="moment == current ? 'border border-secondary shadow' : ''" [src]="moment.thumbnail">
+                    </button>
+                </li>
+            </ul>
         </div>
 
     </div>
+    <ng-container *ngIf="current">
+        <div class="row mt-3">
+            <div class="col-auto">
+                <p>
+                    <img class="mr-1" src="assets/images/clock-regular.svg" height="13" width="13">
+                    <small>{{ current.date.toDateString() }}</small>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <p class="display-4">{{ current.description }}</p>
+            </div>
+        </div>
+    </ng-container>
 </div>
-
-<ng-template #content let-modal>
-    <a aria-label="Close" (click)="modal.dismiss('Cross click')" class="modal-close">
-        <span aria-hidden="true">&times;</span>
-    </a>
-    <img src="{{ current.image$ | async }}" class="img-fluid">
-</ng-template>

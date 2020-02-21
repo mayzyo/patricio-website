@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable, zip, interval, of, merge } from 'rxjs';
-import { take, skip, scan, pluck, share, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { take, skip, scan, share } from 'rxjs/operators';
 import { ContentService } from '../../services/image.service';
+import { rapidFire } from '../../utils/custom-operators';
 
 @Component({
   selector: 'app-highlight',
@@ -27,17 +28,9 @@ export class HighlightComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.collection$ = zip(
-      this.datasource$, 
-      this.animTrigger$
-      ? this.animTrigger$.pipe(
-        take(1),
-        switchMap(() => merge(of(null), interval(300)))
-      )
-      : interval(300)
-    ).pipe(
-      pluck('0'),
-      share(),
+    this.collection$ = this.datasource$.pipe(
+      rapidFire(300, this.animTrigger$),
+      share()
     );
 
     this.oversizeItem$ = this.collection$.pipe(

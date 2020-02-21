@@ -1,7 +1,7 @@
 <div class="jumbotron jumbotron-fluid mb-0 bg-primary text-white">
     <div class="container">
 
-        <h2 class="h4">Email Me | 联系我</h2>
+        <h1 class="h4">Email Me | 联系我</h1>
 
         <form class="row mt-3" (ngSubmit)="onSubmit()" #contactForm="ngForm">
             <div class="col-md-6 col-sm-12">
@@ -13,61 +13,60 @@
                 placeholder="write your message here thanks..."
                 id="message" 
                 name="message"
-                #message="ngModel"
                 [(ngModel)]="model.message"
                 required
                 >
                 </textarea>
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && message.invalid">
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && contactForm.message.invalid">
                     Please leave a quick message for me
                 </div>
                 
             </div>
             <div class="col-md-6 col-sm-12">
 
-                <label for="purpose">Purpose of enquiry - 消息主题</label>
+                <label for="purpose">What's it about - 消息抬头</label>
                 <select 
-                class="form-control" 
+                class="form-control mb-2" 
                 id="purpose"
                 name="purpose"
                 [(ngModel)]="model.purpose"
                 >
-                    <option [value]="null">Select an option - 选择主题</option>
-                    <option [value]="0">Deal</option>
-                    <option [value]="1">Others</option>
+                    <option [value]="null">Select an option - 选择抬头</option>
+                    <option [value]="0">Business - 商务</option>
+                    <option [value]="1">Collab - 合作</option>
+                    <option [value]="2">Others - 其它</option>
                 </select>
 
                 <label for="senderType">A bit about yourself - 如何描述您</label>
                 <select 
-                class="form-control" 
+                class="form-control mb-2" 
                 id="senderType"
                 name="senderType"
                 [(ngModel)]="model.senderType"
                 >
                     <option [value]="null">Select an option - 选择描述</option>
-                    <option [value]="0">Manager / representative</option>
-                    <option [value]="1">Fellow Musician</option>
-                    <option [value]="2">Others</option>
+                    <option [value]="0">Manager / representative - 经理 / 代表人</option>
+                    <option [value]="1">Fellow Musician - 艺人</option>
+                    <option [value]="2">Others - 其它</option>
                 </select>
 
                 <label for="sender">Your email - 您的邮箱</label>
                 <input 
-                class="form-control" 
+                class="form-control mb-2" 
                 type="email" 
                 id="sender" 
                 name="sender"
-                #sender="ngModel"
                 [(ngModel)]="model.sender"
                 placeholder="e.g. email_address@provider.com..."
                 required
                 email
                 >
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && sender.invalid">
+                <div class="text-danger font-italic" *ngIf="attemptedSubmit && contactForm.sender.invalid">
                     Please provide a valid email address
                 </div>
 
                 <button class="btn btn-secondary mt-2 shadow" type="submit" [disabled]="submitting">
-                    Submit form | 发送
+                    Send | 发送
                 </button>
 
             </div>

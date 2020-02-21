@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable, zip, interval, merge, of, from } from 'rxjs';
-import { scan, pluck, switchMap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { scan, tap } from 'rxjs/operators';
 import { ContentService } from 'src/app/services/image.service';
 import { rapidFire } from 'src/app/utils/custom-operators';
 
@@ -23,21 +23,9 @@ export class ListingComponent implements OnInit {
 
   ngOnInit() {
     this.collection$ = this.datasource$.pipe(
-      rapidFire(),
+      rapidFire(300, this.animTrigger$),
       scan<Listing, Listing[]>((acc, cur) => [ ...acc, cur ], []),
     );
-    // this.collection$ = zip(
-    //   this.datasource$, 
-    //   this.animTrigger$
-    //   ? this.animTrigger$.pipe(
-    //     take(1),
-    //     switchMap(() => merge(of(null), interval(300)))
-    //   )
-    //   : interval(300)
-    // ).pipe(
-    //   pluck('0'),
-    //   scan<Listing, Listing[]>((acc, cur) => [ ...acc, cur ], []),
-    // );
   }
 }
 

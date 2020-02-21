@@ -3,10 +3,14 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\models",
+    "\\src\\app\\components",
+    "\\src\\app\\components\\highlight",
     "\\src\\app\\pages",
+    "\\src\\app\\pages\\home",
+    "\\src\\app\\pages\\media",
+    "\\src\\app\\pages\\music",
     "\\src\\app\\services"
   ],
-  "SelectedNode": "\\src\\app\\models\\Email.ts",
+  "SelectedNode": "\\src\\app\\pages\\media\\media.component.html",
   "PreviewInSolutionExplorer": false
 }

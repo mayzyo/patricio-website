@@ -9,6 +9,11 @@ textarea {
     resize: none;
 }
 
+.card-img {
+    object-fit: cover;
+    transition: all .3s ease;
+}
+
 .full-bg.jumbotron-fluid {
     background:
         linear-gradient(map-get($theme-colors, 'tertiary') 0%, red 90%), 
@@ -17,6 +22,8 @@ textarea {
         url('assets/images/home-banner.jpg') 20px;
     background-blend-mode: screen, difference, lighten;
     background-size: cover;
+    width: 105%;
+    margin-left: -5%;
 }
 
 .infinite-scroll {
@@ -30,10 +37,10 @@ textarea {
     bottom: 0;
     overflow-y: scroll;
     /* Increase/Decrease this value for cross-browser compatibility */
-    left: -17px;
-    right: -17px;
-    padding-left: 17px;
-    padding-right: 17px;
+    left: -17.5px;
+    right: -17.5px;
+    padding-left: 17.5px;
+    padding-right: 17.5px;
 
     list-style: none;
 }
@@ -70,6 +77,40 @@ textarea {
         transform: none;
         opacity: 1;
     }
+}
+
+.name {
+  animation: name .4s ease-in forwards;
+  position: absolute;
+  top: 1.5rem;
+}
+
+.reverse.name {
+  animation: name-reverse .4s ease-in forwards;
+}
+
+@keyframes name {
+  0% {
+    transform: none;
+    filter: blur(5px);
+  }
+
+  100% {
+    transform: translateY(-100px) skewY(20deg) scaleY(5);
+    filter: none;
+  }
+}
+
+@keyframes name-reverse {
+  0% {
+    transform: translateY(100px) skewY(-20deg) scaleY(5);
+    filter: blur(5px);
+  }
+
+  100% {
+    transform: none;
+    filter: none;
+  }
 }
 
 @include media-breakpoint-down(md) {

@@ -1,28 +1,34 @@
 <app-banner [quote$]="quote$" [backgroundUrl]="'banner-1.jpg'"></app-banner>
 
-<div class="container">
-    <div class="row my-5">
+<div class="container my-5 pt-5" style="min-height: 50vh;">
+    <div class="row">
 
         <div class="col-lg-9 col-md-12">
-            <h2>
-                Latest Announcements | 最新动态
-                <button class="btn btn-link" *ngIf="loggedIn" (click)="edit('posts')">
-                    <img src="assets/images/edit-regular.svg" height="40" width="40">
+            <div class="d-flex align-items-center">
+                <h1 class="h2">Latest Announcements | 最新动态</h1>
+                <button class="btn btn-link ml-2" *ngIf="loggedIn" (click)="edit('posts')">
+                  <img src="assets/images/edit-regular.svg" height="35" width="35">
                 </button>
-            </h2>
+            </div>
+            <br />
             <app-listing [datasource$]="latest$"></app-listing>
         </div>
 
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as updates">
             <div class="anim-obj">
-                <h2>
+                <h1>
                     <span class="display-4">历史动态</span>
                     <span class="h1 text-monospace text-uppercase">History</span>
-                </h2>
-                <div class="history-list-wrapper">
-                    <ul class="history-list" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
-                        <li class="history-item" *ngFor="let update of updates">
-                            {{ update.title }}
+                </h1>
+                <div class="infinite-scroll" style="height: 14rem;">
+                    <ul infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+                        <li *ngFor="let update of updates">
+                            <ng-container *ngIf="!update.link; else LinkAvailable">
+                                {{ update.title }}
+                            </ng-container>
+                            <ng-template #LinkAvailable>
+                                <a href="{{ update.link }}">{{ update.title }}</a>
+                            </ng-template>
                         </li>
                     </ul>
                 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { of, Observable, BehaviorSubject, from, Subject, combineLatest, merge } from 'rxjs';
-import { switchMap, scan, map, withLatestFrom, tap, share, skipWhile, take } from 'rxjs/operators';
+import { of, Observable, BehaviorSubject, from } from 'rxjs';
+import { switchMap, scan, map, share, take } from 'rxjs/operators';
 import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { HttpClient } from '@angular/common/http';

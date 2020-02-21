@@ -5,20 +5,18 @@
     <h4 class="d-inline ml-2">Edit Music Backlog</h4>
 </button>
 
-<div class="container">
-    <div class="row my-5">
+<div class="container my-5 pt-5" style="min-height: 50vh;">
+    <div class="row">
+        <!-- SEO Optimisation -->
+        <h1 class="d-none">Discography | 作品集</h1>
+
         <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of musics$ | async">
+            <div class="card bg-dark text-white w-100 h-100" (mouseenter)="hover = music" (mouseleave)="hover = null">
 
-            <div class="card bg-dark text-white w-100" (mouseenter)="hover = music" (mouseleave)="hover = null">
-                <img
-                class="h-100"
-                style="object-fit: cover; transition: all .3s ease;"
-                [src]="(music.cover$ | async) || ''"
-                default="assets/images/record-vinyl-solid.svg"
-                [ngStyle]="{ filter: onHover(music) }"
-                >
+                <!-- Image overlay -->
+                <img class="card-img h-100" [ngStyle]="{ filter: onHover(music) }" [src]="(music.cover$ | async) || ''" default="assets/images/record-vinyl-solid.svg">
+
                 <div class="card-img-overlay" [ngSwitch]="music.state">
-
                     <!-- Neutral State -->
                     <div class="d-flex flex-column justify-content-between h-100" *ngSwitchCase="State.INACTIVE" (click)="activate(music)">
                         <div [ngClass]="hover == music ? 'd-none' : ''">
@@ -27,7 +25,6 @@
                         </div>
                         <p class="card-text" [ngClass]="hover == music ? 'd-none' : ''">{{ music.date }}</p>
                     </div>
-
                     <!-- Active State -->
                     <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.ACTIVE">
                         <button class="btn btn-link" (click)="window.open(music.soundCloud, '_blank')" [hidden]="!music.soundCloud">
@@ -40,14 +37,12 @@
                             <img src="assets/images/undo-alt-solid.svg" height="35" width="35">
                         </button>
                     </div>
-
                     <!-- Loading State -->
                     <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.LOADING" (click)="back(music)">
                         <div class="spinner-grow text-primary" role="status"></div>
                         <div class="spinner-grow text-primary" role="status"></div>
                         <div class="spinner-grow text-primary" role="status"></div>
                     </div>
-
                     <!-- Playing State -->
                     <div class="flex-column justify-content-between h-100" [ngClass]="music.state == State.LOADING ? 'd-none' : 'd-flex'" *ngIf="music.state == State.LOADING || music.state == State.PLAYING">
                         <div>
@@ -65,10 +60,9 @@
                             <audio [src]="(music.audio$ | async) || ''" controls style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
     <div class="row mb-5 justify-content-center">

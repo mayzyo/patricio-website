@@ -1,35 +1,45 @@
 <app-banner-landing [quote$]="quote$" (onScrolldown)="scrolldown()"></app-banner-landing>
 
-<div class="jumbotron jumbotron-fluid mb-0 bg-white" style="min-height: 50vh;" #HighlightRef>
-  <div class="container">
-    <h2>
-      <img *ngIf="!loggedIn; else SongEditor" src="assets/images/record-vinyl-solid.svg" height="40" width="40">
+<div class="container my-5 py-5">
+
+  <div style="min-height: 30vh;" #HighlightRef>
+    <div class="d-flex align-items-center">
+      <ng-container *ngIf="!loggedIn; else SongEditor">
+        <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
+      </ng-container>
       <ng-template #SongEditor>
         <button class="btn btn-link" (click)="edit('songs')">
-          <img src="assets/images/edit-regular.svg" height="40" width="40">
+          <img src="assets/images/edit-regular.svg" height="35" width="35">
         </button>
       </ng-template>
-      <span>Highlights | 作品一览</span>
-    </h2>
+      <h1 class="h2 ml-2">Highlights | 作品一览</h1>
+    </div>
     <app-highlight [animTrigger$]="highlightTrigger$" [datasource$]="musics$"></app-highlight>
-    <hr />
-    <h2 class="text-center w-100 lead" #UpcomingRef>Upcoming Events | 最新动态</h2>
+  </div>
+
+  <hr />
+
+  <div style="min-height: 30vh;" #UpcomingRef>
+    <h1 class="lead text-center w-100">Upcoming Events | 最新动态</h1>
     <app-listing [animTrigger$]="listingTrigger$" [datasource$]="updates$"></app-listing>
   </div>
+
 </div>
 
 <div class="jumbotron jumbotron-fluid mb-0 bg-dark text-white" style="min-height: 30vh;" #BiographyRef>
-  <div class="container px-3">
+  <div class="container">
 
-    <h2 class="h3 mb-4">
-      <img *ngIf="!loggedIn; else BioEditor" src="assets/images/portrait-solid.svg" height="40" width="40">
+    <div class="d-flex align-items-center mb-4">
+      <ng-container *ngIf="!loggedIn; else BioEditor">
+        <img src="assets/images/portrait-solid.svg" height="40" width="40">
+      </ng-container>
       <ng-template #BioEditor>
-        <button class="btn btn-link" (click)="edit('songs')">
-          <img src="assets/images/edit-regular.svg" height="40" width="40">
+        <button class="btn btn-link" (click)="edit('biography')">
+          <img src="assets/images/edit-regular.svg" height="35" width="35">
         </button>
       </ng-template>
-      <span>Biography | 简介</span>
-    </h2>
+      <h1 class="h2 ml-2">Biography | 简介</h1>
+    </div>
 
     <div *ngIf="(biography$ | async) as biography" class="row mx-n3" style="white-space: pre-line;">
       <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
