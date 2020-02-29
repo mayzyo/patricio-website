@@ -23,11 +23,11 @@
                             <h5 class="card-title">{{ music.title }}</h5>
                             <p class="card-text my-2">{{ music.genre }}</p>
                         </div>
-                        <p class="card-text" [ngClass]="hover == music ? 'd-none' : ''">{{ music.date }}</p>
+                        <p class="card-text" [ngClass]="hover == music ? 'd-none' : ''">{{ music.date | date:'fullDate' }}</p>
                     </div>
                     <!-- Active State -->
                     <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.ACTIVE">
-                        <button class="btn btn-link" (click)="window.open(music.soundCloud, '_blank')" [hidden]="!music.soundCloud">
+                        <button class="btn btn-link" (click)="redirect(music)" [hidden]="!music.soundCloud">
                             <img src="assets/images/soundcloud-brands.svg" height="40" width="40">
                         </button>
                         <button class="btn btn-link" (click)="play(music)" [hidden]="!music.audioKey">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div>
-                            <audio [src]="(music.audio$ | async) || ''" controls style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
+                            <audio #Player (play)="onPlay($event)" [src]="(music.audio$ | async) || ''" controls style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
                         </div>
                     </div>
                 </div>

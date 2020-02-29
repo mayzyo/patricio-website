@@ -49,6 +49,7 @@ export class MusicComponent implements OnInit {
   // A list of music that is currently loading.
   loading = new Map<string, Music & { state: State }>();
   hover: Music;
+  playing: any;
   more: boolean;
 
   constructor(
@@ -71,6 +72,11 @@ export class MusicComponent implements OnInit {
     }
   }
 
+  onPlay($event: Event) {
+    this.playing && (this.playing.pause());
+    this.playing = $event.target;
+  }
+
   activate(music: Music & { state: State }) {
     if (music.soundCloud || music.audioKey) {
       music.state = State.ACTIVE;
@@ -80,6 +86,10 @@ export class MusicComponent implements OnInit {
   play(music: Music & { state: State }) {
     music.state = State.LOADING;
     this.loading.set(music.audioKey, music);
+  }
+
+  redirect(music: Music) {
+    window.open(music.soundCloud, '_blank');
   }
 
   back(music: Music & { state: State }) {
