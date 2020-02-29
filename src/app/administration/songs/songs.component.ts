@@ -93,7 +93,7 @@ export class SongsComponent implements OnInit {
       return;
     }
 
-    this.form.resetForm(music);
+    this.form.resetForm({ ...music, date: music.date && new Date(music.date).toISOString().split('T')[0] });
     this.current = { ...music };
     this.resetFile(this.cover, music.coverKey);
     this.resetFile(this.audio, music.audioKey);

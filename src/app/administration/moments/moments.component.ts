@@ -76,7 +76,7 @@ export class MomentsComponent implements OnInit {
       return;
     }
 
-    this.form.resetForm(moment);
+    this.form.resetForm({ ...moment, date: moment.date && new Date(moment.date).toISOString().split('T')[0] });
     this.current = { ...moment };
     this.resetFile(this.image, moment.imageKey, moment.thumbnail);
   }

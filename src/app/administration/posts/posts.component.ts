@@ -71,7 +71,7 @@ export class PostsComponent implements OnInit {
       return;
     }
 
-    this.form.reset(update);
+    this.form.resetForm({ ...update, date: update.date && new Date(update.date).toISOString().split('T')[0] });
     this.current = { ...update };
     this.resetFile(this.thumbnail, update.thumbnail);
   }

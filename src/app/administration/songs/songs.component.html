@@ -9,10 +9,10 @@
             (click)="onSelect(item)"
             [ngClass]="current && current.id == item.id ? 'active' : ''" 
             >
-                <img [src]="item.thumbnail || ''" height="60" width="60" default="assets/images/record-vinyl-solid.svg">
-                <div class="flex-1 mx-2">
+                <img [src]="item.thumbnail || ''" height="100" width="100" default="assets/images/record-vinyl-solid.svg">
+                <div class="flex-1 mx-2 d-flex flex-column justify-space-between">
                     <h4>{{ item.title }}</h4>
-                    <p>{{ item.genre }} - {{ item.favourite ? 'Favourited' : '' }}</p>
+                    <p><small>{{ item.date | date:'fullDate' }}</small></p>
                 </div>
             </li>
         </ul>

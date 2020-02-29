@@ -4,13 +4,13 @@
         <ul class="list-group" infiniteScroll [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
             <li 
-            class="list-group-item list-group-item-action d-flex" 
+            class="list-group-item list-group-item-action d-flex flex-column" 
             *ngFor="let item of selection$ | async"
             (click)="onSelect(item)"
             [ngClass]="current && current.id == item.id ? 'active' : ''" 
             >
-                <img *ngIf="item.thumbnail" src="{{ item.thumbnail }}" height="100" width="100">
-                <div class="flex-1 mx-2">
+                <img *ngIf="item.thumbnail" src="{{ item.thumbnail }}" height="100" width="300">
+                <div class="mx-2">
                     <h4>{{ item.title }}</h4>
                     <p>{{ item.description }}</p>
                 </div>
