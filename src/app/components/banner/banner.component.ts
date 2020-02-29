@@ -11,6 +11,7 @@ export class BannerComponent implements OnInit {
 
   @Input() quote$: Observable<Quote>;
   @Input() backgroundUrl: string;
+  @Input() altColour: string;
 
   constructor() { }
 
@@ -18,9 +19,10 @@ export class BannerComponent implements OnInit {
   }
 
   onStyle() {
-    return { 
-      background: `url(../../assets/images/${this.backgroundUrl})`, 
-      'background-size': 'cover', 
+    return {
+      'background-color': this.altColour,
+      'background-image': `url(../../assets/images/${this.backgroundUrl})`, 
+      'background-size': 'cover',
       height: '55vh' 
     };
   }
