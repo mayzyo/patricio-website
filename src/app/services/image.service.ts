@@ -24,7 +24,7 @@ export class ContentService {
   }
 
   stockGallery(index?: number) {
-    return `./assets/images/stock-${index || Math.floor(Math.random() * 4 + 1)}.jpg`;
+    return `./assets/images/stock-${index || Math.round(Math.random() * 4) + 1}.jpg`;
   }
 
   stockGallery$(index?: number) {
