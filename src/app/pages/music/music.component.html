@@ -5,16 +5,16 @@
     <h4 class="d-inline ml-2">Edit Music Backlog</h4>
 </button>
 
+<!-- SEO Optimisation -->
+<h1 class="d-none">Discography | 作品集</h1>
+
 <div class="container my-5 pt-5" style="min-height: 50vh;">
     <div class="row">
-        <!-- SEO Optimisation -->
-        <h1 class="d-none">Discography | 作品集</h1>
-
         <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let music of musics$ | async">
-            <div class="card bg-dark text-white w-100 h-100" (mouseenter)="hover = music" (mouseleave)="hover = null">
+            <div class="card bg-dark text-white" (mouseenter)="hover = music" (mouseleave)="hover = null">
 
                 <!-- Image overlay -->
-                <img class="card-img h-100" [ngStyle]="{ filter: onHover(music) }" [src]="(music.cover$ | async) || ''" default="assets/images/record-vinyl-solid.svg">
+                <img class="card-img square" [ngStyle]="{ filter: onHover(music), height: '14rem' }" [src]="(music.cover$ | async) || ''" default="assets/images/record-vinyl-solid.svg">
 
                 <div class="card-img-overlay" [ngSwitch]="music.state">
                     <!-- Neutral State -->
