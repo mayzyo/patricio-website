@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map, scan, switchMap, tap } from 'rxjs/operators';
-import { ContentService } from 'src/app/services/image.service';
+import { ContentService } from 'src/app/services/content.service';
 import { HttpClient } from '@angular/common/http';
 import { Music } from 'src/app/models/Music';
 import { merge, of, BehaviorSubject, from } from 'rxjs';

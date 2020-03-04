@@ -8,7 +8,7 @@ import { QuotesService } from 'src/app/services/quotes.service';
 import { SocialMedia } from 'src/app/models/SocialMedia';
 import { AdminService } from 'src/app/services/admin.service';
 import { merge, of, from, Observable, Subject } from 'rxjs';
-import { ContentService } from 'src/app/services/image.service';
+import { ContentService } from 'src/app/services/content.service';
 import { Highlight } from 'src/app/components/highlight/highlight.component';
 import { Listing } from 'src/app/components/listing/listing.component';
 

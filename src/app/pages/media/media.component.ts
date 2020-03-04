@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { AdminService } from 'src/app/services/admin.service';
 import { map, scan, switchMap, tap } from 'rxjs/operators';
 import { rapidFire } from 'src/app/utils/custom-operators';
-import { ContentService } from '../../services/image.service';
+import { ContentService } from '../../services/content.service';
 
 @Component({
   selector: 'app-media',

@@ -4,7 +4,7 @@ import { Moment } from 'src/app/models/Moment';
 import { Status } from '../status';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, of, Observable } from 'rxjs';
-import { ContentService } from 'src/app/services/image.service';
+import { ContentService } from 'src/app/services/content.service';
 import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({

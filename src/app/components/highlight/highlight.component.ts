@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take, skip, scan, share } from 'rxjs/operators';
-import { ContentService } from '../../services/image.service';
+import { ContentService } from '../../services/content.service';
 import { rapidFire } from '../../utils/custom-operators';
 
 @Component({
