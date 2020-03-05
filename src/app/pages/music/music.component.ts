@@ -73,7 +73,9 @@ export class MusicComponent implements OnInit {
   }
 
   onPlay($event: Event) {
-    this.playing && (this.playing.pause());
+    if(this.playing && $event.target != this.playing) {
+      this.playing.pause()
+    }
     this.playing = $event.target;
   }
 
