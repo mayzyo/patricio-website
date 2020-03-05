@@ -23,6 +23,7 @@ export class BannerComponent implements OnInit {
       'background-color': this.altColour,
       'background-image': `url(../../assets/images/${this.backgroundUrl})`, 
       'background-size': 'cover',
+      'background-position': '50% 75%',
       height: '55vh' 
     };
   }
