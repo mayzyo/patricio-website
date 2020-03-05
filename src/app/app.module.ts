@@ -31,6 +31,7 @@ import { SongsComponent } from './administration/songs/songs.component';
 import { MomentsComponent } from './administration/moments/moments.component';
 import { PostsComponent } from './administration/posts/posts.component';
 import { LegalComponent } from './pages/legal/legal.component';
+import { TimeFromNowPipe } from './utils/time-from-now.pipe';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { LegalComponent } from './pages/legal/legal.component';
     MomentsComponent,
     PostsComponent,
     LegalComponent,
+    TimeFromNowPipe,
   ],
   imports: [
     BrowserModule,

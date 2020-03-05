@@ -1,6 +1,6 @@
 <div class="row my-3">
     <!-- One large block -->
-    <div class="col-md-8 col-sm-12 p-3" *ngIf="(oversizeItem$ | async) as item" (mouseenter)="hover = item" (mouseleave)="hover = null">
+    <div class="col-md-8 col-12 p-3" *ngIf="(oversizeItem$ | async) as item" (mouseenter)="hover = item" (mouseleave)="hover = null">
         <a class="fade-in card bg-dark text-white w-100 card-big" style="height:20rem; white-space: pre-line;"
             [href]="item.url">
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Second large block -->
-    <div class="col-md-4 col-sm-12 p-3" *ngIf="(largeItem$ | async) as item" (mouseenter)="hover = item" (mouseleave)="hover = null">
+    <div class="col-md-4 col-12 p-3" *ngIf="(largeItem$ | async) as item" (mouseenter)="hover = item" (mouseleave)="hover = null">
         <a class="fade-in card bg-dark text-white w-100 card-big" style="height: 20rem;"
             [href]="item.url">
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Medium sized blocks -->
-    <div class="col-md-4 col-sm-12 p-3" *ngFor="let item of wideItems$ | async" (mouseenter)="hover = item" (mouseleave)="hover = null">
+    <div class="col-md-4 col-12 p-3" *ngFor="let item of wideItems$ | async" (mouseenter)="hover = item" (mouseleave)="hover = null">
         <a class="fade-in card bg-dark text-white w-100 card-mid" style="height: 8rem;" [href]="item.url">
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
             <div class="card-img-overlay" [ngStyle]="{ opacity: hover == item ? '1' : '0' }">
@@ -38,11 +38,11 @@
     </div>
 
     <!-- Small blocks, all remaining -->
-    <div class="col-md-3 col-sm-6 p-3" *ngFor="let item of items$ | async" (mouseenter)="hover = item" (mouseleave)="hover = null">
+    <div class="col-md-3 d-md-block d-none p-3" *ngFor="let item of items$ | async" (mouseenter)="hover = item" (mouseleave)="hover = null">
         <a class="fade-in card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="item.url">
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
             <div class="card-img-overlay d-flex flex-column" [ngStyle]="{ opacity: hover == item ? '1' : '0' }">
-                <h2 class="card-text flex-grow-1 d-flex align-items-end">
+                <h2 class="card-text flex-grow-1 d-flex align-items-end text-right">
                   {{ item.title }}
                 </h2>
             </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { scan, tap } from 'rxjs/operators';
+import { scan } from 'rxjs/operators';
 import { ContentService } from 'src/app/services/content.service';
 import { rapidFire } from 'src/app/utils/custom-operators';
 
@@ -13,6 +13,7 @@ export class ListingComponent implements OnInit {
 
   @Input() datasource$: Observable<Listing>;
   @Input() animTrigger$?: Observable<void>;
+  @Input() showDate?: boolean;
   readonly stockImage$ = this.contents.stockGallery$();
 
   collection$: Observable<Listing[]>;
@@ -34,4 +35,5 @@ export interface Listing {
   description: string;
   link?: string;
   image$?: unknown;
+  date: Date;
 }

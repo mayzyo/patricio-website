@@ -1,20 +1,14 @@
-<ng-container *ngFor="let item of collection$ | async">
-    <div class="fade-in media my-3">
-
-        <img *ngIf="!item.link" class="mr-3" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
-
-        <div class="media-body">
-            <h2 class="h5 mt-0 mb-1" [ngClass]="item.link && 'd-none d-md-block'">
-                {{ item.title }}
-            </h2>
-            <p>{{ item.description }}</p>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item d-flex align-items-center" *ngFor="let item of collection$ | async">
+        <img class="mr-3" *ngIf="!item.link" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
+        <div class="flex-grow-1">
+            <p class="h5">{{ item.description || item.title }}</p>
+            <a href="item.link" *ngIf="showDate">{{ item.date | timeFromNow }} left! {{ item.description ? item.title : "event detail here..." }}</a>
+            <a href="item.link" *ngIf="!showDate">{{ item.description ? item.title : "event detail here..." }}</a>
         </div>
-
+        
         <a *ngIf="item.link" [href]="item.link">
-            <img class="ml-3 border border-dark" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" height="60" width="180" style="object-fit: cover;">
+            <img class="event-img border border-dark" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async">
         </a>
-
-    </div>
-
-    <hr />
-</ng-container>
+    </li>
+</ul>

@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck, switchMap, delayWhen } from 'rxjs/operators';
+import { map, pluck, switchMap, delayWhen, filter, tap, share } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Music } from 'src/app/models/Music';
 import { Update } from 'src/app/models/Update';
@@ -41,7 +41,9 @@ export class HomeComponent implements OnInit {
     { params: { page: '1', size: '4', filter: 'EVENT' } }
   ).pipe(
     switchMap(res => from(res)),
-    map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) }))
+    map(res => ({ ...res, date: new Date(res.date), image$: res.thumbnail && of(res.thumbnail) })),
+    filter(res => res.date > new Date()),
+    share()
   );
   readonly biography$ = this.http.get<Owner>('/api/profile').pipe(
     pluck<Owner, SocialMedia>('socialMedia'),
