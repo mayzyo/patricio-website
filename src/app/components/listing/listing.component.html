@@ -1,5 +1,5 @@
 <ul class="list-group list-group-flush">
-    <li class="list-group-item d-flex align-items-center" *ngFor="let item of collection$ | async">
+    <li class="fade-in list-group-item d-flex align-items-center" *ngFor="let item of collection$ | async">
         <img class="mr-3" *ngIf="!item.link" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
         <div class="flex-grow-1">
             <p class="h5">{{ item.description || item.title }}</p>

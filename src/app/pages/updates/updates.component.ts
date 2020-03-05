@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { of, Observable, BehaviorSubject, from } from 'rxjs';
-import { switchMap, scan, map, share, take } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { scan, map, take } from 'rxjs/operators';
 import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
-import { HttpClient } from '@angular/common/http';
 import { AdminService } from 'src/app/services/admin.service';
 import { Listing } from 'src/app/components/listing/listing.component';
+import { UpdateService } from 'src/app/services/update.service';
 
 @Component({
   selector: 'app-updates',
@@ -14,27 +14,17 @@ import { Listing } from 'src/app/components/listing/listing.component';
 })
 export class UpdatesComponent implements OnInit {
   readonly quote$ = this.quotes.unique$('updates');
-
-  readonly updateUpdates$ = new BehaviorSubject<number>(1);
-  readonly updates$ = this.updateUpdates$.pipe(
-    map(res => ({ page: res.toString(), size: '10' })),
-    switchMap(res => this.http.get<Update[]>('/api/updates', { params: res })),
-    share()
+  readonly history$ = this.updates.result$.pipe(
+    scan<Update, Update[]>((acc, cur) => acc.concat(cur), []),
   );
-
-  readonly history$ = this.updates$.pipe(
-    scan<Update[], Update[]>((acc, cur) => acc.concat(cur), []),
-  );
-
-  readonly latest$: Observable<Listing> = this.updates$.pipe(
-    switchMap(res => from(res)),
+  readonly latest$: Observable<Listing> = this.updates.result$.pipe(
     take(6),
     map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) })),
   );
 
   constructor(
-    private http: HttpClient,
     private quotes: QuotesService,
+    private updates: UpdateService,
     private admin: AdminService
   ) { }
 
@@ -42,7 +32,7 @@ export class UpdatesComponent implements OnInit {
   }
 
   onScroll() {
-    this.updateUpdates$.next(this.updateUpdates$.value + 1);
+    this.updates.next();
   }
   
   loggedIn = this.admin.loggedIn;

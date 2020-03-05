@@ -1,51 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { map, scan, switchMap, tap } from 'rxjs/operators';
-import { ContentService } from 'src/app/services/content.service';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { map, scan, tap, switchMap } from 'rxjs/operators';
 import { Music } from 'src/app/models/Music';
-import { merge, of, BehaviorSubject, from } from 'rxjs';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { rapidFire } from 'src/app/utils/custom-operators';
+import { MusicService } from 'src/app/services/music.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-music',
-  templateUrl: './music.component.html',
-  styleUrls: ['./music.component.scss']
+  selector: 'app-musics',
+  templateUrl: './musics.component.html',
+  styleUrls: ['./musics.component.scss']
 })
-export class MusicComponent implements OnInit {
+export class MusicsComponent implements OnInit, OnDestroy {
   State = State;
+  readonly subs = new Subscription();
   readonly quote$ = this.quotes.unique$('music');
-
-  readonly updateMusics$ = new BehaviorSubject<number>(1);
-  readonly musics$ = this.updateMusics$.pipe(
-    map(res => ({ page: res.toString(), size: '8' })),
-    switchMap(res => this.http.get<Music[]>('/api/musics', { params: res })),
-    tap(res => setTimeout(() => this.more = res.length >= 8, 2700)),
-    switchMap(res => from(res).pipe(
-      map(res => ({
-        ...res,
-        state: State.INACTIVE,
-        date: res.date && new Date(res.date).toDateString(),
-        audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`).pipe(
-          tap(() => {
-            const music = this.loading.get(res.audioKey);
-            if (music) {
-              music.state = State.PLAYING;
-              this.loading.delete(res.audioKey);
-            }
-          })
-        ),
-        cover$: res.thumbnail && merge(
-          of(res.thumbnail),
-          this.contents.get(`/api/musics/covers/${res.coverKey}`)
-        )
-      })),
+  readonly musics$ = this.musics.onPageChange$().pipe(
+    switchMap(() => this.musics.result$.pipe(
+      map(res => ({ ...res, state: State.INACTIVE })),
       rapidFire(300),
     )),
-    scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], [])
+    scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], []),
+    tap(res => this.more = res.length % 8 == 0),
   );
-
   // A list of music that is currently loading.
   loading = new Map<string, Music & { state: State }>();
   hover: Music;
@@ -53,13 +31,25 @@ export class MusicComponent implements OnInit {
   more: boolean;
 
   constructor(
-    private http: HttpClient,
     private quotes: QuotesService,
-    private contents: ContentService,
+    private musics: MusicService,
     private admin: AdminService,
   ) { }
 
   ngOnInit() {
+    this.subs.add(
+      this.musics.audio$.subscribe(res => {
+        const music = this.loading.get(res);
+        if (music) {
+          music.state = State.PLAYING;
+          this.loading.delete(res);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   onHover(music: Music & { state: State }) {
@@ -101,7 +91,7 @@ export class MusicComponent implements OnInit {
 
   showMore() {
     this.more = false;
-    this.updateMusics$.next(this.updateMusics$.value + 1);
+    this.musics.next();
   }
 
   loggedIn = this.admin.loggedIn;

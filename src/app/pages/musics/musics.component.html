@@ -1,6 +1,6 @@
 <app-banner [quote$]="quote$" [backgroundUrl]="'banner-2.jpg'" [altColour]="'#C61C49'"></app-banner>
 
-<button class="btn btn-link ml-5" *ngIf="loggedIn" (click)="edit('songs')">
+<button class="btn btn-link ml-5" *ngIf="loggedIn" (click)="edit('music')">
     <img src="assets/images/edit-regular.svg" height="30" width="30">
     <h4 class="d-inline ml-2">Edit Music Backlog</h4>
 </button>
@@ -23,7 +23,9 @@
                             <h5 class="card-title">{{ music.title }}</h5>
                             <p class="card-text my-2">{{ music.genre }}</p>
                         </div>
-                        <p class="card-text" [ngClass]="hover == music ? 'd-none' : ''">{{ music.date | date:'fullDate' }}</p>
+                        <small class="card-text" [ngClass]="hover == music ? 'd-none' : ''">
+                            {{ music.date | date:'fullDate' }}
+                        </small>
                     </div>
                     <!-- Active State -->
                     <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.ACTIVE">

@@ -7,11 +7,11 @@ import { Status } from '../status';
 import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({
-  selector: 'app-posts',
-  templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.scss']
+  selector: 'app-update-admin',
+  templateUrl: './update-admin.component.html',
+  styleUrls: ['./update-admin.component.scss']
 })
-export class PostsComponent implements OnInit {
+export class UpdateAdminComponent implements OnInit {
   @ViewChild('editorForm', { static:true }) form: NgForm;
   submitting = false;
   model: Partial<Update> = {};

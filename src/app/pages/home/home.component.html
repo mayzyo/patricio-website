@@ -8,20 +8,20 @@
         <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
       </ng-container>
       <ng-template #SongEditor>
-        <button class="btn btn-link" (click)="edit('songs')">
+        <button class="btn btn-link" (click)="edit('music')">
           <img src="assets/images/edit-regular.svg" height="35" width="35">
         </button>
       </ng-template>
       <h1 class="h2 ml-2">Highlights | 作品一览</h1>
     </div>
-    <app-highlight [animTrigger$]="highlightTrigger$" [datasource$]="musics$"></app-highlight>
+    <app-highlight [animTrigger$]="highlightTrigger$" [datasource$]="highlight$"></app-highlight>
   </div>
 
   <hr />
 
   <div style="min-height: 30vh;" [ngClass]="(updates$ | async) ? 'd-block' : 'd-none'" #UpcomingRef>
     <h1 class="lead text-center">Upcoming Events | 最新动态</h1>
-    <app-listing [animTrigger$]="listingTrigger$" [datasource$]="updates$" [showDate]="true"></app-listing>
+    <app-listing [animTrigger$]="listingTrigger$" [datasource$]="upcoming$" [showDate]="true"></app-listing>
   </div>
 
 </div>

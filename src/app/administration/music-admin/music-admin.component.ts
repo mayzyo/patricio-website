@@ -7,11 +7,11 @@ import { Status } from '../status';
 import { continuous } from 'src/app/utils/custom-operators';
 
 @Component({
-  selector: 'app-songs',
-  templateUrl: './songs.component.html',
-  styleUrls: ['./songs.component.scss']
+  selector: 'app-music-admin',
+  templateUrl: './music-admin.component.html',
+  styleUrls: ['./music-admin.component.scss']
 })
-export class SongsComponent implements OnInit {
+export class MusicAdminComponent implements OnInit {
   @ViewChild('editorForm', { static:true }) form: NgForm;
   submitting = false;
   model: Partial<Music> = { favourite: false };

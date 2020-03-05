@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
-import { cacheProvider } from './utils/cache.interceptor';
 import { authProvider } from './utils/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,7 +15,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { EmailComponent } from './components/email/email.component';
 import { UpdatesComponent } from './pages/updates/updates.component';
-import { MusicComponent } from './pages/music/music.component';
+import { MusicsComponent } from './pages/musics/musics.component';
 import { MediaComponent } from './pages/media/media.component';
 import { ColumnPipe } from './utils/column.pipe';
 import { BannerComponent } from './components/banner/banner.component';
@@ -27,11 +26,12 @@ import { HighlightComponent } from './components/highlight/highlight.component';
 import { EditorComponent } from './administration/editor/editor.component';
 import { SocialMediaComponent } from './administration/social-media/social-media.component';
 import { BiographyComponent } from './administration/biography/biography.component';
-import { SongsComponent } from './administration/songs/songs.component';
+import { MusicAdminComponent } from './administration/music-admin/music-admin.component';
 import { MomentsComponent } from './administration/moments/moments.component';
-import { PostsComponent } from './administration/posts/posts.component';
+import { UpdateAdminComponent } from './administration/update-admin/update-admin.component';
 import { LegalComponent } from './pages/legal/legal.component';
 import { TimeFromNowPipe } from './utils/time-from-now.pipe';
+import { MusicDetailComponent } from './pages/music-detail/music-detail.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { TimeFromNowPipe } from './utils/time-from-now.pipe';
     FooterComponent,
     EmailComponent,
     UpdatesComponent,
-    MusicComponent,
+    MusicsComponent,
     MediaComponent,
     ColumnPipe,
     BannerComponent,
@@ -52,11 +52,12 @@ import { TimeFromNowPipe } from './utils/time-from-now.pipe';
     EditorComponent,
     SocialMediaComponent,
     BiographyComponent,
-    SongsComponent,
+    MusicAdminComponent,
     MomentsComponent,
-    PostsComponent,
+    UpdateAdminComponent,
     LegalComponent,
     TimeFromNowPipe,
+    MusicDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +68,7 @@ import { TimeFromNowPipe } from './utils/time-from-now.pipe';
     InfiniteScrollModule,
     AppRoutingModule
   ],
-  providers: [authProvider, cacheProvider],
+  providers: [authProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

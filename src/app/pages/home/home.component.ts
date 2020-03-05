@@ -11,6 +11,8 @@ import { merge, of, from, Observable, Subject } from 'rxjs';
 import { ContentService } from 'src/app/services/content.service';
 import { Highlight } from 'src/app/components/highlight/highlight.component';
 import { Listing } from 'src/app/components/listing/listing.component';
+import { MusicService } from 'src/app/services/music.service';
+import { UpdateService } from 'src/app/services/update.service';
 
 @Component({
   selector: 'app-home',
@@ -24,27 +26,22 @@ export class HomeComponent implements OnInit {
   @ViewChild('BiographyRef', { static: true }) biographyRef: ElementRef;
 
   readonly quote$ = this.quotes.unique$('home');
-  readonly musics$: Observable<Highlight> = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
-    switchMap(res => from(res)),
-    map(res => ({ 
-      ...res,
-      subtitle: res.genre,
-      url: `/works`,
-      image$: res.thumbnail && merge(
-        of(res.thumbnail),
-        this.contents.get(`/api/musics/covers/${res.coverKey}`)
-      )
-    })),
+  readonly highlight$: Observable<Highlight> = this.musics.favourite$.pipe(
+    map(res => ({ ...res, image$: res.cover$ }))
   );
-  readonly updates$: Observable<Listing> = this.http.get<Update[]>(
-    '/api/updates',
-    { params: { page: '1', size: '4', filter: 'EVENT' } }
-  ).pipe(
-    switchMap(res => from(res)),
-    map(res => ({ ...res, date: new Date(res.date), image$: res.thumbnail && of(res.thumbnail) })),
+  readonly upcoming$: Observable<Listing> = this.updates.event$.pipe(
     filter(res => res.date > new Date()),
     share()
   );
+  // readonly updates$: Observable<Listing> = this.http.get<Update[]>(
+  //   '/api/updates',
+  //   { params: { page: '1', size: '4', filter: 'EVENT' } }
+  // ).pipe(
+  //   switchMap(res => from(res)),
+  //   map(res => ({ ...res, date: new Date(res.date), image$: res.thumbnail && of(res.thumbnail) })),
+  //   filter(res => res.date > new Date()),
+  //   share()
+  // );
   readonly biography$ = this.http.get<Owner>('/api/profile').pipe(
     pluck<Owner, SocialMedia>('socialMedia'),
     pluck<SocialMedia, string>('biography'),
@@ -66,7 +63,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private quotes: QuotesService,
-    private contents: ContentService,
+    private musics: MusicService,
+    private updates: UpdateService,
     private admin: AdminService,
   ) { }
 
