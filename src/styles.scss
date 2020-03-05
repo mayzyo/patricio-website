@@ -36,9 +36,9 @@ textarea {
 
 .sub-bg.jumbotron-fluid {
   background: map-get($theme-colors, 'primary');
-  -moz-box-shadow:    inset 0 0 10px #000000;
-  -webkit-box-shadow: inset 0 0 10px #000000;
-  box-shadow:         inset 0 0 10px #000000;
+  -moz-box-shadow:    inset 0 8px 10px -10px #000000;
+  -webkit-box-shadow: inset 0 8px 10px -10px #000000;
+  box-shadow:         inset 0 8px 10px -10px #000000;
 }
 
 .infinite-scroll {

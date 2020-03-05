@@ -18,7 +18,7 @@ export class MusicsComponent implements OnInit, OnDestroy {
   readonly quote$ = this.quotes.unique$('music');
   readonly musics$ = this.musics.onPageChange$().pipe(
     switchMap(() => this.musics.result$.pipe(
-      map(res => ({ ...res, state: State.INACTIVE })),
+      map(res => ({ ...res, state: State.INACTIVE, date: res.date.toDateString() })),
       rapidFire(300),
     )),
     scan<unknown, unknown[]>((acc, cur) => [ ...acc, cur ], []),

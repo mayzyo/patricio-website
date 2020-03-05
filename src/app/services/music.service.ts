@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject, from, of, merge, BehaviorSubject, Observable } from 'rxjs';
+import { Subject, from, of, merge, BehaviorSubject, Observable, race } from 'rxjs';
 import { Music } from '../models/Music';
-import { switchMap, map, shareReplay, tap, share } from 'rxjs/operators';
+import { switchMap, map, shareReplay, tap, share, scan, filter, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ContentService } from './content.service';
 
@@ -20,7 +20,7 @@ export class MusicService {
     switchMap(res => from(res)),
     map(res => ({
       ...res,
-      date: new Date(res.date).toDateString(),
+      date: new Date(res.date),
       audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`).pipe(
         tap(() => this.audio$.next(res.audioKey))
       ),
@@ -29,14 +29,13 @@ export class MusicService {
         this.contents.get(`/api/musics/covers/${res.coverKey}`)
       )
     })),
-    share()
+    shareReplay(8)
   );
 
   readonly favourite$ = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
     switchMap(res => from(res)),
     map(res => ({ 
       ...res,
-      subtitle: res.genre,
       url: `/works/${res.id}`,
       cover$: res.thumbnail && merge(
         of(res.thumbnail),
@@ -61,6 +60,29 @@ export class MusicService {
 
   prev() {
     this.updateResult$.value > 1 && this.updateResult$.next(this.updateResult$.value - 1);
+  }
+
+  select$(id: number) {
+    return race<Music>(
+      this.result$.pipe(
+        filter(res => res.id == id)
+      ),
+      this.http.get<Music>(`/api/musics/${id}`).pipe(
+        map(res => ({
+          ...res,
+          date: new Date(res.date),
+          audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`).pipe(
+            tap(() => this.audio$.next(res.audioKey))
+          ),
+          cover$: res.thumbnail && merge(
+            of(res.thumbnail),
+            this.contents.get(`/api/musics/covers/${res.coverKey}`)
+          )
+        })),
+      )
+    ).pipe(
+      take(1)
+    );
   }
 
   onPageChange$() {

@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
   readonly quote$ = this.quotes.unique$('home');
   readonly highlight$: Observable<Highlight> = this.musics.favourite$.pipe(
-    map(res => ({ ...res, image$: res.cover$ }))
+    map(res => ({ ...res, image$: res.cover$, subtitle: res.genre }))
   );
   readonly upcoming$: Observable<Listing> = this.updates.event$.pipe(
     filter(res => res.date > new Date()),

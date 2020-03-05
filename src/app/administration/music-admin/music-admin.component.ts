@@ -5,6 +5,8 @@ import { Music } from 'src/app/models/Music';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Status } from '../status';
 import { continuous } from 'src/app/utils/custom-operators';
+import { MusicService } from 'src/app/services/music.service';
+import { withLatestFrom, scan } from 'rxjs/operators';
 
 @Component({
   selector: 'app-music-admin',
@@ -19,13 +21,18 @@ export class MusicAdminComponent implements OnInit {
   cover = { status: Status.NONE || '', value: null };
   audio = { status: Status.NONE || '', value: null };
 
-  readonly updateSelection$ = new BehaviorSubject<number>(1);
-  readonly selection$ = this.updateSelection$.pipe(
-    continuous(res => this.http.get<Music[]>('/api/musics', { params: res }), 10),
+  // readonly updateSelection$ = new BehaviorSubject<number>(1);
+  // readonly selection$ = this.updateSelection$.pipe(
+  //   continuous(res => this.http.get<Music[]>('/api/musics', { params: res }), 10),
+  // );
+  readonly selection$ = this.musics.result$.pipe(
+    withLatestFrom(this.musics.onPageChange$()),
+    scan<[Music, number], Music[]>((acc, [cur, page]) => page == 1 ? [cur] : acc.concat(cur), []),
   );
 
   constructor(
     private http: HttpClient,
+    private musics: MusicService,
   ) { }
 
   ngOnInit() {
@@ -121,7 +128,8 @@ export class MusicAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.musics.toPage(1);
+          // this.updateSelection$.next(1);
         }
       );
     }
@@ -140,14 +148,16 @@ export class MusicAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.musics.toPage(1);
+          // this.updateSelection$.next(1);
         }
       );
     }
   }
 
   onScroll() {
-    this.updateSelection$.next(this.updateSelection$.value + 1);
+    this.musics.next();
+    // this.updateSelection$.next(this.updateSelection$.value + 1);
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {
