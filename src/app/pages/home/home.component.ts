@@ -1,14 +1,11 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck, switchMap, delayWhen, filter, tap, share } from 'rxjs/operators';
+import { map, pluck, delayWhen, filter, share } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Music } from 'src/app/models/Music';
-import { Update } from 'src/app/models/Update';
 import { Owner } from 'src/app/models/Owner';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { SocialMedia } from 'src/app/models/SocialMedia';
 import { AdminService } from 'src/app/services/admin.service';
-import { merge, of, from, Observable, Subject } from 'rxjs';
-import { ContentService } from 'src/app/services/content.service';
+import { Observable, Subject } from 'rxjs';
 import { Highlight } from 'src/app/components/highlight/highlight.component';
 import { Listing } from 'src/app/components/listing/listing.component';
 import { MusicService } from 'src/app/services/music.service';
@@ -56,7 +53,8 @@ export class HomeComponent implements OnInit {
     therefore can only work here and not in the other components. */
   );
 
-  highlightTrigger$ = new Subject();
+  // Boolean because it is used to trigger the disabling of arrow down in banner-landing component
+  highlightTrigger$ = new Subject<boolean>();
   listingTrigger$ = new Subject();
   biographyTrigger$ = new Subject();
 
@@ -74,7 +72,7 @@ export class HomeComponent implements OnInit {
   @HostListener('window:scroll', ['$event'])
   onScrollEvent($event: unknown) {
     if (this.scrollOffset(this.highlightRef))
-      this.highlightTrigger$.next();
+      this.highlightTrigger$.next(true);
     if (this.scrollOffset(this.upcomingRef))
       this.listingTrigger$.next();
     if (this.scrollOffset(this.biographyRef))

@@ -8,7 +8,7 @@ import { Quote } from 'src/app/models/Quote';
   styleUrls: ['./banner-landing.component.scss']
 })
 export class BannerLandingComponent implements OnInit {
-
+  @Input() disabled: boolean;
   @Input() quote$: Observable<Quote>;
   @Output() onScrolldown = new EventEmitter();
 

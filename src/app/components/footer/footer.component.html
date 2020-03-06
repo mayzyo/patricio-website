@@ -33,35 +33,35 @@
 
                     <li class="nav-item" *ngIf="socialMedia.facebook">
                       <a class="nav-link" href="{{ socialMedia.facebook }}">
-                        <img src="./assets/images/facebook-square-brands.svg" height="20" width="20">
+                        <fa-icon [icon]="['fab', 'facebook-square']" size="lg" [styles]="{ 'color': '#4267B2'}"></fa-icon>
                         <div class="align-middle d-inline ml-3">Facebook</div>
                       </a>
                     </li>
 
                     <li class="nav-item" *ngIf="socialMedia.linkedIn">
                       <a class="nav-link" href="{{ socialMedia.linkedIn }}">
-                        <img src="./assets/images/linkedin-brands.svg" height="20" width="20">
+                        <fa-icon [icon]="['fab', 'linkedin']" size="lg" [styles]="{ 'color': 'teal'}"></fa-icon>
                         <div class="align-middle d-inline ml-3">LinkedIn</div>
                       </a>
                     </li>
 
                     <li class="nav-item" *ngIf="socialMedia.instagram">
                       <a class="nav-link" href="{{ socialMedia.instagram }}">
-                        <img src="./assets/images/instagram-brands.svg" height="20" width="20">
+                        <fa-icon [icon]="['fab', 'instagram']" size="lg" [styles]="{ 'color': 'orange'}"></fa-icon>
                         <div class="align-middle d-inline ml-3">Instagram</div>
                       </a>
                     </li>
 
                     <li class="nav-item" *ngIf="socialMedia.weChat">
                       <a class="nav-link" href="{{ socialMedia.weChat }}">
-                        <img src="./assets/images/weixin-brands.svg" height="20" width="20">
+                        <fa-icon [icon]="['fab', 'weixin']" size="lg" [styles]="{ 'color': '#7bb32e'}"></fa-icon>
                         <div class="align-middle d-inline ml-3">微信</div>
                       </a>
                     </li>
 
                     <li class="nav-item" *ngIf="socialMedia.weibo">
                       <a class="nav-link" href="{{ socialMedia.weibo }}">
-                        <img src="./assets/images/weibo-brands.svg" height="20" width="20">
+                        <fa-icon [icon]="['fab', 'weibo']" size="lg" [styles]="{ 'color': '#df2029'}"></fa-icon>
                         <div class="align-middle d-inline ml-3">新浪微博</div>
                       </a>
                     </li>

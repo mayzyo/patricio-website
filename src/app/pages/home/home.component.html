@@ -1,15 +1,16 @@
-<app-banner-landing [quote$]="quote$" (onScrolldown)="scrolldown()"></app-banner-landing>
+<app-banner-landing [disabled]="highlightTrigger$ | async" [quote$]="quote$" (onScrolldown)="scrolldown()">
+</app-banner-landing>
 
 <div class="container my-5 py-5">
 
   <div style="min-height: 30vh;" #HighlightRef>
     <div class="d-flex align-items-center">
       <ng-container *ngIf="!loggedIn; else SongEditor">
-        <img src="assets/images/record-vinyl-solid.svg" height="40" width="40">
+        <fa-icon icon="record-vinyl" size="2x"></fa-icon>
       </ng-container>
       <ng-template #SongEditor>
         <button class="btn btn-link" (click)="edit('music')">
-          <img src="assets/images/edit-regular.svg" height="35" width="35">
+          <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
         </button>
       </ng-template>
       <h1 class="h2 ml-2">Highlights | 作品一览</h1>
@@ -31,11 +32,11 @@
 
     <div class="d-flex align-items-center mb-4">
       <ng-container *ngIf="!loggedIn; else BioEditor">
-        <img src="assets/images/portrait-solid.svg" height="40" width="40">
+        <fa-icon [classes]="['text-secondary']" icon="portrait" size="2x"></fa-icon>
       </ng-container>
       <ng-template #BioEditor>
         <button class="btn btn-link" (click)="edit('biography')">
-          <img src="assets/images/edit-regular.svg" height="35" width="35">
+          <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
         </button>
       </ng-template>
       <h1 class="h2 ml-2">Biography | 简介</h1>

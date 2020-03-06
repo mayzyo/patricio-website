@@ -26,7 +26,7 @@ export class MusicsComponent implements OnInit, OnDestroy {
   );
   // A list of music that is currently loading.
   loading = new Map<string, Music & { state: State }>();
-  hover: Music;
+  hover: Music & { state: State };
   playing: any;
   more: boolean;
 
@@ -52,7 +52,7 @@ export class MusicsComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  onHover(music: Music & { state: State }) {
+  hoverStyle(music: Music & { state: State }) {
     if (music.state != State.INACTIVE) {
       return 'opacity(.5) blur(5px)';
     } else if (this.hover == music) {
@@ -60,6 +60,11 @@ export class MusicsComponent implements OnInit, OnDestroy {
     } else {
       return 'opacity(.5)';
     }
+  }
+
+  onMouseLeave() {
+    this.hover.state == State.ACTIVE && (this.hover.state = State.INACTIVE);
+    this.hover = null;
   }
 
   onPlay($event: Event) {

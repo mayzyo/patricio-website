@@ -1,6 +1,5 @@
 <ul class="list-group list-group-flush">
-    <li class="fade-in list-group-item d-flex align-items-center" *ngFor="let item of collection$ | async">
-        <img class="mr-3" *ngIf="!item.link" src="./assets/images/bullhorn-solid.svg" height="50" width="50">
+    <li class="fade-in list-group-item d-flex align-items-center" *ngFor="let item of collection$ | async">        <fa-icon *ngIf="!item.link" icon="bullhorn" size="3x" [classes]="['mr-3']" [styles]="{ 'color': '#DF6795' }"></fa-icon>
         <div class="flex-grow-1">
             <p class="h5">{{ item.description || item.title }}</p>
             <a href="item.link" *ngIf="showDate">{{ item.date | timeFromNow }} left! {{ item.description ? item.title : "event detail here..." }}</a>

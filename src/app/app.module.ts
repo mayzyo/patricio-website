@@ -5,6 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faRecordVinyl, faPortrait, faUndoAlt, faArrowDown, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlayCircle, faClock } from '@fortawesome/free-regular-svg-icons';
+import { faFacebookSquare, faLinkedin, faInstagram, faWeixin, faWeibo, faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 
 import { authProvider } from './utils/auth.interceptor';
 
@@ -66,9 +70,29 @@ import { MusicDetailComponent } from './pages/music-detail/music-detail.componen
     BrowserAnimationsModule,
     NgbModule,
     InfiniteScrollModule,
+    FontAwesomeModule,
     AppRoutingModule
   ],
   providers: [authProvider],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(
+      faRecordVinyl, 
+      faPortrait,
+      faUndoAlt,
+      faArrowDown,
+      faBullhorn,
+      faEdit,
+      faPlayCircle,
+      faClock,
+      faFacebookSquare, 
+      faLinkedin, 
+      faInstagram, 
+      faWeixin, 
+      faWeibo, 
+      faSoundcloud,
+    );
+  }
+}

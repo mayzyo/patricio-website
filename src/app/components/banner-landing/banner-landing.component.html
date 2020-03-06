@@ -11,6 +11,6 @@
   </div>
 </div>
 
-<button class="scrolldown btn btn-link position-absolute w-100" style="top: 95vh;" (click)="scrolldown()">
-  <img src="./assets/images/arrow-down-solid.svg" height="28" width="28">
+<button *ngIf="!disabled" class="scrolldown btn btn-link text-white position-absolute w-100" (click)="scrolldown()">
+  <fa-icon icon="arrow-down" size="lg"></fa-icon>
 </button>
