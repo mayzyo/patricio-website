@@ -1,15 +1,15 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { map, pluck, delayWhen, filter, share } from 'rxjs/operators';
+import { map, pluck, delayWhen, filter, share, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Owner } from 'src/app/models/Owner';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { SocialMedia } from 'src/app/models/SocialMedia';
 import { AdminService } from 'src/app/services/admin.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { Highlight } from 'src/app/components/highlight/highlight.component';
 import { Listing } from 'src/app/components/listing/listing.component';
 import { MusicService } from 'src/app/services/music.service';
-import { UpdateService } from 'src/app/services/update.service';
+import { UpdateService, Filter } from 'src/app/services/update.service';
 
 @Component({
   selector: 'app-home',
@@ -26,10 +26,11 @@ export class HomeComponent implements OnInit {
   readonly highlight$: Observable<Highlight> = this.musics.favourite$.pipe(
     map(res => ({ ...res, image$: res.cover$, subtitle: res.genre }))
   );
-  readonly upcoming$: Observable<Listing> = this.updates.event$.pipe(
+  readonly upcoming$: Observable<Listing> = this.updates.filtered$(Filter.EVENT).pipe(
     filter(res => res.date > new Date()),
     share()
   );
+
   readonly biography$ = this.http.get<Owner>('/api/profile').pipe(
     pluck<Owner, SocialMedia>('socialMedia'),
     pluck<SocialMedia, string>('biography'),

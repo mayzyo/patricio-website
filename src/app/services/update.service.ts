@@ -10,6 +10,7 @@ import { Update } from '../models/Update';
 export class UpdateService {
 
   private readonly updateResult$ = new BehaviorSubject<number>(1);
+  public filter: Filter;
 
   readonly result$ = this.updateResult$.pipe(
     map(res => ({ page: res.toString(), size: '10' })),
@@ -23,18 +24,20 @@ export class UpdateService {
     share()
   );
 
-  readonly event$ = this.http.get<Update[]>(
-    '/api/updates',
-    { params: { page: '1', size: '4', filter: 'EVENT' } }
-  ).pipe(
-    switchMap(res => from(res)),
-    map(res => ({ 
-      ...res, 
-      date: new Date(res.date), 
-      image$: res.thumbnail && of(res.thumbnail) 
-    })),
-    share()
-  );
+  filtered$(filter: Filter) {
+    return this.http.get<Update[]>(
+      '/api/updates',
+      { params: { page: '1', size: '4', filter } }
+    ).pipe(
+      switchMap(res => from(res)),
+      map(res => ({ 
+        ...res, 
+        date: new Date(res.date), 
+        image$: res.thumbnail && of(res.thumbnail) 
+      })),
+      share()
+    );
+  }
 
   constructor(
     private http: HttpClient,
@@ -55,4 +58,10 @@ export class UpdateService {
   onPageChange$() {
     return this.updateResult$ as Observable<number>;
   }
+}
+
+export enum Filter {
+  ALL = 'ALL',
+  EVENT = 'EVENT',
+  POST = 'POST'
 }

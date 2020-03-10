@@ -10,8 +10,28 @@
                     <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
                 </button>
             </div>
+
             <br />
-            <app-listing [datasource$]="latest$"></app-listing>
+
+            <div class="d-flex justify-content-end">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="filter$.value == Filter.ALL && 'active'" (click)="toggleFilter(Filter.ALL)">
+                        All
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="filter$.value == Filter.EVENT && 'active'" (click)="toggleFilter(Filter.EVENT)">
+                        Events
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="filter$.value == Filter.POST && 'active'" (click)="toggleFilter(Filter.POST)">
+                        Posts
+                    </button>
+                </div>
+            </div>
+
+            <br />
+
+            <app-listing *ngIf="filter$.value == Filter.ALL" [datasource$]="latest$"></app-listing>
+            <app-listing *ngIf="filter$.value == Filter.EVENT" [datasource$]="latest$"></app-listing>
+            <app-listing *ngIf="filter$.value == Filter.POST" [datasource$]="latest$"></app-listing>
         </div>
 
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as updates">
@@ -21,7 +41,8 @@
                     <span class="h1 text-monospace text-uppercase">History</span>
                 </h1>
                 <div class="infinite-scroll" style="height: 14rem;">
-                    <ul infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+                    <ul infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
+                        (scrolled)="onScroll()">
                         <li *ngFor="let update of updates">
                             <ng-container *ngIf="!update.link; else LinkAvailable">
                                 {{ update.title }}
