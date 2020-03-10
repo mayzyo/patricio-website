@@ -30,15 +30,6 @@ export class HomeComponent implements OnInit {
     filter(res => res.date > new Date()),
     share()
   );
-  // readonly updates$: Observable<Listing> = this.http.get<Update[]>(
-  //   '/api/updates',
-  //   { params: { page: '1', size: '4', filter: 'EVENT' } }
-  // ).pipe(
-  //   switchMap(res => from(res)),
-  //   map(res => ({ ...res, date: new Date(res.date), image$: res.thumbnail && of(res.thumbnail) })),
-  //   filter(res => res.date > new Date()),
-  //   share()
-  // );
   readonly biography$ = this.http.get<Owner>('/api/profile').pipe(
     pluck<Owner, SocialMedia>('socialMedia'),
     pluck<SocialMedia, string>('biography'),

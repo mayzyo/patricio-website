@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, from, of, merge, BehaviorSubject, Observable, race } from 'rxjs';
 import { Music } from '../models/Music';
-import { switchMap, map, shareReplay, tap, share, scan, filter, take } from 'rxjs/operators';
+import { switchMap, map, shareReplay, tap, filter, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ContentService } from './content.service';
 
@@ -36,7 +36,7 @@ export class MusicService {
     switchMap(res => from(res)),
     map(res => ({ 
       ...res,
-      url: `/works/${res.id}`,
+      url: `/discography/${res.id}`,
       cover$: res.thumbnail && merge(
         of(res.thumbnail),
         this.contents.get(`/api/musics/covers/${res.coverKey}`)

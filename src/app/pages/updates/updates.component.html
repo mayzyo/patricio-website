@@ -5,7 +5,7 @@
 
         <div class="col-lg-9 col-md-12">
             <div class="d-flex align-items-center">
-                <h1 class="h2">Latest Announcements | 最新动态</h1>
+                <h1 class="h2">Recent Announcements | 近期动态</h1>
                 <button class="btn btn-link ml-2" *ngIf="loggedIn" (click)="edit('update')">
                     <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
                 </button>
@@ -17,7 +17,7 @@
         <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as updates">
             <div class="anim-obj">
                 <h1>
-                    <span class="display-4">历史动态</span>
+                    <span class="display-4">历史记录</span>
                     <span class="h1 text-monospace text-uppercase">History</span>
                 </h1>
                 <div class="infinite-scroll" style="height: 14rem;">

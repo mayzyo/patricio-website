@@ -10,8 +10,8 @@ import { MusicDetailComponent } from './pages/music-detail/music-detail.componen
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'updates', component: UpdatesComponent },
-  { path: 'works', component: MusicsComponent },
-  { path: 'works/:id', component: MusicDetailComponent },
+  { path: 'discography', component: MusicsComponent },
+  { path: 'discography/:id', component: MusicDetailComponent },
   { path: 'media', component: MediaComponent },
   { path: 'privacy-policy', component: LegalComponent },
   { path: 'terms-and-conditions', component: LegalComponent },
