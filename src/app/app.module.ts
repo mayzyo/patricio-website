@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faRecordVinyl, faPortrait, faUndoAlt, faArrowDown, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faRecordVinyl, faPortrait, faArrowDown, faBullhorn, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faPlayCircle, faClock } from '@fortawesome/free-regular-svg-icons';
 import { faFacebookSquare, faLinkedin, faInstagram, faWeixin, faWeibo, faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 
@@ -81,7 +81,7 @@ export class AppModule {
     library.addIcons(
       faRecordVinyl, 
       faPortrait,
-      faUndoAlt,
+      faInfoCircle,
       faArrowDown,
       faBullhorn,
       faEdit,

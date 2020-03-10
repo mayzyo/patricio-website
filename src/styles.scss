@@ -5,6 +5,10 @@
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins/_breakpoints";
 
+h1, h2, h3, h4, p {
+  white-space: pre-line;
+}
+
 textarea {
     resize: none;
 }

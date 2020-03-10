@@ -85,15 +85,6 @@ export class MusicsComponent implements OnInit, OnDestroy {
     this.loading.set(music.audioKey, music);
   }
 
-  redirect(music: Music) {
-    window.open(music.soundCloud, '_blank');
-  }
-
-  back(music: Music & { state: State }) {
-    music.state = State.INACTIVE;
-    this.loading.delete(music.audioKey);
-  }
-
   showMore() {
     this.more = false;
     this.musics.next();

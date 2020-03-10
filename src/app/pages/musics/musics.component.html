@@ -29,14 +29,11 @@
                     </div>
                     <!-- Active State -->
                     <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="State.ACTIVE">
-                        <button class="btn btn-link" (click)="redirect(music)" [hidden]="!music.soundCloud">
-                            <fa-icon [icon]="['fab', 'soundcloud']" size="2x" [styles]="{ 'color': '#FF4300' }"></fa-icon>
-                        </button>
                         <button class="btn btn-link text-white" (click)="play(music)" [hidden]="!music.audioKey">
                             <fa-icon [icon]="['far', 'play-circle']" size="2x"></fa-icon>
                         </button>
-                        <button class="btn btn-link text-white" (click)="back(music)">
-                            <fa-icon icon="undo-alt" size="2x"></fa-icon>
+                        <button class="btn btn-link text-white" routerLink="/works/{{ music.id }}">
+                            <fa-icon icon="info-circle" size="2x"></fa-icon>
                         </button>
                     </div>
                     <!-- Loading State -->

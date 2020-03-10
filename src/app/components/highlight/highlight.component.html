@@ -19,7 +19,7 @@
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
             <div class="card-img-overlay d-flex flex-column" [ngStyle]="{ opacity: hover == item ? '1' : '0' }">
                 <h2 class="h1 card-text">{{ item.title }}</h2>
-                <p class="h1 card-text flex-grow-1 d-flex d-flex justify-content-end align-items-end">
+                <p class="h3 card-text flex-grow-1 d-flex d-flex justify-content-end align-items-end">
                     {{ item.subtitle }}
                 </p>
             </div>
@@ -42,7 +42,7 @@
         <a class="fade-in card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="item.url">
             <img class="card-img" [src]="(item.image$ | async) || ''" [default]="stockImage$ | async" [ngStyle]="{ filter: hover == item ? 'opacity(.5) blur(5px)' : '' }">
             <div class="card-img-overlay d-flex flex-column" [ngStyle]="{ opacity: hover == item ? '1' : '0' }">
-                <h2 class="card-text flex-grow-1 d-flex align-items-end text-right">
+                <h2 class="h4 card-text flex-grow-1 d-flex align-items-end text-right">
                   {{ item.title }}
                 </h2>
             </div>

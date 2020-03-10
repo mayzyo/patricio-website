@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, map, share } from 'rxjs/operators';
 import { MusicService } from 'src/app/services/music.service';
+import { Music } from 'src/app/models/Music';
 
 @Component({
   selector: 'app-music-detail',
@@ -21,5 +22,9 @@ export class MusicDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  redirect(music: Music) {
+    window.open(music.soundCloud, '_blank');
   }
 }
