@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { of, Observable, BehaviorSubject } from 'rxjs';
-import { scan, map, switchMap } from 'rxjs/operators';
-import { Update } from 'src/app/models/Update';
+import { of, Observable, BehaviorSubject, from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { Listing } from 'src/app/components/listing/listing.component';
@@ -17,11 +16,10 @@ export class UpdatesComponent implements OnInit {
 
   readonly filter$ = new BehaviorSubject<Filter>(Filter.ALL);
   readonly quote$ = this.quotes.unique$('updates');
-  readonly history$ = this.updates.result$.pipe(
-    scan<Update, Update[]>((acc, cur) => acc.concat(cur), []),
-  );
+  readonly history$ = this.updates.results$;
   readonly latest$: Observable<Listing> = this.filter$.pipe(
     switchMap(res => this.updates.filtered$(res, 6)),
+    switchMap(res => from(res)),
     map(res => ({ 
       ...res, 
       description: this.buildHyperlinks(res.description), 

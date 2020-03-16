@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Update } from 'src/app/models/Update';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Status } from '../status';
-import { continuous } from 'src/app/utils/custom-operators';
+import { UpdateService } from 'src/app/services/update.service';
 
 @Component({
   selector: 'app-update-admin',
@@ -18,13 +18,11 @@ export class UpdateAdminComponent implements OnInit {
   current: Update;
   thumbnail = { status: Status.NONE || '', value: null };
 
-  readonly updateSelection$ = new BehaviorSubject<number>(1);
-  readonly selection$ = this.updateSelection$.pipe(
-    continuous(res => this.http.get<Update[]>('/api/updates', { params: res }), 10),
-  );
+  readonly selection$ = this.updates.results$;
 
   constructor(
     private http: HttpClient,
+    private updates: UpdateService,
   ) { }
 
   ngOnInit() {
@@ -97,7 +95,7 @@ export class UpdateAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.updates.toPage(1);
         }
       );
     }
@@ -115,14 +113,14 @@ export class UpdateAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.updates.toPage(1);
         }
       )
     }
   }
 
   onScroll() {
-    this.updateSelection$.next(this.updateSelection$.value + 1);
+    this.updates.next();
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {
