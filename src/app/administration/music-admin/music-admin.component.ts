@@ -2,11 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Music } from 'src/app/models/Music';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Status } from '../status';
-import { continuous } from 'src/app/utils/custom-operators';
 import { MusicService } from 'src/app/services/music.service';
-import { withLatestFrom, scan, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-music-admin',
@@ -21,15 +19,7 @@ export class MusicAdminComponent implements OnInit {
   cover = { status: Status.NONE || '', value: null };
   audio = { status: Status.NONE || '', value: null };
 
-  // readonly updateSelection$ = new BehaviorSubject<number>(1);
-  // readonly selection$ = this.updateSelection$.pipe(
-  //   continuous(res => this.http.get<Music[]>('/api/musics', { params: res }), 10),
-  // );
-  readonly selection$ = this.musics.onPageChange$().pipe(
-    switchMap(() => this.musics.result$.pipe(
-      // scan<Music, Music[]>((acc, cur) => acc.concat(cur), [])
-    ))
-  );
+  readonly selection$ = this.musics.results$;
 
   constructor(
     private http: HttpClient,
@@ -148,7 +138,6 @@ export class MusicAdminComponent implements OnInit {
         () => {
           this.submitting = false;
           this.musics.toPage(1);
-          // this.updateSelection$.next(1);
         }
       );
     }
@@ -168,7 +157,6 @@ export class MusicAdminComponent implements OnInit {
         () => {
           this.submitting = false;
           this.musics.toPage(1);
-          // this.updateSelection$.next(1);
         }
       );
     }
@@ -176,7 +164,6 @@ export class MusicAdminComponent implements OnInit {
 
   onScroll() {
     this.musics.next();
-    // this.updateSelection$.next(this.updateSelection$.value + 1);
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {

@@ -5,7 +5,7 @@ import { Owner } from 'src/app/models/Owner';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { SocialMedia } from 'src/app/models/SocialMedia';
 import { AdminService } from 'src/app/services/admin.service';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, from } from 'rxjs';
 import { Highlight } from 'src/app/components/highlight/highlight.component';
 import { Listing } from 'src/app/components/listing/listing.component';
 import { MusicService } from 'src/app/services/music.service';
@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit {
 
   readonly quote$ = this.quotes.unique$('home');
   readonly highlight$: Observable<Highlight> = this.musics.favourite$.pipe(
-    map(res => ({ ...res, image$: res.cover$, subtitle: res.genre }))
+    switchMap(res => from(res)),
+    map(res => ({ ...res, image$: res.cover$, subtitle: res.genre, url: `/discography/${res.id}` }))
   );
   readonly upcoming$: Observable<Listing> = this.updates.filtered$(Filter.EVENT).pipe(
     filter(res => res.date > new Date()),

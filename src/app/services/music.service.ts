@@ -22,45 +22,11 @@ export class MusicService {
     withLatestFrom(this.page$),
     scan<[MusicAsync[], number], MusicAsync[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), [])
   )
-  // readonly results$ = merge(
-  //   of(null),
-  //   this.reset$.pipe(
-  //     tap(() => this.page$.next(1))
-  //   )
-  // ).pipe(
-  //   switchMap(() => this.current$),
-  //   scan<Music, Music[]>((acc, cur) => acc.concat(cur), [])
-  // );
-
 
   readonly onAudio$ = new Subject<string>();
-  private readonly updateResult$ = new BehaviorSubject<number>(1);
-  readonly result$ = this.updateResult$.pipe(
-    map(res => ({ page: res.toString(), size: '8' })),
-    switchMap(res => this.http.get<Music[]>('/api/musics', { params: res })),
-    map(res => res.map(el => ({
-      ...el,
-      date: new Date(el.date),
-      audio$: el.audioKey && this.contents.get(`/api/musics/audios/${el.audioKey}`).pipe(
-        tap(() => this.onAudio$.next(el.audioKey))
-      ),
-      cover$: el.thumbnail && merge(
-        of(el.thumbnail),
-        this.contents.get(`/api/musics/covers/${el.coverKey}`)
-      )
-    }))),
-  );
 
   readonly favourite$ = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
-    switchMap(res => from(res)),
-    map(res => ({ 
-      ...res,
-      url: `/discography/${res.id}`,
-      cover$: res.thumbnail && merge(
-        of(res.thumbnail),
-        this.contents.get(`/api/musics/covers/${res.coverKey}`)
-      )
-    })),
+    map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
     shareReplay(10)
   );
 
@@ -70,36 +36,20 @@ export class MusicService {
   ) { }
 
   toPage(num: number) {
-    this.updateResult$.next(num);
     this.page$.next(num);
   }
 
   next() {
-    this.updateResult$.next(this.updateResult$.value + 1);
     this.page$.next(this.page$.value + 1);
-  }
-
-  prev() {
-    this.updateResult$.value > 1 && this.updateResult$.next(this.updateResult$.value - 1);
   }
 
   select$(id: number) {
     return race<Music>(
-      this.result$.pipe(
+      this.results$.pipe(
         map(res => res.find(el => el.id == id))
       ),
       this.http.get<Music>(`/api/musics/${id}`).pipe(
-        map(res => ({
-          ...res,
-          date: new Date(res.date),
-          audio$: res.audioKey && this.contents.get(`/api/musics/audios/${res.audioKey}`).pipe(
-            tap(() => this.onAudio$.next(res.audioKey))
-          ),
-          cover$: res.thumbnail && merge(
-            of(res.thumbnail),
-            this.contents.get(`/api/musics/covers/${res.coverKey}`)
-          )
-        })),
+        map<Music, MusicAsync>(res => new MusicAsync(res, this)),
       )
     ).pipe(
       take(1)
@@ -107,7 +57,7 @@ export class MusicService {
   }
 
   onPageChange$() {
-    return this.updateResult$ as Observable<number>;
+    return this.page$ as Observable<number>;
   }
 }
 
@@ -127,7 +77,7 @@ export class MusicAsync implements Music {
   cover$: Observable<string | SafeUrl>;
 
   constructor(ob: Music, musics: MusicService) {
-    Object.keys(this).forEach(key => this[key] = ob[key]);
+    Object.keys(ob).forEach(key => this[key] = ob[key]);
     this.date = new Date(ob.date);
     this.audio$ = ob.audioKey && musics.contents.get(`/api/musics/audios/${ob.audioKey}`).pipe(
       tap(() => musics.onAudio$.next(ob.audioKey))
@@ -135,6 +85,6 @@ export class MusicAsync implements Music {
     this.cover$ = ob.thumbnail && merge(
       of(ob.thumbnail),
       musics.contents.get(`/api/musics/covers/${ob.coverKey}`)
-    )
+    );
   }
 }
