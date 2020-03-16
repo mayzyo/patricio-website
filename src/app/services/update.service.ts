@@ -24,10 +24,10 @@ export class UpdateService {
     share()
   );
 
-  filtered$(filter: Filter) {
+  filtered$(filter: Filter, size = 4) {
     return this.http.get<Update[]>(
       '/api/updates',
-      { params: { page: '1', size: '4', filter } }
+      { params: { page: '1', size: size.toString(), filter } }
     ).pipe(
       switchMap(res => from(res)),
       map(res => ({ 

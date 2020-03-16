@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Status } from '../status';
 import { continuous } from 'src/app/utils/custom-operators';
 import { MusicService } from 'src/app/services/music.service';
-import { withLatestFrom, scan } from 'rxjs/operators';
+import { withLatestFrom, scan, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-music-admin',
@@ -16,7 +16,7 @@ import { withLatestFrom, scan } from 'rxjs/operators';
 export class MusicAdminComponent implements OnInit {
   @ViewChild('editorForm', { static:true }) form: NgForm;
   submitting = false;
-  model: Partial<Music> = { favourite: false };
+  model: Partial<Music> & { article?: string } = { favourite: false };
   current: Music;
   cover = { status: Status.NONE || '', value: null };
   audio = { status: Status.NONE || '', value: null };
@@ -25,9 +25,10 @@ export class MusicAdminComponent implements OnInit {
   // readonly selection$ = this.updateSelection$.pipe(
   //   continuous(res => this.http.get<Music[]>('/api/musics', { params: res }), 10),
   // );
-  readonly selection$ = this.musics.result$.pipe(
-    withLatestFrom(this.musics.onPageChange$()),
-    scan<[Music, number], Music[]>((acc, [cur, page]) => page == 1 ? [cur] : acc.concat(cur), []),
+  readonly selection$ = this.musics.onPageChange$().pipe(
+    switchMap(() => this.musics.result$.pipe(
+      // scan<Music, Music[]>((acc, cur) => acc.concat(cur), [])
+    ))
   );
 
   constructor(
@@ -36,6 +37,10 @@ export class MusicAdminComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  resetTest() {
+    this.musics.toPage(1);
   }
 
   progressState(status: Status | string) {
@@ -100,7 +105,11 @@ export class MusicAdminComponent implements OnInit {
       return;
     }
 
-    this.form.resetForm({ ...music, date: music.date && new Date(music.date).toISOString().split('T')[0] });
+    this.form.resetForm({ 
+      ...music,
+      article: music.article && music.article.content,
+      date: music.date && new Date(music.date).toISOString().split('T')[0]
+    });
     this.current = { ...music };
     this.resetFile(this.cover, music.coverKey);
     this.resetFile(this.audio, music.audioKey);
@@ -109,7 +118,17 @@ export class MusicAdminComponent implements OnInit {
   onSubmit() {
     if(this.form.valid && !this.submitting) {
       this.submitting = true;
-      this.current = { ...this.current, ...this.model, coverKey: this.cover.value, audioKey: this.audio.value };
+      this.current = { 
+        ...this.current, 
+        ...this.model,
+        article: (this.model.article || (this.current && this.current.article)) && {
+          date: new Date(),
+          ...this.current && this.current.article,
+          content: this.model.article,
+        },
+        coverKey: this.cover.value, 
+        audioKey: this.audio.value,
+      };
       this.current.date = this.current.date || new Date();
 
       var method: Observable<unknown>;

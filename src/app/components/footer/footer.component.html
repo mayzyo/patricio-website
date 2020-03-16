@@ -14,7 +14,7 @@
                             <a class="nav-link" routerLink="/updates">动态 | Updates</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="/discography">作品 | Discography</a>
+                            <a class="nav-link" routerLink="/discography">作品集 | Discography</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" routerLink="/media">媒体 | Media</a>
@@ -26,7 +26,7 @@
                   <h1 class="h4 ml-3">
                     Social Media
                     <button *ngIf="loggedIn" class="btn btn-link" (click)="edit('social-media')">
-                      <img src="assets/images/edit-regular.svg" height="30" width="30">
+                      <fa-icon [icon]="['far', 'edit']" size="lg"></fa-icon>
                     </button>
                   </h1>
                   <ul class="nav flex-column" *ngIf="(socialMedia$ | async) as socialMedia">

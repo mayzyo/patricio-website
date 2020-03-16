@@ -33,7 +33,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   async open() {
     try {
-      await this.modalService.open(this.contentRef, { size: 'lg' }).result;
+      await this.modalService.open(this.contentRef, { size: 'lg', backdrop: 'static' }).result;
     } finally {
       window.location.reload();
     }    

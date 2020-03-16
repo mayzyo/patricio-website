@@ -1,6 +1,6 @@
 <ng-template #ContentRef let-modal>
   <div class="modal-header">
-    <img src="assets/images/edit-regular.svg" height="30" width="30">
+    <fa-icon [icon]="['far', 'edit']" size="lg"></fa-icon>
     <h4 class="modal-title ml-2" style="text-transform: capitalize;">{{ editorType }} Editor</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>

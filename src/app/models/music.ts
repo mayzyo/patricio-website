@@ -1,4 +1,5 @@
-﻿
+﻿import { Article } from './Article';
+
 export interface Music {
 
 	id: number
@@ -18,4 +19,8 @@ export interface Music {
 	audioKey: string
 
 	favourite: boolean
+
+	articleId: number
+
+	article: Article
 }

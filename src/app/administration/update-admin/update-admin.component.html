@@ -9,7 +9,7 @@
             (click)="onSelect(item)"
             [ngClass]="current && current.id == item.id ? 'active' : ''" 
             >
-                <img *ngIf="item.thumbnail" src="{{ item.thumbnail }}" height="100" width="300">
+                <img class="card-img" *ngIf="item.thumbnail" src="{{ item.thumbnail }}" height="100" width="300">
                 <div class="mx-2">
                     <h4>{{ item.title }}</h4>
                     <p>{{ item.description }}</p>
@@ -22,7 +22,7 @@
 
         <div class="form-group">
             <label for="title">Update Title</label>
-            <input type="text" class="form-control" id="title" placeholder="...Macau Visit" name="title" [(ngModel)]="model.title" required>
+            <input type="text" class="form-control" id="title" placeholder="...Macau Visit" name="title" [(ngModel)]="model.title">
         </div>
         <div class="form-group">
             <label for="description">Summary</label>

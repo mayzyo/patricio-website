@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { of, Observable, BehaviorSubject } from 'rxjs';
-import { scan, map, take, switchMap } from 'rxjs/operators';
+import { scan, map, switchMap } from 'rxjs/operators';
 import { Update } from 'src/app/models/Update';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { AdminService } from 'src/app/services/admin.service';
@@ -21,9 +21,12 @@ export class UpdatesComponent implements OnInit {
     scan<Update, Update[]>((acc, cur) => acc.concat(cur), []),
   );
   readonly latest$: Observable<Listing> = this.filter$.pipe(
-    switchMap(res => this.updates.filtered$(res)),
-    take(6),
-    map(res => ({ ...res, image$: res.thumbnail && of(res.thumbnail) })),
+    switchMap(res => this.updates.filtered$(res, 6)),
+    map(res => ({ 
+      ...res, 
+      description: this.buildHyperlinks(res.description), 
+      image$: res.thumbnail && of(res.thumbnail) 
+    })),
   );
   
   constructor(
@@ -41,6 +44,18 @@ export class UpdatesComponent implements OnInit {
 
   toggleFilter(type: Filter) {
     this.filter$.next(type);
+  }
+
+  buildHyperlinks(content: string) {
+    if(!content)
+      return null;
+    const occurrence = content.match(/(http)\S+/g);
+    if(occurrence) {
+      occurrence.forEach(el => 
+        content = content.replace(el, `<a href="${el}" target="_blank">${el}</a>`)
+      );
+    }
+    return content;
   }
   
   loggedIn = this.admin.loggedIn;
