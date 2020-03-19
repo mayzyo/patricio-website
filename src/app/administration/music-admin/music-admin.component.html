@@ -19,7 +19,7 @@
     </div>
 
     <form class="card flex-grow-1 w-100 m-2 py-2 px-4" (ngSubmit)="onSubmit()" #editorForm="ngForm">
-        <button (click)="resetTest()">TEST</button>
+
         <div class="form-group">
             <label for="title">Song Title</label>
             <input type="text" class="form-control" id="title" placeholder="...Symphony No. 40" name="title" [(ngModel)]="model.title" required>
