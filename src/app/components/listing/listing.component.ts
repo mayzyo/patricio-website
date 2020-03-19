@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { scan } from 'rxjs/operators';
 import { ContentService } from 'src/app/services/content.service';
-import { rapidFire } from 'src/app/utils/custom-operators';
+import { delayInterval } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-listing',
@@ -24,7 +24,7 @@ export class ListingComponent implements OnInit {
 
   ngOnInit() {
     this.collection$ = this.datasource$.pipe(
-      rapidFire(300, this.animTrigger$),
+      delayInterval(300, this.animTrigger$),
       scan<Listing, Listing[]>((acc, cur) => [ ...acc, cur ], []),
     );
   }

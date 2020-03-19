@@ -3,9 +3,9 @@ import { NgForm } from '@angular/forms';
 import { Moment } from 'src/app/models/Moment';
 import { Status } from '../status';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, of, Observable } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { ContentService } from 'src/app/services/content.service';
-import { continuous } from 'src/app/utils/custom-operators';
+import { MomentService } from 'src/app/services/moment.service';
 
 @Component({
   selector: 'app-moments',
@@ -19,14 +19,12 @@ export class MomentsComponent implements OnInit {
   image = { status: Status.NONE || '', value: null, preview: null };
   current: Moment;
 
-  readonly updateSelection$ = new BehaviorSubject<number>(1);
-  readonly selection$ = this.updateSelection$.pipe(
-    continuous(res => this.http.get<Moment[]>('/api/media/moments', { params: res }), 5),
-  );
+  readonly selection$ = this.moments.results$;
 
   constructor(
     private http: HttpClient,
     private contents: ContentService,
+    private moments: MomentService,
   ) { }
 
   ngOnInit() {
@@ -102,7 +100,7 @@ export class MomentsComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.moments.refresh();
         }
       );
     }
@@ -120,14 +118,14 @@ export class MomentsComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updateSelection$.next(1);
+          this.moments.refresh();
         }
       );
     }
   }
 
   onScroll() {
-    this.updateSelection$.next(this.updateSelection$.value + 1);
+    this.moments.load();
   }
 
   private resetFile(file: { status: Status | string, value: string, preview: string }, value?: string, preview?: string) {

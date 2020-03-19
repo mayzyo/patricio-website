@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, zip, from, interval, combineLatest } from 'rxjs';
-import { map, scan, tap, switchMap, pluck } from 'rxjs/operators';
+import { Subscription, from } from 'rxjs';
+import { map, scan, switchMap } from 'rxjs/operators';
 import { Music } from 'src/app/models/Music';
 import { QuotesService } from 'src/app/services/quotes.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { MusicService } from 'src/app/services/music.service';
+import { delayInterval } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-musics',
@@ -16,12 +17,14 @@ export class MusicsComponent implements OnInit, OnDestroy {
   readonly subs = new Subscription();
   readonly quote$ = this.quotes.unique$('music');
 
-  readonly musics$ = combineLatest(this.musics.results$, this.musics.current$).pipe(
-    map(res => [res[0].filter(el => res[1].indexOf(el) == -1), res[1]]), // Remove current page from all results.
-    tap(res => this.more = res[1].length % 8 == 0), // Check length of current to be equal to size per page, determining if there is more.
-    switchMap(res => zip(from(res[1]), interval(300)).pipe( // Delayed sequential entry for Animation.
-      pluck('0'),
-      map(x => ({ ...x, state: State.INACTIVE, date: x.date.toDateString() })), // Assign State to each object.
+  readonly musics$ = this.musics.results$.pipe(
+    map(res => res.map(el => ({ ...el, state: State.INACTIVE, date: el.date.toDateString() }))), // Assign State to each object.
+    scan<any[] | null, [unknown[], unknown[]]>((acc, cur) => 
+      [acc[1], cur.filter(el => !acc[1].find(x => (x as any).id == el.id))], 
+      [[], []]
+    ), // Filter out the objects that exists in the previous state and outputing the [previous total, new objects].
+    switchMap(res => from(res[1]).pipe(
+      delayInterval(300),
       scan<unknown, unknown[]>((acc, cur) => acc.concat(cur), res[0]),
     )),
   );
@@ -31,7 +34,9 @@ export class MusicsComponent implements OnInit, OnDestroy {
   displayStates = new Map<string, State>();
   hover: Music & { state: State };
   playing: any;
-  more: boolean;
+  get More() {
+    return !this.musics.EndReached;
+  }
 
   constructor(
     private quotes: QuotesService,
@@ -41,7 +46,7 @@ export class MusicsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(
-      this.musics.onAudio$.subscribe(res => {
+      this.musics.onAudioLoad$.subscribe(res => {
         const music = this.loading.get(res);
         if (music) {
           music.state = State.PLAYING;
@@ -89,8 +94,7 @@ export class MusicsComponent implements OnInit, OnDestroy {
   }
 
   showMore() {
-    this.more = false;
-    this.musics.next();
+    this.musics.load();
   }
 
   loggedIn = this.admin.loggedIn;

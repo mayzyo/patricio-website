@@ -95,7 +95,7 @@ export class UpdateAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updates.toPage(1);
+          this.updates.refresh();
         }
       );
     }
@@ -113,14 +113,14 @@ export class UpdateAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.updates.toPage(1);
+          this.updates.refresh();
         }
       )
     }
   }
 
   onScroll() {
-    this.updates.next();
+    this.updates.load();
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {

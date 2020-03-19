@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject, from, of, merge, BehaviorSubject, Observable, race } from 'rxjs';
+import { Subject, of, merge, Observable, race, iif } from 'rxjs';
 import { Music } from '../models/Music';
-import { switchMap, map, shareReplay, tap, filter, take, share, withLatestFrom, scan } from 'rxjs/operators';
+import { switchMap, map, shareReplay, tap, take, scan } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ContentService } from './content.service';
 import { SafeUrl } from '@angular/platform-browser';
@@ -11,19 +11,29 @@ import { Article } from '../models/Article';
   providedIn: 'root'
 })
 export class MusicService {
-  private readonly page$ = new BehaviorSubject<number>(1);
-  readonly current$ = this.page$.pipe(
-    map(res => ({ page: res.toString(), size: '8' })),
-    switchMap(res => this.http.get<Music[]>('/api/musics', { params: res })),
-    map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
-    share()
-  );
-  readonly results$ = this.current$.pipe(
-    withLatestFrom(this.page$),
-    scan<[MusicAsync[], number], MusicAsync[]>((acc, [cur, page]) => page == 1 ? cur : acc.concat(cur), [])
-  )
+  public readonly pageSize: number = 8;
+  public get EndReached() { return this.endReached; }
+  private readonly load$ = new Subject<void>();
+  private readonly refresh$ = new Subject<void>();
+  private endReached: boolean = false;
 
-  readonly onAudio$ = new Subject<string>();
+  readonly results$ = merge(of(null), this.refresh$).pipe(
+    tap(() => this.endReached = false),
+    switchMap(() => merge(of(null), this.load$).pipe(
+      scan<void, number>(acc => acc + 1, 0),
+      switchMap(res => iif(
+        () => !this.endReached,
+        this.http.get<Music[]>('/api/musics', { params: { page: res.toString(), size: this.pageSize.toString() } }),
+        of([])
+      )),
+      map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
+      scan<MusicAsync[], MusicAsync[]>((acc, cur) => acc.concat(cur), []),
+      tap(res => this.endReached = res.length % this.pageSize != 0) // Check length of current to be equal to size per page, determining if there is more.
+    )),
+    shareReplay(1),
+  );
+
+  readonly onAudioLoad$ = new Subject<string>();
 
   readonly favourite$ = this.http.get<Music[]>('/api/musics', { params: { filter: 'FAVOURITES' } }).pipe(
     map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
@@ -35,12 +45,12 @@ export class MusicService {
     public contents: ContentService,
   ) { }
 
-  toPage(num: number) {
-    this.page$.next(num);
+  refresh() {
+    this.refresh$.next();
   }
 
-  next() {
-    this.page$.next(this.page$.value + 1);
+  load() {
+    this.load$.next();
   }
 
   select$(id: number) {
@@ -56,8 +66,8 @@ export class MusicService {
     );
   }
 
-  onPageChange$() {
-    return this.page$ as Observable<number>;
+  onRefresh$() {
+    return this.refresh$ as Observable<void>;
   }
 }
 
@@ -80,7 +90,7 @@ export class MusicAsync implements Music {
     Object.keys(ob).forEach(key => this[key] = ob[key]);
     this.date = new Date(ob.date);
     this.audio$ = ob.audioKey && musics.contents.get(`/api/musics/audios/${ob.audioKey}`).pipe(
-      tap(() => musics.onAudio$.next(ob.audioKey))
+      tap(() => musics.onAudioLoad$.next(ob.audioKey))
     );
     this.cover$ = ob.thumbnail && merge(
       of(ob.thumbnail),
@@ -88,3 +98,25 @@ export class MusicAsync implements Music {
     );
   }
 }
+
+  // Resetable Setup (This should be in the component clss)
+  // readonly musics$ = merge(
+  //   this.musics.results$.pipe(
+  //     map(res => res.map(el => ({ ...el, state: State.INACTIVE, date: el.date.toDateString() }))), // Assign State to each object.
+  //   ), 
+  //   this.musics.onRefresh$()
+  // ).pipe(
+  //   scan<any[] | null, [unknown[], unknown[]]>((acc, cur) => 
+  //     cur == null ? [[], []] : [acc[1], cur.filter(el => !acc[1].find(x => (x as any).id == el.id))], 
+  //     [[], []]
+  //   ), // Filter out the objects that exists in the previous state and outputing the [previous total, new objects].
+  //   switchMap(res => from(res[1]).pipe(
+  //     rapidFire(300),
+  //     scan<unknown, unknown[]>((acc, cur) => acc.concat(cur), res[0]),
+  //   )),
+  //   tap(res => this.more = res.length % 10 == 0), // Check length of current to be equal to size per page, determining if there is more.
+  // );
+
+  // reset() {
+  //   this.musics.refresh()
+  // }

@@ -1,6 +1,7 @@
-import { Observable, OperatorFunction, BehaviorSubject, zip, interval, from, of, merge } from 'rxjs';
+import { Observable, OperatorFunction, BehaviorSubject, zip, interval, of, merge } from 'rxjs';
 import { map, switchMap, skipWhile, withLatestFrom, scan, pluck, take } from 'rxjs/operators';
 
+// DEPRECATED
 export const continuous = <T>(origin: (params: { page: string, size: string }) => Observable<T[]>, size: number = 10): OperatorFunction <number, T[]> => {
     return (source$: BehaviorSubject<number>) => source$.pipe(
         map(res => ({ page: res.toString(), size: size.toString() })),
@@ -12,25 +13,9 @@ export const continuous = <T>(origin: (params: { page: string, size: string }) =
     );
 }
 
-export const rapidFire = <T>(frequency: number = 300, trigger?: Observable<void>): OperatorFunction <T, T> => {
+export const delayInterval = <T>(frequency: number = 300, trigger?: Observable<void>): OperatorFunction <T, T> => {
     return (source$: Observable<T>) => zip(
         source$,
-        trigger
-            ? trigger.pipe(
-                take(1),
-                switchMap(() => merge(of(null), interval(frequency)))
-            )
-            : interval(frequency)
-    ).pipe(
-        pluck('0')
-    );
-}
-
-export const rapid = <T>(frequency: number = 300, trigger?: Observable<void>): OperatorFunction <T[], T> => {
-    return (source$: Observable<T[]>) => zip(
-        source$.pipe(
-            switchMap(res => from(res))
-        ),
         trigger
             ? trigger.pipe(
                 take(1),

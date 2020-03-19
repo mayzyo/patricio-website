@@ -29,10 +29,6 @@ export class MusicAdminComponent implements OnInit {
   ngOnInit() {
   }
 
-  resetTest() {
-    this.musics.toPage(1);
-  }
-
   progressState(status: Status | string) {
     switch(status) {
       case Status.UPLOAD:
@@ -137,7 +133,7 @@ export class MusicAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.musics.toPage(1);
+          this.musics.refresh();
         }
       );
     }
@@ -156,14 +152,14 @@ export class MusicAdminComponent implements OnInit {
         (err: unknown) => alert(`Something Went Wrong! ${err}`), 
         () => {
           this.submitting = false;
-          this.musics.toPage(1);
+          this.musics.refresh();
         }
       );
     }
   }
 
   onScroll() {
-    this.musics.next();
+    this.musics.load();
   }
 
   private resetFile(file: { status: Status | string, value: string }, value?: string) {
