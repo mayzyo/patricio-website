@@ -64,7 +64,7 @@ import { MusicDetailComponent } from './pages/music-detail/music-detail.componen
     MusicDetailComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
