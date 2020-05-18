@@ -23,7 +23,7 @@ namespace PatricioPersonal.Utilities
                 {
                     clientObj = new HttpClient
                     {
-                        BaseAddress = new Uri("http://47.115.53.47:42882")
+                        BaseAddress = new Uri(connectionString)
                     };
 
                     // Using the base64 string directly in the Environment Variable
@@ -40,7 +40,6 @@ namespace PatricioPersonal.Utilities
         {
             this.connectionString = Configuration.GetConnectionString("BlobStorage");
             this.area = area.ToLower();
-            //connectionString = Environment.GetEnvironmentVariable("RESOURCE_HUB_CONNECTION_STRING");
         }
 
         public Task<Stream> Download(string key)
