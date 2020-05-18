@@ -23,13 +23,13 @@ namespace PatricioPersonal.Utilities
                 {
                     clientObj = new HttpClient
                     {
-                        BaseAddress = new Uri("http://47.115.53.47:3998")
+                        BaseAddress = new Uri("http://47.115.53.47:42882")
                     };
 
                     // Using the base64 string directly in the Environment Variable
                     // byte[] bytes = Encoding.UTF8.GetBytes(connectionString);
                     // string base64 = Convert.ToBase64String(bytes);
-                    clientObj.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", connectionString);
+                    // clientObj.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", connectionString);
                 }
 
                 return clientObj;
