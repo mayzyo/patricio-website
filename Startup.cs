@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PatricioPersonal.Data;
 using PatricioPersonal.Utilities;
-
+// CI test
 namespace PatricioPersonal
 {
     public class Startup
