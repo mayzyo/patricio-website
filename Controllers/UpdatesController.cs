@@ -31,7 +31,7 @@ namespace PatricioPersonal.Controllers
         {
             this.context = context;
             this.imageHelper = imageHelper;
-            blobStorage = blobStorageResolver(Environment.GetEnvironmentVariable("Container"));
+            blobStorage = blobStorageResolver(Environment.GetEnvironmentVariable("CONTAINER"));
         }
 
         [AllowAnonymous]
