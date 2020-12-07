@@ -25,18 +25,18 @@ namespace PatricioPersonal.Utilities
 
             if (!isChina)
             {
-                services.AddScoped<BlobStorageHelperResolver>(serviceProvider => (area) =>
+                services.AddScoped<BlobStorageHelperResolver>(serviceProvider => (container) =>
                 {
                     using var scope = serviceProvider.CreateScope();
-                    return new AzureBlobStorageHelper(Configuration, area);
+                    return new AzureBlobStorageHelper(Configuration, container);
                 });
             }
             else
             {
-                services.AddScoped<BlobStorageHelperResolver>(serviceProvider => (area) =>
+                services.AddScoped<BlobStorageHelperResolver>(serviceProvider => (container) =>
                 {
                     using var scope = serviceProvider.CreateScope();
-                    return new ResourceHubBlobStorageHelper(Configuration, area);
+                    return new ResourceHubBlobStorageHelper(Configuration, container);
                 });
             }
         }

@@ -12,7 +12,7 @@ namespace PatricioPersonal.Utilities
 {
     class ResourceHubBlobStorageHelper : IBlobStorageHelper
     {
-        private readonly string area;
+        private readonly string container;
         private readonly string connectionString;
         private HttpClient clientObj;
         private HttpClient Client
@@ -36,15 +36,15 @@ namespace PatricioPersonal.Utilities
             }
         }
 
-        public ResourceHubBlobStorageHelper(IConfiguration Configuration, string area)
+        public ResourceHubBlobStorageHelper(IConfiguration Configuration, string container)
         {
             this.connectionString = Configuration.GetConnectionString("BlobStorage");
-            this.area = area.ToLower();
+            this.container = container.ToLower();
         }
 
         public Task<Stream> Download(string key)
         {
-            var response = Client.GetAsync($"?fileName={key}&containerName={area}");
+            var response = Client.GetAsync($"?fileName={key}&containerName={container}");
             return response.Result.Content.ReadAsStreamAsync();
         }
 

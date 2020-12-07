@@ -13,7 +13,7 @@ namespace PatricioPersonal.Utilities
 {
     class AzureBlobStorageHelper : IBlobStorageHelper
     {
-        private readonly string area;
+        private readonly string container;
         private readonly string connectionString;
         private BlobContainerClient clientObj;
         private BlobContainerClient Client
@@ -26,17 +26,17 @@ namespace PatricioPersonal.Utilities
                     { // Extend tranport duration.
                         Transport = new HttpClientTransport(new HttpClient { Timeout = TimeSpan.FromSeconds(300) })
                     });
-                    clientObj = serviceClient.GetBlobContainerClient(area);
+                    clientObj = serviceClient.GetBlobContainerClient(container);
                 }
 
                 return clientObj;
             }
         }
 
-        public AzureBlobStorageHelper(IConfiguration Configuration, string area)
+        public AzureBlobStorageHelper(IConfiguration Configuration, string container)
         {
             this.connectionString = Configuration.GetConnectionString("BlobStorage");
-            this.area = area.ToLower();
+            this.container = container.ToLower();
         }
 
         public BlobClient Fetch(string key)

@@ -8,7 +8,7 @@ public static partial class ControllerBaseExtensions
 #if DEBUG
         return true;
 #endif
-        if (Environment.GetEnvironmentVariable("HOST") == "Mirror") return false;
+        if (Environment.GetEnvironmentVariable("CHINA") == "True") return false;
         var principal = controller.Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"];
         return (principal == "michaelziyumay@gmail.com" || principal == "kazenowindflowe9@gmail.com");
     }
