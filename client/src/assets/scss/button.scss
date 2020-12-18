@@ -1,0 +1,12 @@
+button {
+    padding: 14px 0;
+
+    color: inherit;
+    background: none;
+    border: none;
+    border-radius: 0;
+
+    cursor: pointer;
+
+    &:focus { outline: none; }
+}
