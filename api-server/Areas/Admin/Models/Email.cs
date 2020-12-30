@@ -1,14 +1,25 @@
-﻿using System;
+﻿using APIServer.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace APIServer.Areas.Admin.Models
 {
-    public class Email
+    public class Email : BaseEntity
     {
+        public int Id { get; set; }
+        [Required]
+        public string Address { get; set; }
+        public string Message { get; set; }
+        public EmailPurpose Purpose { get; set; }
+        public SenderType Sender { get; set; }
+        [Required]
+        public bool IsSuccess { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+
         public enum EmailPurpose
         {
             DEAL,
@@ -20,17 +31,5 @@ namespace APIServer.Areas.Admin.Models
             MUSICIAN,
             OTHER
         }
-
-        public int Id { get; set; }
-        [Required]
-        public string Address { get; set; }
-        public string Message { get; set; }
-        public EmailPurpose Purpose { get; set; }
-        public SenderType Sender { get; set; }
-        [Required]
-        public bool IsSuccess { get; set; }
-        public int UserId { get; set; }
-        [ForeignKey("UserId")]
-        public User User { get; set; }
     }
 }

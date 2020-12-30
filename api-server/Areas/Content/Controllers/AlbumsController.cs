@@ -14,27 +14,29 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class AlbumsController : ControllerBase
     {
-        private readonly MusicContext _context;
+        private readonly MusicContext context;
 
         public AlbumsController(MusicContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Albums
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Album>>> GetPatricioPersonalAlbums()
+        public async Task<ActionResult<IEnumerable<Album>>> GetAlbums()
         {
-            return await _context.PatricioPersonalAlbums.ToListAsync();
+            return await context.PatricioPersonalAlbums.ToListAsync();
         }
 
         // GET: /Albums/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Album>> GetAlbum(int id)
         {
-            var album = await _context.PatricioPersonalAlbums.FindAsync(id);
+            var album = await context.PatricioPersonalAlbums
+                .Include(el => el.Songs)
+                .FirstOrDefaultAsync(el => el.Id == id);
 
-            if (album == null)
+            if (album == default(Album))
             {
                 return NotFound();
             }
@@ -52,11 +54,11 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(album).State = EntityState.Modified;
+            context.Entry(album).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +80,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Album>> PostAlbum(Album album)
         {
-            _context.PatricioPersonalAlbums.Add(album);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalAlbums.Add(album);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetAlbum", new { id = album.Id }, album);
         }
@@ -88,21 +90,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAlbum(int id)
         {
-            var album = await _context.PatricioPersonalAlbums.FindAsync(id);
+            var album = await context.PatricioPersonalAlbums.FindAsync(id);
             if (album == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalAlbums.Remove(album);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalAlbums.Remove(album);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool AlbumExists(int id)
         {
-            return _context.PatricioPersonalAlbums.Any(e => e.Id == id);
+            return context.PatricioPersonalAlbums.Any(e => e.Id == id);
         }
     }
 }

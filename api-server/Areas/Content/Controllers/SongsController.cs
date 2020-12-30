@@ -14,27 +14,57 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class SongsController : ControllerBase
     {
-        private readonly MusicContext _context;
+        private readonly MusicContext context;
 
         public SongsController(MusicContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Songs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Song>>> GetPatricioPersonalSongs()
+        public async Task<ActionResult<IEnumerable<Song>>> GetSongs(int page = 1, int size = 10)
         {
-            return await _context.PatricioPersonalSongs.ToListAsync();
+            return await context.PatricioPersonalSongs
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+            //return await _context.PatricioPersonalSongs.ToListAsync();
+        }
+
+        // GET: /Songs/Highlights
+        [HttpGet("Highlights")]
+        public async Task<ActionResult<IEnumerable<Song>>> GetHighlights()
+        {
+            return await context
+                .PatricioPersonalSongs
+                .Where(el => el.IsHighlight)
+                .ToListAsync();
+        }
+
+        // GET: /Songs/Genre/Classical
+        [HttpGet("Genre/{option}")]
+        public async Task<ActionResult<IEnumerable<Song>>> GetSongsWithGenre(string option, int page = 1, int size = 10)
+        {
+            return await context
+                .PatricioPersonalSongs
+                .Where(el => el.Genre == option)
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
         }
 
         // GET: /Songs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Song>> GetSong(int id)
         {
-            var song = await _context.PatricioPersonalSongs.FindAsync(id);
-
-            if (song == null)
+            var song = await context.PatricioPersonalSongs
+                .Include(el => el.Album)
+                .FirstOrDefaultAsync(el => el.Id == id);
+                            
+            if (song == default(Song))
             {
                 return NotFound();
             }
@@ -52,11 +82,11 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(song).State = EntityState.Modified;
+            context.Entry(song).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +108,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Song>> PostSong(Song song)
         {
-            _context.PatricioPersonalSongs.Add(song);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalSongs.Add(song);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetSong", new { id = song.Id }, song);
         }
@@ -88,21 +118,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSong(int id)
         {
-            var song = await _context.PatricioPersonalSongs.FindAsync(id);
+            var song = await context.PatricioPersonalSongs.FindAsync(id);
             if (song == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalSongs.Remove(song);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalSongs.Remove(song);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool SongExists(int id)
         {
-            return _context.PatricioPersonalSongs.Any(e => e.Id == id);
+            return context.PatricioPersonalSongs.Any(e => e.Id == id);
         }
     }
 }

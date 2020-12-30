@@ -14,25 +14,25 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        private readonly ContentContext _context;
+        private readonly ContentContext context;
 
         public ArticlesController(ContentContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Articles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetPatricioPersonalArticles()
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
         {
-            return await _context.PatricioPersonalArticles.ToListAsync();
+            return await context.PatricioPersonalArticles.ToListAsync();
         }
 
         // GET: /Articles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)
         {
-            var article = await _context.PatricioPersonalArticles.FindAsync(id);
+            var article = await context.PatricioPersonalArticles.FindAsync(id);
 
             if (article == null)
             {
@@ -52,11 +52,11 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(article).State = EntityState.Modified;
+            context.Entry(article).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +78,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
         {
-            _context.PatricioPersonalArticles.Add(article);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalArticles.Add(article);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetArticle", new { id = article.Id }, article);
         }
@@ -88,21 +88,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
-            var article = await _context.PatricioPersonalArticles.FindAsync(id);
+            var article = await context.PatricioPersonalArticles.FindAsync(id);
             if (article == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalArticles.Remove(article);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalArticles.Remove(article);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool ArticleExists(int id)
         {
-            return _context.PatricioPersonalArticles.Any(e => e.Id == id);
+            return context.PatricioPersonalArticles.Any(e => e.Id == id);
         }
     }
 }

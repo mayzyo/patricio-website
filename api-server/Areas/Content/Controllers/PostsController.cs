@@ -14,25 +14,41 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ContentContext _context;
+        private readonly ContentContext context;
 
         public PostsController(ContentContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPatricioPersonalPosts()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts(int page = 1, int size = 10)
         {
-            return await _context.PatricioPersonalPosts.ToListAsync();
+            return await context.PatricioPersonalPosts
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+        }
+
+        // GET: /Posts/Events
+        [HttpGet("Events")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetEvents(int page = 1, int size = 10)
+        {
+            return await context.PatricioPersonalPosts
+                .Where(el => el.IsEvent)
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
         }
 
         // GET: /Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await _context.PatricioPersonalPosts.FindAsync(id);
+            var post = await context.PatricioPersonalPosts.FindAsync(id);
 
             if (post == null)
             {
@@ -52,11 +68,11 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(post).State = EntityState.Modified;
+            context.Entry(post).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +94,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
-            _context.PatricioPersonalPosts.Add(post);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalPosts.Add(post);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
         }
@@ -88,21 +104,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var post = await _context.PatricioPersonalPosts.FindAsync(id);
+            var post = await context.PatricioPersonalPosts.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalPosts.Remove(post);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalPosts.Remove(post);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool PostExists(int id)
         {
-            return _context.PatricioPersonalPosts.Any(e => e.Id == id);
+            return context.PatricioPersonalPosts.Any(e => e.Id == id);
         }
     }
 }

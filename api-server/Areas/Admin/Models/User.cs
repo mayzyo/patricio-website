@@ -1,3 +1,4 @@
+using APIServer.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace APIServer.Areas.Admin.Models
 {
-    public class User
+    public class User : BaseEntity
     {
         public int Id { get; set; }
         [Required]

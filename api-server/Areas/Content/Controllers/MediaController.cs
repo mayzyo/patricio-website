@@ -14,25 +14,29 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class MediaController : ControllerBase
     {
-        private readonly ContentContext _context;
+        private readonly ContentContext context;
 
         public MediaController(ContentContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Media
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Media>>> GetPatricioPersonalMedia()
+        public async Task<ActionResult<IEnumerable<Media>>> GetMedia(int page = 1, int size = 10)
         {
-            return await _context.PatricioPersonalMedia.ToListAsync();
+            return await context.PatricioPersonalMedia
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
         }
 
         // GET: /Media/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Media>> GetMedia(int id)
         {
-            var media = await _context.PatricioPersonalMedia.FindAsync(id);
+            var media = await context.PatricioPersonalMedia.FindAsync(id);
 
             if (media == null)
             {
@@ -52,11 +56,11 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(media).State = EntityState.Modified;
+            context.Entry(media).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +82,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Media>> PostMedia(Media media)
         {
-            _context.PatricioPersonalMedia.Add(media);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalMedia.Add(media);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetMedia", new { id = media.Id }, media);
         }
@@ -88,21 +92,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedia(int id)
         {
-            var media = await _context.PatricioPersonalMedia.FindAsync(id);
+            var media = await context.PatricioPersonalMedia.FindAsync(id);
             if (media == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalMedia.Remove(media);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalMedia.Remove(media);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool MediaExists(int id)
         {
-            return _context.PatricioPersonalMedia.Any(e => e.Id == id);
+            return context.PatricioPersonalMedia.Any(e => e.Id == id);
         }
     }
 }

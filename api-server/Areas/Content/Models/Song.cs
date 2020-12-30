@@ -1,17 +1,16 @@
-﻿using System;
+﻿using APIServer.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace APIServer.Areas.Content.Models
 {
-    public class Song
+    public class Song : BaseEntity
     {
         public int Id { get; set; }
         public int? AlbumId { get; set; }
-        [ForeignKey("AlbumId")]
         public Album Album { get; set; }
         [Required]
         public string Title { get; set; }

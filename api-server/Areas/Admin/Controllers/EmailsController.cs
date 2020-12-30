@@ -14,27 +14,29 @@ namespace APIServer.Areas.Admin.Controllers
     [ApiController]
     public class EmailsController : ControllerBase
     {
-        private readonly AdminContext _context;
+        private readonly AdminContext context;
 
         public EmailsController(AdminContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Emails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Email>>> GetPatricioPersonalEmails()
+        public async Task<ActionResult<IEnumerable<Email>>> GetEmails()
         {
-            return await _context.PatricioPersonalEmails.ToListAsync();
+            return await context.PatricioPersonalEmails.ToListAsync();
         }
 
         // GET: /Emails/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Email>> GetEmail(int id)
         {
-            var email = await _context.PatricioPersonalEmails.FindAsync(id);
+            var email = await context.PatricioPersonalEmails
+                .Include(el => el.Id == id)
+                .FirstOrDefaultAsync();
 
-            if (email == null)
+            if (email == default(Email))
             {
                 return NotFound();
             }
@@ -52,11 +54,11 @@ namespace APIServer.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(email).State = EntityState.Modified;
+            context.Entry(email).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +80,8 @@ namespace APIServer.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult<Email>> PostEmail(Email email)
         {
-            _context.PatricioPersonalEmails.Add(email);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalEmails.Add(email);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetEmail", new { id = email.Id }, email);
         }
@@ -88,21 +90,21 @@ namespace APIServer.Areas.Admin.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmail(int id)
         {
-            var email = await _context.PatricioPersonalEmails.FindAsync(id);
+            var email = await context.PatricioPersonalEmails.FindAsync(id);
             if (email == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalEmails.Remove(email);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalEmails.Remove(email);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool EmailExists(int id)
         {
-            return _context.PatricioPersonalEmails.Any(e => e.Id == id);
+            return context.PatricioPersonalEmails.Any(e => e.Id == id);
         }
     }
 }

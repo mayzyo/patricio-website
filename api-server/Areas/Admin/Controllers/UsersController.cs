@@ -14,25 +14,25 @@ namespace APIServer.Areas.Admin.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AdminContext _context;
+        private readonly AdminContext context;
 
         public UsersController(AdminContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         // GET: /Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetPatricioPersonalUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.PatricioPersonalUsers.ToListAsync();
+            return await context.PatricioPersonalUsers.ToListAsync();
         }
 
         // GET: /Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.PatricioPersonalUsers.FindAsync(id);
+            var user = await context.PatricioPersonalUsers.FindAsync(id);
 
             if (user == null)
             {
@@ -52,11 +52,11 @@ namespace APIServer.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            context.Entry(user).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +78,8 @@ namespace APIServer.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.PatricioPersonalUsers.Add(user);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalUsers.Add(user);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -88,21 +88,21 @@ namespace APIServer.Areas.Admin.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.PatricioPersonalUsers.FindAsync(id);
+            var user = await context.PatricioPersonalUsers.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.PatricioPersonalUsers.Remove(user);
-            await _context.SaveChangesAsync();
+            context.PatricioPersonalUsers.Remove(user);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool UserExists(int id)
         {
-            return _context.PatricioPersonalUsers.Any(e => e.Id == id);
+            return context.PatricioPersonalUsers.Any(e => e.Id == id);
         }
     }
 }
