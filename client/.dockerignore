@@ -1,0 +1,10 @@
+.env
+docker-compose.yml
+.gitignore
+**/.git
+
+/dist
+/node_modules
+
+/.storybook
+/e2e
