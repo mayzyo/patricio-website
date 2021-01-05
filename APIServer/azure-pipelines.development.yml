@@ -13,9 +13,12 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-      - task: VSBuild@1
+      - task: NuGetCommand@2
         inputs:
-          solution: 'xUnitTest.sln'
+          command: 'restore'
+          restoreSolution: 'xUnitTest.sln'
+          feedsToUse: 'select'
+          vstsFeed: 'aafeb507-d25f-4f2f-9ce9-31dfd9e795ae'
       - task: VSTest@2
         inputs:
           testSelector: 'testAssemblies'
