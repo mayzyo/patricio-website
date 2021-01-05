@@ -12,7 +12,7 @@ trigger:
     - APIServer/*
 
 pool:
-  vmImage: 'debian-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: Docker@2
