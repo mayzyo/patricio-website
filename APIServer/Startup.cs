@@ -38,10 +38,9 @@ namespace APIServer
             });
 
             // Entity Core setup
-            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("DestinesiahubDb"))
-            {
-                Password = Configuration["DbPassword"]
-            };
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("DestinesiahubDb"));
+            if(Configuration["DbPassword"] != null) builder.Password = Configuration["DbPassword"];
+
             services.AddDbContext<AdminContext>(options => options.UseSqlServer(builder.ConnectionString));
             services.AddDbContext<ContentContext>(options => options.UseSqlServer(builder.ConnectionString));
             services.AddDbContext<MusicContext>(options => options.UseSqlServer(builder.ConnectionString));
