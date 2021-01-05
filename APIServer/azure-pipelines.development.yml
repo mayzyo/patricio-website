@@ -6,34 +6,32 @@
 trigger: none
 pr: none
 
-resources:
-  containers:
-  - container: linux # reusable alias
-    image: ubuntu-latest
-  - container: windows
-    image: windows-latest
-
-jobs:
-- job: UnitTesting
-  container: windows # reference
-  steps:
-  - task: VSTest@2
-    inputs:
-      testSelector: 'testAssemblies'
-      testAssemblyVer2: |
-        **\bin\$(BuildConfiguration)\**\*test*.dll
-        !**\obj\**
-        !**\xunit.runner.visualstudio.testadapter.dll
-        !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-      searchFolder: '$(System.DefaultWorkingDirectory)\APIServer.Tests'
-
-- job: BuildingImage
-  container: linux # reference
-  steps:
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'Aliyun Registry'
-      repository: 'destinesiastudio/patriciopersonal-apiserver'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: 'dev'
+stages:
+- stage: Test
+  jobs:
+  - job:
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - task: VSTest@2
+        inputs:
+          testSelector: 'testAssemblies'
+          testAssemblyVer2: |
+            **\bin\$(BuildConfiguration)\**\*test*.dll
+            !**\obj\**
+            !**\xunit.runner.visualstudio.testadapter.dll
+            !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+          searchFolder: '$(System.DefaultWorkingDirectory)\APIServer.Tests'
+- stage: Build
+  jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Aliyun Registry'
+        repository: 'destinesiastudio/patriciopersonal-apiserver'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: 'dev'
