@@ -13,6 +13,9 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+      - task: VSBuild@1
+        inputs:
+          solution: 'xUnitTest.sln'
       - task: VSTest@2
         inputs:
           testSelector: 'testAssemblies'
