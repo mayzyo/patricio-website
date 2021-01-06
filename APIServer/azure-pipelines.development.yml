@@ -25,7 +25,7 @@ stages:
         Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
         addPipelineData: false
         buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
-        arguments: '-t $(repo):$(tag)'
+        arguments: '-t $(repo):$(Build.BuildId)'
     - script: |
         CONTAINER=$(docker images -qf "label=unittestlayer=true")
         echo $CONTAINER
