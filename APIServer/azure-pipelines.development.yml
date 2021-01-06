@@ -39,7 +39,7 @@ stages:
         inputs:
           codeCoverageTool: 'cobertura'
           summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
-          reportDirectory: '$(System.DefaultWorkingDirectory)/testresults/coverage/reports'
+          pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
 - stage: Build
   jobs:
   - job:
