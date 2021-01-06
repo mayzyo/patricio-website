@@ -38,7 +38,7 @@ stages:
       - task: PublishCodeCoverageResults@1
         inputs:
           codeCoverageTool: 'cobertura'
-          summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/coverage/coverage.cobertura.xml'
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
           reportDirectory: '$(System.DefaultWorkingDirectory)/testresults/coverage/reports'
 - stage: Build
   jobs:
