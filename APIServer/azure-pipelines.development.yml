@@ -19,8 +19,8 @@ stages:
           Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
           addPipelineData: false
       - script: |
-          $id=docker images --filter "label=unittestlayer=true" -q | Select-Object -First 1
-          docker create --name testcontainer $id
+          CONTAINER=$(docker images -qf "label=unittestlayer=true")
+          docker create --name testcontainer $CONTAINER
           docker cp testcontainer:/out/testresults ./testresults
           docker stop testcontainer
           docker rm testcontainer
