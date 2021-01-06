@@ -11,44 +11,23 @@ stages:
   jobs:
   - job:
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
     steps:
-      - task: Docker@2
+      - task: NuGetCommand@2
         inputs:
-          command: 'build'
-          Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
-          buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
-          tags: 'dev'
-      - script: |
-          CONTAINER=$(docker images -qf "label=unittestlayer=true")
-          echo $CONTAINER
-          docker images -a
-          echo "Label filtered..."
-          docker images -qf "label=unittestlayer=true"
-          echo "All label filtered..."
-          docker images -aqf "label=unittestlayer=true"
-          echo "All images"
-          docker images -a
-          VAR=123
-          echo $VAR
-          docker create --name testcontainer $CONTAINER
-          docker cp testcontainer:/out/testresults ./testresults
-          docker stop testcontainer
-          docker rm testcontainer
-        displayName: Extract Test Reports
-        continueOnError: false
-      - task: PublishTestResults@2
+          command: 'restore'
+          restoreSolution: 'xUnitTest.sln'
+          feedsToUse: 'select'
+          vstsFeed: 'aafeb507-d25f-4f2f-9ce9-31dfd9e795ae'
+      - task: VSTest@2
         inputs:
-          testRunner: VSTest
-          testResultsFiles: '**/loggedresults.xml'
-          searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
-          publishRunAttachments: true
-          failTaskOnFailedTests: true
-      - task: PublishCodeCoverageResults@1
-        inputs:
-          codeCoverageTool: 'cobertura'
-          summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/coverage/coverage.cobertura.xml'
-          reportDirectory: '$(System.DefaultWorkingDirectory)/testresults/coverage/reports'
+          testSelector: 'testAssemblies'
+          testAssemblyVer2: |
+            **\bin\$(BuildConfiguration)\**\*test*.dll
+            !**\obj\**
+            !**\xunit.runner.visualstudio.testadapter.dll
+            !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+          searchFolder: '$(System.DefaultWorkingDirectory)\APIServer.Tests'
 - stage: Build
   jobs:
   - job:
