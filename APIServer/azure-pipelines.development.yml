@@ -6,6 +6,12 @@
 trigger: none
 pr: none
 
+variables:
+- name: repo
+  value: destinesiastudio/patriciopersonal-apiserver
+- name: tag
+  value: latest
+  
 stages:
 - stage: Build
   jobs:
