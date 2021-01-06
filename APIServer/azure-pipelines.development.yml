@@ -13,11 +13,10 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      - task: Docker@2
-        inputs:
-          command: 'build'
-          Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
-          addPipelineData: false
+      - script: |
+          docker build -t notimportant -f $(System.DefaultWorkingDirectory)/APIServer/Dockerfile $(System.DefaultWorkingDirectory)/APIServer
+        displayName: Build Docker Image
+        continueOnError: false
       - script: |
           CONTAINER=$(docker images -qf "label=unittestlayer=true")
           echo $CONTAINER
