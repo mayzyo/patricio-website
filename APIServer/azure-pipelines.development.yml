@@ -20,6 +20,7 @@ stages:
           addPipelineData: false
       - script: |
           CONTAINER=$(docker images -qf "label=unittestlayer=true")
+          echo $CONTAINER
           docker create --name testcontainer $CONTAINER
           docker cp testcontainer:/out/testresults ./testresults
           docker stop testcontainer
