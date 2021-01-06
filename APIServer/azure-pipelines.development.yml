@@ -16,7 +16,7 @@ stages:
       - task: Docker@2
         inputs:
           command: 'build'
-          Dockerfile: 'Dockerfile'
+          Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
           buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
           tags: 'dev'
       - script: |
