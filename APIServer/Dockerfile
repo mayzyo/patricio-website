@@ -7,11 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["APIServer/APIServer.csproj", "APIServer/"]
-RUN dotnet restore "APIServer/APIServer.csproj"
+COPY ["APIServer.Tests/APIServer.Tests.csproj", "APIServer.Tests/"]
+COPY ["APIServer.csproj", ""]
+RUN dotnet restore "./APIServer.csproj"
 COPY . .
-WORKDIR "/src/APIServer"
+WORKDIR "/src/."
 RUN dotnet build "APIServer.csproj" -c Release -o /app/build
+
+FROM build AS test
+WORKDIR /src/APIServer.Tests
+LABEL unittestlayer=true
+RUN dotnet test --logger "trx;LogFileName=loggedresults.xml" --collect "XPlat Code Coverage" --results-directory /out/testresults
 
 FROM build AS publish
 RUN dotnet publish "APIServer.csproj" -c Release -o /app/publish
