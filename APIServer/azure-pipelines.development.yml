@@ -11,23 +11,35 @@ stages:
   jobs:
   - job:
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'ubuntu-latest'
     steps:
-      - task: NuGetCommand@2
+      - task: Docker@2
         inputs:
-          command: 'restore'
-          restoreSolution: 'xUnitTest.sln'
-          feedsToUse: 'select'
-          vstsFeed: 'aafeb507-d25f-4f2f-9ce9-31dfd9e795ae'
-      - task: VSTest@2
+          command: 'build'
+          Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
+          addPipelineData: false
+          buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
+      - script: |
+          CONTAINER=$(docker images -qf "label=unittestlayer=true")
+          echo $CONTAINER
+          docker create --name testcontainer $CONTAINER
+          docker cp testcontainer:/out/testresults ./testresults
+          docker stop testcontainer
+          docker rm testcontainer
+        displayName: Extract Test Reports
+        continueOnError: false
+      - task: PublishTestResults@2
         inputs:
-          testSelector: 'testAssemblies'
-          testAssemblyVer2: |
-            **\bin\$(BuildConfiguration)\**\*test*.dll
-            !**\obj\**
-            !**\xunit.runner.visualstudio.testadapter.dll
-            !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-          searchFolder: '$(System.DefaultWorkingDirectory)\APIServer.Tests'
+          testRunner: VSTest
+          testResultsFiles: '**/loggedresults.xml'
+          searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
+          publishRunAttachments: true
+          failTaskOnFailedTests: true
+      - task: PublishCodeCoverageResults@1
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
+          reportDirectory: '$(System.DefaultWorkingDirectory)/testresults/coverage/reports'
 - stage: Build
   jobs:
   - job:
