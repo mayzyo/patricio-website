@@ -19,12 +19,12 @@ stages:
           Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
           addPipelineData: false
       - script: |
-          export unittestslayerid=$(docker images --filter "label=unittestlayer=true" -q)
-          docker create --name unittestcontainer $unittestslayerid
-          docker cp unittestcontainer:/out/testresults ./testresults
-          docker stop unittestcontainer
-          docker rm unittestcontainer
-        displayName: Run unit tests
+          $id=docker images --filter "label=unittestlayer=true" -q | Select-Object -First 1
+          docker create --name testcontainer $id
+          docker cp testcontainer:/out/testresults ./testresults
+          docker stop testcontainer
+          docker rm testcontainer
+        displayName: Extract Test Reports
         continueOnError: false
       - task: PublishTestResults@2
         inputs:
