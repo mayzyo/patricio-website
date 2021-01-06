@@ -7,39 +7,6 @@ trigger: none
 pr: none
 
 stages:
-- stage: Test
-  jobs:
-  - job:
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: Docker@2
-        inputs:
-          command: 'build'
-          Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
-          addPipelineData: false
-          buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
-      - script: |
-          CONTAINER=$(docker images -qf "label=unittestlayer=true")
-          echo $CONTAINER
-          docker create --name testcontainer $CONTAINER
-          docker cp testcontainer:/out/testresults ./testresults
-          docker stop testcontainer
-          docker rm testcontainer
-        displayName: Extract Test Reports
-        continueOnError: false
-      - task: PublishTestResults@2
-        inputs:
-          testRunner: VSTest
-          testResultsFiles: '**/loggedresults.xml'
-          searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
-          publishRunAttachments: true
-          failTaskOnFailedTests: true
-      - task: PublishCodeCoverageResults@1
-        inputs:
-          codeCoverageTool: 'cobertura'
-          summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
-          pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
 - stage: Build
   jobs:
   - job:
@@ -48,8 +15,60 @@ stages:
     steps:
     - task: Docker@2
       inputs:
+        command: 'build'
+        Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
+        addPipelineData: false
+        buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
+        arguments: '-t $(repo):$(tag)'
+    - script: |
+        CONTAINER=$(docker images -qf "label=unittestlayer=true")
+        echo $CONTAINER
+        docker create --name testcontainer $CONTAINER
+        docker cp testcontainer:/out/testresults ./testresults
+        docker stop testcontainer
+        docker rm testcontainer
+      displayName: Extract Test Reports
+      continueOnError: false
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/loggedresults.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
+        publishRunAttachments: true
+        failTaskOnFailedTests: true
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
+    - script: |
+        docker image save $(repo):$(tag) -o $(Pipeline.Workspace)/$(Build.BuildId).tar
+      displayName: Docker Image to Artifact
+      continueOnError: false
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/$(Build.BuildId).tar'
+        artifact: 'docker-image'
+        publishLocation: 'pipeline'
+- stage: Push
+  jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'docker-image'
+        targetPath: '$(Pipeline.Workspace)'
+    - script: |
+        docker load --input $(Pipeline.Workspace)/docker-image/$(Build.BuildId).tar
+      displayName: Artifact to Docker Image
+      continueOnError: false
+    - task: Docker@2
+      inputs:
         containerRegistry: 'Aliyun Registry'
-        repository: 'destinesiastudio/patriciopersonal-apiserver'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: 'dev'
+        repository: $(repo)
+        command: 'push'
+        addPipelineData: false
+        tags: $(tag)
