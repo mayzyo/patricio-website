@@ -13,14 +13,24 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      - script: |
-          docker build -t notimportant -f $(System.DefaultWorkingDirectory)/APIServer/Dockerfile $(System.DefaultWorkingDirectory)/APIServer
-        displayName: Build Docker Image
-        continueOnError: false
+      - task: Docker@2
+        inputs:
+          command: 'build'
+          Dockerfile: 'Dockerfile'
+          buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
+          tags: 'dev'
       - script: |
           CONTAINER=$(docker images -qf "label=unittestlayer=true")
           echo $CONTAINER
           docker images -a
+          echo "Label filtered..."
+          docker images -qf "label=unittestlayer=true"
+          echo "All label filtered..."
+          docker images -aqf "label=unittestlayer=true"
+          echo "All images"
+          docker images -a
+          VAR=123
+          echo $VAR
           docker create --name testcontainer $CONTAINER
           docker cp testcontainer:/out/testresults ./testresults
           docker stop testcontainer
