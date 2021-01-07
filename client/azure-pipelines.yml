@@ -42,6 +42,13 @@ stages:
         docker rm testcontainer
       displayName: Extract Test Reports
       continueOnError: false
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/junit.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
+        publishRunAttachments: true
+        failTaskOnFailedTests: true
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'cobertura'

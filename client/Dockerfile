@@ -11,6 +11,7 @@ LABEL unittestlayer=true
 RUN npm run test
 RUN mkdir -p /out/testresults
 RUN cp -r /app/coverage /out/testresults
+RUN cp /app/junit.xml /out/testresults
 
 FROM node:12-alpine AS final
 WORKDIR /app
