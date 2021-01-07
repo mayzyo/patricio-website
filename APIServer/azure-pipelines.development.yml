@@ -48,7 +48,7 @@ stages:
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
         pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
     - script: |
-        docker image save $(repo):$(Build.BuildId) -o $(Pipeline.Workspace)/dockerimage.tar
+        docker image save $(repo):$(tag) -o $(Pipeline.Workspace)/dockerimage.tar
       displayName: Docker Image to Artifact
       continueOnError: false
     - task: PublishPipelineArtifact@1
