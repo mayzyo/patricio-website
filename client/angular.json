@@ -86,7 +86,9 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-            "no-cache": true
+            "no-cache": true,
+            "coverage": true,
+            "coverageReporters": ["cobertura"]
           }
         },
         "lint": {
