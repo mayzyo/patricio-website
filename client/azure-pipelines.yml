@@ -44,7 +44,7 @@ stages:
       continueOnError: false
     - task: PublishTestResults@2
       inputs:
-        testRunner: VSTest
+        testRunner: JUnit
         testResultsFiles: '**/junit.xml'
         searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
         publishRunAttachments: true
