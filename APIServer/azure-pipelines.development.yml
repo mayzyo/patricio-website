@@ -27,7 +27,7 @@ stages:
         Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
         addPipelineData: false
         buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
-        arguments: '-t $(registry)/$(repo):$(Build.BuildId)'
+        arguments: '-t $(registry)/$(repo):$(tag)'
     - script: |
         CONTAINER=$(docker images -qf "label=unittestlayer=true")
         echo "unit test image found $CONTAINER"
@@ -50,7 +50,7 @@ stages:
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/testresults/**/coverage.cobertura.xml'
         pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
     - script: |
-        docker image save $(registry)/$(repo):$(Build.BuildId) -o $(Pipeline.Workspace)/dockerimage.tar
+        docker image save $(registry)/$(repo):$(tag) -o $(Pipeline.Workspace)/dockerimage.tar
       displayName: Docker Image to Artifact
       continueOnError: false
     - task: PublishPipelineArtifact@1
