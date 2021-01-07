@@ -77,7 +77,7 @@ stages:
         targetPath: '$(Pipeline.Workspace)'
     - script: |
         docker load --input $(Pipeline.Workspace)/dockerimage.tar
-        docker -t $(registry)/$(repo):$(Build.BuildId) $(registry)/$(repo):$(tag)
+        docker tag $(registry)/$(repo):$(Build.BuildId) $(registry)/$(repo):$(tag)
       displayName: Artifact to Docker Image
       continueOnError: false
     - task: Docker@2
