@@ -1,0 +1,84 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - $(System.DefaultWorkingDirectory)/client/*
+
+variables:
+- name: registry
+  value: registry.cn-shenzhen.aliyuncs.com
+- name: repo
+  value: destinesiastudio/patriciopersonal-client
+- name: tag
+  value: latest
+
+stages:
+- stage: Build
+  jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        command: 'build'
+        Dockerfile: '$(System.DefaultWorkingDirectory)/client/Dockerfile'
+        addPipelineData: false
+        buildContext: '$(System.DefaultWorkingDirectory)/client'
+        arguments: '-t $(registry)/$(repo):$(Build.BuildId)'
+    - script: |
+        CONTAINER=$(docker images -qf "label=unittestlayer=true")
+        echo "unit test image found $CONTAINER"
+        docker create --name testcontainer $CONTAINER
+        docker cp testcontainer:/out/testresults ./testresults
+        docker stop testcontainer
+        docker rm testcontainer
+      displayName: Extract Test Reports
+      continueOnError: false
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '**/coverage.cobertura.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)/client'
+        failIfCoverageEmpty: true
+    - script: |
+        docker image save $(registry)/$(repo):$(Build.BuildId) -o $(Pipeline.Workspace)/dockerimage.tar
+      displayName: Docker Image to Artifact
+      continueOnError: false
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/dockerimage.tar'
+        artifact: 'docker-image'
+        publishLocation: 'pipeline'
+- stage: Push
+  jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'docker-image'
+        targetPath: '$(Pipeline.Workspace)'
+    - script: |
+        docker load --input $(Pipeline.Workspace)/dockerimage.tar
+        docker tag $(registry)/$(repo):$(Build.BuildId) $(registry)/$(repo):$(tag)
+      displayName: Artifact to Docker Image
+      continueOnError: false
+    - task: Docker@2
+      inputs:
+        containerRegistry: '$(registry)'
+        repository: $(repo)
+        command: 'push'
+        addPipelineData: false
+        tags: |
+          $(Build.BuildId)
+          $(tag)
