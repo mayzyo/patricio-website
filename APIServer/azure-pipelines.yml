@@ -10,6 +10,7 @@ trigger:
   paths:
     include:
     - $(System.DefaultWorkingDirectory)/APIServer/*
+pr: none
 
 variables:
 - name: registry
