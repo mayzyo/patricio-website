@@ -9,7 +9,7 @@ trigger:
     - master
   paths:
     include:
-    - $(System.DefaultWorkingDirectory)/client/*
+    - client/*
 pr: none
 
 variables:
