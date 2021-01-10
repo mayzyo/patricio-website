@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TopBannerComponent } from './top-banner.component';
@@ -8,7 +9,8 @@ describe('TopBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopBannerComponent ]
+      declarations: [ TopBannerComponent ],
+      imports: [HttpClientModule]
     })
     .compileComponents();
   });

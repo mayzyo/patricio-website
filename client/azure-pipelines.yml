@@ -9,13 +9,13 @@ trigger:
     - master
   paths:
     include:
-    - $(System.DefaultWorkingDirectory)/APIServer/*
+    - $(System.DefaultWorkingDirectory)/client/*
 
 variables:
 - name: registry
   value: registry.cn-shenzhen.aliyuncs.com
 - name: repo
-  value: destinesiastudio/patriciopersonal-apiserver
+  value: destinesiastudio/patriciopersonal-client
 - name: tag
   value: latest
 
@@ -29,9 +29,9 @@ stages:
     - task: Docker@2
       inputs:
         command: 'build'
-        Dockerfile: '$(System.DefaultWorkingDirectory)/APIServer/Dockerfile'
+        Dockerfile: '$(System.DefaultWorkingDirectory)/client/Dockerfile'
         addPipelineData: false
-        buildContext: '$(System.DefaultWorkingDirectory)/APIServer'
+        buildContext: '$(System.DefaultWorkingDirectory)/client'
         arguments: '-t $(registry)/$(repo):$(Build.BuildId)'
     - script: |
         CONTAINER=$(docker images -qf "label=unittestlayer=true")
@@ -44,16 +44,16 @@ stages:
       continueOnError: false
     - task: PublishTestResults@2
       inputs:
-        testRunner: VSTest
-        testResultsFiles: '**/loggedresults.xml'
+        testRunner: JUnit
+        testResultsFiles: '**/junit.xml'
         searchFolder: '$(System.DefaultWorkingDirectory)/testresults'
         publishRunAttachments: true
         failTaskOnFailedTests: true
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'cobertura'
-        summaryFileLocation: '**/coverage.cobertura.xml'
-        pathToSources: '$(System.DefaultWorkingDirectory)/APIServer'
+        summaryFileLocation: '**/cobertura-coverage.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)/client'
         failIfCoverageEmpty: true
     - script: |
         docker image save $(registry)/$(repo):$(Build.BuildId) -o $(Pipeline.Workspace)/dockerimage.tar

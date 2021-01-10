@@ -1,24 +1,20 @@
-FROM node:12-alpine as build
-
+FROM node:12-alpine AS build
 WORKDIR /app
-
-COPY ./package* /app
-
+COPY ./package* /app/
 RUN npm install
-
 COPY . /app
-
 RUN npm run build:ssr
 
-FROM node:12-alpine
-
+FROM build AS test
 WORKDIR /app
+LABEL unittestlayer=true
+RUN npm run test
+RUN mkdir -p /out/testresults
+RUN cp -r /app/coverage /out/testresults
+RUN cp /app/junit.xml /out/testresults
 
-# Get all the code needed to run the app
-COPY --from=build /app/dist/patricio-personal/* /app
-
-# Expose the port the app runs in
+FROM node:12-alpine AS final
+WORKDIR /app
+COPY --from=build /app/dist/patricio-personal/* /app/
 EXPOSE 3000
-
-# Serve the app
 CMD ["node", "./server/main.js"]
