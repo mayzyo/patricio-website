@@ -9,14 +9,14 @@ trigger:
     - master
   paths:
     include:
-    - client/*
+    - webapp/*
 pr: none
 
 variables:
 - name: registry
   value: registry.cn-shenzhen.aliyuncs.com
 - name: repo
-  value: destinesiastudio/patriciopersonal-client
+  value: destinesiastudio/patriciopersonal-webapp
 - name: tag
   value: latest
 
@@ -30,9 +30,9 @@ stages:
     - task: Docker@2
       inputs:
         command: 'build'
-        Dockerfile: '$(System.DefaultWorkingDirectory)/client/Dockerfile'
+        Dockerfile: '$(System.DefaultWorkingDirectory)/webapp/Dockerfile'
         addPipelineData: false
-        buildContext: '$(System.DefaultWorkingDirectory)/client'
+        buildContext: '$(System.DefaultWorkingDirectory)/webapp'
         arguments: '-t $(registry)/$(repo):$(Build.BuildId)'
     - script: |
         CONTAINER=$(docker images -qf "label=unittestlayer=true")
@@ -54,7 +54,7 @@ stages:
       inputs:
         codeCoverageTool: 'cobertura'
         summaryFileLocation: '**/cobertura-coverage.xml'
-        pathToSources: '$(System.DefaultWorkingDirectory)/client'
+        pathToSources: '$(System.DefaultWorkingDirectory)/webapp'
         failIfCoverageEmpty: true
     - script: |
         docker image save $(registry)/$(repo):$(Build.BuildId) -o $(Pipeline.Workspace)/dockerimage.tar

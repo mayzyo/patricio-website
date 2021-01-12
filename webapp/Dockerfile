@@ -16,5 +16,5 @@ RUN cp /app/junit.xml /out/testresults
 FROM node:12-alpine AS final
 WORKDIR /app
 COPY --from=build /app/dist/patricio-personal/* /app/
-EXPOSE 3000
+EXPOSE 4000
 CMD ["node", "./server/main.js"]
