@@ -12,9 +12,14 @@ export class TopBannerComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    // this.http.get<any[]>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {
+    this.http.get<any>('/Songs?page=1&size=10').subscribe(res => {
+      this.test = res;
+      console.log('tester', res)
+      
+    })
+    // this.http.get<any>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {
     //   this.test = res;
-    //   console.log('tester', res[0])
+    //   console.log('tester', res.name)
       
     // })
   }

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { MockDataProvider } from './utils/mock-data.interceptor';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     SharedModule
   ],
-  providers: [],
+  providers: [MockDataProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
