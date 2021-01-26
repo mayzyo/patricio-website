@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, tap } from 'rxjs/operators';
-import { paths } from '../models';
 import * as faker from 'faker';
 declare var require: any;
 
-const openapi = require('../../../../openapi.json');
+const openapi = require('/../openapi.json');
 
 @Injectable()
 export class MockDataInterceptor implements HttpInterceptor {
@@ -55,7 +54,7 @@ export class MockDataInterceptor implements HttpInterceptor {
         );
     }
 
-    generate<T extends keyof paths>(path: T) {
+    generate(path: string) {
         var schema: any = openapi["paths"][path]["get"]["responses"][200]["content"]["text/plain"]["schema"];
         var comp: string[] = schema["items"]["$ref"].split('/');
         var isArray = schema["type"] == 'array';
