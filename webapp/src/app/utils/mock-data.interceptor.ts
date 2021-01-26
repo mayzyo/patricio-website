@@ -17,7 +17,7 @@ export class MockDataInterceptor implements HttpInterceptor {
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(
             mergeMap(() => {
-                if(request.method == 'GET')
+                if (request.method == 'GET')
                     return of(new HttpResponse({ status: 200, body: this.generate(request.url.split('?')[0] as any) }));
                 // if (request.url.endsWith('/api/profile') && request.method === 'GET') {
                 //     return of(new HttpResponse({ status:200, body:ProfileSchema() }));
@@ -56,24 +56,36 @@ export class MockDataInterceptor implements HttpInterceptor {
     }
 
     generate<T extends keyof paths>(path: T) {
+        var schema: any = openapi["paths"][path]["get"]["responses"][200]["content"]["text/plain"]["schema"];
+        var comp: string[] = schema["items"]["$ref"].split('/');
+        var isArray = schema["type"] == 'array';
+        var model = openapi["components"]["schemas"][comp[comp.length - 1]]["properties"];
+
         var data = "";
-        var schema: string[] = openapi["paths"][path]["get"]["responses"][200]["content"]["text/plain"]["schema"]["items"]["$ref"].split('/');
-        var model = openapi["components"]["schemas"][schema[schema.length - 1]]["properties"];
         for (var propertyName in model) {
             data = data.concat(`"${propertyName}": "${this.buildModel(propertyName, model[propertyName])}",`);
         }
         data = `{ ${data.substring(0, data.length - 1)} }`;
+
+        if(isArray) {
+            var array = '';
+            for (let i = 0; i < 3; i++) {
+                array = array.concat(data, ',');
+            }
+            data = `[ ${array.substring(0, array.length - 1)} ]`;
+        }
+
         return JSON.parse(faker.fake(data));
     }
 
     buildModel(name: string, obj: { type: string, format: string }) {
-        if(name == "id")
+        if (name == "id")
             return "{{random.uuid}}";
-        switch(obj.type){
+        switch (obj.type) {
             case "string":
                 return obj.format == "date-time"
-                ? "{{date.recent}}"
-                : "{{lorem.sentence}}";
+                    ? "{{date.recent}}"
+                    : "{{lorem.sentence}}";
             case "integer":
                 return "{{random.number}}";
             case "boolean":

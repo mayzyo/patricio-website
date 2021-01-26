@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { paths } from 'src/app/models';
 
 @Component({
   selector: 'app-top-banner',
@@ -12,9 +13,9 @@ export class TopBannerComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get<any>('/Songs?page=1&size=10').subscribe(res => {
+    this.http.get<SongResponse>('/Songs?page=1&size=10').subscribe(res => {
       this.test = res;
-      console.log('tester', res)
+      console.log('tester', res[0].title)
       
     })
     // this.http.get<any>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {
@@ -25,3 +26,5 @@ export class TopBannerComponent implements OnInit {
   }
 
 }
+
+type SongResponse = paths["/Songs"]["get"]["responses"][200]["text/plain"];
