@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { paths } from 'src/app/core/models/openapi.model';
 
 @Injectable({
   providedIn: 'root'

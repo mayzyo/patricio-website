@@ -15,7 +15,7 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "npm run docs:json && start-storybook -p 6006 --ci",
     "build-storybook": "npm run docs:json && build-storybook",
-    "schema": "npx openapi-typescript ../openapi.json -o ./src/app/models.d.ts"
+    "schema": "npx openapi-typescript ../openapi.json -o ./src/app/core/models/openapi.model.d.ts"
   },
   "private": true,
   "dependencies": {
