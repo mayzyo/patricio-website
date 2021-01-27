@@ -1,22 +1,22 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TopBannerComponent } from './top-banner.component';
+import { BannerAComponent } from './banner-a.component';
 
-describe('TopBannerComponent', () => {
-  let component: TopBannerComponent;
-  let fixture: ComponentFixture<TopBannerComponent>;
+describe('BannerAComponent', () => {
+  let component: BannerAComponent;
+  let fixture: ComponentFixture<BannerAComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopBannerComponent ],
+      declarations: [ BannerAComponent ],
       imports: [HttpClientModule]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TopBannerComponent);
+    fixture = TestBed.createComponent(BannerAComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

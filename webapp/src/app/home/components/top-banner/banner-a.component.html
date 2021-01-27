@@ -1,0 +1,12 @@
+<div *ngIf="quote">
+    <p class="message">{{ quote.message }}</p>
+    <p class="author">{{ quote.author }}</p>
+</div>
+<button 
+    class="scroll-btn" 
+    [@cue]="cueActive"
+    (@cue.done)="loopCueAnimation($event)" 
+    (click)="scrollDown()"
+>
+    <fa-icon [icon]="faAngleDoubleDown" size="3x"></fa-icon>
+</button>

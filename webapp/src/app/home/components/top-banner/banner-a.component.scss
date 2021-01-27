@@ -1,0 +1,42 @@
+@import 'src/assets/scss/theme.scss';
+
+:host {
+    // width: 105%;
+    height: 100vh;
+    padding: 0 map-get($spacing, std);
+    // margin-left: -2.5%;
+    // padding: 0 2.5%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: map-get($palettes, white);
+    background:
+        linear-gradient(map-get($palettes, highlight) 0%, red 90%), 
+        linear-gradient(to right, map-get($palettes, accent) 0%, yellow 90%), 
+        url('~src/assets/images/home-banner.jpg') 30px,
+        url('~src/assets/images/home-banner.jpg') 20px;
+    background-blend-mode: screen, difference, lighten;
+    background-size: cover;
+    background-position: center;
+}
+
+.message {
+    font-size: calc(36rem / #{map-get($text, std)});
+}
+
+.author {
+    text-align: right;
+    font-size: calc(12rem / #{map-get($text, std)});
+}
+
+.scroll-btn {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 36px;
+    margin: auto;
+    padding: 0;
+}

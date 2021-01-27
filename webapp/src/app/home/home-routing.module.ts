@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'updates', component: UpdatesComponent },
   { path: 'discography', component: DiscographyComponent },
   { path: 'media', component: MediaComponent },
-  // { path: '',   redirectTo: '/home', pathMatch: 'full' }
+  { path: '',   redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({

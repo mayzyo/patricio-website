@@ -5,15 +5,18 @@ import { UpdatesComponent } from './pages/updates/updates.component';
 import { DiscographyComponent } from './pages/discography/discography.component';
 import { MediaComponent } from './pages/media/media.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { TopBannerComponent } from './components/top-banner/top-banner.component';
+import { BannerAComponent } from './components/top-banner/banner-a.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LayoutAComponent } from './components/layout-a/layout-a.component';
 
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, TopBannerComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, BannerAComponent, LayoutAComponent],
   imports: [
     CommonModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    FontAwesomeModule
   ]
 })
 export class HomeModule { }
