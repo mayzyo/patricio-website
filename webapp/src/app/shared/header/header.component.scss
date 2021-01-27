@@ -1,5 +1,12 @@
 @import 'src/assets/scss/theme.scss';
 
+:host{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
 .navbar {
     position: relative;
     height: 48px;
