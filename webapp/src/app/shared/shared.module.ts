@@ -6,7 +6,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollableLabelsComponent } from './scrollable-labels/scrollable-labels.component';
-import { AppRoutingModule } from '../app-routing.module';
 
 
 
@@ -16,7 +15,7 @@ import { AppRoutingModule } from '../app-routing.module';
     CommonModule,
     FontAwesomeModule,
     ScrollingModule,
-    AppRoutingModule
+    // AppRoutingModule
   ],
   exports: [
     HeaderComponent,

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutAComponent } from './layout-a.component';
+import { ImageViewerComponent } from './image-viewer.component';
 
-describe('LayoutAComponent', () => {
-  let component: LayoutAComponent;
-  let fixture: ComponentFixture<LayoutAComponent>;
+describe('ImageViewerComponent', () => {
+  let component: ImageViewerComponent;
+  let fixture: ComponentFixture<ImageViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LayoutAComponent ]
+      declarations: [ ImageViewerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LayoutAComponent);
+    fixture = TestBed.createComponent(ImageViewerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

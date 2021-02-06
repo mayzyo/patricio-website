@@ -5,16 +5,16 @@ import { AnimationEvent, transition, trigger, useAnimation } from '@angular/anim
 import { cueAnimation } from '../../animations/cue.animation';
 
 @Component({
-  selector: 'app-banner-a',
-  templateUrl: './banner-a.component.html',
+  selector: 'app-landing-banner',
+  templateUrl: './landing-banner.component.html',
   animations: [
     trigger('cue', [
       transition('* => true', useAnimation(cueAnimation))
     ])
   ],
-  styleUrls: ['./banner-a.component.scss']
+  styleUrls: ['./landing-banner.component.scss']
 })
-export class BannerAComponent implements OnInit {
+export class LandingBannerComponent implements OnInit {
   faAngleDoubleDown = faAngleDoubleDown;
   quote = this.famousQuote.random();
   cueActive: boolean = false;

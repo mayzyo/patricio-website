@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import "src/assets/scss/button.scss";
-@import "src/assets/scss/link.scss";
+@use "src/assets/scss/button.scss";
+@use "src/assets/scss/link.scss";
+@use '~swiper/swiper-bundle';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

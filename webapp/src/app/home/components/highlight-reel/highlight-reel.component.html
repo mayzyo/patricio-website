@@ -1,0 +1,14 @@
+<swiper [slidesPerView]="1.5" [spaceBetween]="24">
+    <ng-template *ngIf="(oversizeItem$ | async) as item" swiperSlide>
+        <app-touchable-a class="item" [title]="item.title" [backgroundUrl]="item.backgroundUrl"></app-touchable-a>
+    </ng-template>
+    <ng-template *ngIf="(largeItem$ | async) as item" swiperSlide>
+        <app-touchable-b class="item"  [title]="item.title" [backgroundUrl]="item.backgroundUrl"></app-touchable-b>
+    </ng-template>
+    <ng-template *ngFor="let item of wideItems$ | async" swiperSlide>
+        <app-touchable-c class="item" [title]="item.title" [backgroundUrl]="item.backgroundUrl"></app-touchable-c>
+    </ng-template>
+    <ng-template *ngFor="let item of items$ | async" swiperSlide>
+        <app-touchable-d class="item" [title]="item.title" [backgroundUrl]="item.backgroundUrl"></app-touchable-d>
+    </ng-template>
+</swiper>
