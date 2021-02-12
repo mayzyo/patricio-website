@@ -1,0 +1,7 @@
+<ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+
+<!-- The generic item that is slotted in through ng-container. {item:item} and let-item="item" syntax is for passing template context variables -->
+<ng-template let-item="item" #defaultItem>
+    <p>{{ item.title }}</p>
+    <p class="subtitle">{{ item.subtitle }}</p>
+</ng-template>

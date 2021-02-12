@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DiscographyComponent } from './pages/discography/discography.component';
-import { HomeComponent } from './pages/home/home.component';
-import { MediaComponent } from './pages/media/media.component';
-import { UpdatesComponent } from './pages/updates/updates.component';
+import { DiscographyComponent } from './discography/discography.component';
+import { HomeComponent } from './home/home.component';
+import { MediaComponent } from './media/media.component';
+import { UpdatesComponent } from './updates/updates.component';
 
 
 const routes: Routes = [

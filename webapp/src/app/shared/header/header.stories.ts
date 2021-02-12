@@ -5,7 +5,7 @@ import { HeaderComponent } from './header.component';
 import { ScrollableLabelsComponent } from '../scrollable-labels/scrollable-labels.component';
 
 export default {
-    title: 'Header',
+    title: 'Shared/Header',
     excludeStories: /.*Data$/,
     decorators: [
         moduleMetadata({

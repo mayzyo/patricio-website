@@ -2,32 +2,65 @@
     "pipes": [],
     "interfaces": [
         {
-            "name": "Touchable",
-            "id": "interface-Touchable-d2b902c817750b29f857e9cc0c1c342d",
-            "file": "src/app/home/components/highlight-reel/highlight-reel.component.ts",
+            "name": "EventPost",
+            "id": "interface-EventPost-4c4136ca95e44a4d258ced10ecb64f93",
+            "file": "src/app/home/quick-feed/quick-feed.component.ts",
             "type": "interface",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-highlight-reel',\n  templateUrl: './highlight-reel.component.html',\n  styleUrls: ['./highlight-reel.component.scss']\n})\nexport class HighlightReelComponent implements OnInit {\n  @Input() datasource$?: Observable<Touchable>;\n  @Input() animTrigger$?: Observable<void>;\n\n  oversizeItem$?: Observable<Touchable>;\n  largeItem$?: Observable<Touchable>;\n  wideItems$?: Observable<Touchable[]>;\n  items$?: Observable<Touchable[]>;\n  hover?: Touchable;\n\n  constructor() { }\n\n  ngOnInit(): void {\n    this.animTrigger$ = of()\n    if(this.datasource$ && this.animTrigger$) {\n      this.initCollection(this.datasource$, this.animTrigger$);\n    }\n  }\n\n  private initCollection(datasource$: Observable<Touchable>, animTrigger$: Observable<void>) {\n    var collection$ = datasource$.pipe(\n      share()\n    );\n    // var collection$ = zip(\n    //   datasource$,\n    //   animTrigger$.pipe(\n    //     take(1),\n    //     switchMap(() => merge(of(null), interval(600)))\n    //   )\n    // ).pipe(\n    //   pluck('0'),\n    //   // tap(res => this.entryFade(res)),\n    //   share()\n    // );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}\n\ninterface Touchable {\n  title?: string,\n  subtitle?: string,\n  backgroundUrl?: string\n}",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { SocialService } from '../social.service';\n\n@Component({\n  selector: 'app-quick-feed',\n  templateUrl: './quick-feed.component.html',\n  styleUrls: ['./quick-feed.component.scss']\n})\nexport class QuickFeedComponent implements OnInit {\n\n  constructor(private socials: SocialService) { }\n\n  ngOnInit(): void {\n\n  }\n\n}\n\nexport interface EventPost {\n  title: string\n  date: Date\n  imageUrl: string\n}",
+            "properties": [
+                {
+                    "name": "date",
+                    "type": "Date",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                },
+                {
+                    "name": "imageUrl",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 22
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "Touchable",
+            "id": "interface-Touchable-d78cdaa25b17cab9d72b165d2928f1ae",
+            "file": "src/app/home/highlight-reel/highlight-reel.component.ts",
+            "type": "interface",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { from, interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';\nimport { MusicService } from '../music.service';\n\n@Component({\n  selector: 'app-highlight-reel',\n  templateUrl: './highlight-reel.component.html',\n  styleUrls: ['./highlight-reel.component.scss']\n})\nexport class HighlightReelComponent implements OnInit {\n  @Input() animTrigger$?: Observable<void>;\n\n  oversizeItem$?: Observable<Touchable>;\n  largeItem$?: Observable<Touchable>;\n  wideItems$?: Observable<Touchable[]>;\n  items$?: Observable<Touchable[]>;\n  hover?: Touchable;\n\n  constructor(private musics: MusicService) { }\n\n  ngOnInit(): void {\n    this.animTrigger$ = of()\n    if(this.animTrigger$) {\n      this.initCollection(this.animTrigger$);\n    }\n  }\n\n  private initCollection(animTrigger$: Observable<void>) {\n    var collection$ = this.musics.highlights$.pipe(\n      switchMap(res => \n        from(\n          res.map(el => ({ title: el.title, subtitle: el.genre, backgroundUrl: 'assets/images/banner-1.jpg' }))\n        )\n      ),\n      share()\n    );\n    // var collection$ = zip(\n    //   datasource$,\n    //   animTrigger$.pipe(\n    //     take(1),\n    //     switchMap(() => merge(of(null), interval(600)))\n    //   )\n    // ).pipe(\n    //   pluck('0'),\n    //   // tap(res => this.entryFade(res)),\n    //   share()\n    // );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}\n\ninterface Touchable {\n  title?: string,\n  subtitle: string | undefined | null,\n  backgroundUrl?: string\n}",
             "properties": [
                 {
                     "name": "backgroundUrl",
                     "type": "string",
                     "optional": true,
                     "description": "",
-                    "line": 68
+                    "line": 73
                 },
                 {
                     "name": "subtitle",
-                    "type": "string",
-                    "optional": true,
+                    "type": "string | undefined | null",
+                    "optional": false,
                     "description": "",
-                    "line": 67
+                    "line": 72
                 },
                 {
                     "name": "title",
                     "type": "string",
                     "optional": true,
                     "description": "",
-                    "line": 66
+                    "line": 71
                 }
             ],
             "indexSignatures": [],
@@ -39,7 +72,7 @@
         {
             "name": "FamousQuoteService",
             "id": "injectable-FamousQuoteService-81079ec9dd73ed7ab92848a9e3a14172",
-            "file": "src/app/home/services/famous-quote.service.ts",
+            "file": "src/app/home/famous-quote.service.ts",
             "properties": [],
             "methods": [
                 {
@@ -66,12 +99,58 @@
         },
         {
             "name": "MusicService",
-            "id": "injectable-MusicService-95f3bbceea9a579f30df984403c81f62",
-            "file": "src/app/home/services/music.service.ts",
-            "properties": [],
+            "id": "injectable-MusicService-a805f56de9a40c31935d4012869c53f1",
+            "file": "src/app/home/music.service.ts",
+            "properties": [
+                {
+                    "name": "highlights$",
+                    "type": "Observable<SongResponse>",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
             "methods": [],
             "description": "",
-            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { paths } from 'src/app/core/models/openapi.model';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class MusicService {\n\n  constructor(private http: HttpClient) {\n    this.http.get<SongResponse>('/Songs?page=1&size=10').subscribe(res => {\n      console.log('tester', res[0].title)\n    })\n    // this.http.get<any>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {\n    //   this.test = res;\n    //   console.log('tester', res.name)\n      \n    // })\n  }\n}\n\ntype SongResponse = paths[\"/Songs\"][\"get\"][\"responses\"][200][\"text/plain\"];",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { paths } from 'src/app/shared/backend.api';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class MusicService {\n  highlights$: Observable<SongResponse>;\n\n  constructor(private http: HttpClient) {\n    this.highlights$ = this.http.get<SongResponse>('/Songs?page=1&size=10');\n    // this.http.get<any>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {\n    //   this.test = res;\n    //   console.log('tester', res.name)\n      \n    // })\n  }\n}\n\ntype SongResponse = paths[\"/Songs\"][\"get\"][\"responses\"][200][\"text/plain\"];",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "SocialService",
+            "id": "injectable-SocialService-5d808d3eecad7b52d8078458b00587e1",
+            "file": "src/app/home/social.service.ts",
+            "properties": [
+                {
+                    "name": "latest$",
+                    "type": "Observable<PostResponse>",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { paths } from 'src/app/shared/backend.api';\n\n@Injectable()\nexport class SocialService {\n  latest$: Observable<PostResponse>;\n\n  constructor(private http: HttpClient) {\n    this.latest$ = this.http.get<PostResponse>('/Posts?page=1&size=10');\n  }\n}\n\ntype PostResponse = paths[\"/Posts\"][\"get\"][\"responses\"][200][\"text/plain\"];",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -91,22 +170,6 @@
                         }
                     }
                 ]
-            },
-            "type": "injectable"
-        },
-        {
-            "name": "SocialService",
-            "id": "injectable-SocialService-f5ea3c599fcc240467df98b983088829",
-            "file": "src/app/home/services/social.service.ts",
-            "properties": [],
-            "methods": [],
-            "description": "",
-            "sourceCode": "import { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class SocialService {\n\n  constructor() { }\n}\n",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 6
             },
             "type": "injectable"
         }
@@ -202,7 +265,7 @@
         {
             "name": "BiographyComponent",
             "id": "component-BiographyComponent-248d1dbbe2fc4f307e18c2de6303370a",
-            "file": "src/app/home/components/biography/biography.component.ts",
+            "file": "src/app/home/biography/biography.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -258,7 +321,7 @@
         {
             "name": "DiscographyComponent",
             "id": "component-DiscographyComponent-880dc0ac5bed081f9ece12ea8166a684",
-            "file": "src/app/home/pages/discography/discography.component.ts",
+            "file": "src/app/home/discography/discography.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -314,7 +377,7 @@
         {
             "name": "EmailMeComponent",
             "id": "component-EmailMeComponent-23f41f037a0e9ba25fa35597d9b8069c",
-            "file": "src/app/home/components/email-me/email-me.component.ts",
+            "file": "src/app/home/email-me/email-me.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -512,8 +575,8 @@
         },
         {
             "name": "HighlightReelComponent",
-            "id": "component-HighlightReelComponent-d2b902c817750b29f857e9cc0c1c342d",
-            "file": "src/app/home/components/highlight-reel/highlight-reel.component.ts",
+            "id": "component-HighlightReelComponent-d78cdaa25b17cab9d72b165d2928f1ae",
+            "file": "src/app/home/highlight-reel/highlight-reel.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -533,11 +596,6 @@
                     "name": "animTrigger$",
                     "line": 12,
                     "type": "Observable<void>"
-                },
-                {
-                    "name": "datasource$",
-                    "line": 11,
-                    "type": "Observable<Touchable>"
                 }
             ],
             "outputsClass": [],
@@ -583,10 +641,6 @@
                     "name": "initCollection",
                     "args": [
                         {
-                            "name": "datasource$",
-                            "type": "Observable<Touchable>"
-                        },
-                        {
                             "name": "animTrigger$",
                             "type": "Observable<void>"
                         }
@@ -599,13 +653,6 @@
                         112
                     ],
                     "jsdoctags": [
-                        {
-                            "name": "datasource$",
-                            "type": "Observable<Touchable>",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        },
                         {
                             "name": "animTrigger$",
                             "type": "Observable<void>",
@@ -629,11 +676,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';\n\n@Component({\n  selector: 'app-highlight-reel',\n  templateUrl: './highlight-reel.component.html',\n  styleUrls: ['./highlight-reel.component.scss']\n})\nexport class HighlightReelComponent implements OnInit {\n  @Input() datasource$?: Observable<Touchable>;\n  @Input() animTrigger$?: Observable<void>;\n\n  oversizeItem$?: Observable<Touchable>;\n  largeItem$?: Observable<Touchable>;\n  wideItems$?: Observable<Touchable[]>;\n  items$?: Observable<Touchable[]>;\n  hover?: Touchable;\n\n  constructor() { }\n\n  ngOnInit(): void {\n    this.animTrigger$ = of()\n    if(this.datasource$ && this.animTrigger$) {\n      this.initCollection(this.datasource$, this.animTrigger$);\n    }\n  }\n\n  private initCollection(datasource$: Observable<Touchable>, animTrigger$: Observable<void>) {\n    var collection$ = datasource$.pipe(\n      share()\n    );\n    // var collection$ = zip(\n    //   datasource$,\n    //   animTrigger$.pipe(\n    //     take(1),\n    //     switchMap(() => merge(of(null), interval(600)))\n    //   )\n    // ).pipe(\n    //   pluck('0'),\n    //   // tap(res => this.entryFade(res)),\n    //   share()\n    // );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}\n\ninterface Touchable {\n  title?: string,\n  subtitle?: string,\n  backgroundUrl?: string\n}",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { from, interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';\nimport { MusicService } from '../music.service';\n\n@Component({\n  selector: 'app-highlight-reel',\n  templateUrl: './highlight-reel.component.html',\n  styleUrls: ['./highlight-reel.component.scss']\n})\nexport class HighlightReelComponent implements OnInit {\n  @Input() animTrigger$?: Observable<void>;\n\n  oversizeItem$?: Observable<Touchable>;\n  largeItem$?: Observable<Touchable>;\n  wideItems$?: Observable<Touchable[]>;\n  items$?: Observable<Touchable[]>;\n  hover?: Touchable;\n\n  constructor(private musics: MusicService) { }\n\n  ngOnInit(): void {\n    this.animTrigger$ = of()\n    if(this.animTrigger$) {\n      this.initCollection(this.animTrigger$);\n    }\n  }\n\n  private initCollection(animTrigger$: Observable<void>) {\n    var collection$ = this.musics.highlights$.pipe(\n      switchMap(res => \n        from(\n          res.map(el => ({ title: el.title, subtitle: el.genre, backgroundUrl: 'assets/images/banner-1.jpg' }))\n        )\n      ),\n      share()\n    );\n    // var collection$ = zip(\n    //   datasource$,\n    //   animTrigger$.pipe(\n    //     take(1),\n    //     switchMap(() => merge(of(null), interval(600)))\n    //   )\n    // ).pipe(\n    //   pluck('0'),\n    //   // tap(res => this.entryFade(res)),\n    //   share()\n    // );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}\n\ninterface Touchable {\n  title?: string,\n  subtitle: string | undefined | null,\n  backgroundUrl?: string\n}",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ".item {\r\n    height: 45vh;\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\napp-quick-player {\r\n    position: relative;\r\n    height: 45vh;\r\n    min-height: 293px;\r\n\r\n    display: flex;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n\r\n    &.oversize {\r\n        flex-wrap: wrap;\r\n        align-items: flex-end;\r\n    }\r\n    \r\n    &.large {\r\n        flex-direction: column;\r\n        justify-content: space-between;\r\n        align-items: stretch;\r\n\r\n        & > .subtitle { text-align: end; }\r\n    }\r\n    \r\n    &.wide {\r\n        flex-direction: column;\r\n        align-items: flex-start;\r\n    }\r\n    \r\n    &.small {\r\n        flex-direction: column;\r\n        justify-content: flex-end;\r\n        align-items: flex-end;\r\n    }\r\n}\r\n\r\n.split {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
                     "styleUrl": "./highlight-reel.component.scss"
                 }
             ],
@@ -641,18 +688,32 @@
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
-                "args": [],
-                "line": 18
+                "args": [
+                    {
+                        "name": "musics",
+                        "type": "MusicService"
+                    }
+                ],
+                "line": 18,
+                "jsdoctags": [
+                    {
+                        "name": "musics",
+                        "type": "MusicService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<swiper [slidesPerView]=\"1.5\" [spaceBetween]=\"24\">\n    <ng-template *ngIf=\"(oversizeItem$ | async) as item\" swiperSlide>\n        <app-touchable-a class=\"item\" [title]=\"item.title\" [backgroundUrl]=\"item.backgroundUrl\"></app-touchable-a>\n    </ng-template>\n    <ng-template *ngIf=\"(largeItem$ | async) as item\" swiperSlide>\n        <app-touchable-b class=\"item\"  [title]=\"item.title\" [backgroundUrl]=\"item.backgroundUrl\"></app-touchable-b>\n    </ng-template>\n    <ng-template *ngFor=\"let item of wideItems$ | async\" swiperSlide>\n        <app-touchable-c class=\"item\" [title]=\"item.title\" [backgroundUrl]=\"item.backgroundUrl\"></app-touchable-c>\n    </ng-template>\n    <ng-template *ngFor=\"let item of items$ | async\" swiperSlide>\n        <app-touchable-d class=\"item\" [title]=\"item.title\" [backgroundUrl]=\"item.backgroundUrl\"></app-touchable-d>\n    </ng-template>\n</swiper>"
+            "templateData": "<swiper [slidesPerView]=\"1.5\" [spaceBetween]=\"24\" [slidesOffsetBefore]=\"24\" [slidesOffsetAfter]=\"24\">\n    <ng-template *ngIf=\"(oversizeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"oversize\" [backgroundUrl]=\"item.backgroundUrl\">\n            <p>{{ item.title }}</p>\n            <span class=\"split\">|</span>\n            <p class=\"subtitle\">{{ item.subtitle }}</p>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngIf=\"(largeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"large\" [backgroundUrl]=\"item.backgroundUrl\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of wideItems$ | async\" swiperSlide>\n        <app-quick-player class=\"wide\" [backgroundUrl]=\"item.backgroundUrl\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of items$ | async\" swiperSlide>\n        <app-quick-player class=\"small\" [backgroundUrl]=\"item.backgroundUrl\">\n            <p>{{ item.title }}</p>\n        </app-quick-player>\n    </ng-template>\n</swiper>\n\n<!-- The generic item that is slotted in through ng-container. {item:item} and let-item=\"item\" syntax is for passing template context variables -->\n<ng-template let-item=\"item\" #defaultItem>\n    <p>{{ item.title }}</p>\n    <p class=\"subtitle\">{{ item.subtitle }}</p>\n</ng-template>"
         },
         {
             "name": "HomeComponent",
-            "id": "component-HomeComponent-56bb65adb88a2d9b7af344a3e2caf43c",
-            "file": "src/app/home/pages/home/home.component.ts",
+            "id": "component-HomeComponent-3e4401185cb2fa51c761ba1bdf199a7e",
+            "file": "src/app/home/home/home.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -669,16 +730,7 @@
             "viewProviders": [],
             "inputsClass": [],
             "outputsClass": [],
-            "propertiesClass": [
-                {
-                    "name": "test",
-                    "defaultValue": "from([\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n])",
-                    "type": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 10
-                }
-            ],
+            "propertiesClass": [],
             "methodsClass": [
                 {
                     "name": "ngOnInit",
@@ -686,7 +738,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 23
+                    "line": 11
                 }
             ],
             "hostBindings": [],
@@ -694,7 +746,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { from } from 'rxjs';\r\n\r\n@Component({\r\n  selector: 'app-home',\r\n  templateUrl: './home.component.html',\r\n  styleUrls: ['./home.component.scss']\r\n})\r\nexport class HomeComponent implements OnInit {\r\n  test = from([\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n    { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n])\r\n  constructor() { }\r\n\r\n  ngOnInit(): void {\r\n  }\r\n\r\n}\r\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\n\r\n@Component({\r\n  selector: 'app-home',\r\n  templateUrl: './home.component.html',\r\n  styleUrls: ['./home.component.scss']\r\n})\r\nexport class HomeComponent implements OnInit {\r\n  constructor() { }\r\n\r\n  ngOnInit(): void {\r\n  }\r\n\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -707,7 +759,7 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 20
+                "line": 8
             },
             "implements": [
                 "OnInit"
@@ -717,7 +769,7 @@
         {
             "name": "ImageViewerComponent",
             "id": "component-ImageViewerComponent-db2d9af0d44b40429d64725bcbaf75a9",
-            "file": "src/app/home/components/image-viewer/image-viewer.component.ts",
+            "file": "src/app/home/image-viewer/image-viewer.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -772,8 +824,8 @@
         },
         {
             "name": "LandingBannerComponent",
-            "id": "component-LandingBannerComponent-73dc6448c61fdea0a349a34e74173798",
-            "file": "src/app/home/components/landing-banner/landing-banner.component.ts",
+            "id": "component-LandingBannerComponent-cfed706f78163d55311e4d603244754f",
+            "file": "src/app/home/landing-banner/landing-banner.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -863,11 +915,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { FamousQuoteService } from '../../services/famous-quote.service';\nimport { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons';\nimport { AnimationEvent, transition, trigger, useAnimation } from '@angular/animations';\nimport { cueAnimation } from '../../animations/cue.animation';\n\n@Component({\n  selector: 'app-landing-banner',\n  templateUrl: './landing-banner.component.html',\n  animations: [\n    trigger('cue', [\n      transition('* => true', useAnimation(cueAnimation))\n    ])\n  ],\n  styleUrls: ['./landing-banner.component.scss']\n})\nexport class LandingBannerComponent implements OnInit {\n  faAngleDoubleDown = faAngleDoubleDown;\n  quote = this.famousQuote.random();\n  cueActive: boolean = false;\n\n  constructor(private famousQuote: FamousQuoteService) { }\n\n  ngOnInit(): void {\n    this.loopCueAnimation();\n  }\n\n  loopCueAnimation(event?: AnimationEvent) {\n    this.cueActive = false;\n    setTimeout(() => this.cueActive = true, 5000);\n  }\n\n  scrollDown() {\n\n  }\n}\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { FamousQuoteService } from '../famous-quote.service';\nimport { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons';\nimport { AnimationEvent, transition, trigger, useAnimation } from '@angular/animations';\nimport { cueAnimation } from '../cue.animation';\n\n@Component({\n  selector: 'app-landing-banner',\n  templateUrl: './landing-banner.component.html',\n  animations: [\n    trigger('cue', [\n      transition('* => true', useAnimation(cueAnimation))\n    ])\n  ],\n  styleUrls: ['./landing-banner.component.scss']\n})\nexport class LandingBannerComponent implements OnInit {\n  faAngleDoubleDown = faAngleDoubleDown;\n  quote = this.famousQuote.random();\n  cueActive: boolean = false;\n\n  constructor(private famousQuote: FamousQuoteService) { }\n\n  ngOnInit(): void {\n    this.loopCueAnimation();\n  }\n\n  loopCueAnimation(event?: AnimationEvent) {\n    this.cueActive = false;\n    setTimeout(() => this.cueActive = true, 5000);\n  }\n\n  scrollDown() {\n\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    // width: 105%;\r\n    height: 100vh;\r\n    padding: 0 map-get($spacing, std);\r\n    // margin-left: -2.5%;\r\n    // padding: 0 2.5%;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\r\n    align-items: center;\r\n\r\n    color: map-get(theme.$palettes, white);\r\n    background:\r\n        linear-gradient(map-get(theme.$palettes, highlight) 0%, red 90%), \r\n        linear-gradient(to right, map-get(theme.$palettes, accent) 0%, yellow 90%), \r\n        url(~src/assets/images/home-banner.jpg) 30px,\r\n        url(~src/assets/images/home-banner.jpg) 20px;\r\n    background-blend-mode: screen, difference, lighten;\r\n    background-size: cover;\r\n    background-position: center;\r\n}\r\n\r\n.message {\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.author {\r\n    text-align: right;\r\n    font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.scroll-btn {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    bottom: 36px;\r\n    margin: auto;\r\n    padding: 0;\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    // width: 105%;\r\n    height: 100vh;\r\n    padding: 0 map-get(theme.$spacing, std);\r\n    // margin-left: -2.5%;\r\n    // padding: 0 2.5%;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\r\n    align-items: center;\r\n\r\n    color: map-get(theme.$palettes, white);\r\n    background:\r\n        linear-gradient(map-get(theme.$palettes, highlight) 0%, red 90%), \r\n        linear-gradient(to right, map-get(theme.$palettes, accent) 0%, yellow 90%), \r\n        url(~src/assets/images/home-banner.jpg) 30px,\r\n        url(~src/assets/images/home-banner.jpg) 20px;\r\n    background-blend-mode: screen, difference, lighten;\r\n    background-size: cover;\r\n    background-position: center;\r\n}\r\n\r\n.message {\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.author {\r\n    text-align: right;\r\n    font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.scroll-btn {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    bottom: 36px;\r\n    margin: auto;\r\n    padding: 0;\r\n}",
                     "styleUrl": "./landing-banner.component.scss"
                 }
             ],
@@ -900,7 +952,7 @@
         {
             "name": "LegalComponent",
             "id": "component-LegalComponent-d3a026f9bcbb2e18a7ca5910d5f4c46e",
-            "file": "src/app/home/pages/legal/legal.component.ts",
+            "file": "src/app/home/legal/legal.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -956,7 +1008,7 @@
         {
             "name": "MediaComponent",
             "id": "component-MediaComponent-1b6a209c0cb9cdf2f762bc6defc33fa1",
-            "file": "src/app/home/pages/media/media.component.ts",
+            "file": "src/app/home/media/media.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1012,7 +1064,7 @@
         {
             "name": "MediaGalleryComponent",
             "id": "component-MediaGalleryComponent-5864bd1950502a0ad36cedd866bf7ffb",
-            "file": "src/app/home/components/media-gallery/media-gallery.component.ts",
+            "file": "src/app/home/media-gallery/media-gallery.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1068,7 +1120,7 @@
         {
             "name": "MusicBannerComponent",
             "id": "component-MusicBannerComponent-65c8089c5242d956007fa36e69c5042c",
-            "file": "src/app/home/components/music-banner/music-banner.component.ts",
+            "file": "src/app/home/music-banner/music-banner.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1124,7 +1176,7 @@
         {
             "name": "MusicComponent",
             "id": "component-MusicComponent-bacbbcb8e1a131849d50bea07d379712",
-            "file": "src/app/home/pages/music/music.component.ts",
+            "file": "src/app/home/music/music.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1180,7 +1232,7 @@
         {
             "name": "MusicGalleryComponent",
             "id": "component-MusicGalleryComponent-187554dd7f04d5e9addb949ee2189c6c",
-            "file": "src/app/home/components/music-gallery/music-gallery.component.ts",
+            "file": "src/app/home/music-gallery/music-gallery.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1235,8 +1287,8 @@
         },
         {
             "name": "QuickFeedComponent",
-            "id": "component-QuickFeedComponent-ff8f14d8f4ab13588bf2da222631a724",
-            "file": "src/app/home/components/quick-feed/quick-feed.component.ts",
+            "id": "component-QuickFeedComponent-4c4136ca95e44a4d258ced10ecb64f93",
+            "file": "src/app/home/quick-feed/quick-feed.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1261,7 +1313,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 12
+                    "line": 13
                 }
             ],
             "hostBindings": [],
@@ -1269,7 +1321,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-quick-feed',\n  templateUrl: './quick-feed.component.html',\n  styleUrls: ['./quick-feed.component.scss']\n})\nexport class QuickFeedComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { SocialService } from '../social.service';\n\n@Component({\n  selector: 'app-quick-feed',\n  templateUrl: './quick-feed.component.html',\n  styleUrls: ['./quick-feed.component.scss']\n})\nexport class QuickFeedComponent implements OnInit {\n\n  constructor(private socials: SocialService) { }\n\n  ngOnInit(): void {\n\n  }\n\n}\n\nexport interface EventPost {\n  title: string\n  date: Date\n  imageUrl: string\n}",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1281,13 +1333,89 @@
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
-                "args": [],
-                "line": 8
+                "args": [
+                    {
+                        "name": "socials",
+                        "type": "SocialService"
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "socials",
+                        "type": "SocialService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<p>quick-feed works!</p>\n"
+            "templateData": "<ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n\n<!-- The generic item that is slotted in through ng-container. {item:item} and let-item=\"item\" syntax is for passing template context variables -->\n<ng-template let-item=\"item\" #defaultItem>\n    <p>{{ item.title }}</p>\n    <p class=\"subtitle\">{{ item.subtitle }}</p>\n</ng-template>"
+        },
+        {
+            "name": "QuickPlayerComponent",
+            "id": "component-QuickPlayerComponent-598259afd0a916726c4603f344f62cdd",
+            "file": "src/app/home/quick-player/quick-player.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-quick-player",
+            "styleUrls": [
+                "./quick-player.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./quick-player.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "backgroundUrl",
+                    "line": 10,
+                    "type": "string"
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 14
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-quick-player',\n  templateUrl: './quick-player.component.html',\n  styleUrls: ['./quick-player.component.scss']\n})\nexport class QuickPlayerComponent implements OnInit {\n\n  @Input() backgroundUrl?: string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    height: 45vh;\r\n    min-height: 293px;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
+                    "styleUrl": "./quick-player.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<ng-content></ng-content>\n<div class=\"background blur\" [style.background-image]=\"'url(' + backgroundUrl + ')'\"></div>"
         },
         {
             "name": "ScrollableLabelsComponent",
@@ -1348,7 +1476,7 @@
         {
             "name": "ShowcaseComponent",
             "id": "component-ShowcaseComponent-926a99e2bc356cbdaf9eb9b3aa8d57de",
-            "file": "src/app/home/components/showcase/showcase.component.ts",
+            "file": "src/app/home/showcase/showcase.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1385,7 +1513,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\nh1 {\r\n    margin: 24px;\r\n}\r\n\r\n.subtitle {\r\n    text-align: center;\r\n    font-size: calc(14rem / #{map-get(theme.$text, std)});\r\n    font-weight: normal;\r\n}",
                     "styleUrl": "./showcase.component.scss"
                 }
             ],
@@ -1399,371 +1527,12 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<h1>Showcase | 作品一览</h1>\n<app-highlight-reel></app-highlight-reel>\n<div class=\"divider\"></div>\n\n<ng-container *ngIf=\"true\">\n    <h1>Upcoming events | 新活动</h1>\n    <app-quick-feed></app-quick-feed>\n</ng-container>\n\n<ng-container *ngIf=\"false\">\n    <h1>No upcoming event | 近期没有活动</h1>\n</ng-container>"
-        },
-        {
-            "name": "TouchableAComponent",
-            "id": "component-TouchableAComponent-3869d47739988c3f40d2ee384dabaf8a",
-            "file": "src/app/home/components/touchable-a/touchable-a.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-touchable-a",
-            "styleUrls": [
-                "./touchable-a.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./touchable-a.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "backgroundUrl",
-                    "line": 11,
-                    "type": "string"
-                },
-                {
-                    "name": "subtitle",
-                    "line": 10,
-                    "type": "string"
-                },
-                {
-                    "name": "title",
-                    "line": 9,
-                    "type": "string"
-                }
-            ],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 15
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-touchable-a',\n  templateUrl: './touchable-a.component.html',\n  styleUrls: ['./touchable-a.component.scss']\n})\nexport class TouchableAComponent implements OnInit {\n  @Input() title?: string;\n  @Input() subtitle?: string;\n  @Input() backgroundUrl?: string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n  // @HostBinding('style.background-image')\n  // get backgroundImage(): string {\n  //   return `url(${this.backgroundUrl})`;\n  // }\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    min-height: 293px;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    align-items: flex-end;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.divider {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
-                    "styleUrl": "./touchable-a.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 11
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>{{ title }}</p>\n<span class=\"divider\">|</span>\n<p class=\"subtitle\">{{ subtitle }}</p>\n\n<div \n    class=\"background blur\" \n    [style.background-image]=\"'url(' + backgroundUrl + ')'\"\n></div>"
-        },
-        {
-            "name": "TouchableBComponent",
-            "id": "component-TouchableBComponent-148b5a5ab6a60d6820681923ab751afa",
-            "file": "src/app/home/components/touchable-b/touchable-b.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-touchable-b",
-            "styleUrls": [
-                "../touchable-a/touchable-a.component.scss",
-                "./touchable-b.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./touchable-b.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "backgroundUrl",
-                    "line": 11,
-                    "type": "string"
-                },
-                {
-                    "name": "subtitle",
-                    "line": 10,
-                    "type": "string"
-                },
-                {
-                    "name": "title",
-                    "line": 9,
-                    "type": "string"
-                }
-            ],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 15
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-touchable-b',\n  templateUrl: './touchable-b.component.html',\n  styleUrls: ['../touchable-a/touchable-a.component.scss', './touchable-b.component.scss']\n})\nexport class TouchableBComponent implements OnInit {\n  @Input() title?: string;\n  @Input() subtitle?: string;\n  @Input() backgroundUrl?: string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    min-height: 293px;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    align-items: flex-end;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.divider {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
-                    "styleUrl": "../touchable-a/touchable-a.component.scss"
-                },
-                {
-                    "data": ":host {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: stretch;\r\n}",
-                    "styleUrl": "./touchable-b.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 11
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>{{ title }}</p>\n<p class=\"subtitle\">{{ subtitle }}</p>\n\n<div \n    class=\"background blur\" \n    [style.background-image]=\"'url(' + backgroundUrl + ')'\"\n></div>"
-        },
-        {
-            "name": "TouchableCComponent",
-            "id": "component-TouchableCComponent-4ab4c5b03e418b1da19b435e377f8303",
-            "file": "src/app/home/components/touchable-c/touchable-c.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-touchable-c",
-            "styleUrls": [
-                "../touchable-a/touchable-a.component.scss",
-                "./touchable-c.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./touchable-c.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "backgroundUrl",
-                    "line": 11,
-                    "type": "string"
-                },
-                {
-                    "name": "subtitle",
-                    "line": 10,
-                    "type": "string"
-                },
-                {
-                    "name": "title",
-                    "line": 9,
-                    "type": "string"
-                }
-            ],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 15
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-touchable-c',\n  templateUrl: './touchable-c.component.html',\n  styleUrls: ['../touchable-a/touchable-a.component.scss', './touchable-c.component.scss']\n})\nexport class TouchableCComponent implements OnInit {\n  @Input() title?: string;\n  @Input() subtitle?: string;\n  @Input() backgroundUrl?: string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    min-height: 293px;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    align-items: flex-end;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.divider {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
-                    "styleUrl": "../touchable-a/touchable-a.component.scss"
-                },
-                {
-                    "data": ":host {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n}",
-                    "styleUrl": "./touchable-c.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 11
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>{{ title }}</p>\n<p class=\"subtitle\">{{ subtitle }}</p>\n\n<div \n    class=\"background blur\" \n    [style.background-image]=\"'url(' + backgroundUrl + ')'\"\n></div>"
-        },
-        {
-            "name": "TouchableDComponent",
-            "id": "component-TouchableDComponent-3834338e9edbd11c0353c7084befed28",
-            "file": "src/app/home/components/touchable-d/touchable-d.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-touchable-d",
-            "styleUrls": [
-                "../touchable-a/touchable-a.component.scss",
-                "./touchable-d.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./touchable-d.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "backgroundUrl",
-                    "line": 11,
-                    "type": "string"
-                },
-                {
-                    "name": "subtitle",
-                    "line": 10,
-                    "type": "string"
-                },
-                {
-                    "name": "title",
-                    "line": 9,
-                    "type": "string"
-                }
-            ],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 15
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-touchable-d',\n  templateUrl: './touchable-d.component.html',\n  styleUrls: ['../touchable-a/touchable-a.component.scss', './touchable-d.component.scss']\n})\nexport class TouchableDComponent implements OnInit {\n  @Input() title?: string;\n  @Input() subtitle?: string;\n  @Input() backgroundUrl?: string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    min-height: 293px;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    align-items: flex-end;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.divider {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
-                    "styleUrl": "../touchable-a/touchable-a.component.scss"
-                },
-                {
-                    "data": ":host {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-end;\r\n    align-items: flex-end;\r\n}",
-                    "styleUrl": "./touchable-d.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 11
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>{{ title }}</p>\n<p class=\"subtitle\">{{ subtitle }}</p>\n\n<div \n    class=\"background blur\" \n    [style.background-image]=\"'url(' + backgroundUrl + ')'\"\n></div>"
-        },
-        {
-            "name": "TouchableEComponent",
-            "id": "component-TouchableEComponent-91afbd8ee4c8dd31bd5639c7754fd416",
-            "file": "src/app/home/components/touchable-e/touchable-e.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-touchable-e",
-            "styleUrls": [
-                "./touchable-e.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./touchable-e.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 12
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-touchable-e',\n  templateUrl: './touchable-e.component.html',\n  styleUrls: ['./touchable-e.component.scss']\n})\nexport class TouchableEComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": ":host {\r\n    \r\n}",
-                    "styleUrl": "./touchable-e.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 8
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>touchable-e works!</p>\n"
+            "templateData": "<h1>Showcase | 作品一览</h1>\n<app-highlight-reel class=\"section\"></app-highlight-reel>\n<div class=\"divider\"></div>\n\n<ng-container *ngIf=\"true\">\n    <h1 class=\"subtitle\">Upcoming events | 新活动</h1>\n    <app-quick-feed></app-quick-feed>\n</ng-container>\n\n<ng-container *ngIf=\"false\">\n    <h1 class=\"subtitle\">No upcoming event | 近期没有活动</h1>\n</ng-container>"
         },
         {
             "name": "UpdateFeedComponent",
             "id": "component-UpdateFeedComponent-60a873a8b8d8c4551ace076a5587f8b7",
-            "file": "src/app/home/components/update-feed/update-feed.component.ts",
+            "file": "src/app/home/update-feed/update-feed.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1819,7 +1588,7 @@
         {
             "name": "UpdatesComponent",
             "id": "component-UpdatesComponent-8003e634e1abe16f1e4a6292ee4a4665",
-            "file": "src/app/home/pages/updates/updates.component.ts",
+            "file": "src/app/home/updates/updates.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -1894,9 +1663,6 @@
                     "elements": [
                         {
                             "name": "AppRoutingModule"
-                        },
-                        {
-                            "name": "CoreModule"
                         },
                         {
                             "name": "SharedModule"
@@ -1988,35 +1754,6 @@
             ]
         },
         {
-            "name": "CoreModule",
-            "children": [
-                {
-                    "type": "providers",
-                    "elements": []
-                },
-                {
-                    "type": "declarations",
-                    "elements": []
-                },
-                {
-                    "type": "imports",
-                    "elements": []
-                },
-                {
-                    "type": "exports",
-                    "elements": []
-                },
-                {
-                    "type": "bootstrap",
-                    "elements": []
-                },
-                {
-                    "type": "classes",
-                    "elements": []
-                }
-            ]
-        },
-        {
             "name": "HomeModule",
             "children": [
                 {
@@ -2072,22 +1809,10 @@
                             "name": "QuickFeedComponent"
                         },
                         {
+                            "name": "QuickPlayerComponent"
+                        },
+                        {
                             "name": "ShowcaseComponent"
-                        },
-                        {
-                            "name": "TouchableAComponent"
-                        },
-                        {
-                            "name": "TouchableBComponent"
-                        },
-                        {
-                            "name": "TouchableCComponent"
-                        },
-                        {
-                            "name": "TouchableDComponent"
-                        },
-                        {
-                            "name": "TouchableEComponent"
                         },
                         {
                             "name": "UpdateFeedComponent"
@@ -2211,65 +1936,9 @@
                 "name": "cueAnimation",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/animations/cue.animation.ts",
+                "file": "src/app/home/cue.animation.ts",
                 "type": "",
                 "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ bottom: '*' }),\r\n        style({ bottom: '0' }),\r\n        style({ bottom: '*' })\r\n    ]))\r\n])"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                "type": "any",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                "type": "any",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                "type": "any",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                "type": "any",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/showcase/showcase.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/landing-banner/landing-banner.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                "type": "any",
-                "defaultValue": "Template.bind({})"
             },
             {
                 "name": "Default",
@@ -2283,25 +1952,49 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "file": "src/app/home/showcase/showcase.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
+                "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
             },
             {
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/components/highlight-reel/highlight-reel.stories.ts",
+                "file": "src/app/home/quick-player/quick-player.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+                "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
             },
             {
-                "name": "environment",
+                "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/environments/environment.ts",
-                "type": "object",
-                "defaultValue": "{\r\n  production: false\r\n}"
+                "file": "src/app/home/quick-feed/quick-feed.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: QuickFeedComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/landing-banner/landing-banner.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
             },
             {
                 "name": "environment",
@@ -2310,6 +2003,14 @@
                 "file": "src/environments/environment.prod.ts",
                 "type": "object",
                 "defaultValue": "{\r\n  production: true\r\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  production: false\r\n}"
             },
             {
                 "name": "mainModule",
@@ -2331,7 +2032,7 @@
                 "name": "MockDataProvider",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/utils/mock-data.interceptor.ts",
+                "file": "src/app/core/mock-data.interceptor.ts",
                 "type": "object",
                 "defaultValue": "{\r\n    // use fake backend in place of Http service for backend-less development\r\n    provide: HTTP_INTERCEPTORS,\r\n    useClass: MockDataInterceptor,\r\n    multi: true\r\n}"
             },
@@ -2347,7 +2048,7 @@
                 "name": "openapi",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/utils/mock-data.interceptor.ts",
+                "file": "src/app/core/mock-data.interceptor.ts",
                 "type": "",
                 "defaultValue": "require('/../openapi.json')"
             },
@@ -2355,48 +2056,8 @@
                 "name": "require",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/utils/mock-data.interceptor.ts",
+                "file": "src/app/core/mock-data.interceptor.ts",
                 "type": "any"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                "type": "",
-                "defaultValue": "(args: TouchableAComponent) => ({\r\n    component: TouchableAComponent,\r\n    props: args\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                "type": "",
-                "defaultValue": "(args: TouchableBComponent) => ({\r\n    component: TouchableBComponent,\r\n    props: args\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                "type": "",
-                "defaultValue": "(args: TouchableDComponent) => ({\r\n    component: TouchableDComponent,\r\n    props: args\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                "type": "",
-                "defaultValue": "(args: TouchableEComponent) => ({\r\n    component: TouchableEComponent,\r\n    props: args\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                "type": "",
-                "defaultValue": "(args: TouchableCComponent) => ({\r\n    component: TouchableCComponent,\r\n    props: args\r\n})"
             }
         ],
         "functions": [
@@ -2421,11 +2082,20 @@
         ],
         "typealiases": [
             {
+                "name": "PostResponse",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "",
+                "file": "src/app/home/social.service.ts",
+                "description": "",
+                "kind": 175
+            },
+            {
                 "name": "SongResponse",
                 "ctype": "miscellaneous",
                 "subtype": "typealias",
                 "rawtype": "",
-                "file": "src/app/home/services/music.service.ts",
+                "file": "src/app/home/music.service.ts",
                 "description": "",
                 "kind": 175
             }
@@ -2457,124 +2127,14 @@
                     "defaultValue": "mainModule && mainModule.filename || ''"
                 }
             ],
-            "src/app/home/animations/cue.animation.ts": [
+            "src/app/home/cue.animation.ts": [
                 {
                     "name": "cueAnimation",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/home/animations/cue.animation.ts",
+                    "file": "src/app/home/cue.animation.ts",
                     "type": "",
                     "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ bottom: '*' }),\r\n        style({ bottom: '0' }),\r\n        style({ bottom: '*' })\r\n    ]))\r\n])"
-                }
-            ],
-            "src/app/home/components/touchable-d/touchable-d.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                    "type": "any",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                    "type": "",
-                    "defaultValue": "(args: TouchableDComponent) => ({\r\n    component: TouchableDComponent,\r\n    props: args\r\n})"
-                }
-            ],
-            "src/app/home/components/touchable-c/touchable-c.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                    "type": "any",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                    "type": "",
-                    "defaultValue": "(args: TouchableCComponent) => ({\r\n    component: TouchableCComponent,\r\n    props: args\r\n})"
-                }
-            ],
-            "src/app/home/components/touchable-b/touchable-b.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                    "type": "any",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                    "type": "",
-                    "defaultValue": "(args: TouchableBComponent) => ({\r\n    component: TouchableBComponent,\r\n    props: args\r\n})"
-                }
-            ],
-            "src/app/home/components/touchable-a/touchable-a.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                    "type": "any",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                    "type": "",
-                    "defaultValue": "(args: TouchableAComponent) => ({\r\n    component: TouchableAComponent,\r\n    props: args\r\n})"
-                }
-            ],
-            "src/app/home/components/showcase/showcase.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/showcase/showcase.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
-                }
-            ],
-            "src/app/home/components/landing-banner/landing-banner.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/landing-banner/landing-banner.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
-                }
-            ],
-            "src/app/home/components/touchable-e/touchable-e.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                    "type": "any",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                    "type": "",
-                    "defaultValue": "(args: TouchableEComponent) => ({\r\n    component: TouchableEComponent,\r\n    props: args\r\n})"
                 }
             ],
             "src/app/shared/header/header.stories.ts": [
@@ -2595,6 +2155,56 @@
                     "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n    props: {\r\n        isActive: false\r\n    },\r\n})"
                 }
             ],
+            "src/app/home/showcase/showcase.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/showcase/showcase.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
+                }
+            ],
+            "src/app/home/quick-player/quick-player.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/quick-player/quick-player.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
+                }
+            ],
+            "src/app/home/quick-feed/quick-feed.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/quick-feed/quick-feed.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: QuickFeedComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+                }
+            ],
+            "src/app/home/landing-banner/landing-banner.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/landing-banner/landing-banner.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
+                }
+            ],
+            "src/app/home/highlight-reel/highlight-reel.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+                }
+            ],
             "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
                 {
                     "name": "Default",
@@ -2603,26 +2213,6 @@
                     "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
                     "type": "",
                     "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-                }
-            ],
-            "src/app/home/components/highlight-reel/highlight-reel.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/components/highlight-reel/highlight-reel.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
-                }
-            ],
-            "src/environments/environment.ts": [
-                {
-                    "name": "environment",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/environments/environment.ts",
-                    "type": "object",
-                    "defaultValue": "{\r\n  production: false\r\n}"
                 }
             ],
             "src/environments/environment.prod.ts": [
@@ -2635,12 +2225,22 @@
                     "defaultValue": "{\r\n  production: true\r\n}"
                 }
             ],
-            "src/app/utils/mock-data.interceptor.ts": [
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  production: false\r\n}"
+                }
+            ],
+            "src/app/core/mock-data.interceptor.ts": [
                 {
                     "name": "MockDataProvider",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/utils/mock-data.interceptor.ts",
+                    "file": "src/app/core/mock-data.interceptor.ts",
                     "type": "object",
                     "defaultValue": "{\r\n    // use fake backend in place of Http service for backend-less development\r\n    provide: HTTP_INTERCEPTORS,\r\n    useClass: MockDataInterceptor,\r\n    multi: true\r\n}"
                 },
@@ -2648,7 +2248,7 @@
                     "name": "openapi",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/utils/mock-data.interceptor.ts",
+                    "file": "src/app/core/mock-data.interceptor.ts",
                     "type": "",
                     "defaultValue": "require('/../openapi.json')"
                 },
@@ -2656,7 +2256,7 @@
                     "name": "require",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/utils/mock-data.interceptor.ts",
+                    "file": "src/app/core/mock-data.interceptor.ts",
                     "type": "any"
                 }
             ]
@@ -2685,13 +2285,24 @@
         },
         "groupedEnumerations": {},
         "groupedTypeAliases": {
-            "src/app/home/services/music.service.ts": [
+            "src/app/home/social.service.ts": [
+                {
+                    "name": "PostResponse",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "",
+                    "file": "src/app/home/social.service.ts",
+                    "description": "",
+                    "kind": 175
+                }
+            ],
+            "src/app/home/music.service.ts": [
                 {
                     "name": "SongResponse",
                     "ctype": "miscellaneous",
                     "subtype": "typealias",
                     "rawtype": "",
-                    "file": "src/app/home/services/music.service.ts",
+                    "file": "src/app/home/music.service.ts",
                     "description": "",
                     "kind": 175
                 }
@@ -2770,7 +2381,55 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/animations/cue.animation.ts",
+                "filePath": "src/app/core/mock-data.interceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "MockDataInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/mock-data.interceptor.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "MockDataProvider",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/mock-data.interceptor.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "openapi",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/mock-data.interceptor.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "require",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/biography/biography.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "BiographyComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/cue.animation.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -2780,290 +2439,7 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/components/biography/biography.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "BiographyComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/email-me/email-me.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "EmailMeComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/highlight-reel/highlight-reel.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "HighlightReelComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/11",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/highlight-reel/highlight-reel.component.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "Touchable",
-                "coveragePercent": 0,
-                "coverageCount": "0/4",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/highlight-reel/highlight-reel.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/image-viewer/image-viewer.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "ImageViewerComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/landing-banner/landing-banner.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "LandingBannerComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/8",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/landing-banner/landing-banner.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/media-gallery/media-gallery.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "MediaGalleryComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/music-banner/music-banner.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "MusicBannerComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/music-gallery/music-gallery.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "MusicGalleryComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/quick-feed/quick-feed.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "QuickFeedComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/showcase/showcase.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "ShowcaseComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/showcase/showcase.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-a/touchable-a.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TouchableAComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-a/touchable-a.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Template",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-b/touchable-b.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TouchableBComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-b/touchable-b.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Template",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-c/touchable-c.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TouchableCComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-c/touchable-c.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Template",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-d/touchable-d.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TouchableDComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-d/touchable-d.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Template",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-e/touchable-e.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TouchableEComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/touchable-e/touchable-e.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "Template",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/components/update-feed/update-feed.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "UpdateFeedComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/pages/discography/discography.component.ts",
+                "filePath": "src/app/home/discography/discography.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "DiscographyComponent",
@@ -3072,52 +2448,16 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/pages/home/home.component.ts",
+                "filePath": "src/app/home/email-me/email-me.component.ts",
                 "type": "component",
                 "linktype": "component",
-                "name": "HomeComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/4",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/pages/legal/legal.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "LegalComponent",
+                "name": "EmailMeComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/pages/media/media.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "MediaComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/pages/music/music.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "MusicComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/pages/updates/updates.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "UpdatesComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/services/famous-quote.service.ts",
+                "filePath": "src/app/home/famous-quote.service.ts",
                 "type": "injectable",
                 "linktype": "injectable",
                 "name": "FamousQuoteService",
@@ -3126,21 +2466,224 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/services/music.service.ts",
+                "filePath": "src/app/home/highlight-reel/highlight-reel.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HighlightReelComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/highlight-reel/highlight-reel.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Touchable",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/highlight-reel/highlight-reel.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/home/home.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HomeComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/image-viewer/image-viewer.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ImageViewerComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/landing-banner/landing-banner.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LandingBannerComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/landing-banner/landing-banner.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/legal/legal.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LegalComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/media-gallery/media-gallery.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MediaGalleryComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/media/media.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MediaComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/music-banner/music-banner.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MusicBannerComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/music-gallery/music-gallery.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MusicGalleryComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/music.service.ts",
                 "type": "injectable",
                 "linktype": "injectable",
                 "name": "MusicService",
                 "coveragePercent": 0,
-                "coverageCount": "0/2",
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/services/social.service.ts",
+                "filePath": "src/app/home/music/music.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MusicComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/quick-feed/quick-feed.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "QuickFeedComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/quick-feed/quick-feed.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "EventPost",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/quick-feed/quick-feed.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/quick-player/quick-player.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "QuickPlayerComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/quick-player/quick-player.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/showcase/showcase.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ShowcaseComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/showcase/showcase.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/social.service.ts",
                 "type": "injectable",
                 "linktype": "injectable",
                 "name": "SocialService",
                 "coveragePercent": 0,
-                "coverageCount": "0/2",
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/update-feed/update-feed.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "UpdateFeedComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/updates/updates.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "UpdatesComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {
@@ -3196,45 +2739,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "Default",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/utils/mock-data.interceptor.ts",
-                "type": "interceptor",
-                "linktype": "interceptor",
-                "name": "MockDataInterceptor",
-                "coveragePercent": 0,
-                "coverageCount": "0/5",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/utils/mock-data.interceptor.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "MockDataProvider",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/utils/mock-data.interceptor.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "openapi",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/utils/mock-data.interceptor.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "require",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

@@ -3,7 +3,7 @@ import { moduleMetadata } from '@storybook/angular';
 import { ScrollableLabelsComponent } from './scrollable-labels.component';
 
 export default {
-    title: 'Scrollable Labels',
+    title: 'Shared/Scrollable Labels',
     excludeStories: /.*Data$/,
     decorators: [
         moduleMetadata({

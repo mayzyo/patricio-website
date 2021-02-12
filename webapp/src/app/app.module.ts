@@ -5,9 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { MockDataProvider } from './utils/mock-data.interceptor';
+import { MockDataProvider } from './core/mock-data.interceptor';
 
 @NgModule({
   declarations: [
@@ -18,7 +17,6 @@ import { MockDataProvider } from './utils/mock-data.interceptor';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    CoreModule,
     SharedModule
   ],
   providers: [MockDataProvider],

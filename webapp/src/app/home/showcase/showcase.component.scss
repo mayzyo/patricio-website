@@ -1,0 +1,11 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+h1 {
+    margin: 24px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: calc(14rem / #{map-get(theme.$text, std)});
+    font-weight: normal;
+}

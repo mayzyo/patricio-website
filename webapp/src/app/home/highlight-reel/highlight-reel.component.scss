@@ -1,0 +1,71 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+p, span { 
+    margin: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+app-quick-player {
+    position: relative;
+    height: 45vh;
+    min-height: 293px;
+
+    display: flex;
+
+    border: 1px map-get(theme.$palettes, black) solid;
+    font-size: calc(36rem / #{map-get(theme.$text, std)});
+    color: white;
+
+    &.oversize {
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+    
+    &.large {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+
+        & > .subtitle { text-align: end; }
+    }
+    
+    &.wide {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    &.small {
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+}
+
+.split {
+    margin: 0 24px;
+}
+
+.subtitle {
+    font-size: calc(18rem / #{map-get(theme.$text, std)});
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+ 
+    background-position: center;
+    background-size: contain;
+}
+
+.blur {
+    transition: none;
+    &:hover {
+        filter: blur(4px);
+        margin: -5px;
+    }
+}
