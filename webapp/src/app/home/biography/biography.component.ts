@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-biography',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BiographyComponent implements OnInit {
 
-  constructor() { }
+  constructor(private profiles: ProfileService) { }
 
   ngOnInit(): void {
   }

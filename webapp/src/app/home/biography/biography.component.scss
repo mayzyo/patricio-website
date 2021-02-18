@@ -1,0 +1,26 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+:host {
+    position: relative;
+    min-height: 800px;
+    padding: 0 24px;
+
+    display: block;
+
+    color: map-get(theme.$palettes, white);
+    background-color: map-get(theme.$palettes, black);
+}
+
+.show-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(transparent, black);
+}

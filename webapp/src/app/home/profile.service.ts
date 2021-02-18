@@ -2,13 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Post } from './models';
+import { Article } from './models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SocialService {
-  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts');
+export class ProfileService {
+  biography$: Observable<Article> = this.http.get<Article[]>('/Articles')
+  .pipe(
+    map(res => res[0])
+  );
 
   constructor(private http: HttpClient) { }
 }

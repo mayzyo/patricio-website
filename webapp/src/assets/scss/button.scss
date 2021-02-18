@@ -1,3 +1,5 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
 button {
     padding: 14px 0;
 
@@ -9,4 +11,11 @@ button {
     cursor: pointer;
 
     &:focus { outline: none; }
+}
+
+button.outline {
+    padding: 8px 12px;
+
+    border: 2px solid map-get(theme.$palettes, accent);
+    color: map-get(theme.$palettes, accent);
 }

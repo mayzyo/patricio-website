@@ -2,8 +2,8 @@
     <li *ngFor="let item of socials.latest$ | async">
         <img src="assets/images/banner-1.jpg" height="60px" width="60px" />
         <div class="text">
-            <p>{{ item.title | limit:40 }}</p>
-            <p class="date">{{ item.date | date:'fullDate' }}</p>
+            <p>{{ item.heading | limit:40 }}</p>
+            <p class="date">{{ item.created | date:'fullDate' }}</p>
         </div>
     </li>
 </ul>

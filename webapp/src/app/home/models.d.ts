@@ -1,5 +1,4 @@
-export interface Post {
-    title: string
-    date: Date
-    imageUrl: string
-}
+import { paths } from "../shared/backend.api";
+
+export type Post = paths["/Posts"]["get"]["responses"][200]["text/plain"][number];
+export type Article = paths["/Articles"]["get"]["responses"][200]["text/plain"][number];
