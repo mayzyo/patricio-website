@@ -1,0 +1,21 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+:host {
+    display: block;
+    padding: 0 map-get(theme.$spacing, std);
+    
+    color: map-get(theme.$palettes, white);
+    background-color: map-get(theme.$palettes, primary);
+}
+
+.form-ctrl {
+    margin: 24px 0;
+    
+    display: flex;
+    flex-direction: column;
+
+    & > label { 
+        padding-bottom: 8px;
+        font-size: calc(12rem / #{map-get(theme.$text, std)});
+    }
+}

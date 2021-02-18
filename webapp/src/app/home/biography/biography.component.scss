@@ -3,7 +3,7 @@
 :host {
     position: relative;
     min-height: 800px;
-    padding: 0 24px;
+    padding: 0 map-get(theme.$spacing, std);
 
     display: block;
 
