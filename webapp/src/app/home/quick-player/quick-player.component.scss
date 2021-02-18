@@ -7,6 +7,7 @@
     padding: 24px;
 
     display: flex;
+    overflow: hidden;
 
     border: 1px map-get(theme.$palettes, black) solid;
     font-size: calc(36rem / #{map-get(theme.$text, std)});

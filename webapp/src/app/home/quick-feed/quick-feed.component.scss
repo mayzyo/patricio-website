@@ -1,0 +1,23 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+p { margin: 0; }
+
+li {
+    margin: 24px;
+
+    display: flex;
+    align-items: center;
+
+    .text {
+        margin-left: 24px;
+
+        display: flex;
+        flex-direction: column;
+
+        font-size: calc(18rem / #{map-get(theme.$text, std)});
+
+        .date {
+            font-size: calc(12rem / #{map-get(theme.$text, std)});
+        }
+    }
+}

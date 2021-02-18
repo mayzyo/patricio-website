@@ -6,11 +6,12 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollableLabelsComponent } from './scrollable-labels/scrollable-labels.component';
+import { LimitPipe } from './limit.pipe';
 
 
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent],
+  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent, LimitPipe],
   imports: [
     CommonModule,
     FontAwesomeModule,

@@ -15,9 +15,3 @@ export class QuickFeedComponent implements OnInit {
   }
 
 }
-
-export interface EventPost {
-  title: string
-  date: Date
-  imageUrl: string
-}
