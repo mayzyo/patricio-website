@@ -151,48 +151,22 @@
             "type": "injectable"
         },
         {
-            "name": "SocialService",
-            "id": "injectable-SocialService-08939814e9705032f1edbf24278bec80",
-            "file": "src/app/home/social.service.ts",
+            "name": "ProfileService",
+            "id": "injectable-ProfileService-40a827ce27de656d89e4fd064f239692",
+            "file": "src/app/home/profile.service.ts",
             "properties": [
                 {
-                    "name": "latest$",
-                    "defaultValue": "this.http.get<PostResponse>('/Posts?page=1&size=10')\n  .pipe(\n    map(res => \n      res.map(el => this.bindPost(el))\n    )\n  )",
-                    "type": "Observable<Post[]>",
+                    "name": "biography$",
+                    "defaultValue": "this.http.get<Article[]>('/Articles')\n  .pipe(\n    map(res => res[0])\n  )",
+                    "type": "Observable<Article>",
                     "optional": false,
                     "description": "",
-                    "line": 12
+                    "line": 11
                 }
             ],
-            "methods": [
-                {
-                    "name": "bindPost",
-                    "args": [
-                        {
-                            "name": "res",
-                            "type": ""
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "Post",
-                    "typeParameters": [],
-                    "line": 21,
-                    "modifierKind": [
-                        112
-                    ],
-                    "jsdoctags": [
-                        {
-                            "name": "res",
-                            "type": "",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methods": [],
             "description": "",
-            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { from, Observable } from 'rxjs';\nimport { map, switchMap } from 'rxjs/operators';\nimport { paths } from 'src/app/shared/backend.api';\nimport { Post } from './models';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class SocialService {\n  latest$: Observable<Post[]> = this.http.get<PostResponse>('/Posts?page=1&size=10')\n  .pipe(\n    map(res => \n      res.map(el => this.bindPost(el))\n    )\n  );\n\n  constructor(private http: HttpClient) { }\n\n  private bindPost(res: PostResponse[number]): Post {\n    return {\n      title: res.heading,\n      date: new Date(res.created || ''),\n      imageUrl: ''\n    };\n  }\n}\n\ntype PostResponse = paths[\"/Posts\"][\"get\"][\"responses\"][200][\"text/plain\"];",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport { Article } from './models';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class ProfileService {\n  biography$: Observable<Article> = this.http.get<Article[]>('/Articles')\n  .pipe(\n    map(res => res[0])\n  );\n\n  constructor(private http: HttpClient) { }\n}",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -202,7 +176,46 @@
                         "type": "HttpClient"
                     }
                 ],
-                "line": 17,
+                "line": 14,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "SocialService",
+            "id": "injectable-SocialService-de6539dbc633fd6757857eb730e20865",
+            "file": "src/app/home/social.service.ts",
+            "properties": [
+                {
+                    "name": "latest$",
+                    "defaultValue": "this.http.get<Post[]>('/Posts')",
+                    "type": "Observable<Post[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport { Post } from './models';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class SocialService {\n  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts');\n\n  constructor(private http: HttpClient) { }\n}",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 11,
                 "jsdoctags": [
                     {
                         "name": "http",
@@ -306,7 +319,7 @@
         },
         {
             "name": "BiographyComponent",
-            "id": "component-BiographyComponent-248d1dbbe2fc4f307e18c2de6303370a",
+            "id": "component-BiographyComponent-8fbe2148d35d86fa5f6f8a8af5f7c58e",
             "file": "src/app/home/biography/biography.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -332,7 +345,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 12
+                    "line": 13
                 }
             ],
             "hostBindings": [],
@@ -340,11 +353,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-biography',\n  templateUrl: './biography.component.html',\n  styleUrls: ['./biography.component.scss']\n})\nexport class BiographyComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { ProfileService } from '../profile.service';\n\n@Component({\n  selector: 'app-biography',\n  templateUrl: './biography.component.html',\n  styleUrls: ['./biography.component.scss']\n})\nexport class BiographyComponent implements OnInit {\n\n  constructor(private profiles: ProfileService) { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    min-height: 800px;\r\n    padding: 0 map-get(theme.$spacing, std);\r\n\r\n    display: block;\r\n\r\n    color: map-get(theme.$palettes, white);\r\n    background-color: map-get(theme.$palettes, black);\r\n}\r\n\r\n.show-overlay {\r\n    position: absolute;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    min-height: 100px;\r\n\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n\r\n    background: linear-gradient(transparent, black);\r\n}",
                     "styleUrl": "./biography.component.scss"
                 }
             ],
@@ -352,13 +365,27 @@
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
-                "args": [],
-                "line": 8
+                "args": [
+                    {
+                        "name": "profiles",
+                        "type": "ProfileService"
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "profiles",
+                        "type": "ProfileService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<h1>Biography | 简介</h1>\n<img src=\"#\" />\n<p></p>"
+            "templateData": "<h1>Biography | 简介</h1>\n<img src=\"assets/images/banner-1.jpg\" width=\"100%\" />\n<p *ngIf=\"(profiles.biography$ | async) as biography\">{{ biography.content }}</p>\n\n<div class=\"show-overlay\">\n    <button class=\"outline\">Show All</button>\n</div>"
         },
         {
             "name": "DiscographyComponent",
@@ -456,7 +483,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    display: block;\r\n    padding: 0 map-get(theme.$spacing, std);\r\n    \r\n    color: map-get(theme.$palettes, white);\r\n    background-color: map-get(theme.$palettes, primary);\r\n}\r\n\r\n.form-ctrl {\r\n    margin: 24px 0;\r\n    \r\n    display: flex;\r\n    flex-direction: column;\r\n\r\n    & > label { \r\n        padding-bottom: 8px;\r\n        font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n    }\r\n}",
                     "styleUrl": "./email-me.component.scss"
                 }
             ],
@@ -470,7 +497,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<h1>Email Me | 联系我</h1>\n<label>Your message - 信息内容</label>\n<textarea></textarea>\n<label>Whats it about - 信息标题</label>\n<select></select>\n<label>A bit about yourself - 如何描述您</label>\n<select></select>\n<label>Your email - 您的邮箱</label>\n<input />\n<button>Send | 发送</button>"
+            "templateData": "<h1>Email Me | 联系我</h1>\n\n<form class=\"email\">\n    <div class=\"form-ctrl\">\n        <label>Your message - 信息内容</label>\n        <textarea></textarea>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>Whats it about - 信息标题</label>\n        <select></select>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>A bit about yourself - 如何描述您</label>\n        <select></select>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>Your email - 您的邮箱</label>\n        <input />\n    </div>\n    \n    <div>\n        <button class=\"solid\">Send | 发送</button>\n    </div>\n</form>"
         },
         {
             "name": "FooterComponent",
@@ -1395,7 +1422,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<ul>\n    <li *ngFor=\"let item of socials.latest$ | async\">\n        <img src=\"assets/images/banner-1.jpg\" height=\"60px\" width=\"60px\" />\n        <div class=\"text\">\n            <p>{{ item.title | limit:40 }}</p>\n            <p class=\"date\">{{ item.date | date:'fullDate' }}</p>\n        </div>\n    </li>\n</ul>"
+            "templateData": "<ul>\n    <li *ngFor=\"let item of socials.latest$ | async\">\n        <img src=\"assets/images/banner-1.jpg\" height=\"60px\" width=\"60px\" />\n        <div class=\"text\">\n            <p>{{ item.heading | limit:40 }}</p>\n            <p class=\"date\">{{ item.created | date:'fullDate' }}</p>\n        </div>\n    </li>\n</ul>"
         },
         {
             "name": "QuickPlayerComponent",
@@ -1989,22 +2016,6 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "src/app/shared/header/header.stories.ts",
                 "type": "",
                 "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n})"
@@ -2013,17 +2024,17 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/quick-player/quick-player.stories.ts",
+                "file": "src/app/home/showcase/showcase.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
+                "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
             },
             {
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/showcase/showcase.stories.ts",
+                "file": "src/app/home/quick-player/quick-player.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
+                "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
             },
             {
                 "name": "Default",
@@ -2042,12 +2053,36 @@
                 "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
             },
             {
-                "name": "environment",
+                "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/environments/environment.prod.ts",
-                "type": "object",
-                "defaultValue": "{\r\n  production: true\r\n}"
+                "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/email-me/email-me.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/biography/biography.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
             },
             {
                 "name": "environment",
@@ -2056,6 +2091,14 @@
                 "file": "src/environments/environment.ts",
                 "type": "object",
                 "defaultValue": "{\r\n  production: false\r\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  production: true\r\n}"
             },
             {
                 "name": "mainModule",
@@ -2127,15 +2170,6 @@
         ],
         "typealiases": [
             {
-                "name": "PostResponse",
-                "ctype": "miscellaneous",
-                "subtype": "typealias",
-                "rawtype": "",
-                "file": "src/app/home/social.service.ts",
-                "description": "",
-                "kind": 175
-            },
-            {
                 "name": "SongResponse",
                 "ctype": "miscellaneous",
                 "subtype": "typealias",
@@ -2182,26 +2216,6 @@
                     "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ bottom: '*' }),\r\n        style({ bottom: '0' }),\r\n        style({ bottom: '*' })\r\n    ]))\r\n])"
                 }
             ],
-            "src/app/home/highlight-reel/highlight-reel.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
-                }
-            ],
-            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-                }
-            ],
             "src/app/shared/header/header.stories.ts": [
                 {
                     "name": "Default",
@@ -2220,16 +2234,6 @@
                     "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n    props: {\r\n        isActive: false\r\n    },\r\n})"
                 }
             ],
-            "src/app/home/quick-player/quick-player.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-player/quick-player.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
-                }
-            ],
             "src/app/home/showcase/showcase.stories.ts": [
                 {
                     "name": "Default",
@@ -2238,6 +2242,16 @@
                     "file": "src/app/home/showcase/showcase.stories.ts",
                     "type": "",
                     "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
+                }
+            ],
+            "src/app/home/quick-player/quick-player.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/quick-player/quick-player.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: QuickPlayerComponent,\r\n    props: {\r\n        backgroundUrl: 'assets/images/banner-1.jpg'\r\n    }\r\n})"
                 }
             ],
             "src/app/home/quick-feed/quick-feed.stories.ts": [
@@ -2260,14 +2274,44 @@
                     "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
                 }
             ],
-            "src/environments/environment.prod.ts": [
+            "src/app/home/highlight-reel/highlight-reel.stories.ts": [
                 {
-                    "name": "environment",
+                    "name": "Default",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/environments/environment.prod.ts",
-                    "type": "object",
-                    "defaultValue": "{\r\n  production: true\r\n}"
+                    "file": "src/app/home/highlight-reel/highlight-reel.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
+                }
+            ],
+            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
+                }
+            ],
+            "src/app/home/email-me/email-me.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/email-me/email-me.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
+                }
+            ],
+            "src/app/home/biography/biography.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/biography/biography.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
                 }
             ],
             "src/environments/environment.ts": [
@@ -2278,6 +2322,16 @@
                     "file": "src/environments/environment.ts",
                     "type": "object",
                     "defaultValue": "{\r\n  production: false\r\n}"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  production: true\r\n}"
                 }
             ],
             "src/app/core/mock-data.interceptor.ts": [
@@ -2330,17 +2384,6 @@
         },
         "groupedEnumerations": {},
         "groupedTypeAliases": {
-            "src/app/home/social.service.ts": [
-                {
-                    "name": "PostResponse",
-                    "ctype": "miscellaneous",
-                    "subtype": "typealias",
-                    "rawtype": "",
-                    "file": "src/app/home/social.service.ts",
-                    "description": "",
-                    "kind": 175
-                }
-            ],
             "src/app/home/music.service.ts": [
                 {
                     "name": "SongResponse",
@@ -2474,6 +2517,16 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/home/biography/biography.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/home/cue.animation.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
@@ -2499,6 +2552,16 @@
                 "name": "EmailMeComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/email-me/email-me.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -2639,6 +2702,15 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/home/profile.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ProfileService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/home/quick-feed/quick-feed.component.ts",
                 "type": "component",
                 "linktype": "component",
@@ -2701,7 +2773,7 @@
                 "linktype": "injectable",
                 "name": "SocialService",
                 "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {

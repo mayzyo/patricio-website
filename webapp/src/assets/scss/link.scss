@@ -1,3 +1,5 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
 a {
     display: inline-block;
 
@@ -7,4 +9,9 @@ a {
     cursor: pointer;
     
     &:hover { color: inherit; }
+}
+
+a.navlink {
+    color: map-get(theme.$palettes, primary);
+    font-size: calc(14rem / #{map-get(theme.$text, std)});
 }
