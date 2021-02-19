@@ -6,7 +6,6 @@ import { ScrollableLabelsComponent } from '../scrollable-labels/scrollable-label
 
 export default {
     title: 'Shared/Header',
-    excludeStories: /.*Data$/,
     decorators: [
         moduleMetadata({
             // imports both components to allow component composition with storybook

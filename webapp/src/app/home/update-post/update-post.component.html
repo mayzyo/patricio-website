@@ -1,0 +1,11 @@
+<section class="title">
+    <img src="assets/images/banner-1.jpg" width="60px" height="60px" />
+    <div class="text">
+        <h2>{{ datasource.heading | limit:20 }}</h2>
+        <time class="date" [dateTime]="datasource.created">{{ datasource.created | date:'fullDate' }}</time>
+    </div>
+</section>
+
+<p *ngIf="datasource.body">{{ datasource.body }}</p>
+
+<img src="assets/images/banner-1.jpg" width="100%" />

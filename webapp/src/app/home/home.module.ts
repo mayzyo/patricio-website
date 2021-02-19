@@ -22,11 +22,12 @@ import { LegalComponent } from './legal/legal.component';
 import { MusicBannerComponent } from './music-banner/music-banner.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
+import { UpdatePostComponent } from './update-post/update-post.component';
 
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, UpdateFeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, MusicBannerComponent, ImageViewerComponent, QuickPlayerComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, UpdateFeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, MusicBannerComponent, ImageViewerComponent, QuickPlayerComponent, UpdatePostComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -1,1 +1,19 @@
-<p>update-feed works!</p>
+<swiper [spaceBetween]="24" [direction]="'vertical'" [slidesPerView]="'auto'" [autoHeight]="true">
+    <ng-template swiperSlide>
+        <div class="radio-group" role="group">
+            <input type="radio" name="btnradio" id="btnradio1" checked>
+            <label for="btnradio1">All</label>
+          
+            <input type="radio" name="btnradio" id="btnradio2">
+            <label for="btnradio2">Events</label>
+          
+            <input type="radio" name="btnradio" id="btnradio3">
+            <label for="btnradio3">Posts</label>
+        </div>
+    </ng-template>
+    <ng-template *ngFor="let post of socials.latest$ | async" swiperSlide>
+        <app-update-post [datasource]="post"></app-update-post>
+    </ng-template>
+</swiper>
+
+<div class="background blur"></div>

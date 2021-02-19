@@ -1,0 +1,37 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+p {
+    margin-bottom: map-get(theme.$spacing, std);
+    font-size: calc(14rem / #{map-get(theme.$text, std)});
+}
+
+:host {
+    padding: map-get(theme.$spacing, std);
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid map-get(theme.$palettes, black);;
+    background-color: map-get(theme.$palettes, white);
+}
+
+.title {
+    margin-bottom: map-get(theme.$spacing, std);
+
+    display: flex;
+    align-items: stretch;
+
+    .text {
+        margin-left: 24px;
+    
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    
+        h2 { font-size: calc(18rem / #{map-get(theme.$text, std)}); margin: 0; }
+    
+        .date {
+            font-size: calc(12rem / #{map-get(theme.$text, std)});
+        }
+    }
+}

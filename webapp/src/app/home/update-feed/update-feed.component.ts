@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SocialService } from '../social.service';
 
 @Component({
   selector: 'app-update-feed',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UpdateFeedComponent implements OnInit {
 
-  constructor() { }
+  constructor(private socials: SocialService) { }
 
   ngOnInit(): void {
   }

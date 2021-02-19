@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class LimitPipe implements PipeTransform {
 
   transform(value: string, size: number = 60): string {
-    return value.slice(0, size).concat('...');
+    return value.length > 60 ? value.slice(0, size).concat('...') : value;
   }
 
 }
