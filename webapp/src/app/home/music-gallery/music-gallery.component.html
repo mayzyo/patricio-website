@@ -1,1 +1,7 @@
-<p>music-gallery works!</p>
+<swiper [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true">
+    <ng-template *ngFor="let item of musics.get$ | async" swiperSlide>
+        <app-quick-player  [backgroundUrl]="'assets/images/banner-1.jpg'">
+            <p>{{ item.title }}</p>
+        </app-quick-player>
+    </ng-template>
+</swiper>

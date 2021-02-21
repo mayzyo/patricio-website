@@ -1,1 +1,5 @@
-<p>media-gallery works!</p>
+<ng-container *ngFor="let datagroup of (datasource$ | async) | group">
+    <div class="column" *ngFor="let data of datagroup">
+        <img [src]="data.imageUrl" width="100%" />
+    </div>
+</ng-container>
