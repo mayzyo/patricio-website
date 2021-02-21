@@ -1,20 +1,20 @@
 import { moduleMetadata, Story } from '@storybook/angular';
 import { LimitPipe } from 'src/app/shared/limit.pipe';
 import { Post } from '../models';
-import { UpdatePostComponent } from './update-post.component';
+import { PostCardComponent } from './post-card.component';
 
 export default {
-    title: 'Updates/Update Post',
+    title: 'Home/Post Card',
     decorators: [
         moduleMetadata({
             // imports both components to allow component composition with storybook
-            declarations: [UpdatePostComponent, LimitPipe]
+            declarations: [PostCardComponent, LimitPipe]
         }),
     ]
 };
 
 const Template: Story<Post> = args => ({
-    component: UpdatePostComponent,
+    component: PostCardComponent,
     props: { datasource: args },
 });
 

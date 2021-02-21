@@ -1,6 +1,6 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-app-update-post {
+app-post-card {
     margin: 0 map-get(theme.$spacing, std);
 }
 

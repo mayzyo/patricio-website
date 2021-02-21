@@ -14,7 +14,7 @@ import { ShowcaseComponent } from './showcase/showcase.component';
 import { BiographyComponent } from './biography/biography.component';
 import { EmailMeComponent } from './email-me/email-me.component';
 import { QuickFeedComponent } from './quick-feed/quick-feed.component';
-import { UpdateFeedComponent } from './update-feed/update-feed.component';
+import { FeedComponent } from './feed/feed.component';
 import { MusicGalleryComponent } from './music-gallery/music-gallery.component';
 import { MediaGalleryComponent } from './media-gallery/media-gallery.component';
 import { MusicComponent } from './music/music.component';
@@ -22,12 +22,12 @@ import { LegalComponent } from './legal/legal.component';
 import { MusicBannerComponent } from './music-banner/music-banner.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
-import { UpdatePostComponent } from './update-post/update-post.component';
+import { PostCardComponent } from './post-card/post-card.component';
 
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, UpdateFeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, MusicBannerComponent, ImageViewerComponent, QuickPlayerComponent, UpdatePostComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, MusicBannerComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -12,7 +12,7 @@
         </div>
     </ng-template>
     <ng-template *ngFor="let post of socials.latest$ | async" swiperSlide>
-        <app-update-post [datasource]="post"></app-update-post>
+        <app-post-card [datasource]="post"></app-post-card>
     </ng-template>
 </swiper>
 

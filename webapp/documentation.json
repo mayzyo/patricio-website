@@ -2,7 +2,7 @@
     "pipes": [
         {
             "name": "LimitPipe",
-            "id": "pipe-LimitPipe-84055a7ea512fda2f4851778f854d695",
+            "id": "pipe-LimitPipe-3fd0c213e31215c09265d773def52e8c",
             "file": "src/app/shared/limit.pipe.ts",
             "type": "pipe",
             "description": "",
@@ -45,7 +45,7 @@
                 }
             ],
             "ngname": "limit",
-            "sourceCode": "import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  name: 'limit'\n})\nexport class LimitPipe implements PipeTransform {\n\n  transform(value: string, size: number = 60): string {\n    return value.slice(0, size).concat('...');\n  }\n\n}\n"
+            "sourceCode": "import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  name: 'limit'\n})\nexport class LimitPipe implements PipeTransform {\n\n  transform(value: string, size: number = 60): string {\n    return value.length > 60 ? value.slice(0, size).concat('...') : value;\n  }\n\n}\n"
         }
     ],
     "interfaces": [
@@ -191,7 +191,7 @@
         },
         {
             "name": "SocialService",
-            "id": "injectable-SocialService-de6539dbc633fd6757857eb730e20865",
+            "id": "injectable-SocialService-f73a3ad8b6bc8bb30cc995febd1362fa",
             "file": "src/app/home/social.service.ts",
             "properties": [
                 {
@@ -201,11 +201,19 @@
                     "optional": false,
                     "description": "",
                     "line": 11
+                },
+                {
+                    "name": "posts$",
+                    "defaultValue": "this.http.get<Post[]>('/Posts')",
+                    "type": "Observable<Post[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
                 }
             ],
             "methods": [],
             "description": "",
-            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport { Post } from './models';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class SocialService {\n  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts');\n\n  constructor(private http: HttpClient) { }\n}",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport { Post } from './models';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class SocialService {\n  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts');\n  posts$: Observable<Post[]> = this.http.get<Post[]>('/Posts');\n\n  constructor(private http: HttpClient) { }\n}",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -215,7 +223,7 @@
                         "type": "HttpClient"
                     }
                 ],
-                "line": 11,
+                "line": 12,
                 "jsdoctags": [
                     {
                         "name": "http",
@@ -500,8 +508,78 @@
             "templateData": "<h1>Email Me | 联系我</h1>\n\n<form class=\"email\">\n    <div class=\"form-ctrl\">\n        <label>Your message - 信息内容</label>\n        <textarea></textarea>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>Whats it about - 信息标题</label>\n        <select></select>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>A bit about yourself - 如何描述您</label>\n        <select></select>\n    </div>\n\n    <div class=\"form-ctrl\">\n        <label>Your email - 您的邮箱</label>\n        <input />\n    </div>\n    \n    <div>\n        <button class=\"solid\">Send | 发送</button>\n    </div>\n</form>"
         },
         {
+            "name": "FeedComponent",
+            "id": "component-FeedComponent-ee6687adb5a1db3828be73453d92ba33",
+            "file": "src/app/home/feed/feed.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-feed",
+            "styleUrls": [
+                "./feed.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./feed.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { SocialService } from '../social.service';\n\n@Component({\n  selector: 'app-feed',\n  templateUrl: './feed.component.html',\n  styleUrls: ['./feed.component.scss']\n})\nexport class FeedComponent implements OnInit {\n\n  constructor(private socials: SocialService) { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\napp-post-card {\r\n    margin: 0 map-get(theme.$spacing, std);\r\n}\r\n\r\nswiper {\r\n    height: 100vh;\r\n}\r\n\r\n:host {\r\n    position: relative;\r\n    display: block;\r\n    overflow: hidden;\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: -1;\r\n    margin: -5px;\r\n \r\n    background-image: url('/assets/images/banner-1.jpg');\r\n    background-position: center;\r\n    background-size: cover;\r\n\r\n    filter: blur(4px);\r\n}\r\n\r\n.radio-group {\r\n    float: right;\r\n    margin-top: calc(6px + 2px + #{map-get(theme.$spacing, std)});\r\n    margin-right: map-get(theme.$spacing, std);\r\n\r\n    color: map-get(theme.$palettes, white);\r\n    font-size: calc(14rem / #{map-get(theme.$text, std)});\r\n\r\n    label:first-of-type {\r\n        border-left: 2px solid map-get(theme.$palettes, primary);\r\n    }\r\n\r\n    label {\r\n        padding: 6px 12px;\r\n        border: 2px solid map-get(theme.$palettes, primary);\r\n        border-left: none;\r\n        background-color: transparent;\r\n    }\r\n\r\n    input {\r\n        opacity: 0;\r\n        width: 0;\r\n        height: 0;\r\n        margin: 0;\r\n    }\r\n\r\n    input[type=\"radio\"]:checked + label {\r\n        background-color: map-get(theme.$palettes, primary);\r\n    }\r\n}",
+                    "styleUrl": "./feed.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "socials",
+                        "type": "SocialService"
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "socials",
+                        "type": "SocialService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<swiper [spaceBetween]=\"24\" [direction]=\"'vertical'\" [slidesPerView]=\"'auto'\" [autoHeight]=\"true\">\n    <ng-template swiperSlide>\n        <div class=\"radio-group\" role=\"group\">\n            <input type=\"radio\" name=\"btnradio\" id=\"btnradio1\" checked>\n            <label for=\"btnradio1\">All</label>\n          \n            <input type=\"radio\" name=\"btnradio\" id=\"btnradio2\">\n            <label for=\"btnradio2\">Events</label>\n          \n            <input type=\"radio\" name=\"btnradio\" id=\"btnradio3\">\n            <label for=\"btnradio3\">Posts</label>\n        </div>\n    </ng-template>\n    <ng-template *ngFor=\"let post of socials.latest$ | async\" swiperSlide>\n        <app-post-card [datasource]=\"post\"></app-post-card>\n    </ng-template>\n</swiper>\n\n<div class=\"background blur\"></div>"
+        },
+        {
             "name": "FooterComponent",
-            "id": "component-FooterComponent-eb3f87f27433f2596d9b9240c9cb1c36",
+            "id": "component-FooterComponent-d2fc13ca9263d14e65bbf8390c5d1ea1",
             "file": "src/app/shared/footer/footer.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -519,7 +597,40 @@
             "viewProviders": [],
             "inputsClass": [],
             "outputsClass": [],
-            "propertiesClass": [],
+            "propertiesClass": [
+                {
+                    "name": "faFacebookSquare",
+                    "defaultValue": "faFacebookSquare",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "faInstagram",
+                    "defaultValue": "faInstagram",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "faSoundcloud",
+                    "defaultValue": "faSoundcloud",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "faWeixin",
+                    "defaultValue": "faWeixin",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
             "methodsClass": [
                 {
                     "name": "ngOnInit",
@@ -527,7 +638,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 12
+                    "line": 17
                 }
             ],
             "hostBindings": [],
@@ -535,11 +646,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\n\r\n@Component({\r\n  selector: 'app-footer',\r\n  templateUrl: './footer.component.html',\r\n  styleUrls: ['./footer.component.scss']\r\n})\r\nexport class FooterComponent implements OnInit {\r\n\r\n  constructor() { }\r\n\r\n  ngOnInit(): void {\r\n  }\r\n\r\n}\r\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { faFacebookSquare, faInstagram, faSoundcloud, faWeixin } from '@fortawesome/free-brands-svg-icons';\r\n\r\n@Component({\r\n  selector: 'app-footer',\r\n  templateUrl: './footer.component.html',\r\n  styleUrls: ['./footer.component.scss']\r\n})\r\nexport class FooterComponent implements OnInit {\r\n  faFacebookSquare = faFacebookSquare;\r\n  faInstagram = faInstagram;\r\n  faSoundcloud = faSoundcloud;\r\n  faWeixin = faWeixin;\r\n\r\n  constructor() { }\r\n\r\n  ngOnInit(): void {\r\n  }\r\n\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    padding: 0 map-get(theme.$spacing, std);\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n\r\n    color: map-get(theme.$palettes, white);\r\n    background-color: map-get(theme.$palettes, black);\r\n}\r\n\r\n.navlist {\r\n    margin-bottom: map-get(theme.$spacing, wide);\r\n\r\n    & > li {\r\n        margin: map-get(theme.$spacing, std) 0;\r\n    }\r\n}\r\n\r\n.list-heading {\r\n    font-size: calc(24rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.navlink.social {\r\n    color: map-get(theme.$palettes, white);\r\n\r\n    & > fa-icon {\r\n        margin-right: 12px;\r\n    }\r\n\r\n    &.facebook > fa-icon { color: #2F80ED; }\r\n    &.instagram > fa-icon { color: #9B4900; }\r\n    &.soundcloud > fa-icon { color: #F2994A; }\r\n    &.weixin > fa-icon { color: #27AE60; }\r\n}\r\n\r\n.foot-note {\r\n    text-align: center;\r\n    font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n}",
                     "styleUrl": "./footer.component.scss"
                 }
             ],
@@ -548,12 +659,12 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 8
+                "line": 13
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<p>footer works!</p>\r\n"
+            "templateData": "<div>\r\n    <h1 class=\"list-heading\">Navigation</h1>\r\n    <ul class=\"navlist\">\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/home\">主页 | Home</a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/updates\">动态 | Updates</a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/discography\">作品集 | Discography</a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/media\">媒体 | Media</a>\r\n        </li>\r\n    </ul>\r\n    \r\n    <h1 class=\"list-heading\">Social Media</h1>\r\n    <ul class=\"navlist\">\r\n        <li>\r\n            <a class=\"navlink social facebook\" href=\"#\">\r\n                <fa-icon [icon]=\"faFacebookSquare\" size=\"lg\"></fa-icon>\r\n                <span>Facebook</span>\r\n            </a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink social instagram\" href=\"#\">\r\n                <fa-icon [icon]=\"faInstagram\" size=\"lg\"></fa-icon>\r\n                <span>Instagram</span>\r\n            </a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink social soundcloud\" href=\"#\">\r\n                <fa-icon [icon]=\"faSoundcloud\" size=\"lg\"></fa-icon>\r\n                <span>Sound Cloud</span>\r\n            </a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink social weixin\" href=\"#\">\r\n                <fa-icon [icon]=\"faWeixin\" size=\"lg\"></fa-icon>\r\n                <span>微信</span>\r\n            </a>\r\n        </li>\r\n    </ul>\r\n    \r\n    <h1 class=\"list-heading\">Legals</h1>\r\n    <ul class=\"navlist\">\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/legal\">Privacy Policy | 隐私条款</a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink\" routerLink=\"/legal\">Terms & Conditions</a>\r\n        </li>\r\n        <li>\r\n            <a class=\"navlink\" href=\"#\">Login</a>\r\n        </li>\r\n    </ul>\r\n</div>\r\n\r\n<div>\r\n    <p class=\"foot-note\">©2021 Kaze Patricio Chan. All Rights Reserved.</p>\r\n    <p class=\"foot-note\">Web Design by Michael May</p>\r\n</div>"
         },
         {
             "name": "HeaderComponent",
@@ -1355,6 +1466,69 @@
             "templateData": "<p>music-gallery works!</p>\n"
         },
         {
+            "name": "PostCardComponent",
+            "id": "component-PostCardComponent-2fb5df68a393a379f8141df92549e963",
+            "file": "src/app/home/post-card/post-card.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-post-card",
+            "styleUrls": [
+                "./post-card.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./post-card.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "datasource",
+                    "defaultValue": "{}",
+                    "line": 10,
+                    "type": "Partial<Post>"
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 14
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { Post } from '../models';\n\n@Component({\n  selector: 'app-post-card',\n  templateUrl: './post-card.component.html',\n  styleUrls: ['./post-card.component.scss']\n})\nexport class PostCardComponent implements OnInit {\n  @Input() datasource: Partial<Post> = {};\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\np {\r\n    margin-bottom: map-get(theme.$spacing, std);\r\n    font-size: calc(14rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n:host {\r\n    padding: map-get(theme.$spacing, std);\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n\r\n    border: 1px solid map-get(theme.$palettes, black);;\r\n    background-color: map-get(theme.$palettes, white);\r\n}\r\n\r\n.title {\r\n    margin-bottom: map-get(theme.$spacing, std);\r\n\r\n    display: flex;\r\n    align-items: stretch;\r\n\r\n    .text {\r\n        margin-left: 24px;\r\n    \r\n        display: flex;\r\n        flex-direction: column;\r\n        justify-content: space-between;\r\n    \r\n        h2 { font-size: calc(18rem / #{map-get(theme.$text, std)}); margin: 0; }\r\n    \r\n        .date {\r\n            font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n        }\r\n    }\r\n}",
+                    "styleUrl": "./post-card.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<section class=\"title\">\n    <img src=\"assets/images/banner-1.jpg\" width=\"60px\" height=\"60px\" />\n    <div class=\"text\">\n        <h2>{{ datasource.heading | limit:20 }}</h2>\n        <time class=\"date\" [dateTime]=\"datasource.created\">{{ datasource.created | date:'fullDate' }}</time>\n    </div>\n</section>\n\n<p *ngIf=\"datasource.body\">{{ datasource.body }}</p>\n\n<img src=\"assets/images/banner-1.jpg\" width=\"100%\" />"
+        },
+        {
             "name": "QuickFeedComponent",
             "id": "component-QuickFeedComponent-1529d80192e1a3346fbcf1553f16a3e7",
             "file": "src/app/home/quick-feed/quick-feed.component.ts",
@@ -1599,62 +1773,6 @@
             "templateData": "<h1>Showcase | 作品一览</h1>\n<app-highlight-reel class=\"section\"></app-highlight-reel>\n<div class=\"divider\"></div>\n\n<ng-container *ngIf=\"true\">\n    <h1 class=\"subtitle\">Upcoming events | 新活动</h1>\n    <app-quick-feed></app-quick-feed>\n</ng-container>\n\n<ng-container *ngIf=\"false\">\n    <h1 class=\"subtitle\">No upcoming event | 近期没有活动</h1>\n</ng-container>"
         },
         {
-            "name": "UpdateFeedComponent",
-            "id": "component-UpdateFeedComponent-60a873a8b8d8c4551ace076a5587f8b7",
-            "file": "src/app/home/update-feed/update-feed.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "app-update-feed",
-            "styleUrls": [
-                "./update-feed.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./update-feed.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "ngOnInit",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 12
-                }
-            ],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-update-feed',\n  templateUrl: './update-feed.component.html',\n  styleUrls: ['./update-feed.component.scss']\n})\nexport class UpdateFeedComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "",
-                    "styleUrl": "./update-feed.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 8
-            },
-            "implements": [
-                "OnInit"
-            ],
-            "templateData": "<p>update-feed works!</p>\n"
-        },
-        {
             "name": "UpdatesComponent",
             "id": "component-UpdatesComponent-8003e634e1abe16f1e4a6292ee4a4665",
             "file": "src/app/home/updates/updates.component.ts",
@@ -1708,7 +1826,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<app-update-feed></app-update-feed>\r\n<app-email-me></app-email-me>"
+            "templateData": "<app-feed></app-update-feed>\r\n<app-email-me></app-email-me>"
         }
     ],
     "modules": [
@@ -1842,6 +1960,9 @@
                             "name": "EmailMeComponent"
                         },
                         {
+                            "name": "FeedComponent"
+                        },
+                        {
                             "name": "HighlightReelComponent"
                         },
                         {
@@ -1875,6 +1996,9 @@
                             "name": "MusicGalleryComponent"
                         },
                         {
+                            "name": "PostCardComponent"
+                        },
+                        {
                             "name": "QuickFeedComponent"
                         },
                         {
@@ -1882,9 +2006,6 @@
                         },
                         {
                             "name": "ShowcaseComponent"
-                        },
-                        {
-                            "name": "UpdateFeedComponent"
                         },
                         {
                             "name": "UpdatesComponent"
@@ -2024,6 +2145,14 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/app/shared/footer/footer.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/app/home/showcase/showcase.stories.ts",
                 "type": "",
                 "defaultValue": "() => ({\r\n    component: ShowcaseComponent,\r\n})"
@@ -2048,6 +2177,38 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/app/home/post-card/post-card.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/biography/biography.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/email-me/email-me.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/app/home/landing-banner/landing-banner.stories.ts",
                 "type": "",
                 "defaultValue": "() => ({\r\n    component: LandingBannerComponent,\r\n})"
@@ -2064,25 +2225,9 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "file": "src/app/home/feed/feed.stories.ts",
                 "type": "",
-                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/email-me/email-me.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/biography/biography.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+                "defaultValue": "() => ({\r\n    component: FeedComponent,\r\n})"
             },
             {
                 "name": "environment",
@@ -2146,6 +2291,14 @@
                 "subtype": "variable",
                 "file": "src/app/core/mock-data.interceptor.ts",
                 "type": "any"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/post-card/post-card.stories.ts",
+                "type": "Story<Post>",
+                "defaultValue": "args => ({\r\n    component: PostCardComponent,\r\n    props: { datasource: args },\r\n})"
             }
         ],
         "functions": [
@@ -2234,6 +2387,16 @@
                     "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n    props: {\r\n        isActive: false\r\n    },\r\n})"
                 }
             ],
+            "src/app/shared/footer/footer.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/footer/footer.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
+                }
+            ],
             "src/app/home/showcase/showcase.stories.ts": [
                 {
                     "name": "Default",
@@ -2264,6 +2427,54 @@
                     "defaultValue": "() => ({\r\n    component: QuickFeedComponent,\r\n})"
                 }
             ],
+            "src/app/home/post-card/post-card.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/post-card/post-card.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/post-card/post-card.stories.ts",
+                    "type": "Story<Post>",
+                    "defaultValue": "args => ({\r\n    component: PostCardComponent,\r\n    props: { datasource: args },\r\n})"
+                }
+            ],
+            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
+                }
+            ],
+            "src/app/home/biography/biography.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/biography/biography.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+                }
+            ],
+            "src/app/home/email-me/email-me.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/email-me/email-me.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
+                }
+            ],
             "src/app/home/landing-banner/landing-banner.stories.ts": [
                 {
                     "name": "Default",
@@ -2284,34 +2495,14 @@
                     "defaultValue": "() => ({\r\n    component: HighlightReelComponent,\r\n    props: {\r\n        datasource$: from([\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' },\r\n            { title: 'Touchable Title', subtitle: 'Subtitle', backgroundUrl: 'assets/images/banner-1.jpg' }\r\n        ])\r\n    }\r\n})"
                 }
             ],
-            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
+            "src/app/home/feed/feed.stories.ts": [
                 {
                     "name": "Default",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                    "file": "src/app/home/feed/feed.stories.ts",
                     "type": "",
-                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-                }
-            ],
-            "src/app/home/email-me/email-me.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/email-me/email-me.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: EmailMeComponent,\r\n})"
-                }
-            ],
-            "src/app/home/biography/biography.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/biography/biography.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+                    "defaultValue": "() => ({\r\n    component: FeedComponent,\r\n})"
                 }
             ],
             "src/environments/environment.ts": [
@@ -2574,6 +2765,25 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/home/feed/feed.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "FeedComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/feed/feed.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/home/highlight-reel/highlight-reel.component.ts",
                 "type": "component",
                 "linktype": "component",
@@ -2702,6 +2912,35 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/home/post-card/post-card.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PostCardComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/post-card/post-card.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/post-card/post-card.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/home/profile.service.ts",
                 "type": "injectable",
                 "linktype": "injectable",
@@ -2773,16 +3012,7 @@
                 "linktype": "injectable",
                 "name": "SocialService",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/home/update-feed/update-feed.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "UpdateFeedComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
@@ -2800,7 +3030,17 @@
                 "linktype": "component",
                 "name": "FooterComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/footer/footer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
