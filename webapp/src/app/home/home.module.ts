@@ -19,15 +19,15 @@ import { MusicGalleryComponent } from './music-gallery/music-gallery.component';
 import { MediaGalleryComponent } from './media-gallery/media-gallery.component';
 import { MusicComponent } from './music/music.component';
 import { LegalComponent } from './legal/legal.component';
-import { MusicBannerComponent } from './music-banner/music-banner.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
 import { PostCardComponent } from './post-card/post-card.component';
+import { PlayerBannerComponent } from './player-banner/player-banner.component';
 
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, MusicBannerComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent],
   imports: [
     CommonModule,
     SharedModule,

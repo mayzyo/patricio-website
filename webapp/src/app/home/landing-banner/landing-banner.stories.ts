@@ -8,7 +8,6 @@ export default {
     title: 'Home/Landing Banner',
     decorators: [
         moduleMetadata({
-            // imports both components to allow component composition with storybook
             declarations: [LandingBannerComponent],
             imports: [BrowserAnimationsModule, FontAwesomeModule],
         }),
