@@ -1,9 +1,5 @@
 <ul>
     <li *ngFor="let item of socials.latest$ | async">
-        <img src="assets/images/banner-1.jpg" height="60px" width="60px" />
-        <div class="text">
-            <p>{{ item.heading | limit:40 }}</p>
-            <p class="date">{{ item.created | date:'fullDate' }}</p>
-        </div>
+        <app-post-card [datasource]="simplify(item)"></app-post-card>
     </li>
 </ul>

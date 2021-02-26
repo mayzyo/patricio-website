@@ -8,7 +8,9 @@ import { Post } from './models';
   providedIn: 'root'
 })
 export class SocialService {
-  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts');
+  latest$: Observable<Post[]> = this.http.get<Post[]>('/Posts').pipe(
+    map(res => res.slice(0, 3))
+  );
   posts$: Observable<Post[]> = this.http.get<Post[]>('/Posts');
 
   constructor(private http: HttpClient) { }

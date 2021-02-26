@@ -68,7 +68,7 @@ export class MockDataInterceptor implements HttpInterceptor {
 
         if(isArray) {
             var array = '';
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 10; i++) {
                 array = array.concat(data, ',');
             }
             data = `[ ${array.substring(0, array.length - 1)} ]`;

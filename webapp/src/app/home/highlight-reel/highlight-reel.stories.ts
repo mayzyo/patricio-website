@@ -6,6 +6,7 @@ import { SwiperModule } from 'swiper/angular';
 import { QuickPlayerComponent } from '../quick-player/quick-player.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MockDataProvider } from 'src/app/core/mock-data.interceptor';
+import { LayoutModule } from '@angular/cdk/layout';
 
 export default {
     title: 'Home/Highlight Reel',
@@ -13,7 +14,7 @@ export default {
         moduleMetadata({
             // imports both components to allow component composition with storybook
             declarations: [HighlightReelComponent, QuickPlayerComponent],
-            imports: [BrowserAnimationsModule, HttpClientModule, SwiperModule],
+            imports: [BrowserAnimationsModule, HttpClientModule, SwiperModule, LayoutModule],
             providers: [MockDataProvider]
         }),
     ]

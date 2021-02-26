@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
 import { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-highlight-reel',
@@ -17,10 +18,12 @@ export class HighlightReelComponent implements OnInit {
   items$?: Observable<Touchable[]>;
   hover?: Touchable;
 
-  constructor(private musics: MusicService) { }
+  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)');
+
+  constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
-    this.animTrigger$ = of()
+    this.animTrigger$ = of();
     if(this.animTrigger$) {
       this.initCollection(this.animTrigger$);
     }
