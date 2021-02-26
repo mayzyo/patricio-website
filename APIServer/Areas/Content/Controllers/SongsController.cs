@@ -62,6 +62,7 @@ namespace APIServer.Areas.Content.Controllers
         {
             var song = await context.PatricioPersonalSongs
                 .Include(el => el.Album)
+                .Include(el => el.Audio)
                 .FirstOrDefaultAsync(el => el.Id == id);
                             
             if (song == default(Song))

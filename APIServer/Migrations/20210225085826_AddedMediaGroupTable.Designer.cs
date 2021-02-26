@@ -4,14 +4,16 @@ using APIServer.Areas.Content.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APIServer.Migrations
 {
     [DbContext(typeof(ContentContext))]
-    partial class ContentContextModelSnapshot : ModelSnapshot
+    [Migration("20210225085826_AddedMediaGroupTable")]
+    partial class AddedMediaGroupTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,18 +81,6 @@ namespace APIServer.Migrations
                     b.ToTable("PatricioPersonalArticles");
                 });
 
-            modelBuilder.Entity("APIServer.Areas.Content.Models.Gallery", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PatricioPersonalGallery");
-                });
-
             modelBuilder.Entity("APIServer.Areas.Content.Models.Media", b =>
                 {
                     b.Property<int>("Id")
@@ -107,6 +97,9 @@ namespace APIServer.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("MediaGroupId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -116,7 +109,21 @@ namespace APIServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MediaGroupId");
+
                     b.ToTable("PatricioPersonalMedia");
+                });
+
+            modelBuilder.Entity("APIServer.Areas.Content.Models.MediaGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MediaGroup");
                 });
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Post", b =>
@@ -132,7 +139,7 @@ namespace APIServer.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GalleryId")
+                    b.Property<int?>("ImagesId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastModified")
@@ -147,7 +154,7 @@ namespace APIServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GalleryId");
+                    b.HasIndex("ImagesId");
 
                     b.ToTable("PatricioPersonalPosts");
                 });
@@ -193,21 +200,6 @@ namespace APIServer.Migrations
                     b.ToTable("PatricioPersonalSongs");
                 });
 
-            modelBuilder.Entity("GalleryMedia", b =>
-                {
-                    b.Property<int>("GalleryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MediaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GalleryId", "MediaId");
-
-                    b.HasIndex("MediaId");
-
-                    b.ToTable("GalleryMedia");
-                });
-
             modelBuilder.Entity("APIServer.Areas.Content.Models.Album", b =>
                 {
                     b.HasOne("APIServer.Areas.Content.Models.Media", "CoverImage")
@@ -226,13 +218,20 @@ namespace APIServer.Migrations
                     b.Navigation("Song");
                 });
 
+            modelBuilder.Entity("APIServer.Areas.Content.Models.Media", b =>
+                {
+                    b.HasOne("APIServer.Areas.Content.Models.MediaGroup", null)
+                        .WithMany("Media")
+                        .HasForeignKey("MediaGroupId");
+                });
+
             modelBuilder.Entity("APIServer.Areas.Content.Models.Post", b =>
                 {
-                    b.HasOne("APIServer.Areas.Content.Models.Gallery", "Gallery")
+                    b.HasOne("APIServer.Areas.Content.Models.MediaGroup", "Images")
                         .WithMany()
-                        .HasForeignKey("GalleryId");
+                        .HasForeignKey("ImagesId");
 
-                    b.Navigation("Gallery");
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Song", b =>
@@ -250,24 +249,14 @@ namespace APIServer.Migrations
                     b.Navigation("Audio");
                 });
 
-            modelBuilder.Entity("GalleryMedia", b =>
-                {
-                    b.HasOne("APIServer.Areas.Content.Models.Gallery", null)
-                        .WithMany()
-                        .HasForeignKey("GalleryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("APIServer.Areas.Content.Models.Media", null)
-                        .WithMany()
-                        .HasForeignKey("MediaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("APIServer.Areas.Content.Models.Album", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("APIServer.Areas.Content.Models.MediaGroup", b =>
+                {
+                    b.Navigation("Media");
                 });
 #pragma warning restore 612, 618
         }

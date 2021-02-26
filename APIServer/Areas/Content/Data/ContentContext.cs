@@ -16,6 +16,7 @@ namespace APIServer.Areas.Content.Data
         public DbSet<Post> PatricioPersonalPosts { get; set; }
         public DbSet<Article> PatricioPersonalArticles { get; set; }
         public DbSet<Media> PatricioPersonalMedia { get; set; }
+        public DbSet<Gallery> PatricioPersonalGallery { get; set; }
 
         public ContentContext(DbContextOptions<ContentContext> options) : base(options)
         {

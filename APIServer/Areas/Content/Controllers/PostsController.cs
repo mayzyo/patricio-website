@@ -37,7 +37,7 @@ namespace APIServer.Areas.Content.Controllers
         public async Task<ActionResult<IEnumerable<Post>>> GetEvents(int page = 1, int size = 10)
         {
             return await context.PatricioPersonalPosts
-                .Where(el => el.IsEvent)
+                .Where(el => el.Link != null)
                 .OrderByDescending(el => el.Created)
                 .Skip((page - 1) * size)
                 .Take(size)
@@ -48,7 +48,9 @@ namespace APIServer.Areas.Content.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await context.PatricioPersonalPosts.FindAsync(id);
+            var post = await context.PatricioPersonalPosts
+                .Include(el => el.Gallery)
+                .FirstOrDefaultAsync(el => el.Id == id);
 
             if (post == null)
             {

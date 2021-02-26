@@ -11,10 +11,10 @@ namespace APIServer.Areas.Content.Models
     {
         public int Id { get; set; }
         [Required]
-        public string Heading { get; set; }
-        public string Body { get; set; }
-        [Required]
-        public bool IsEvent { get; set; }
-        public string EventUrl { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public string Link { get; set; }
+        public int? GalleryId { get; set; }
+        public Gallery Gallery { get; set; }
     }
 }
