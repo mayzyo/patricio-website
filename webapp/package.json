@@ -1,5 +1,5 @@
 {
-  "name": "patricio-personal",
+  "name": "webapp",
   "version": "3.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,14 +8,14 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev:ssr": "ng run patricio-personal:serve-ssr",
-    "serve:ssr": "node dist/patricio-personal/server/main.js",
-    "build:ssr": "ng build --prod && ng run patricio-personal:server:production",
-    "prerender": "ng run patricio-personal:prerender",
+    "dev:ssr": "ng run webapp:serve-ssr",
+    "serve:ssr": "node dist/webapp/server/main.js",
+    "build:ssr": "ng build --prod && ng run webapp:server:production",
+    "prerender": "ng run webapp:prerender",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "npm run docs:json && start-storybook -p 6006 --ci",
     "build-storybook": "npm run docs:json && build-storybook",
-    "schema": "npx openapi-typescript ../openapi.json -o ./src/app/core/models/openapi.model.d.ts"
+    "schema": "npx openapi-typescript ../openapi.json -o ./src/app/shared/backend.api.d.ts"
   },
   "private": true,
   "dependencies": {
