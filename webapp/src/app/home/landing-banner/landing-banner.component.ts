@@ -22,7 +22,7 @@ export class LandingBannerComponent implements OnInit {
   constructor(private famousQuote: FamousQuoteService) { }
 
   ngOnInit(): void {
-    this.loopCueAnimation();
+    // this.loopCueAnimation();
   }
 
   loopCueAnimation(event?: AnimationEvent) {

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
 import { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-highlight-reel',
@@ -27,6 +27,10 @@ export class HighlightReelComponent implements OnInit {
     if(this.animTrigger$) {
       this.initCollection(this.animTrigger$);
     }
+  }
+
+  breakpointChanged(state: BreakpointState | null) {
+    return state != null && state.matches;
   }
 
   private initCollection(animTrigger$: Observable<void>) {

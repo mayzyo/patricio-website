@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { HeaderComponent } from './header/header.component';
@@ -17,11 +18,13 @@ import { GroupPipe } from './group.pipe';
     CommonModule,
     FontAwesomeModule,
     ScrollingModule,
-    // AppRoutingModule
+    RouterModule
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LimitPipe,
+    GroupPipe
   ]
 })
 export class SharedModule { }

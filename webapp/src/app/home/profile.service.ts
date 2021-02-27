@@ -8,7 +8,7 @@ import { Article } from './models';
   providedIn: 'root'
 })
 export class ProfileService {
-  biography$: Observable<Article> = this.http.get<Article[]>('/Articles')
+  biography$: Observable<Article> = this.http.get<Article[]>('http://localhost:5000/Articles')
   .pipe(
     map(res => res[0])
   );

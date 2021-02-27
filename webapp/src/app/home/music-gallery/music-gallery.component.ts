@@ -8,7 +8,7 @@ import { MusicService } from '../music.service';
 })
 export class MusicGalleryComponent implements OnInit {
 
-  constructor(private musics: MusicService) { }
+  constructor(public musics: MusicService) { }
 
   ngOnInit(): void {
   }

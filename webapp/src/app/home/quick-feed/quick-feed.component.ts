@@ -8,7 +8,7 @@ import { SocialService } from '../social.service';
   styleUrls: ['./quick-feed.component.scss']
 })
 export class QuickFeedComponent implements OnInit {
-  constructor(private socials: SocialService) { }
+  constructor(public socials: SocialService) { }
 
   ngOnInit(): void {
 
@@ -16,7 +16,7 @@ export class QuickFeedComponent implements OnInit {
 
   simplify(post: Post): Partial<Post> {
     return {
-      heading: post.heading,
+      title: post.title,
       created: post.created
     }
   }

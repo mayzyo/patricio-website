@@ -8,7 +8,7 @@ import { SocialService } from '../social.service';
 })
 export class FeedComponent implements OnInit {
 
-  constructor(private socials: SocialService) { }
+  constructor(public socials: SocialService) { }
 
   ngOnInit(): void {
   }

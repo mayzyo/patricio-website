@@ -7,14 +7,9 @@ import { Song } from './models';
   providedIn: 'root'
 })
 export class MusicService {
-  highlights$: Observable<Song[]> = this.http.get<Song[]>('/Songs');
-  get$: Observable<Song[]> = this.http.get<Song[]>('/Songs');;
+  highlights$: Observable<Song[]> = this.http.get<Song[]>('http://localhost:5000/Songs');
+  get$: Observable<Song[]> = this.http.get<Song[]>('http://localhost:5000/Songs');
 
   constructor(private http: HttpClient) {
-    // this.http.get<any>('http://localhost:5000/Songs?page=1&size=10').subscribe(res => {
-    //   this.test = res;
-    //   console.log('tester', res.name)
-      
-    // })
   }
 }

@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import {TransferHttpCacheModule} from '@nguniversal/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { MockDataProvider } from './core/mock-data.interceptor';
 
@@ -14,12 +14,12 @@ import { MockDataProvider } from './core/mock-data.interceptor';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    TransferHttpCacheModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     SharedModule
   ],
-  providers: [MockDataProvider],
+  // providers: [MockDataProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

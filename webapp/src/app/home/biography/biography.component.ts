@@ -8,7 +8,7 @@ import { ProfileService } from '../profile.service';
 })
 export class BiographyComponent implements OnInit {
 
-  constructor(private profiles: ProfileService) { }
+  constructor(public profiles: ProfileService) { }
 
   ngOnInit(): void {
   }

@@ -25,8 +25,16 @@ export function app(): express.Express {
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
-  const apiProxy = createProxyMiddleware('/api', { target: 'http://localhost:5000' });
-  server.get('/api/**', apiProxy);
+
+  // proxy middleware options
+  const options = {
+    target: 'http://localhost:5000', // target host
+    changeOrigin: true, // needed for virtual hosted sites
+    pathRewrite: {
+      '^/api': '/', // remove base path
+    },
+  };
+  server.get('/api/**', createProxyMiddleware(options));
   // Serve static files from /browser
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'

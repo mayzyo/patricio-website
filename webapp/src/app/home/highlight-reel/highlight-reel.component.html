@@ -1,4 +1,4 @@
-<div *ngIf="!(this.breakpoint$ | async).matches">
+<div *ngIf="!breakpointChanged(breakpoint$ | async)">
     <swiper [slidesPerView]="1.5" [spaceBetween]="24" [slidesOffsetBefore]="24" [slidesOffsetAfter]="24">
         <ng-template *ngIf="(oversizeItem$ | async) as item" swiperSlide>
             <app-quick-player class="oversize" [backgroundUrl]="item.backgroundUrl">
@@ -25,7 +25,7 @@
     </swiper>
 </div>
 
-<div class="grid" *ngIf="(this.breakpoint$ | async).matches">
+<div class="grid" *ngIf="breakpointChanged(breakpoint$ | async)">
     <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [backgroundUrl]="item.backgroundUrl">
         <p>{{ item.title }}</p>
         <span class="split">|</span>

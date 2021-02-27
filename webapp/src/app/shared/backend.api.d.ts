@@ -590,16 +590,31 @@ export interface operations {}
 
 export interface components {
   schemas: {
+    MediaType: 0 | 1 | 2;
+    Gallery: {
+      id?: number;
+      media: components["schemas"]["Media"][];
+    };
+    Media: {
+      created?: string;
+      lastModified?: string;
+      id?: number;
+      url: string;
+      type: components["schemas"]["MediaType"];
+      isVisible: boolean;
+      gallery?: components["schemas"]["Gallery"][] | null;
+    };
     Song: {
       created?: string;
       lastModified?: string;
       id?: number;
-      albumId?: number | null;
       album?: components["schemas"]["Album"];
       title: string;
       genre?: string | null;
-      soundCloud?: string | null;
       isHighlight: boolean;
+      soundCloud?: string | null;
+      audioId?: number | null;
+      audio?: components["schemas"]["Media"];
     };
     Album: {
       created?: string;
@@ -608,6 +623,7 @@ export interface components {
       title: string;
       genre?: string | null;
       songs?: components["schemas"]["Song"][] | null;
+      coverImage?: components["schemas"]["Media"];
     };
     Article: {
       created?: string;
@@ -642,32 +658,15 @@ export interface components {
       userId?: number;
       user?: components["schemas"]["User"];
     };
-    MediaType: 0 | 1 | 2;
     Post: {
       created?: string;
       lastModified?: string;
       id?: number;
-      heading: string;
-      body?: string | null;
-      isEvent: boolean;
-      eventUrl?: string | null;
-    };
-    Media: {
-      created?: string;
-      lastModified?: string;
-      id?: number;
-      preview?: string | null;
-      url: string;
-      type: components["schemas"]["MediaType"];
-      isVisible: boolean;
-      songId?: number | null;
-      song?: components["schemas"]["Song"];
-      postId?: number | null;
-      post?: components["schemas"]["Post"];
-      articleId?: number | null;
-      article?: components["schemas"]["Article"];
-      albumId?: number | null;
-      album?: components["schemas"]["Album"];
+      title: string;
+      content?: string | null;
+      link?: string | null;
+      galleryId?: number | null;
+      gallery?: components["schemas"]["Gallery"];
     };
   };
 }
