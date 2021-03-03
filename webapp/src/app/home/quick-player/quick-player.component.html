@@ -1,2 +1,2 @@
 <ng-content></ng-content>
-<div class="background blur" [style.background-image]="'url(' + backgroundUrl + ')'"></div>
+<div *ngIf="backgroundUrl" class="background blur" [style.background-image]="'url(' + backgroundUrl + ')'"></div>

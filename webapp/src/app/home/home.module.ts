@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { HomeComponent } from './home/home.component';
 import { UpdatesComponent } from './updates/updates.component';
 import { DiscographyComponent } from './discography/discography.component';
@@ -23,7 +24,6 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
 import { PostCardComponent } from './post-card/post-card.component';
 import { PlayerBannerComponent } from './player-banner/player-banner.component';
-
 
 
 @NgModule({

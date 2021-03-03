@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class QuickPlayerComponent implements OnInit {
 
-  @Input() backgroundUrl?: string;
+  @Input() backgroundUrl: string | null = '';
 
   constructor() { }
 

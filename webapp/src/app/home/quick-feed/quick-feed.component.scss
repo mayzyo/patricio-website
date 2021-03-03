@@ -1,23 +1,27 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-p { margin: 0; }
+:host {
+    margin: 0 map-get(theme.$spacing, page);
+    display: block;
+}
 
-li {
-    margin: 24px;
+app-post-card {
+    border: none;
+    padding: 0;
+}
 
-    // display: flex;
-    // align-items: center;
+.title {
+    text-align: center;
+    font-size: map-get(theme.$text, heading);
+}
 
-    // .text {
-    //     margin-left: 24px;
+@media (min-width: map-get(theme.$screens, laptop)) {
+    :host {
+        margin: 0 map-get(theme.$spacing, page-wide);
+    }
 
-    //     display: flex;
-    //     flex-direction: column;
-
-    //     font-size: calc(18rem / #{map-get(theme.$text, std)});
-
-    //     .date {
-    //         font-size: calc(12rem / #{map-get(theme.$text, std)});
-    //     }
-    // }
+    ol {
+        display: flex;
+        justify-content: space-between;
+    }
 }

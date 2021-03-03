@@ -1,7 +1,12 @@
-<h1>Biography | 简介</h1>
-<img src="assets/images/banner-1.jpg" width="100%" />
-<p *ngIf="(profiles.biography$ | async) as biography">{{ biography.content }}</p>
+<h2 class="title">Biography | 简介</h2>
 
-<div class="show-overlay">
-    <button class="outline">Show All</button>
-</div>
+<section class="container">
+    <img class="portrait" [src]="portrait" />
+
+    <div class="biography" [ngClass]="show ? 'all' : ''">
+        <p>{{ biography }}</p>
+        <div class="overlay" *ngIf="!show">
+            <button class="outline" (click)="show = true">Show All</button>
+        </div>
+    </div>
+</section>

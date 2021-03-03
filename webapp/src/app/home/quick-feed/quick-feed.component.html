@@ -1,5 +1,7 @@
-<ul>
+<h2 class="title">{{ true ? "Upcoming events | 新活动" : "No upcoming event | 近期没有活动" }}</h2>
+
+<ol>
     <li *ngFor="let item of socials.latest$ | async">
         <app-post-card [datasource]="simplify(item)"></app-post-card>
     </li>
-</ul>
+</ol>

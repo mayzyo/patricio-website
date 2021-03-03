@@ -11,7 +11,6 @@ export class QuickFeedComponent implements OnInit {
   constructor(public socials: SocialService) { }
 
   ngOnInit(): void {
-
   }
 
   simplify(post: Post): Partial<Post> {

@@ -3,14 +3,13 @@
 :host {
     position: relative;
     height: 45vh;
-    min-height: 293px;
     padding: 24px;
 
     display: flex;
     overflow: hidden;
 
     border: 1px map-get(theme.$palettes, black) solid;
-    font-size: calc(36rem / #{map-get(theme.$text, std)});
+    font-size: calc(32rem / #{map-get(theme.$text, std)});
     color: white;
 }
 
@@ -23,7 +22,7 @@
     z-index: 9;
  
     background-position: center;
-    background-size: contain;
+    background-size: cover;
 }
 
 .blur {

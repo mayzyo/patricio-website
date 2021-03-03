@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
-import { map, pluck, reduce, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
+import { map, pluck, reduce, scan, share, shareReplay, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { StaticFileService } from 'src/app/core/static-file.service';
 
 @Component({
   selector: 'app-highlight-reel',
@@ -20,7 +21,7 @@ export class HighlightReelComponent implements OnInit {
 
   breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)');
 
-  constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }
+  constructor(private musics: MusicService, private staticFiles: StaticFileService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.animTrigger$ = of();
@@ -37,11 +38,18 @@ export class HighlightReelComponent implements OnInit {
     var collection$ = this.musics.highlights$.pipe(
       switchMap(res => 
         from(
-          res.map(el => ({ title: el.title, subtitle: el.genre, backgroundUrl: 'assets/images/banner-1.jpg' }))
+          res.map(el => ({ 
+            title: el.title,
+            subtitle: el.genre,
+            backgroundUrl$: this.staticFiles.get('abcd').pipe(
+              shareReplay()
+            )
+          }))
         )
       ),
-      share()
+      shareReplay()
     );
+
     // var collection$ = zip(
     //   datasource$,
     //   animTrigger$.pipe(
@@ -77,5 +85,5 @@ export class HighlightReelComponent implements OnInit {
 interface Touchable {
   title?: string,
   subtitle: string | undefined | null,
-  backgroundUrl?: string
+  backgroundUrl$: Observable<string>
 }

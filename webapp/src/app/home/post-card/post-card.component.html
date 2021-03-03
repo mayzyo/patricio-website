@@ -8,4 +8,4 @@
 
 <p *ngIf="datasource.content">{{ datasource.content }}</p>
 
-<img src="assets/images/banner-1.jpg" width="100%" />
+<img *ngIf="datasource.content" src="assets/images/banner-1.jpg" width="100%" />

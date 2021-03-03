@@ -1,26 +1,72 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 :host {
-    position: relative;
-    min-height: 800px;
-    padding: 0 map-get(theme.$spacing, std);
-
+    padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
     display: block;
 
-    color: map-get(theme.$palettes, white);
     background-color: map-get(theme.$palettes, black);
 }
 
-.show-overlay {
+.title {
+    color: map-get(theme.$palettes, accent);
+}
+
+.biography {
+    position: relative;
+    height: 50vh;
+    overflow: hidden;
+
+    color: map-get(theme.$palettes, white); 
+    line-height: 32px;
+    white-space: pre-line;
+
+    & > p { margin: 0; }
+
+    &.all {
+        height: 100%;
+    }
+}
+
+.portrait {
+    width: 100%;
+}
+
+.overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    min-height: 100px;
+    height: 25vh;
+    padding-bottom: 24px;
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 
-    background: linear-gradient(transparent, black);
+    background: linear-gradient(transparent, #{map-get(theme.$palettes, black)});
 }
+
+@media (min-width: map-get(theme.$screens, laptop)) {
+    :host {
+        padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page-wide);
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-flow: dense;
+        grid-gap: 80px;
+        gap: 80px;
+    }
+
+    .portrait {
+        grid-column: 2;
+        object-fit: cover;
+        height: 100%;
+    }
+
+    .biography { height: 100%; }
+
+    .overlay { display: none; }
+}
+

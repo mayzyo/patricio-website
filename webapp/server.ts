@@ -12,7 +12,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/patricio-personal/browser');
+  const distFolder = join(process.cwd(), 'dist/webapp/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
@@ -26,15 +26,16 @@ export function app(): express.Express {
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
 
-  // proxy middleware options
-  const options = {
-    target: 'http://localhost:5000', // target host
-    changeOrigin: true, // needed for virtual hosted sites
-    pathRewrite: {
-      '^/api': '/', // remove base path
-    },
-  };
-  server.get('/api/**', createProxyMiddleware(options));
+  // // proxy middleware options
+  // const options = {
+  //   target: 'http://localhost:5000', // target host
+  //   changeOrigin: true, // needed for virtual hosted sites
+  //   pathRewrite: {
+  //     '^/api': '/', // remove base path
+  //   },
+  // };
+  // server.get('/api/**', createProxyMiddleware(options));
+  
   // Serve static files from /browser
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'

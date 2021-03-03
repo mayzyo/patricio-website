@@ -36,11 +36,38 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "intl": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.intl.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            },
+            "china": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.china.ts"
                 }
               ],
               "optimization": true,
@@ -68,12 +95,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "webapp:build",
-            "proxyConfig": "proxy.conf.json"
+            "browserTarget": "webapp:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "webapp:build:production"
+            "intl": {
+              "browserTarget": "webapp:build:intl"
+            },
+            "china": {
+              "browserTarget": "webapp:build:china"
             }
           }
         },
@@ -114,7 +143,7 @@
             "devServerTarget": "webapp:serve"
           },
           "configurations": {
-            "production": {
+            "intl": {
               "devServerTarget": "webapp:serve:production"
             }
           }
@@ -127,12 +156,23 @@
             "tsConfig": "tsconfig.server.json"
           },
           "configurations": {
-            "production": {
+            "intl": {
               "outputHashing": "media",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.intl.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": true
+            },
+            "china": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.china.ts"
                 }
               ],
               "sourceMap": false,
@@ -147,17 +187,19 @@
             "serverTarget": "webapp:server"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "webapp:build:production",
-              "serverTarget": "webapp:server:production"
+            "intl": {
+              "browserTarget": "webapp:build:intl",
+              "serverTarget": "webapp:server:intl"
+            },
+            "china": {
+              "browserTarget": "webapp:build:china",
+              "serverTarget": "webapp:server:china"
             }
           }
         },
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
           "options": {
-            "browserTarget": "webapp:build:production",
-            "serverTarget": "webapp:server:production",
             "routes": [
               "/",
               "/home",
@@ -165,7 +207,14 @@
             ]
           },
           "configurations": {
-            "production": {}
+            "intl": {
+              "browserTarget": "webapp:build:intl",
+              "serverTarget": "webapp:server:intl"
+            },
+            "china": {
+              "browserTarget": "webapp:build:china",
+              "serverTarget": "webapp:server:china"
+            }
           }
         }
       }

@@ -10,8 +10,9 @@ $spacing: (
     small: 4px,
     std: 24px,
     wide: 48px,
-    page: 80px,
-    page-wide: 128px,
+    large: 80px,
+    page: 24px,
+    page-wide: 120px,
 );
 
 $screens: (        
@@ -23,4 +24,7 @@ $screens: (
 
 $text: (
     std: 16,
+    heading: calc(24rem / 16)
 );
+
+$scrollbar: 5px;

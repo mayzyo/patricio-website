@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  backend: 'http://localhost:5000',
+  // media: 'http://localhost:3000'
+  media: 'http://125.49.75.2:32045'
 };
 
 /*
