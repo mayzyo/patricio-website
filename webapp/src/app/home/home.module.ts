@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HomeRoutingModule } from './home-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SwiperModule } from 'swiper/angular';
+import { SharedModule } from '../shared/shared.module';
 
 import { HomeComponent } from './home/home.component';
 import { UpdatesComponent } from './updates/updates.component';
 import { DiscographyComponent } from './discography/discography.component';
 import { MediaComponent } from './media/media.component';
-import { HomeRoutingModule } from './home-routing.module';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SwiperModule } from 'swiper/angular';
-import { HighlightReelComponent } from './highlight-reel/highlight-reel.component';
-import { SharedModule } from '../shared/shared.module';
 import { LandingBannerComponent } from './landing-banner/landing-banner.component';
 import { ShowcaseComponent } from './showcase/showcase.component';
 import { BiographyComponent } from './biography/biography.component';
@@ -27,7 +26,7 @@ import { PlayerBannerComponent } from './player-banner/player-banner.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, HighlightReelComponent, LandingBannerComponent, ShowcaseComponent, HighlightReelComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent],
   imports: [
     CommonModule,
     SharedModule,

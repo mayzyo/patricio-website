@@ -1,13 +1,49 @@
-<h1>Showcase | 作品一览</h1>
-<app-highlight-reel class="section"></app-highlight-reel>
+<h2 class="title">Showcase | 作品一览</h2>
 
-<div class="divider"></div>
-
-<ng-container *ngIf="true">
-    <h1 class="subtitle">Upcoming events | 新活动</h1>
-    <app-quick-feed></app-quick-feed>
+<ng-container *ngIf="!breakpointChanged(breakpoint$ | async)">
+    <swiper [slidesPerView]="1.5" [spaceBetween]="24" [slidesOffsetBefore]="24" [slidesOffsetAfter]="24">
+        <ng-template *ngIf="(oversizeItem$ | async) as item" swiperSlide>
+            <app-quick-player class="large" [backgroundUrl]="item.backgroundUrl$ | async">
+                <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+            </app-quick-player>
+        </ng-template>
+        <ng-template *ngIf="(largeItem$ | async) as item" swiperSlide>
+            <app-quick-player class="large" [backgroundUrl]="item.backgroundUrl$ | async">
+                <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+            </app-quick-player>
+        </ng-template>
+        <ng-template *ngFor="let item of wideItems$ | async" swiperSlide>
+            <app-quick-player class="wide" [backgroundUrl]="item.backgroundUrl$ | async">
+                <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+            </app-quick-player>
+        </ng-template>
+        <ng-template *ngFor="let item of items$ | async" swiperSlide>
+            <app-quick-player class="small" [backgroundUrl]="item.backgroundUrl$ | async">
+                <p>{{ item.title }}</p>
+            </app-quick-player>
+        </ng-template>
+    </swiper>
 </ng-container>
 
-<ng-container *ngIf="false">
-    <h1 class="subtitle">No upcoming event | 近期没有活动</h1>
-</ng-container>
+<div class="grid" *ngIf="breakpointChanged(breakpoint$ | async)">
+    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [backgroundUrl]="item.backgroundUrl$ | async">
+        <p>{{ item.title }}</p>
+        <span class="split">|</span>
+        <p class="subtitle">{{ item.subtitle | limit:40 }}</p>
+    </app-quick-player>
+    <app-quick-player class="large" *ngIf="(largeItem$ | async) as item" [backgroundUrl]="item.backgroundUrl$ | async">
+        <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+    </app-quick-player>
+    <app-quick-player class="wide" *ngFor="let item of wideItems$ | async" [backgroundUrl]="item.backgroundUrl$ | async">
+        <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
+    </app-quick-player>
+    <app-quick-player class="small" *ngFor="let item of items$ | async" [backgroundUrl]="item.backgroundUrl$ | async">
+        <p>{{ item.title }}</p>
+    </app-quick-player>
+</div>
+
+<!-- The generic item that is slotted in through ng-container. {item:item} and let-item="item" syntax is for passing template context variables -->
+<ng-template let-item="item" #defaultItem>
+    <p>{{ item.title }}</p>
+    <p class="subtitle">{{ item.subtitle | limit }}</p>
+</ng-template>

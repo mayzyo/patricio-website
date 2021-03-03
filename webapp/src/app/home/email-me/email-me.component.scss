@@ -8,11 +8,15 @@
     background-color: map-get(theme.$palettes, primary);
 }
 
+.title {
+    margin: 0;
+}
+
 .email {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 80px;
-    gap: 80px;
+    display: flex;
+    flex-direction: column;
+
+    & > * { flex: 1; }
 }
 
 .form-ctrl {
@@ -41,5 +45,14 @@
 @media (min-width: map-get(theme.$screens, laptop)) {
     :host {
         padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page-wide);
+    }
+
+    .email {
+        flex-direction: row;
+
+        & > :first-child {
+            margin-right: 80px;
+            margin-bottom: 0;
+        }
     }
 }
