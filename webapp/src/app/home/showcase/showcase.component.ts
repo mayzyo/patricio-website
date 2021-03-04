@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
 import { map, pluck, reduce, scan, share, shareReplay, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { StaticFileService } from 'src/app/core/static-file.service';
 
 
@@ -20,7 +20,9 @@ export class ShowcaseComponent implements OnInit {
   items$?: Observable<Touchable[]>;
   hover?: Touchable;
 
-  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)');
+  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
+    map(res => res.matches)
+  );
 
   constructor(private musics: MusicService, private staticFiles: StaticFileService, private breakpointObserver: BreakpointObserver) { }
 
@@ -29,10 +31,6 @@ export class ShowcaseComponent implements OnInit {
     if(this.animTrigger$) {
       this.initCollection(this.animTrigger$);
     }
-  }
-
-  breakpointChanged(state: BreakpointState | null) {
-    return state != null && state.matches;
   }
 
   private initCollection(animTrigger$: Observable<void>) {

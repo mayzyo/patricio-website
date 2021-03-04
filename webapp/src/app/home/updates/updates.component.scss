@@ -1,0 +1,88 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+.feed {
+    height: calc(100vh - 88px);
+    padding: 0 map-get(theme.$spacing, page);
+}
+
+.top-bar {
+    width: calc(50% - 17.5px);
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.history {
+    position: absolute;
+    right: 17.5px;
+    top: 0;
+    width: calc(25% - 17.5px - 74px);
+    margin: map-get(theme.$spacing, std);
+    padding: map-get(theme.$spacing, std);
+
+    border: 1px solid map-get(theme.$palettes, black);
+}
+
+app-footer {
+    position: absolute;
+    top: 0;
+    left: 17.5px;
+    width: calc(25% - 17.5px - 74px);
+    height: calc(100vh - 88px);
+    margin: 0 map-get(theme.$spacing, std);
+    padding: 0;
+
+    justify-content: space-between;
+
+    color: map-get(theme.$palettes, black);
+    background-color: transparent;
+}
+
+@media (min-width: map-get(theme.$screens, laptop)) {
+    :host {
+        position: relative;
+        display: block;
+    }
+    .title { 
+
+    }
+
+    app-post-card {
+        width: calc(50% - 48px - 17.5px);
+        margin: map-get(theme.$spacing, std) auto;
+    }
+
+    .feed {
+        padding: 0 map-get(theme.$spacing, page-wide);
+    }
+}
+
+.radio-group {
+    color: map-get(theme.$palettes, primary);
+    font-size: calc(14rem / #{map-get(theme.$text, std)});
+
+    label:first-of-type {
+        border-left: 2px solid map-get(theme.$palettes, primary);
+    }
+
+    label {
+        padding: 6px 12px;
+        border: 2px solid map-get(theme.$palettes, primary);
+        border-left: none;
+        background-color: transparent;
+    }
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        margin: 0;
+    }
+
+    input[type="radio"]:checked + label {
+        color: map-get(theme.$palettes, white);
+        background-color: map-get(theme.$palettes, primary);
+    }
+}

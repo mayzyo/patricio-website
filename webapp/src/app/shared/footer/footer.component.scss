@@ -28,7 +28,7 @@
 }
 
 .navlink.social {
-    color: map-get(theme.$palettes, white);
+    color: inherit;
 
     & > fa-icon {
         margin-right: 12px;

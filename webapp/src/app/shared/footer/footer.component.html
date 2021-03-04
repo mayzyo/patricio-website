@@ -1,6 +1,6 @@
-<section class="container">
+<section *ngIf="isActive || navigations.footer" class="container" [style.flex-direction]="isActive && 'column'">
 
-    <ul class="navlist">
+    <ul class="navlist" *ngIf="!isActive">
         <li>
             <h2 class="list-heading">Navigation</h2>
         </li>
@@ -18,7 +18,7 @@
         </li>
     </ul>
     
-    <ul class="navlist">
+    <ul class="navlist" [style.margin-bottom]="isActive && '0'">
         <li>
             <h2 class="list-heading">Social Media</h2>
         </li>
@@ -64,7 +64,7 @@
     </ul>
 </section>
 
-<section class="container">
+<section *ngIf="isActive || navigations.footer" class="container" [style.flex-direction]="isActive && 'column'">
     <p class="foot-note">©2021 Kaze Patricio Chan. All Rights Reserved.</p>
     <p class="foot-note">Web Design by Michael May</p>
 </section>

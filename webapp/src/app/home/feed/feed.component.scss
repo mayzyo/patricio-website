@@ -1,41 +1,36 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-app-post-card {
-    margin: 0 map-get(theme.$spacing, std);
+.feed {
+    height: calc(100vh - 88px);
+    padding: 0 map-get(theme.$spacing, page);
 }
 
-swiper {
-    height: 100vh;
+.top-bar {
+    width: calc(50% - 17.5px);
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
-:host {
-    position: relative;
-    display: block;
-    overflow: hidden;
-}
+@media (min-width: map-get(theme.$screens, laptop)) {
+    .title { 
 
-.background {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    margin: -5px;
- 
-    background-image: url('/assets/images/banner-1.jpg');
-    background-position: center;
-    background-size: cover;
+    }
 
-    filter: blur(4px);
+    app-post-card {
+        width: calc(50% - 48px - 17.5px);
+        margin: map-get(theme.$spacing, std) auto;
+    }
+
+    .feed {
+        padding: 0 map-get(theme.$spacing, page-wide);
+    }
 }
 
 .radio-group {
-    float: right;
-    margin-top: calc(6px + 2px + #{map-get(theme.$spacing, std)});
-    margin-right: map-get(theme.$spacing, std);
-
-    color: map-get(theme.$palettes, white);
+    color: map-get(theme.$palettes, primary);
     font-size: calc(14rem / #{map-get(theme.$text, std)});
 
     label:first-of-type {
@@ -57,6 +52,7 @@ swiper {
     }
 
     input[type="radio"]:checked + label {
+        color: map-get(theme.$palettes, white);
         background-color: map-get(theme.$palettes, primary);
     }
 }

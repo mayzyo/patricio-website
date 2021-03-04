@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { faFacebookSquare, faInstagram, faSoundcloud, faWeixin } from '@fortawesome/free-brands-svg-icons';
+import { NavigationService } from '../navigation.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,12 +8,14 @@ import { faFacebookSquare, faInstagram, faSoundcloud, faWeixin } from '@fortawes
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  faFacebookSquare = faFacebookSquare;
-  faInstagram = faInstagram;
-  faSoundcloud = faSoundcloud;
-  faWeixin = faWeixin;
+  readonly faFacebookSquare = faFacebookSquare;
+  readonly faInstagram = faInstagram;
+  readonly faSoundcloud = faSoundcloud;
+  readonly faWeixin = faWeixin;
+  
+  @Input() isActive?: boolean;
 
-  constructor() { }
+  constructor(public navigations: NavigationService) { }
 
   ngOnInit(): void {
   }

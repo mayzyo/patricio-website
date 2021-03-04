@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SwiperModule } from 'swiper/angular';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SharedModule } from '../shared/shared.module';
 
 import { HomeComponent } from './home/home.component';
@@ -23,16 +24,18 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
 import { PostCardComponent } from './post-card/post-card.component';
 import { PlayerBannerComponent } from './player-banner/player-banner.component';
+import { FeedHistoryComponent } from './feed-history/feed-history.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent],
   imports: [
     CommonModule,
     SharedModule,
     HomeRoutingModule,
     FontAwesomeModule,
-    SwiperModule
+    SwiperModule,
+    ScrollingModule
   ]
 })
 export class HomeModule { }
