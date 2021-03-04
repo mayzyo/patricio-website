@@ -11,6 +11,7 @@ export default {
      
     Fugiat consequatur quia ipsum laudantium reiciendis omnis officiis. Reiciendis et dicta hic quos. Nisi ratione ex dicta excepturi est dolore error ea nemo. Dolor quia qui corporis est atque adipisci.`,
     "homeBannerUrl": "assets/images/home-banner.jpg",
+    "discographyBannerUrl": "assets/images/banner-2.jpg",
     "emailTitleDesc": "whats it about - 信息抬头",
     "emailTitleOptions": [
         "business",

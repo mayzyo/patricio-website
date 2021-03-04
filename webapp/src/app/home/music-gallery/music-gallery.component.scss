@@ -1,5 +1,10 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+$gap: 12px;
+
 app-quick-player {
     height: 100vh;
+    margin: 0;
 }
 
 swiper {
@@ -7,6 +12,42 @@ swiper {
 }
 
 p {
+    margin: 0;
     z-index: 10;
     pointer-events: none;
+}
+
+.gallery {
+    margin: 0 map-get(theme.$spacing, page-wide);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: $gap;
+    gap: $gap;
+
+    & > app-quick-player {
+        $offset: $gap * 3 + map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar2;
+        $margin-borders: map-get(theme.$spacing, std) * 2 + (1px * 2);
+        height: calc((100vw - #{$offset}) / 4 - #{$margin-borders});
+    }
+}
+
+@media (min-width: map-get(theme.$screens, laptop)) {
+    :host {
+        position: relative;
+        padding: map-get(theme.$spacing, page-wide) 0;
+
+        display: block;
+    }
+
+    .title { 
+        margin: 0 map-get(theme.$spacing, page-wide);
+        margin-bottom: map-get(theme.$spacing, std);
+        color: map-get(theme.$palettes, white);
+    }
+
+    .background {
+        height: 80vh;
+        background: linear-gradient(transparent 0%, white 75%), var(--bg);
+    }
 }

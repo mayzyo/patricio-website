@@ -1,7 +1,19 @@
-<swiper [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true">
+<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true">
     <ng-template *ngFor="let item of musics.get$ | async" swiperSlide>
-        <app-quick-player  [backgroundUrl]="'assets/images/banner-1.jpg'">
+        <app-quick-player  [backgroundUrl]="item.coverImage$ | async">
             <p>{{ item.title }}</p>
         </app-quick-player>
     </ng-template>
 </swiper>
+
+<ng-container *ngIf="breakpoint$ | async">
+    <h1 class="title">Composed by Me | 我的作品</h1>
+
+    <div class="gallery">
+        <app-quick-player *ngFor="let item of musics.get$ | async" [backgroundUrl]="item.coverImage$ | async">
+            <p>{{ item.title }}</p>
+        </app-quick-player>
+    </div>
+    
+    <div class="background blur" [style]="backgroundUrl"></div>
+</ng-container>

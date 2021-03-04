@@ -28,7 +28,7 @@ export class MockDataInterceptor implements HttpInterceptor {
                 } else if(request.url.startsWith(environment.media)) {
                     if(request.method == 'GET') {
                         return this.http.get(
-                            'http://125.49.75.2:30039/generated/400x400', 
+                            'http://125.49.75.2:30039/generated/400x600', 
                             { observe: 'response', responseType: 'blob' }
                         );
                     }
