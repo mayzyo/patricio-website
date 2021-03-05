@@ -27,8 +27,10 @@ export class MockDataInterceptor implements HttpInterceptor {
                     }
                 } else if(request.url.startsWith(environment.media)) {
                     if(request.method == 'GET') {
+                        const sizes = ['1080x1080', '1280x720', '600x400', '400x600', '768x1024', '1024x680'];
                         return this.http.get(
-                            'http://125.49.75.2:30039/generated/400x600', 
+                            `http://localhost:5004/generated/${sizes[Math.floor(Math.random() * 6)]}`,
+                            // `http://125.49.75.2:30039/generated/${sizes[Math.floor(Math.random() * 6)]}`,
                             { observe: 'response', responseType: 'blob' }
                         );
                     }
