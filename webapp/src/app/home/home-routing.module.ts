@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DiscographyComponent } from './discography/discography.component';
 import { HomeComponent } from './home/home.component';
 import { MediaComponent } from './media/media.component';
+import { MusicComponent } from './music/music.component';
 import { UpdatesComponent } from './updates/updates.component';
 
 
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'updates', component: UpdatesComponent },
   { path: 'discography', component: DiscographyComponent },
   { path: 'media', component: MediaComponent },
+  { path: 'music/:id', component: MusicComponent },
   { path: '',   redirectTo: '/home', pathMatch: 'full' }
 ];
 

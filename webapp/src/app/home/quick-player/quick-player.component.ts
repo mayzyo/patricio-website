@@ -6,7 +6,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./quick-player.component.scss']
 })
 export class QuickPlayerComponent implements OnInit {
-
   @Input() backgroundUrl: string | null = '';
 
   constructor() { }

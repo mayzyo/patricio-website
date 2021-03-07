@@ -1,4 +1,13 @@
-<h1>quibusdam laborum quidem 中文名</h1>
-<time class="date" datet="2020-10-15">2020-10-15</time>
+<article class="player" *ngIf="(song$ | async) as song">
+    <section>
+        <h1>{{ song.title }}</h1>
+        <time class="date" [dateTime]="song.created">{{ song.created | date }}</time>
+    </section>
 
-<audio src="assets/mp3.mp3" controls></audio>
+
+    <audio src="assets/mp3.mp3" controls></audio>
+
+    <div *ngIf="(song.coverImage$ | async) as coverImage" class="background" [style.background-image]="'url(' + coverImage + ')'"></div>
+</article>
+
+<div class="background blur" [style]="backgroundUrl"></div>

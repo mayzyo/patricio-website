@@ -35,6 +35,7 @@ p {
 @media (min-width: map-get(theme.$screens, laptop)) {
     :host {
         position: relative;
+        min-height: 100vh;
         padding: map-get(theme.$spacing, page-wide) 0;
 
         display: block;

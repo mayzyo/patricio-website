@@ -11,11 +11,17 @@ import { Song } from './models';
 })
 export class MusicService {
   highlights$: Observable<Song[]> = this.http.get<Song[]>(`${environment.backend}/Songs`);
-  get$: Observable<Array<Song & { coverImage$: any }>> = this.http.get<Song[]>(`${environment.backend}/Songs`).pipe(
+  list$: Observable<Array<Song & { coverImage$: any }>> = this.http.get<Song[]>(`${environment.backend}/Songs`).pipe(
     map(res => res.map(el => ({ ...el, coverImage$: this.staticFiles.get('abc') }))),
     shareReplay()
   );
 
   constructor(private http: HttpClient, private staticFiles: StaticFileService) {
+  }
+
+  get$(id: string) {
+    return this.http.get<Song & { coverImage$: any }>(`${environment.backend}/Songs/${id}`).pipe(
+      map(res => ({ ...res, coverImage$: this.staticFiles.get('abc') })),
+    );
   }
 }

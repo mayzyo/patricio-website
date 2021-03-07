@@ -1,2 +1,2 @@
 <ng-content></ng-content>
-<div *ngIf="backgroundUrl" class="background blur" [style.background-image]="'url(' + backgroundUrl + ')'"></div>
+<a *ngIf="backgroundUrl" class="background blur" [routerLink]="['/music', 'abcd']" [style.background-image]="'url(' + backgroundUrl + ')'"></a>

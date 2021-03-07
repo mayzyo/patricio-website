@@ -19,10 +19,12 @@ export class MockDataInterceptor implements HttpInterceptor {
 
                 if(request.url.startsWith(environment.backend)) {
                     if(request.method == 'GET') {
-                        const path = request.url
+                        var path = request.url
                             .substring(environment.backend.length, request.url.length)
                             .split('?')[0];
 
+                        const subRoutes = path.split('/');
+                        path = subRoutes.length > 2 == true ? `/${subRoutes[1]}/{id}` : path;
                         return of(new HttpResponse({ status: 200, body: this.generate(path) }));
                     }
                 } else if(request.url.startsWith(environment.media)) {
@@ -45,8 +47,8 @@ export class MockDataInterceptor implements HttpInterceptor {
 
     private generate(path: string) {
         var schema: any = openapi["paths"][path]["get"]["responses"][200]["content"]["text/plain"]["schema"];
-        var comp: string[] = schema["items"]["$ref"].split('/');
         var isArray = schema["type"] == 'array';
+        let comp: string[] = isArray ? schema["items"]["$ref"].split('/') : schema["$ref"].split('/');
         var model = openapi["components"]["schemas"][comp[comp.length - 1]]["properties"];
 
         var data = "";

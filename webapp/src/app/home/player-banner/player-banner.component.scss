@@ -1,11 +1,18 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 :host {
-    position: relative;
+    padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
+}
+
+.player {
     height: 100vh;
+    position: relative;
+    margin: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
+    padding: 14px;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 h1,time {
@@ -15,10 +22,21 @@ h1,time {
     background-color: map-get(theme.$palettes, black);
 }
 
-audio {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
+audio { width: 100%; }
+
+@media (min-width: map-get(theme.$screens, laptop)) {
+    :host {
+        display: block;
+        padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page-wide);
+
+        & > .background {
+            height: 80vh;
+            z-index: -2;
+            background: linear-gradient(transparent 0%, white 75%), var(--bg);
+        }
+    }
+    
+    .player {
+        height: 500px;
+    }
 }
