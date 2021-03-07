@@ -17,7 +17,6 @@ import { EmailMeComponent } from './email-me/email-me.component';
 import { QuickFeedComponent } from './quick-feed/quick-feed.component';
 import { FeedComponent } from './feed/feed.component';
 import { MusicGalleryComponent } from './music-gallery/music-gallery.component';
-import { MediaGalleryComponent } from './media-gallery/media-gallery.component';
 import { MusicComponent } from './music/music.component';
 import { LegalComponent } from './legal/legal.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
@@ -28,7 +27,7 @@ import { FeedHistoryComponent } from './feed-history/feed-history.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MediaGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent],
   imports: [
     CommonModule,
     SharedModule,

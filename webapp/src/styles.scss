@@ -7,6 +7,7 @@
 @use "src/assets/scss/divider.scss";
 @use "src/assets/scss/background.scss";
 @use '~swiper/swiper-bundle';
+@import '~@angular/cdk/overlay-prebuilt.css';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

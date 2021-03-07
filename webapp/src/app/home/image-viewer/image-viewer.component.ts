@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { MediaService } from '../media.service';
 
 @Component({
   selector: 'app-image-viewer',
@@ -6,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./image-viewer.component.scss']
 })
 export class ImageViewerComponent implements OnInit {
+  @Output() closePanel = new EventEmitter();
 
-  constructor() { }
+  constructor(public media: MediaService) { }
 
   ngOnInit(): void {
   }

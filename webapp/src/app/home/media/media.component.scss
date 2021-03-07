@@ -1,8 +1,11 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
+button { padding: 0; }
+
 :host {
-    display: block;
+    min-height: 100vh;
     margin: map-get(theme.$spacing, std) map-get(theme.$spacing, page);
+    display: block;
 }
 
 .title { display: none; }

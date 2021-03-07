@@ -13,6 +13,8 @@
 
 <section class="gallery">
     <div class="gallery-column" *ngFor="let group of (media.get$ | async | group:(breakpoint$ | async) ? 4 : 2)">
-        <img class="gallery-item" *ngFor="let item of group" [src]="item.coverImage$ | async" />
+        <button *ngFor="let item of group" (click)="openViewer(item)">
+            <img class="gallery-item" [src]="item.coverImage$ | async" />
+        </button>
     </div>
 </section>

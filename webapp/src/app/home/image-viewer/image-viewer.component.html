@@ -1,1 +1,4 @@
-<p>image-viewer works!</p>
+<ng-container *ngIf="(media.current$ | async) as current">
+    <img class="viewer" [src]="current.coverImage$ | async" height="80%" width="80%" />
+    <time [dateTime]="current.created">{{ current.created | date }}</time>
+</ng-container>

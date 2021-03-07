@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +21,8 @@ import { MockDataProvider } from './core/mock-data.interceptor';
     TransferHttpCacheModule,
     HttpClientModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    OverlayModule
   ],
   providers: [MockDataProvider],
   bootstrap: [AppComponent]
