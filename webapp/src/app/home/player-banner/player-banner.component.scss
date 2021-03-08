@@ -1,21 +1,18 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-:host {
-    padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
-}
-
 .player {
     height: 100vh;
     position: relative;
-    margin: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
     padding: 14px;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    .subtitle { float: right; }
 }
 
-h1,time {
+h1, time {
     padding: 14px;
 
     color: map-get(theme.$palettes, white);
@@ -26,8 +23,9 @@ audio { width: 100%; }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
     :host {
+        height: 100vh;
         display: block;
-        padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page-wide);
+        padding: map-get(theme.$spacing, page-wide);
 
         & > .background {
             height: 80vh;
@@ -38,5 +36,7 @@ audio { width: 100%; }
     
     .player {
         height: 500px;
+
+        .title { display: inline-block; }
     }
 }

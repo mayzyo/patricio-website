@@ -1,4 +1,4 @@
-import { Component, HostBinding, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FamousQuoteService } from '../famous-quote.service';
 import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons';
 import { transition, trigger, useAnimation } from '@angular/animations';
@@ -19,7 +19,9 @@ import { isPlatformBrowser } from '@angular/common';
   styleUrls: ['./landing-banner.component.scss']
 })
 export class LandingBannerComponent implements OnInit {
-  faAngleDoubleDown = faAngleDoubleDown;
+  readonly faAngleDoubleDown = faAngleDoubleDown;
+  readonly backgroundUrl: string = `--bg: url(${metaData.homeBannerUrl})`;
+
   quote = this.famousQuotes.random();
   cueActive$: Observable<boolean> = interval(5000)
     .pipe(
@@ -27,16 +29,10 @@ export class LandingBannerComponent implements OnInit {
       takeWhile(() => isPlatformBrowser(this.platformId))
     );
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private famousQuotes: FamousQuoteService
-  ) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, public famousQuotes: FamousQuoteService) { }
 
   ngOnInit(): void {
   }
-
-  @HostBinding('style')
-  style: string = `--bg: url(${metaData.homeBannerUrl})`;
 
   scrollDown() {
     window.scroll({

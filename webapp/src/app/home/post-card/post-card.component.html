@@ -1,5 +1,5 @@
 <section class="title">
-    <img src="assets/images/banner-1.jpg" width="60px" height="60px" />
+    <img *ngIf="(datasource.thumbnail$ | async) as thumbnail" [src]="thumbnail" width="60px" height="60px" />
     <div class="text">
         <h2>{{ datasource.title | limit:20 }}</h2>
         <time class="date" [dateTime]="datasource.created">{{ datasource.created | date:'fullDate' }}</time>
@@ -8,4 +8,6 @@
 
 <p *ngIf="datasource.content">{{ datasource.content }}</p>
 
-<img *ngIf="datasource.content" src="assets/images/banner-1.jpg" width="100%" />
+<div class="gallery" *ngIf="datasource.gallery">
+    <img *ngFor="let media of datasource.gallery.media" [src]="media.url$ | async" width="100%" />
+</div>

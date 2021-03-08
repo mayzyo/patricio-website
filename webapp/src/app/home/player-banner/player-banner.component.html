@@ -1,7 +1,9 @@
-<article class="player" *ngIf="(song$ | async) as song">
+<article *ngIf="(song$ | async) as song" class="player">
     <section>
-        <h1>{{ song.title }}</h1>
-        <time class="date" [dateTime]="song.created">{{ song.created | date }}</time>
+        <div>
+            <h1 class="title">{{ song.title }}</h1>
+        </div>
+        <time class="subtitle" [dateTime]="song.created">{{ song.created | date }}</time>
     </section>
 
 

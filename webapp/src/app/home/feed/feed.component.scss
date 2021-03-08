@@ -1,58 +1,46 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-.feed {
-    height: calc(100vh - 88px);
-    padding: 0 map-get(theme.$spacing, page);
+app-post-card {
+    margin: map-get(theme.$spacing, std) map-get(theme.$spacing, page);
 }
 
-.top-bar {
-    width: calc(50% - 17.5px);
-    margin: auto;
+.tool-bar {
+    width: 100%;
+    margin: 0 map-get(theme.$spacing, page);
 
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    .title {
+        display: none;
+    }
+
+    .radio-group {
+        display: flex;
+    
+        label { flex: 1; text-align: center; }
+    }
+}
+
+.feed {
+    height: calc(100vh - 88px);
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
-    .title { 
-
-    }
-
     app-post-card {
         width: calc(50% - 48px - 17.5px);
         margin: map-get(theme.$spacing, std) auto;
     }
 
-    .feed {
-        padding: 0 map-get(theme.$spacing, page-wide);
-    }
-}
+    .tool-bar {
+        width: calc(50% - 17.5px);
+        margin: auto;
+    
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-.radio-group {
-    color: map-get(theme.$palettes, primary);
-    font-size: calc(14rem / #{map-get(theme.$text, std)});
+        .title { display: block; }
 
-    label:first-of-type {
-        border-left: 2px solid map-get(theme.$palettes, primary);
-    }
-
-    label {
-        padding: 6px 12px;
-        border: 2px solid map-get(theme.$palettes, primary);
-        border-left: none;
-        background-color: transparent;
-    }
-
-    input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-        margin: 0;
-    }
-
-    input[type="radio"]:checked + label {
-        color: map-get(theme.$palettes, white);
-        background-color: map-get(theme.$palettes, primary);
+        .radio-group {
+            label { flex: 0; }
+        }
     }
 }

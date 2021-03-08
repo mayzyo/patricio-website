@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { MockDataProvider } from './core/mock-data.interceptor';
+import { MockModelProvider } from './core/mock-model.interceptor';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { MockDataProvider } from './core/mock-data.interceptor';
     SharedModule,
     OverlayModule
   ],
-  providers: [MockDataProvider],
+  providers: [MockDataProvider, MockModelProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

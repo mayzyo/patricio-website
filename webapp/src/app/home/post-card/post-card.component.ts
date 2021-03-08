@@ -7,7 +7,7 @@ import { Post } from '../models';
   styleUrls: ['./post-card.component.scss']
 })
 export class PostCardComponent implements OnInit {
-  @Input() datasource: Partial<Post> = {};
+  @Input() datasource!: Partial<Post>;
 
   constructor() { }
 

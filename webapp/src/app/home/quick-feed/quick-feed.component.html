@@ -2,6 +2,6 @@
 
 <ol>
     <li *ngFor="let item of socials.latest$ | async">
-        <app-post-card [datasource]="simplify(item)"></app-post-card>
+        <app-post-card [datasource]="item"></app-post-card>
     </li>
 </ol>

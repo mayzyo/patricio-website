@@ -1,43 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map, mergeMap } from 'rxjs/operators';
 import * as faker from 'faker';
 import { environment } from 'src/environments/environment';
-declare var require: any;
-
-const openapi = require('/../openapi.json');
-
+import { Post } from '../home/models';
+import { paths } from '../shared/backend.api';
 @Injectable()
 export class MockDataInterceptor implements HttpInterceptor {
-    constructor(private http: HttpClient) { }
+    constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(
             mergeMap(() => {
-
                 if(request.url.startsWith(environment.backend)) {
-                    if(request.method == 'GET') {
-                        var path = request.url
-                            .substring(environment.backend.length, request.url.length)
-                            .split('?')[0];
-
-                        const subRoutes = path.split('/');
-                        path = subRoutes.length > 2 == true ? `/${subRoutes[1]}/{id}` : path;
-                        return of(new HttpResponse({ status: 200, body: this.generate(path) }));
-                    }
-                } else if(request.url.startsWith(environment.media)) {
-                    if(request.method == 'GET') {
-                        const sizes = ['1080x1080', '1280x720', '600x400', '400x600', '768x1024', '1024x680'];
-                        return this.http.get(
-                            `http://localhost:5004/generated/${sizes[Math.floor(Math.random() * 6)]}`,
-                            // `http://125.49.75.2:30039/generated/${sizes[Math.floor(Math.random() * 6)]}`,
-                            { observe: 'response', responseType: 'blob' }
-                        );
-                    }
+                    const body = this.routes(request);
+                    return body
+                        ? of(
+                            new HttpResponse({ 
+                                status: 200, 
+                                body: body
+                            })
+                        ) 
+                        : next.handle(request);
                 }
-
                 // pass through any requests not handled above
                 return next.handle(request);
             }),
@@ -45,43 +32,46 @@ export class MockDataInterceptor implements HttpInterceptor {
         );
     }
 
-    private generate(path: string) {
-        var schema: any = openapi["paths"][path]["get"]["responses"][200]["content"]["text/plain"]["schema"];
-        var isArray = schema["type"] == 'array';
-        let comp: string[] = isArray ? schema["items"]["$ref"].split('/') : schema["$ref"].split('/');
-        var model = openapi["components"]["schemas"][comp[comp.length - 1]]["properties"];
+    private routes(request: HttpRequest<any>) {
+        var path = request.url
+            .substring(environment.backend.length, request.url.length)
+            .split('?')[0];
 
-        var data = "";
-        for (var propertyName in model) {
-            data = data.concat(`"${propertyName}": "${this.buildModel(propertyName, model[propertyName])}",`);
+        switch(path) {
+            case '/Quotes':
+                return this.quotes(request);
+            case '/Posts':
+                return this.posts(request);
+            default:
+                return null;
+            
         }
-        data = `{ ${data.substring(0, data.length - 1)} }`;
-
-        if (isArray) {
-            var array = '';
-            for (let i = 0; i < 10; i++) {
-                array = array.concat(data, ',');
-            }
-            data = `[ ${array.substring(0, array.length - 1)} ]`;
-        }
-
-        return JSON.parse(faker.fake(data));
     }
 
-    private buildModel(name: string, obj: { type: string, format: string }) {
-        if (name == "id")
-            return "{{random.uuid}}";
-        switch (obj.type) {
-            case "string":
-                return obj.format == "date-time"
-                    ? "{{date.recent}}"
-                    : "{{lorem.sentence}}";
-            case "integer":
-                return "{{random.number}}";
-            case "boolean":
-                return "{{random.boolean}}";
-            default:
-                return "N/A";
+    private quotes(request: HttpRequest<any>) {
+        if(request.method == 'GET') {
+            return {
+                author: faker.name.findName(),
+                message: faker.lorem.sentence()
+            };
+        } else {
+            throw Error('Not Implemented');
+        }
+    }
+
+    private posts(request: HttpRequest<any>): paths["/Posts"]["get"]["responses"][200]["text/plain"] {
+        if(request.method == 'GET') {
+            return Array.from({ length: 10 }).map((_, i) => ({
+                id: i,
+                title: faker.lorem.sentence(),
+                content: Math.random() > .5 ? faker.lorem.paragraph() : undefined,
+                created: faker.date.past().toString(),
+                gallery: { media: Array.from({ length: 1 + Math.floor(Math.random() * 8) }).map(() => ({
+                        url: 'image-url', type: 0, isVisible: false
+                    })) } 
+            }));
+        } else {
+            throw Error('Not Implemented');
         }
     }
 }

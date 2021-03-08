@@ -1,15 +1,15 @@
 <cdk-virtual-scroll-viewport class="feed" itemSize="10">
-    <div class="top-bar">
+    <div class="tool-bar">
         <h1 class="title">近期动态 Recent Announcements</h1>
         <article class="radio-group" role="group">
-            <input type="radio" name="btnradio" id="btnradio1" checked>
-            <label for="btnradio1">All</label>
+            <input type="radio" name="btnradio" id="all" checked>
+            <label for="all">All</label>
             
-            <input type="radio" name="btnradio" id="btnradio2">
-            <label for="btnradio2">Events</label>
+            <input type="radio" name="btnradio" id="events">
+            <label for="events">Events</label>
             
-            <input type="radio" name="btnradio" id="btnradio3">
-            <label for="btnradio3">Posts</label>
+            <input type="radio" name="btnradio" id="posts">
+            <label for="posts">Posts</label>
         </article>
     </div>
     <app-post-card *cdkVirtualFor="let post of socials.posts$ | async" [datasource]="post"></app-post-card>
