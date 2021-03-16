@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APIServer.Areas.Content.Models
+namespace APIServer.Areas.Metric.Models
 {
-    public class Gallery
+    public class User
     {
         public int Id { get; set; }
-        [Required]
-        public ICollection<Media> Media { get; set; }
     }
 }

@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APIServer.Areas.Admin.Models
+namespace APIServer.Areas.Metric.Models
 {
-    public class Email : BaseEntity
+    public class Email
     {
         public int Id { get; set; }
         [Required]

@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class MediaController : ControllerBase
     {
-        private readonly ContentContext context;
+        private readonly Data.ContentContext context;
 
-        public MediaController(ContentContext context)
+        public MediaController(Data.ContentContext context)
         {
             this.context = context;
         }
@@ -36,7 +36,10 @@ namespace APIServer.Areas.Content.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Media>> GetMedia(int id)
         {
-            var media = await context.PatricioPersonalMedia.FindAsync(id);
+            var media = await context.PatricioPersonalMedia
+                .Include(el => el.Post)
+                .Include(el => el.Article)
+                .FirstOrDefaultAsync(el => el.Id == id);
 
             if (media == null)
             {
@@ -75,17 +78,6 @@ namespace APIServer.Areas.Content.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: /Media
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Media>> PostMedia(Media media)
-        {
-            context.PatricioPersonalMedia.Add(media);
-            await context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMedia", new { id = media.Id }, media);
         }
 
         // DELETE: /Media/5

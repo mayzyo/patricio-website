@@ -30,22 +30,11 @@ namespace APIServer.Areas.Content.Controllers
                 .Skip((page - 1) * size)
                 .Take(size)
                 .ToListAsync();
-            //return await _context.PatricioPersonalSongs.ToListAsync();
-        }
-
-        // GET: /Songs/Highlights
-        [HttpGet("Highlights")]
-        public async Task<ActionResult<IEnumerable<Song>>> GetHighlights()
-        {
-            return await context
-                .PatricioPersonalSongs
-                .Where(el => el.IsHighlight)
-                .ToListAsync();
         }
 
         // GET: /Songs/Genre/Classical
         [HttpGet("Genre/{option}")]
-        public async Task<ActionResult<IEnumerable<Song>>> GetSongsWithGenre(string option, int page = 1, int size = 10)
+        public async Task<ActionResult<IEnumerable<Song>>> GetGenreSongs(string option, int page = 1, int size = 10)
         {
             return await context
                 .PatricioPersonalSongs
@@ -62,9 +51,10 @@ namespace APIServer.Areas.Content.Controllers
         {
             var song = await context.PatricioPersonalSongs
                 .Include(el => el.Album)
-                .Include(el => el.Audio)
+                .Include(el => el.TopSong)
+                .Include(el => el.Article)
                 .FirstOrDefaultAsync(el => el.Id == id);
-                            
+
             if (song == default(Song))
             {
                 return NotFound();
@@ -83,6 +73,7 @@ namespace APIServer.Areas.Content.Controllers
                 return BadRequest();
             }
 
+            song.Album = await context.PatricioPersonalAlbums.FindAsync(song.Album.Id);
             context.Entry(song).State = EntityState.Modified;
 
             try
@@ -109,6 +100,16 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Song>> PostSong(Song song)
         {
+            if (song.Album.Id != 0)
+            {
+                song.Album = await context.PatricioPersonalAlbums.FindAsync(song.Album.Id);
+            }
+
+            if (song.Article != null && song.Article.Id != 0)
+            {
+                song.Article = await context.PatricioPersonalArticles.FindAsync(song.Article.Id);
+            }
+
             context.PatricioPersonalSongs.Add(song);
             await context.SaveChangesAsync();
 

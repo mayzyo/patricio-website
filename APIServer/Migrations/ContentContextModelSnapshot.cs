@@ -15,24 +15,25 @@ namespace APIServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Album", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CoverImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("CoverImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModified")
@@ -44,8 +45,6 @@ namespace APIServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoverImageId");
-
                     b.ToTable("PatricioPersonalAlbums");
                 });
 
@@ -54,7 +53,7 @@ namespace APIServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -66,29 +65,13 @@ namespace APIServer.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SongId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SongId");
-
                     b.ToTable("PatricioPersonalArticles");
-                });
-
-            modelBuilder.Entity("APIServer.Areas.Content.Models.Gallery", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PatricioPersonalGallery");
                 });
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Media", b =>
@@ -96,16 +79,19 @@ namespace APIServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ArticleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsVisible")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -116,6 +102,10 @@ namespace APIServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("PostId");
+
                     b.ToTable("PatricioPersonalMedia");
                 });
 
@@ -124,16 +114,13 @@ namespace APIServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("GalleryId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -147,8 +134,6 @@ namespace APIServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GalleryId");
-
                     b.ToTable("PatricioPersonalPosts");
                 });
 
@@ -157,22 +142,23 @@ namespace APIServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AlbumId")
+                    b.Property<int>("AlbumId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AudioId")
+                    b.Property<int?>("ArticleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Audio")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsHighlight")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -188,86 +174,103 @@ namespace APIServer.Migrations
 
                     b.HasIndex("AlbumId");
 
-                    b.HasIndex("AudioId");
+                    b.HasIndex("ArticleId")
+                        .IsUnique()
+                        .HasFilter("[ArticleId] IS NOT NULL");
 
                     b.ToTable("PatricioPersonalSongs");
                 });
 
-            modelBuilder.Entity("GalleryMedia", b =>
+            modelBuilder.Entity("APIServer.Areas.Content.Models.TopSong", b =>
                 {
-                    b.Property<int>("GalleryId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Rank")
                         .HasColumnType("int");
 
-                    b.Property<int>("MediaId")
+                    b.Property<int>("SongId")
                         .HasColumnType("int");
 
-                    b.HasKey("GalleryId", "MediaId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("MediaId");
+                    b.HasIndex("SongId")
+                        .IsUnique();
 
-                    b.ToTable("GalleryMedia");
+                    b.ToTable("PatricioPersonalTopSongs");
                 });
 
-            modelBuilder.Entity("APIServer.Areas.Content.Models.Album", b =>
+            modelBuilder.Entity("APIServer.Areas.Content.Models.Media", b =>
                 {
-                    b.HasOne("APIServer.Areas.Content.Models.Media", "CoverImage")
-                        .WithMany()
-                        .HasForeignKey("CoverImageId");
+                    b.HasOne("APIServer.Areas.Content.Models.Article", "Article")
+                        .WithMany("Gallery")
+                        .HasForeignKey("ArticleId");
 
-                    b.Navigation("CoverImage");
-                });
+                    b.HasOne("APIServer.Areas.Content.Models.Post", "Post")
+                        .WithMany("Gallery")
+                        .HasForeignKey("PostId");
 
-            modelBuilder.Entity("APIServer.Areas.Content.Models.Article", b =>
-                {
-                    b.HasOne("APIServer.Areas.Content.Models.Song", "Song")
-                        .WithMany()
-                        .HasForeignKey("SongId");
+                    b.Navigation("Article");
 
-                    b.Navigation("Song");
-                });
-
-            modelBuilder.Entity("APIServer.Areas.Content.Models.Post", b =>
-                {
-                    b.HasOne("APIServer.Areas.Content.Models.Gallery", "Gallery")
-                        .WithMany()
-                        .HasForeignKey("GalleryId");
-
-                    b.Navigation("Gallery");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Song", b =>
                 {
                     b.HasOne("APIServer.Areas.Content.Models.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumId");
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("APIServer.Areas.Content.Models.Media", "Audio")
-                        .WithMany()
-                        .HasForeignKey("AudioId");
+                    b.HasOne("APIServer.Areas.Content.Models.Article", "Article")
+                        .WithOne("Song")
+                        .HasForeignKey("APIServer.Areas.Content.Models.Song", "ArticleId");
 
                     b.Navigation("Album");
 
-                    b.Navigation("Audio");
+                    b.Navigation("Article");
                 });
 
-            modelBuilder.Entity("GalleryMedia", b =>
+            modelBuilder.Entity("APIServer.Areas.Content.Models.TopSong", b =>
                 {
-                    b.HasOne("APIServer.Areas.Content.Models.Gallery", null)
-                        .WithMany()
-                        .HasForeignKey("GalleryId")
+                    b.HasOne("APIServer.Areas.Content.Models.Song", "Song")
+                        .WithOne("TopSong")
+                        .HasForeignKey("APIServer.Areas.Content.Models.TopSong", "SongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("APIServer.Areas.Content.Models.Media", null)
-                        .WithMany()
-                        .HasForeignKey("MediaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Song");
                 });
 
             modelBuilder.Entity("APIServer.Areas.Content.Models.Album", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("APIServer.Areas.Content.Models.Article", b =>
+                {
+                    b.Navigation("Gallery");
+
+                    b.Navigation("Song");
+                });
+
+            modelBuilder.Entity("APIServer.Areas.Content.Models.Post", b =>
+                {
+                    b.Navigation("Gallery");
+                });
+
+            modelBuilder.Entity("APIServer.Areas.Content.Models.Song", b =>
+                {
+                    b.Navigation("TopSong");
                 });
 #pragma warning restore 612, 618
         }

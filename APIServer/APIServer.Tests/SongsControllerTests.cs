@@ -29,8 +29,7 @@ namespace APIServer.Tests
                     new Song()
                     {
                         Id = 1,
-                        Title = "Song1",
-                        IsHighlight = true
+                        Title = "Song1"
                     }
                 );
                 context.SaveChanges();

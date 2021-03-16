@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace APIServer.Migrations
 {
-    public partial class CreateContentDB : Migration
+    public partial class AddContentDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +14,30 @@ namespace APIServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PatricioPersonalAlbums", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PatricioPersonalArticles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PatricioPersonalArticles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -26,10 +46,11 @@ namespace APIServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Heading = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsEvent = table.Column<bool>(type: "bit", nullable: false),
-                    EventUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,11 +63,14 @@ namespace APIServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AlbumId = table.Column<int>(type: "int", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SoundCloud = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsHighlight = table.Column<bool>(type: "bit", nullable: false)
+                    Audio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    ArticleId = table.Column<int>(type: "int", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,26 +80,11 @@ namespace APIServer.Migrations
                         column: x => x.AlbumId,
                         principalTable: "PatricioPersonalAlbums",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PatricioPersonalArticles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SongId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PatricioPersonalArticles", x => x.Id);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PatricioPersonalArticles_PatricioPersonalSongs_SongId",
-                        column: x => x.SongId,
-                        principalTable: "PatricioPersonalSongs",
+                        name: "FK_PatricioPersonalSongs_PatricioPersonalArticles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "PatricioPersonalArticles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -86,24 +95,16 @@ namespace APIServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Preview = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    IsVisible = table.Column<bool>(type: "bit", nullable: false),
-                    SongId = table.Column<int>(type: "int", nullable: true),
                     PostId = table.Column<int>(type: "int", nullable: true),
                     ArticleId = table.Column<int>(type: "int", nullable: true),
-                    AlbumId = table.Column<int>(type: "int", nullable: true)
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PatricioPersonalMedia", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PatricioPersonalMedia_PatricioPersonalAlbums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "PatricioPersonalAlbums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PatricioPersonalMedia_PatricioPersonalArticles_ArticleId",
                         column: x => x.ArticleId,
@@ -116,23 +117,29 @@ namespace APIServer.Migrations
                         principalTable: "PatricioPersonalPosts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PatricioPersonalTopSongs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Rank = table.Column<int>(type: "int", nullable: true),
+                    SongId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PatricioPersonalTopSongs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PatricioPersonalMedia_PatricioPersonalSongs_SongId",
+                        name: "FK_PatricioPersonalTopSongs_PatricioPersonalSongs_SongId",
                         column: x => x.SongId,
                         principalTable: "PatricioPersonalSongs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatricioPersonalArticles_SongId",
-                table: "PatricioPersonalArticles",
-                column: "SongId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatricioPersonalMedia_AlbumId",
-                table: "PatricioPersonalMedia",
-                column: "AlbumId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PatricioPersonalMedia_ArticleId",
@@ -145,14 +152,22 @@ namespace APIServer.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatricioPersonalMedia_SongId",
-                table: "PatricioPersonalMedia",
-                column: "SongId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PatricioPersonalSongs_AlbumId",
                 table: "PatricioPersonalSongs",
                 column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatricioPersonalSongs_ArticleId",
+                table: "PatricioPersonalSongs",
+                column: "ArticleId",
+                unique: true,
+                filter: "[ArticleId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatricioPersonalTopSongs_SongId",
+                table: "PatricioPersonalTopSongs",
+                column: "SongId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -161,7 +176,7 @@ namespace APIServer.Migrations
                 name: "PatricioPersonalMedia");
 
             migrationBuilder.DropTable(
-                name: "PatricioPersonalArticles");
+                name: "PatricioPersonalTopSongs");
 
             migrationBuilder.DropTable(
                 name: "PatricioPersonalPosts");
@@ -171,6 +186,9 @@ namespace APIServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "PatricioPersonalAlbums");
+
+            migrationBuilder.DropTable(
+                name: "PatricioPersonalArticles");
         }
     }
 }

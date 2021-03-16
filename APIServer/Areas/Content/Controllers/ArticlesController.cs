@@ -32,7 +32,10 @@ namespace APIServer.Areas.Content.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)
         {
-            var article = await context.PatricioPersonalArticles.FindAsync(id);
+            var article = await context.PatricioPersonalArticles
+                .Include(el => el.Gallery)
+                .Include(el => el.Song)
+                .FirstOrDefaultAsync(el => el.Id == id);
 
             if (article == null)
             {
@@ -78,6 +81,17 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
         {
+            if(article.Song != null)
+            {
+                if(article.Song.Id != 0)
+                {
+                    article.Song = await context.PatricioPersonalSongs.FindAsync(article.Song.Id);
+                } else
+                {
+                    return BadRequest("Cannot create new song from article creation.");
+                }
+            }
+
             context.PatricioPersonalArticles.Add(article);
             await context.SaveChangesAsync();
 
@@ -88,10 +102,28 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArticle(int id)
         {
-            var article = await context.PatricioPersonalArticles.FindAsync(id);
+            var article = await context.PatricioPersonalArticles
+                .Include(el => el.Gallery)
+                .Include(el => el.Song)
+                .FirstOrDefaultAsync(el => el.Id == id);
+
             if (article == null)
             {
                 return NotFound();
+            }
+
+            if (article.Gallery != null)
+            {
+                foreach (var media in article.Gallery)
+                {
+                    context.PatricioPersonalMedia.Remove(media);
+                }
+            }
+
+            if(article.Song != null)
+            {
+                article.Song.Article = null;
+                context.Entry(article.Song).State = EntityState.Modified;
             }
 
             context.PatricioPersonalArticles.Remove(article);

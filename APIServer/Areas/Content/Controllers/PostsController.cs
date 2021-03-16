@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ContentContext context;
+        private readonly Data.ContentContext context;
 
-        public PostsController(ContentContext context)
+        public PostsController(Data.ContentContext context)
         {
             this.context = context;
         }
@@ -26,15 +26,29 @@ namespace APIServer.Areas.Content.Controllers
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts(int page = 1, int size = 10)
         {
             return await context.PatricioPersonalPosts
+                .Include(el => el.Gallery)
                 .OrderByDescending(el => el.Created)
                 .Skip((page - 1) * size)
                 .Take(size)
                 .ToListAsync();
         }
 
-        // GET: /Posts/Events
-        [HttpGet("Events")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetEvents(int page = 1, int size = 10)
+        // GET: /Posts/Update
+        [HttpGet("Update")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetUpdatePosts(int page = 1, int size = 10)
+        {
+            return await context.PatricioPersonalPosts
+                .Include(el => el.Gallery)
+                .Where(el => el.Link == null)
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+        }
+
+        // GET: /Posts/Event
+        [HttpGet("Event")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetEventPosts(int page = 1, int size = 10)
         {
             return await context.PatricioPersonalPosts
                 .Where(el => el.Link != null)
@@ -68,6 +82,12 @@ namespace APIServer.Areas.Content.Controllers
             if (id != post.Id)
             {
                 return BadRequest();
+            }
+
+            if(post.Gallery != null)
+            {
+                post.Gallery = await context.PatricioPersonalMedia
+                    .Where(media => post.Gallery.Contains(media)).ToListAsync();
             }
 
             context.Entry(post).State = EntityState.Modified;
@@ -106,10 +126,21 @@ namespace APIServer.Areas.Content.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var post = await context.PatricioPersonalPosts.FindAsync(id);
+            var post = await context.PatricioPersonalPosts
+                .Include(el => el.Gallery)
+                .FirstOrDefaultAsync(el => el.Id == id);
+
             if (post == null)
             {
                 return NotFound();
+            }
+
+            if(post.Gallery != null)
+            {
+                foreach (var media in post.Gallery)
+                {
+                    context.PatricioPersonalMedia.Remove(media);
+                }
             }
 
             context.PatricioPersonalPosts.Remove(post);

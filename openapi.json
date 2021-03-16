@@ -1187,7 +1187,7 @@
         }
       }
     },
-    "/Songs/Highlights": {
+    "/Songs/Top": {
       "get": {
         "tags": [
           "Songs"
@@ -1200,7 +1200,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/TopSong"
                   }
                 }
               },
@@ -1208,7 +1208,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/TopSong"
                   }
                 }
               },
@@ -1216,7 +1216,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/TopSong"
                   }
                 }
               }
@@ -1596,76 +1596,9 @@
   },
   "components": {
     "schemas": {
-      "MediaType": {
-        "enum": [
-          0,
-          1,
-          2
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "Gallery": {
-        "required": [
-          "media"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "media": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Media"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "Media": {
-        "required": [
-          "isVisible",
-          "type",
-          "url"
-        ],
-        "type": "object",
-        "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "url": {
-            "type": "string"
-          },
-          "type": {
-            "$ref": "#/components/schemas/MediaType"
-          },
-          "isVisible": {
-            "type": "boolean"
-          },
-          "gallery": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Gallery"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Song": {
         "required": [
-          "isHighlight",
+          "album",
           "title"
         ],
         "type": "object",
@@ -1692,26 +1625,20 @@
             "type": "string",
             "nullable": true
           },
-          "isHighlight": {
-            "type": "boolean"
-          },
           "soundCloud": {
             "type": "string",
             "nullable": true
           },
-          "audioId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "audio": {
-            "$ref": "#/components/schemas/Media"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
       "Album": {
         "required": [
+          "genre",
           "title"
         ],
         "type": "object",
@@ -1732,8 +1659,7 @@
             "type": "string"
           },
           "genre": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "songs": {
             "type": "array",
@@ -1743,14 +1669,15 @@
             "nullable": true
           },
           "coverImage": {
-            "$ref": "#/components/schemas/Media"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "Article": {
+      "Post": {
         "required": [
-          "content"
+          "title"
         ],
         "type": "object",
         "properties": {
@@ -1767,19 +1694,102 @@
             "format": "int32"
           },
           "title": {
+            "type": "string"
+          },
+          "content": {
             "type": "string",
             "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Media"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Media": {
+        "required": [
+          "type",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post"
+          },
+          "article": {
+            "$ref": "#/components/schemas/Article"
+          },
+          "url": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/MediaType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Article": {
+        "required": [
+          "content",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
           },
           "content": {
             "type": "string"
           },
-          "songId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "song": {
             "$ref": "#/components/schemas/Song"
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Media"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1802,10 +1812,6 @@
         "format": "int32"
       },
       "User": {
-        "required": [
-          "email",
-          "isOwner"
-        ],
         "type": "object",
         "properties": {
           "created": {
@@ -1819,24 +1825,6 @@
           "id": {
             "type": "integer",
             "format": "int32"
-          },
-          "isOwner": {
-            "type": "boolean"
-          },
-          "email": {
-            "type": "string"
-          },
-          "facebook": {
-            "type": "string",
-            "nullable": true
-          },
-          "instagram": {
-            "type": "string",
-            "nullable": true
-          },
-          "weixin": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1886,9 +1874,9 @@
         },
         "additionalProperties": false
       },
-      "Post": {
+      "TopSong": {
         "required": [
-          "title"
+          "song"
         ],
         "type": "object",
         "properties": {
@@ -1904,24 +1892,12 @@
             "type": "integer",
             "format": "int32"
           },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "link": {
-            "type": "string",
-            "nullable": true
-          },
-          "galleryId": {
+          "rank": {
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "int32"
           },
-          "gallery": {
-            "$ref": "#/components/schemas/Gallery"
+          "song": {
+            "$ref": "#/components/schemas/Song"
           }
         },
         "additionalProperties": false

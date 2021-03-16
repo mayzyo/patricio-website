@@ -16,11 +16,19 @@ namespace APIServer.Areas.Content.Data
         public DbSet<Post> PatricioPersonalPosts { get; set; }
         public DbSet<Article> PatricioPersonalArticles { get; set; }
         public DbSet<Media> PatricioPersonalMedia { get; set; }
-        public DbSet<Gallery> PatricioPersonalGallery { get; set; }
+        public DbSet<TopSong> PatricioPersonalTopSongs { get; set; }
 
         public ContentContext(DbContextOptions<ContentContext> options) : base(options)
         {
 
         }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder
+        //        .Entity<Song>()
+        //        .WithOne(e => e.Id)
+        //        .OnDelete(DeleteBehavior.ClientCascade);
+        //}
     }
 }

@@ -1,4 +1,4 @@
-using APIServer.Areas.Admin.Data;
+using APIServer.Areas.Metric.Data;
 using APIServer.Areas.Content.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,9 +39,9 @@ namespace APIServer
 
             // Entity Core setup
             var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("DestinesiahubDb"));
-            if(Configuration["DbPassword"] != null) builder.Password = Configuration["DbPassword"];
+            if(Configuration["DestinesiahubDb"] != null) builder.Password = Configuration["DestinesiahubDb"];
 
-            services.AddDbContext<AdminContext>(options => options.UseSqlServer(builder.ConnectionString));
+            services.AddDbContext<MetricContext>(options => options.UseSqlServer(builder.ConnectionString));
             services.AddDbContext<ContentContext>(options => options.UseSqlServer(builder.ConnectionString));
             services.AddDbContext<MusicContext>(options => options.UseSqlServer(builder.ConnectionString));
         }

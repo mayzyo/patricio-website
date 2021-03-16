@@ -1,4 +1,4 @@
-﻿using APIServer.Areas.Admin.Models;
+﻿using APIServer.Areas.Metric.Models;
 using APIServer.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APIServer.Areas.Admin.Data
+namespace APIServer.Areas.Metric.Data
 {
-    public class AdminContext : BaseContext
+    public class MetricContext : DbContext
     {
         public DbSet<Email> PatricioPersonalEmails { get; set; }
         public DbSet<User> PatricioPersonalUsers { get; set; }
 
-        public AdminContext(DbContextOptions<AdminContext> options) : base(options)
+        public MetricContext(DbContextOptions<MetricContext> options) : base(options)
         {
 
         }

@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using APIServer.Areas.Admin.Data;
-using APIServer.Areas.Admin.Models;
+using APIServer.Areas.Metric.Data;
+using APIServer.Areas.Metric.Models;
 
-namespace APIServer.Areas.Admin.Controllers
+namespace APIServer.Areas.Metric.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AdminContext context;
+        private readonly MetricContext context;
 
-        public UsersController(AdminContext context)
+        public UsersController(MetricContext context)
         {
             this.context = context;
         }
