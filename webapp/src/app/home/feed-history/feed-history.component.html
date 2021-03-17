@@ -1,10 +1,11 @@
-<ol class="history">
-    <li>
-        <h2>历史记录History</h2>
-    </li>
-    <li>item</li>
-    <li>item</li>
-    <li>item</li>
-    <li>item</li>
-    <li>item</li>
-</ol>
+<dl class="history">
+    <dt>
+        <h2>历史记录<div>History</div></h2>
+    </dt>
+    <ng-container *ngFor="let archive of socials.archive$ | async">
+        <dt>{{ archive.year }}</dt>
+        <dd *ngFor="let month of archive.months">
+            <button (click)="socials.getArchivedPosts$.next({ year: archive.year, month: month })">{{ months[month] }}</button>
+        </dd>
+    </ng-container>
+</dl>

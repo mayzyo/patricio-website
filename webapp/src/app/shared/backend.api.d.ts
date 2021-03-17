@@ -356,6 +356,40 @@ export interface paths {
       };
     };
   };
+  "/Posts/History": {
+    get: {
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["History"][];
+          "application/json": components["schemas"]["History"][];
+          "text/json": components["schemas"]["History"][];
+        };
+      };
+    };
+  };
+  "/Posts/History/{year}/{month}": {
+    get: {
+      parameters: {
+        path: {
+          year: number;
+          month: number;
+        };
+        query: {
+          page?: number;
+          size?: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["Post"][];
+          "application/json": components["schemas"]["Post"][];
+          "text/json": components["schemas"]["Post"][];
+        };
+      };
+    };
+  };
   "/Posts/{id}": {
     get: {
       parameters: {
@@ -725,6 +759,10 @@ export interface components {
       isSuccess: boolean;
       userId?: number;
       user?: components["schemas"]["User"];
+    };
+    History: {
+      year: number;
+      month: number;
     };
   };
 }

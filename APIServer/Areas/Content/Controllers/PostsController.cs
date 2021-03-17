@@ -58,6 +58,32 @@ namespace APIServer.Areas.Content.Controllers
                 .ToListAsync();
         }
 
+        // GET: /Posts/History
+        [HttpGet("History")]
+        public async Task<ActionResult<IEnumerable<History>>> GetPostHistory()
+        {
+            return await context.PatricioPersonalPosts
+                .GroupBy(el => new { el.Created.Year, el.Created.Month })
+                .Select(el => new History { Year = el.Key.Year, Month = el.Key.Month })
+                .ToListAsync();
+        }
+
+        // GET: /Posts/History/{year}/{month}
+        [HttpGet("History/{year}/{month}")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPostHistory(int year, int month, int page = 1, int size = 10)
+        {
+            var date = new DateTime(year, month, 1);
+            date = date.AddMonths(1);
+            date = date.AddDays(-1);
+
+            return await context.PatricioPersonalPosts
+                .OrderByDescending(el => el.Created)
+                .Where(el => el.Created <= date)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+        }
+
         // GET: /Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
