@@ -28,7 +28,8 @@ namespace APIServer.Areas.Content.Controllers
             return await context.PatricioPersonalTopSongs
                 .Include(el => el.Song)
                 .Include(el => el.Song.Album)
-                .OrderBy(el => el.Rank)
+                .OrderBy(el => el.Rank == null)
+                .ThenBy(el => el.Rank)
                 .ToListAsync();
         }
 
@@ -86,6 +87,11 @@ namespace APIServer.Areas.Content.Controllers
         [HttpPost]
         public async Task<ActionResult<TopSong>> PostTopSong(TopSong topSong)
         {
+            if(topSong.Rank != null && await context.PatricioPersonalTopSongs.FirstOrDefaultAsync(el => el.Rank == topSong.Rank) != null)
+            {
+                return BadRequest($"Rank {topSong.Rank} already exist.");
+            }
+
             topSong.Song = await context.PatricioPersonalSongs.FindAsync(topSong.Song.Id);
 
             if (topSong.Song == null)

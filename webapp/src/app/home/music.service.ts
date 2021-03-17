@@ -30,6 +30,7 @@ export class MusicService {
   private topSongToSong(topSong: TopSong): Song {
     return {
       ...topSong.song,
+      genre: topSong.song.genre ? topSong.song.genre : topSong.song.album.genre,
       background$: topSong.song.album.coverImage 
         ? this.files.get(topSong.song.album.coverImage) 
         : of()

@@ -14,7 +14,7 @@ export class StaticFileService {
   get(fileName: string) {
     const params = { containerName: 'patriciopersonal', fileName };
     return this.http.get(
-      `${environment.media}`,
+      `${environment.media}/${fileName}`,
       { params, responseType: 'blob', headers: { 'kfntech-key': this.apiKey } }
     ).pipe(
       map(res => window.URL.createObjectURL(res))

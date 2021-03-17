@@ -18,12 +18,12 @@ namespace APIServer.Tests
         [Fact]
         public async void GetAllTest()
         {
-            var options = new DbContextOptionsBuilder<MusicContext>()
+            var options = new DbContextOptionsBuilder<ContentContext>()
                 .UseInMemoryDatabase(databaseName: "destinesiahub_db")
                 .Options;
 
             // Insert seed data into the database using one instance of the context
-            using (var context = new MusicContext(options))
+            using (var context = new ContentContext(options))
             {
                 context.PatricioPersonalSongs.Add(
                     new Song()
@@ -36,7 +36,7 @@ namespace APIServer.Tests
             }
 
             // Use a clean instance of the context to run the test
-            using (var context = new MusicContext(options))
+            using (var context = new ContentContext(options))
             {
                 var controller = new SongsController(context);
                 // Act

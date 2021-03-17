@@ -34,12 +34,12 @@ namespace APIServer.Areas.Content.Controllers
         }
 
         // GET: /Songs/Genre/Classical
-        [HttpGet("Genre/{option}")]
-        public async Task<ActionResult<IEnumerable<Song>>> GetGenreSongs(string option, int page = 1, int size = 10)
+        [HttpGet("Genre/{genre}")]
+        public async Task<ActionResult<IEnumerable<Song>>> GetGenreSongs(string genre, int page = 1, int size = 10)
         {
             return await context.PatricioPersonalSongs
                 .Include(el => el.Album)
-                .Where(el => el.Genre == option)
+                .Where(el => el.Genre == genre)
                 .OrderByDescending(el => el.Created)
                 .Skip((page - 1) * size)
                 .Take(size)
