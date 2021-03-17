@@ -26,8 +26,9 @@ namespace APIServer.Areas.Content.Controllers
         public async Task<ActionResult<IEnumerable<TopSong>>> GetPatricioPersonalTopSongs()
         {
             return await context.PatricioPersonalTopSongs
-                .Include(topSong => topSong.Song)
-                .OrderBy(topSong => topSong.Rank)
+                .Include(el => el.Song)
+                .Include(el => el.Song.Album)
+                .OrderBy(el => el.Rank)
                 .ToListAsync();
         }
 
@@ -36,7 +37,8 @@ namespace APIServer.Areas.Content.Controllers
         public async Task<ActionResult<TopSong>> GetTopSong(int id)
         {
             var topSong = await context.PatricioPersonalTopSongs
-                .Include(topSong => topSong.Song)
+                .Include(el => el.Song)
+                .Include(el => el.Song.Album)
                 .FirstAsync(topSong => topSong.Id == id);
 
             if (topSong == null)

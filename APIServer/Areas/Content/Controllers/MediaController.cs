@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class MediaController : ControllerBase
     {
-        private readonly Data.ContentContext context;
+        private readonly ContentContext context;
 
-        public MediaController(Data.ContentContext context)
+        public MediaController(ContentContext context)
         {
             this.context = context;
         }

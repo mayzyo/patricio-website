@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly Data.ContentContext context;
+        private readonly ContentContext context;
 
-        public PostsController(Data.ContentContext context)
+        public PostsController(ContentContext context)
         {
             this.context = context;
         }

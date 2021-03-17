@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class AlbumsController : ControllerBase
     {
-        private readonly MusicContext context;
+        private readonly ContentContext context;
 
-        public AlbumsController(MusicContext context)
+        public AlbumsController(ContentContext context)
         {
             this.context = context;
         }

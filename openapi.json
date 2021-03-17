@@ -646,57 +646,6 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Media"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Media"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Media"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Media"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Media"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Media"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Media"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Media"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/Media/{id}": {
@@ -914,7 +863,65 @@
         }
       }
     },
-    "/Posts/Events": {
+    "/Posts/Update": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Posts/Event": {
       "get": {
         "tags": [
           "Posts"
@@ -1187,44 +1194,6 @@
         }
       }
     },
-    "/Songs/Top": {
-      "get": {
-        "tags": [
-          "Songs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TopSong"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TopSong"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TopSong"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Songs/Genre/{option}": {
       "get": {
         "tags": [
@@ -1379,6 +1348,201 @@
       "delete": {
         "tags": [
           "Songs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Songs/Top": {
+      "get": {
+        "tags": [
+          "TopSongs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopSong"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopSong"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopSong"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TopSongs"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Songs/Top/{id}": {
+      "get": {
+        "tags": [
+          "TopSongs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopSong"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "TopSongs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopSong"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TopSongs"
         ],
         "parameters": [
           {
@@ -1596,10 +1760,9 @@
   },
   "components": {
     "schemas": {
-      "Song": {
+      "TopSong": {
         "required": [
-          "album",
-          "title"
+          "song"
         ],
         "type": "object",
         "properties": {
@@ -1615,65 +1778,28 @@
             "type": "integer",
             "format": "int32"
           },
-          "album": {
-            "$ref": "#/components/schemas/Album"
-          },
-          "title": {
-            "type": "string"
-          },
-          "genre": {
-            "type": "string",
+          "rank": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "soundCloud": {
-            "type": "string",
-            "nullable": true
+          "songId": {
+            "type": "integer",
+            "format": "int32"
           },
-          "audio": {
-            "type": "string",
-            "nullable": true
+          "song": {
+            "$ref": "#/components/schemas/Song"
           }
         },
         "additionalProperties": false
       },
-      "Album": {
-        "required": [
-          "genre",
-          "title"
+      "MediaType": {
+        "enum": [
+          0,
+          1
         ],
-        "type": "object",
-        "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
-            "type": "string"
-          },
-          "genre": {
-            "type": "string"
-          },
-          "songs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Song"
-            },
-            "nullable": true
-          },
-          "coverImage": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
+        "type": "integer",
+        "format": "int32"
       },
       "Post": {
         "required": [
@@ -1714,14 +1840,6 @@
         },
         "additionalProperties": false
       },
-      "MediaType": {
-        "enum": [
-          0,
-          1
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "Media": {
         "required": [
           "type",
@@ -1741,17 +1859,17 @@
             "type": "integer",
             "format": "int32"
           },
-          "post": {
-            "$ref": "#/components/schemas/Post"
-          },
-          "article": {
-            "$ref": "#/components/schemas/Article"
-          },
           "url": {
             "type": "string"
           },
           "type": {
             "$ref": "#/components/schemas/MediaType"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post"
+          },
+          "article": {
+            "$ref": "#/components/schemas/Article"
           }
         },
         "additionalProperties": false
@@ -1794,6 +1912,96 @@
         },
         "additionalProperties": false
       },
+      "Song": {
+        "required": [
+          "album",
+          "genre",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          },
+          "soundCloud": {
+            "type": "string",
+            "nullable": true
+          },
+          "audio": {
+            "type": "string",
+            "nullable": true
+          },
+          "album": {
+            "$ref": "#/components/schemas/Album"
+          },
+          "topSong": {
+            "$ref": "#/components/schemas/TopSong"
+          },
+          "articleId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "article": {
+            "$ref": "#/components/schemas/Article"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Album": {
+        "required": [
+          "genre",
+          "songs",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "genre": {
+            "type": "string"
+          },
+          "songs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Song"
+            }
+          },
+          "coverImage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "EmailPurpose": {
         "enum": [
           0,
@@ -1814,14 +2022,6 @@
       "User": {
         "type": "object",
         "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
           "id": {
             "type": "integer",
             "format": "int32"
@@ -1836,14 +2036,6 @@
         ],
         "type": "object",
         "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
           "id": {
             "type": "integer",
             "format": "int32"
@@ -1870,34 +2062,6 @@
           },
           "user": {
             "$ref": "#/components/schemas/User"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TopSong": {
-        "required": [
-          "song"
-        ],
-        "type": "object",
-        "properties": {
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rank": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "song": {
-            "$ref": "#/components/schemas/Song"
           }
         },
         "additionalProperties": false

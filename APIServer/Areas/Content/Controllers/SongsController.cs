@@ -14,9 +14,9 @@ namespace APIServer.Areas.Content.Controllers
     [ApiController]
     public class SongsController : ControllerBase
     {
-        private readonly MusicContext context;
+        private readonly ContentContext context;
 
-        public SongsController(MusicContext context)
+        public SongsController(ContentContext context)
         {
             this.context = context;
         }
@@ -26,6 +26,7 @@ namespace APIServer.Areas.Content.Controllers
         public async Task<ActionResult<IEnumerable<Song>>> GetSongs(int page = 1, int size = 10)
         {
             return await context.PatricioPersonalSongs
+                .Include(el => el.Album)
                 .OrderByDescending(el => el.Created)
                 .Skip((page - 1) * size)
                 .Take(size)
@@ -36,8 +37,8 @@ namespace APIServer.Areas.Content.Controllers
         [HttpGet("Genre/{option}")]
         public async Task<ActionResult<IEnumerable<Song>>> GetGenreSongs(string option, int page = 1, int size = 10)
         {
-            return await context
-                .PatricioPersonalSongs
+            return await context.PatricioPersonalSongs
+                .Include(el => el.Album)
                 .Where(el => el.Genre == option)
                 .OrderByDescending(el => el.Created)
                 .Skip((page - 1) * size)

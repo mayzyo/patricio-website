@@ -58,6 +58,15 @@ namespace APIServer
 
             //app.UseHttpsRedirection();
 
+            // CORS setting with CorsPolicyBuilder.
+            app.UseCors(builder =>
+            {
+                builder
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
             app.UseRouting();
 
             app.UseAuthorization();
