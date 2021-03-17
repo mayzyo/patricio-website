@@ -66,9 +66,10 @@ export class MockDataInterceptor implements HttpInterceptor {
                 title: faker.lorem.sentence(),
                 content: Math.random() > .5 ? faker.lorem.paragraph() : undefined,
                 created: faker.date.past().toString(),
-                gallery: { media: Array.from({ length: 1 + Math.floor(Math.random() * 8) }).map(() => ({
-                        url: 'image-url', type: 0, isVisible: false
-                    })) } 
+                gallery: Array.from({ length: 1 + Math.floor(Math.random() * 8) })
+                    .map(() => 
+                        ({ url: 'image-url', type: 0, isVisible: false })
+                    )
             }));
         } else {
             throw Error('Not Implemented');

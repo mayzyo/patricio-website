@@ -1,7 +1,17 @@
-<h2 class="title">{{ true ? "Upcoming events | 新活动" : "No upcoming event | 近期没有活动" }}</h2>
+<ng-container *ngIf="(socials.latest$ | async) as latest">
+    <ng-container *ngTemplateOutlet="latest.length != 0 ? Content : NoContent; context: {latest:latest}"></ng-container>
+</ng-container>
 
-<ol>
-    <li *ngFor="let item of socials.latest$ | async">
-        <app-post-card [datasource]="item"></app-post-card>
-    </li>
-</ol>
+<ng-template #Content let-latest="latest">
+    <h2 class="title">Upcoming events | 新活动</h2>
+
+    <ol>
+        <li *ngFor="let item of latest">
+            <app-post-card [datasource]="item"></app-post-card>
+        </li>
+    </ol>
+</ng-template>
+
+<ng-template #NoContent>
+    <h2 class="title empty">No upcoming event | 近期没有活动</h2>
+</ng-template>

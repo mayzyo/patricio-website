@@ -1,4 +1,8 @@
-<div *ngIf="(famousQuotes.random$ | async) as quote">
+<!-- <div *ngIf="(famousQuotes.random$ | async) as quote">
+    <p class="message">{{ quote.message }}</p>
+    <p class="author">{{ quote.author }}</p>
+</div> -->
+<div *ngIf="quote">
     <p class="message">{{ quote.message }}</p>
     <p class="author">{{ quote.author }}</p>
 </div>

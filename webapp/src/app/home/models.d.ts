@@ -6,9 +6,12 @@ export type Media = components["schemas"]["Media"] & {
     url$: Observable<SafeUrl>
 };
 export type Post = components["schemas"]["Post"] & {
-    thumbnail$: SafeUrl | string,
-    gallery?: { media: Media[] }
+    thumbnail$: Observable<SafeUrl>,
+    gallery?: Media[]
 };
 export type LatestPost = Pick<Post, "title" | "created" | "id" | "gallery" | "thumbnail$">;
 export type Article = paths["/Articles"]["get"]["responses"][200]["text/plain"][number];
-export type Song = paths["/Songs"]["get"]["responses"][200]["text/plain"][number];
+export type Song = components["schemas"]["Song"] & {
+    background$: Observable<string>
+};
+export type TopSong = components["schemas"]["TopSong"];

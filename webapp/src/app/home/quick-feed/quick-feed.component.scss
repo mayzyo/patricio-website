@@ -13,6 +13,10 @@ app-post-card {
 .title {
     text-align: center;
     font-size: map-get(theme.$text, heading);
+
+    &.empty {
+        padding-bottom: 15vh;
+    }
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {

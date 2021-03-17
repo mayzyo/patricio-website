@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
 import { map, pluck, reduce, scan, share, shareReplay, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StaticFileService } from 'src/app/core/static-file.service';
+import { Song } from '../models';
 
 
 @Component({
@@ -13,18 +13,19 @@ import { StaticFileService } from 'src/app/core/static-file.service';
 })
 export class ShowcaseComponent implements OnInit {
   @Input() animTrigger$?: Observable<void>;
+  @HostBinding('style.display') private display: string = 'block';
 
-  oversizeItem$?: Observable<Touchable>;
-  largeItem$?: Observable<Touchable>;
-  wideItems$?: Observable<Touchable[]>;
-  items$?: Observable<Touchable[]>;
-  hover?: Touchable;
+  oversizeItem$?: Observable<Song>;
+  largeItem$?: Observable<Song>;
+  wideItems$?: Observable<Song[]>;
+  items$?: Observable<Song[]>;
+  hover?: Song;
 
   breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
     map(res => res.matches)
   );
 
-  constructor(private musics: MusicService, private staticFiles: StaticFileService, private breakpointObserver: BreakpointObserver) { }
+  constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.animTrigger$ = of();
@@ -34,18 +35,9 @@ export class ShowcaseComponent implements OnInit {
   }
 
   private initCollection(animTrigger$: Observable<void>) {
-    var collection$ = this.musics.highlights$.pipe(
-      switchMap(res => 
-        from(
-          res.map(el => ({ 
-            title: el.title,
-            subtitle: el.genre,
-            backgroundUrl$: this.staticFiles.get('abcd').pipe(
-              shareReplay()
-            )
-          }))
-        )
-      ),
+    var collection$ = this.musics.showcase$.pipe(
+      tap(res => this.display = res.length == 0 ? 'none' : 'block'),
+      switchMap(res => from(res)),
       shareReplay()
     );
 
@@ -70,19 +62,13 @@ export class ShowcaseComponent implements OnInit {
     );
     this.wideItems$ = collection$.pipe(
       skip(2),
-      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),
+      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),
       take(3),
     );
     this.items$ = collection$.pipe(
       skip(5),
-      scan<Touchable, Touchable[]>((acc, cur) => [...acc, cur], []),
+      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),
       take(4)
     );
   }
-}
-
-interface Touchable {
-  title?: string,
-  subtitle: string | undefined | null,
-  backgroundUrl$: Observable<string>
 }

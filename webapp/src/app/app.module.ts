@@ -25,7 +25,7 @@ import { MockModelProvider } from './core/mock-model.interceptor';
     SharedModule,
     OverlayModule
   ],
-  providers: [MockDataProvider, MockModelProvider],
+  // providers: [MockDataProvider, MockModelProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

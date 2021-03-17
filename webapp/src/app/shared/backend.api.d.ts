@@ -240,22 +240,6 @@ export interface paths {
         };
       };
     };
-    post: {
-      requestBody: {
-        "application/json-patch+json": components["schemas"]["Media"];
-        "application/json": components["schemas"]["Media"];
-        "text/json": components["schemas"]["Media"];
-        "application/*+json": components["schemas"]["Media"];
-      };
-      responses: {
-        /** Success */
-        200: {
-          "text/plain": components["schemas"]["Media"];
-          "application/json": components["schemas"]["Media"];
-          "text/json": components["schemas"]["Media"];
-        };
-      };
-    };
   };
   "/Media/{id}": {
     get: {
@@ -336,7 +320,25 @@ export interface paths {
       };
     };
   };
-  "/Posts/Events": {
+  "/Posts/Update": {
+    get: {
+      parameters: {
+        query: {
+          page?: number;
+          size?: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["Post"][];
+          "application/json": components["schemas"]["Post"][];
+          "text/json": components["schemas"]["Post"][];
+        };
+      };
+    };
+  };
+  "/Posts/Event": {
     get: {
       parameters: {
         query: {
@@ -433,18 +435,6 @@ export interface paths {
       };
     };
   };
-  "/Songs/Highlights": {
-    get: {
-      responses: {
-        /** Success */
-        200: {
-          "text/plain": components["schemas"]["Song"][];
-          "application/json": components["schemas"]["Song"][];
-          "text/json": components["schemas"]["Song"][];
-        };
-      };
-    };
-  };
   "/Songs/Genre/{option}": {
     get: {
       parameters: {
@@ -493,6 +483,79 @@ export interface paths {
         "application/json": components["schemas"]["Song"];
         "text/json": components["schemas"]["Song"];
         "application/*+json": components["schemas"]["Song"];
+      };
+      responses: {
+        /** Success */
+        200: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          id: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: unknown;
+      };
+    };
+  };
+  "/Songs/Top": {
+    get: {
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["TopSong"][];
+          "application/json": components["schemas"]["TopSong"][];
+          "text/json": components["schemas"]["TopSong"][];
+        };
+      };
+    };
+    post: {
+      requestBody: {
+        "application/json-patch+json": components["schemas"]["TopSong"];
+        "application/json": components["schemas"]["TopSong"];
+        "text/json": components["schemas"]["TopSong"];
+        "application/*+json": components["schemas"]["TopSong"];
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["TopSong"];
+          "application/json": components["schemas"]["TopSong"];
+          "text/json": components["schemas"]["TopSong"];
+        };
+      };
+    };
+  };
+  "/Songs/Top/{id}": {
+    get: {
+      parameters: {
+        path: {
+          id: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["TopSong"];
+          "application/json": components["schemas"]["TopSong"];
+          "text/json": components["schemas"]["TopSong"];
+        };
+      };
+    };
+    put: {
+      parameters: {
+        path: {
+          id: number;
+        };
+      };
+      requestBody: {
+        "application/json-patch+json": components["schemas"]["TopSong"];
+        "application/json": components["schemas"]["TopSong"];
+        "text/json": components["schemas"]["TopSong"];
+        "application/*+json": components["schemas"]["TopSong"];
       };
       responses: {
         /** Success */
@@ -590,10 +653,23 @@ export interface operations {}
 
 export interface components {
   schemas: {
-    MediaType: 0 | 1 | 2;
-    Gallery: {
+    TopSong: {
+      created?: string;
+      lastModified?: string;
       id?: number;
-      media: components["schemas"]["Media"][];
+      rank?: number | null;
+      songId?: number;
+      song: components["schemas"]["Song"];
+    };
+    MediaType: 0 | 1;
+    Post: {
+      created?: string;
+      lastModified?: string;
+      id?: number;
+      title: string;
+      content?: string | null;
+      link?: string | null;
+      gallery?: components["schemas"]["Media"][] | null;
     };
     Media: {
       created?: string;
@@ -601,54 +677,46 @@ export interface components {
       id?: number;
       url: string;
       type: components["schemas"]["MediaType"];
-      isVisible: boolean;
-      gallery?: components["schemas"]["Gallery"][] | null;
+      post?: components["schemas"]["Post"];
+      article?: components["schemas"]["Article"];
+    };
+    Article: {
+      created?: string;
+      lastModified?: string;
+      id?: number;
+      title: string;
+      content: string;
+      song?: components["schemas"]["Song"];
+      gallery?: components["schemas"]["Media"][] | null;
     };
     Song: {
       created?: string;
       lastModified?: string;
       id?: number;
-      album?: components["schemas"]["Album"];
       title: string;
-      genre?: string | null;
-      isHighlight: boolean;
+      genre: string;
       soundCloud?: string | null;
-      audioId?: number | null;
-      audio?: components["schemas"]["Media"];
+      audio?: string | null;
+      album: components["schemas"]["Album"];
+      topSong?: components["schemas"]["TopSong"];
+      articleId?: number | null;
+      article?: components["schemas"]["Article"];
     };
     Album: {
       created?: string;
       lastModified?: string;
       id?: number;
       title: string;
-      genre?: string | null;
-      songs?: components["schemas"]["Song"][] | null;
-      coverImage?: components["schemas"]["Media"];
-    };
-    Article: {
-      created?: string;
-      lastModified?: string;
-      id?: number;
-      title?: string | null;
-      content: string;
-      songId?: number | null;
-      song?: components["schemas"]["Song"];
+      genre: string;
+      songs: components["schemas"]["Song"][];
+      coverImage?: string | null;
     };
     EmailPurpose: 0 | 1;
     SenderType: 0 | 1 | 2;
     User: {
-      created?: string;
-      lastModified?: string;
       id?: number;
-      isOwner: boolean;
-      email: string;
-      facebook?: string | null;
-      instagram?: string | null;
-      weixin?: string | null;
     };
     Email: {
-      created?: string;
-      lastModified?: string;
       id?: number;
       address: string;
       message?: string | null;
@@ -657,16 +725,6 @@ export interface components {
       isSuccess: boolean;
       userId?: number;
       user?: components["schemas"]["User"];
-    };
-    Post: {
-      created?: string;
-      lastModified?: string;
-      id?: number;
-      title: string;
-      content?: string | null;
-      link?: string | null;
-      galleryId?: number | null;
-      gallery?: components["schemas"]["Gallery"];
     };
   };
 }

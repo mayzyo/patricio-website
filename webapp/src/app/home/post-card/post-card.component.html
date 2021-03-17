@@ -9,5 +9,5 @@
 <p *ngIf="datasource.content">{{ datasource.content }}</p>
 
 <div class="gallery" *ngIf="datasource.gallery">
-    <img *ngFor="let media of datasource.gallery.media" [src]="media.url$ | async" width="100%" />
+    <img *ngFor="let media of datasource.gallery" [src]="media.url$ | async" width="100%" />
 </div>
