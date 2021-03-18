@@ -24,7 +24,7 @@
 </swiper>
 
 <div class="grid" *ngIf="breakpoint$ | async">
-    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [backgroundUrl]="item.coverImage$ | async">
+    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [song]="item" [backgroundUrl]="item.coverImage$ | async">
         <p>{{ item.title }}</p>
         <span class="split">|</span>
         <p class="subtitle">{{ item.genre | limit:40 }}</p>
