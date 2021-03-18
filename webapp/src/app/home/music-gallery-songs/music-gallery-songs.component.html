@@ -1,0 +1,13 @@
+<swiper [slidesPerView]="1">
+    <ng-template swiperSlide>
+        <app-album [backgroundUrl]="album.coverImage$ | async" [album]="album">
+            <p>{{ album.title }}</p>
+        </app-album>
+    </ng-template>
+
+    <ng-template *ngFor="let song of songs$ | async" swiperSlide>
+        <app-quick-player [song]="song" [backgroundUrl]="song.coverImage$ | async">
+            <p>{{ song.title }}</p>
+        </app-quick-player>
+    </ng-template>
+</swiper>

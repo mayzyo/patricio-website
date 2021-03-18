@@ -1,0 +1,2 @@
+<ng-content></ng-content>
+<button *ngIf="backgroundUrl" class="background blur" (click)="selectAlbum.emit(album)" [style.background-image]="'url(' + backgroundUrl + ')'"></button>

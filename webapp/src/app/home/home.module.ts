@@ -24,10 +24,12 @@ import { QuickPlayerComponent } from './quick-player/quick-player.component';
 import { PostCardComponent } from './post-card/post-card.component';
 import { PlayerBannerComponent } from './player-banner/player-banner.component';
 import { FeedHistoryComponent } from './feed-history/feed-history.component';
+import { AlbumComponent } from './album/album.component';
+import { MusicGallerySongsComponent } from './music-gallery-songs/music-gallery-songs.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent, AlbumComponent, MusicGallerySongsComponent],
   imports: [
     CommonModule,
     SharedModule,

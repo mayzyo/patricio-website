@@ -1,41 +1,41 @@
-<h2 class="title">Showcase | 作品一览</h2>
+<!-- <h2 class="title">Showcase | 作品一览</h2> -->
 
 <swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1.5" [spaceBetween]="24" [slidesOffsetBefore]="24" [slidesOffsetAfter]="24">
     <ng-template *ngIf="(oversizeItem$ | async) as item" swiperSlide>
-        <app-quick-player class="large" [backgroundUrl]="item.background$ | async">
+        <app-quick-player class="large" [song]="item" [backgroundUrl]="item.coverImage$ | async">
             <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
         </app-quick-player>
     </ng-template>
     <ng-template *ngIf="(largeItem$ | async) as item" swiperSlide>
-        <app-quick-player class="large" [backgroundUrl]="item.background$ | async">
+        <app-quick-player class="large" [song]="item" [backgroundUrl]="item.coverImage$ | async">
             <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
         </app-quick-player>
     </ng-template>
     <ng-template *ngFor="let item of wideItems$ | async" swiperSlide>
-        <app-quick-player class="wide" [backgroundUrl]="item.background$ | async">
+        <app-quick-player class="wide" [song]="item" [backgroundUrl]="item.coverImage$ | async">
             <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
         </app-quick-player>
     </ng-template>
     <ng-template *ngFor="let item of items$ | async" swiperSlide>
-        <app-quick-player class="small" [backgroundUrl]="item.background$ | async">
+        <app-quick-player class="small" [song]="item" [backgroundUrl]="item.coverImage$ | async">
             <p>{{ item.title }}</p>
         </app-quick-player>
     </ng-template>
 </swiper>
 
 <div class="grid" *ngIf="breakpoint$ | async">
-    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [backgroundUrl]="item.background$ | async">
+    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [backgroundUrl]="item.coverImage$ | async">
         <p>{{ item.title }}</p>
         <span class="split">|</span>
         <p class="subtitle">{{ item.genre | limit:40 }}</p>
     </app-quick-player>
-    <app-quick-player class="large" *ngIf="(largeItem$ | async) as item" [backgroundUrl]="item.background$ | async">
+    <app-quick-player class="large" *ngIf="(largeItem$ | async) as item" [song]="item" [backgroundUrl]="item.coverImage$ | async">
         <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
     </app-quick-player>
-    <app-quick-player class="wide" *ngFor="let item of wideItems$ | async" [backgroundUrl]="item.background$ | async">
+    <app-quick-player class="wide" *ngFor="let item of wideItems$ | async" [song]="item" [backgroundUrl]="item.coverImage$ | async">
         <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
     </app-quick-player>
-    <app-quick-player class="small" *ngFor="let item of items$ | async" [backgroundUrl]="item.background$ | async">
+    <app-quick-player class="small" *ngFor="let item of items$ | async" [song]="item" [backgroundUrl]="item.coverImage$ | async">
         <p>{{ item.title }}</p>
     </app-quick-player>
 </div>

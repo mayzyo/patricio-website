@@ -15,10 +15,10 @@ export class PlayerBannerComponent implements OnInit {
   readonly backgroundUrl: string = `--bg: url(${metaData.discographyBannerUrl})`;
 
   song$: Observable<Song & { coverImage$: any }> = this.route.paramMap.pipe(
-    switchMap(params => this.music.get$(params.get('id') || ''))
+    switchMap(params => this.musics.get$(params.get('id') || ''))
   );
 
-  constructor(private route: ActivatedRoute, private music: MusicService) { }
+  constructor(private route: ActivatedRoute, private musics: MusicService) { }
 
   ngOnInit(): void {
   }

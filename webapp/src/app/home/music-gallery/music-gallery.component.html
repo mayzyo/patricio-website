@@ -1,19 +1,26 @@
-<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true">
-    <ng-template *ngFor="let item of musics.list$ | async" swiperSlide>
-        <app-quick-player  [backgroundUrl]="item.coverImage$ | async">
-            <p>{{ item.title }}</p>
-        </app-quick-player>
-    </ng-template>
+<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true"(activeIndexChange)="activeIndexChange($event)">
+    <ng-container *ngIf="currentAlbum">
+        <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
+            <app-music-gallery-songs [album]="album" [current]="currentAlbum"></app-music-gallery-songs>
+        </ng-template>
+    </ng-container>
 </swiper>
 
 <ng-container *ngIf="breakpoint$ | async">
     <h1 class="title">Composed by Me | 我的作品</h1>
 
     <div class="gallery">
-        <app-quick-player *ngFor="let item of musics.list$ | async" [backgroundUrl]="item.coverImage$ | async">
-            <p>{{ item.title }}</p>
+        <ng-container *ngIf="currentAlbum == undefined">
+            <app-album *ngFor="let album of musics.albums$ | async" [backgroundUrl]="album.coverImage$ | async"
+                [album]="album" (selectAlbum)="selectAlbum($event)">
+                <p>{{ album.title }}</p>
+            </app-album>
+        </ng-container>
+
+        <app-quick-player *ngFor="let song of musics.songs$ | async" [song]="song" [backgroundUrl]="song.coverImage$ | async">
+            <p>{{ song.title }}</p>
         </app-quick-player>
     </div>
-    
+
     <div class="background blur" [style]="backgroundUrl"></div>
 </ng-container>

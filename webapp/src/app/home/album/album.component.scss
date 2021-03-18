@@ -1,0 +1,35 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+:host {
+    position: relative;
+    height: 45vh;
+    padding: 24px;
+
+    display: flex;
+    overflow: hidden;
+
+    border: 1px map-get(theme.$palettes, black) solid;
+    font-size: calc(32rem / #{map-get(theme.$text, std)});
+    color: white;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+    width: 100%;
+ 
+    background-position: center;
+    background-size: cover;
+}
+
+.blur {
+    transition: none;
+    &:hover {
+        filter: blur(4px);
+        margin: -5px;
+    }
+}

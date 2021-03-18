@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Song } from '../models';
 
 @Component({
   selector: 'app-quick-player',
@@ -6,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./quick-player.component.scss']
 })
 export class QuickPlayerComponent implements OnInit {
+  @Input() song!: Song;
   @Input() backgroundUrl: string | null = '';
 
   constructor() { }
