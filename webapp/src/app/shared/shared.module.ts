@@ -9,11 +9,12 @@ import { FooterComponent } from './footer/footer.component';
 import { ScrollableLabelsComponent } from './scrollable-labels/scrollable-labels.component';
 import { LimitPipe } from './limit.pipe';
 import { GroupPipe } from './group.pipe';
+import { NoticeComponent } from './notice/notice.component';
 
 
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent, LimitPipe, GroupPipe],
+  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent, LimitPipe, GroupPipe, NoticeComponent],
   imports: [
     CommonModule,
     FontAwesomeModule,

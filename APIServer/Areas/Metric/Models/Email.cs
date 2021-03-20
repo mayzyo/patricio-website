@@ -1,4 +1,5 @@
-﻿using APIServer.Utilities;
+﻿using APIServer.Areas.Metric.Data;
+using APIServer.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,29 +8,16 @@ using System.Threading.Tasks;
 
 namespace APIServer.Areas.Metric.Models
 {
-    public class Email
+    public class Email : BaseEntity
     {
         public int Id { get; set; }
         [Required]
         public string Address { get; set; }
-        public string Message { get; set; }
-        public EmailPurpose Purpose { get; set; }
-        public SenderType Sender { get; set; }
         [Required]
+        public string Message { get; set; }
+        public string Title { get; set; }
+        public string Template { get; set; }
         public bool IsSuccess { get; set; }
-        public int UserId { get; set; }
         public User User { get; set; }
-
-        public enum EmailPurpose
-        {
-            DEAL,
-            OTHER
-        }
-        public enum SenderType
-        {
-            DIRECTOR,
-            MUSICIAN,
-            OTHER
-        }
     }
 }

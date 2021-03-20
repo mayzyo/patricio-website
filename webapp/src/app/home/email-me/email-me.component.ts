@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EmailService } from 'src/app/shared/email.service';
 import metaData from 'src/meta-data';
 
 @Component({
@@ -7,10 +8,12 @@ import metaData from 'src/meta-data';
   styleUrls: ['./email-me.component.scss']
 })
 export class EmailMeComponent implements OnInit {
-  readonly emailTitle: string = metaData.emailTitleDesc;
-  readonly emailTemplate: string = metaData.emailTemplateDesc;
+  readonly title: string = metaData.emailTitleDesc;
+  readonly template: string = metaData.emailTemplateDesc;
+  readonly titleOptions: string[] = metaData.emailTitleOptions;
+  readonly templateOptions: string[] =metaData.emailTemplateOptions;
 
-  constructor() { }
+  constructor(public emails: EmailService) { }
 
   ngOnInit(): void {
   }

@@ -2232,29 +2232,24 @@
         },
         "additionalProperties": false
       },
-      "EmailPurpose": {
-        "enum": [
-          0,
-          1
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "SenderType": {
-        "enum": [
-          0,
-          1,
-          2
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "User": {
         "type": "object",
         "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
           "id": {
             "type": "integer",
             "format": "int32"
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2262,10 +2257,19 @@
       "Email": {
         "required": [
           "address",
-          "isSuccess"
+          "isSuccess",
+          "message"
         ],
         "type": "object",
         "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
           "id": {
             "type": "integer",
             "format": "int32"
@@ -2274,21 +2278,18 @@
             "type": "string"
           },
           "message": {
+            "type": "string"
+          },
+          "title": {
             "type": "string",
             "nullable": true
           },
-          "purpose": {
-            "$ref": "#/components/schemas/EmailPurpose"
-          },
-          "sender": {
-            "$ref": "#/components/schemas/SenderType"
+          "template": {
+            "type": "string",
+            "nullable": true
           },
           "isSuccess": {
             "type": "boolean"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int32"
           },
           "user": {
             "$ref": "#/components/schemas/User"

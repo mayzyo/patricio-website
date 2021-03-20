@@ -1,41 +1,41 @@
 <h2 class="title">Email Me | 联系我</h2>
 
-<form class="email">
+<form class="email" #emailForm="ngForm" (ngSubmit)="emails.submit()">
     <div class="form-ctrl">
-        <label>Your message - 信息内容</label>
+        <label class="required" for="message">Your message - 信息内容</label>
         <div class="textarea-wrapper">
-            <textarea rows="10" placeholder="Please leave a quick message for me"></textarea>
+            <textarea rows="10" placeholder="Please leave a quick message for me" id="message" name="message" [(ngModel)]="emails.model.message" required></textarea>
         </div>
     </div>
 
     <section>
         <div class="form-ctrl">
-            <label>{{ emailTitle }}</label>
-            <select>
-                <option [value]="null">Click to select - 点击选择</option>
-                <option [value]="0">Business - 商务</option>
-                <option [value]="1">Collab - 合作</option>
-                <option [value]="2">Others - 其它</option>
+            <label for="title">{{ title }}</label>
+            <select id="title" name="title" [(ngModel)]="emails.model.title">
+                <option [value]="''">Click to select - 点击选择</option>
+                <option *ngFor="let option of titleOptions" [value]="option">
+                    {{ option }}
+                </option>
             </select>
         </div>
     
         <div class="form-ctrl">
-            <label>{{ emailTemplate }}</label>
-            <select>
-                <option [value]="null">Click to select - 点击选择</option>
-                <option [value]="0">Business - 商务</option>
-                <option [value]="1">Collab - 合作</option>
-                <option [value]="2">Others - 其它</option>
+            <label for="template">{{ template }}</label>
+            <select id="template" name="template" [(ngModel)]="emails.model.template">
+                <option [value]="''">Click to select - 点击选择</option>
+                <option *ngFor="let option of templateOptions" [value]="option">
+                    {{ option }}
+                </option>
             </select>
         </div>
     
         <div class="form-ctrl">
-            <label>Your email - 您的邮箱</label>
-            <input placeholder="e.g. example@mail.com" />
+            <label class="required" for="address">Your email - 您的邮箱</label>
+            <input type="email" placeholder="e.g. example@mail.com" id="address" name="address" [(ngModel)]="emails.model.address" required email />
         </div>
         
         <div>
-            <button class="solid">Send | 发送</button>
+            <button class="solid" type="submit" [disabled]="!emailForm.form.valid">Send | 发送</button>
         </div>
     </section>
 </form>

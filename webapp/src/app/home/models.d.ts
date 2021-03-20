@@ -28,3 +28,9 @@ export type TopSong = components["schemas"]["TopSong"];
 export interface Album extends BaseAlbum {
     coverImage$: Observable<string>;
 }
+export interface Email {
+    address: string;
+    message: string;
+    title: string;
+    template: string;
+}

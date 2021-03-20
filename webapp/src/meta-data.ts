@@ -14,14 +14,14 @@ export default {
     "discographyBannerUrl": "assets/images/banner-2.jpg",
     "emailTitleDesc": "whats it about - 信息抬头",
     "emailTitleOptions": [
-        "business",
-        "business",
-        "business"
+        "Business - 商务",
+        "Collab - 合作",
+        "Others - 其它"
     ],
     "emailTemplateDesc": "A bit about yourself - 如何描述您",
     "emailTemplateOptions": [
-        "business",
-        "business",
-        "business"
+        "Musician - 音乐家",
+        "Producer - 制片人",
+        "Others - 其它"
     ]
 }

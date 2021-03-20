@@ -8,6 +8,11 @@
     background-color: map-get(theme.$palettes, primary);
 }
 
+.required::after {
+    content: " *";
+    color: red;
+}
+
 .title {
     margin: 0;
 }

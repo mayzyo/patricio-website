@@ -781,19 +781,21 @@ export interface components {
       songs: components["schemas"]["Song"][];
       coverImage?: string | null;
     };
-    EmailPurpose: 0 | 1;
-    SenderType: 0 | 1 | 2;
     User: {
+      created?: string;
+      lastModified?: string;
       id?: number;
+      ipAddress?: string | null;
     };
     Email: {
+      created?: string;
+      lastModified?: string;
       id?: number;
       address: string;
-      message?: string | null;
-      purpose?: components["schemas"]["EmailPurpose"];
-      sender?: components["schemas"]["SenderType"];
+      message: string;
+      title?: string | null;
+      template?: string | null;
       isSuccess: boolean;
-      userId?: number;
       user?: components["schemas"]["User"];
     };
     History: {

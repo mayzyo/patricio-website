@@ -35,7 +35,9 @@ export class MusicService {
   }
 
   get$(id: string) {
-    return this.http.get<Song & { coverImage$: any }>(`${environment.backend}/Songs/${id}`).pipe(
+    return this.http.get<paths["/Songs/{id}"]["get"]["responses"][200]["text/plain"]>(
+      `${environment.backend}/Songs/${id}`
+    ).pipe(
       map(res => this.createSong(res, res.album)),
     );
   }

@@ -9,8 +9,13 @@ button {
     border-radius: 0;
 
     cursor: pointer;
+}
 
-    &:focus { outline: none; }
+button:focus { outline: none; }
+
+button:disabled { 
+    opacity: .5;
+    cursor: not-allowed;
 }
 
 button.outline {

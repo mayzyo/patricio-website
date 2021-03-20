@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIServer.Areas.Metric.Data;
 using APIServer.Areas.Metric.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace APIServer.Areas.Metric.Controllers
 {
@@ -15,10 +16,12 @@ namespace APIServer.Areas.Metric.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly MetricContext context;
+        private readonly IActionContextAccessor accessor;
 
-        public EmailsController(MetricContext context)
+        public EmailsController(MetricContext context, IActionContextAccessor accessor)
         {
             this.context = context;
+            this.accessor = accessor;
         }
 
         // GET: /Emails
@@ -80,6 +83,22 @@ namespace APIServer.Areas.Metric.Controllers
         [HttpPost]
         public async Task<ActionResult<Email>> PostEmail(Email email)
         {
+            var remoteIpAddress = accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            var user = await context.PatricioPersonalUsers
+                .FirstOrDefaultAsync(user => user.IpAddress == remoteIpAddress);
+
+            if (user != null)
+            {
+                email.User = user;
+            } else
+            {
+                email.User = new User
+                {
+                    IpAddress = remoteIpAddress
+                };
+            }
+
             context.PatricioPersonalEmails.Add(email);
             await context.SaveChangesAsync();
 
