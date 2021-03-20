@@ -32,6 +32,30 @@ namespace APIServer.Areas.Content.Controllers
                 .ToListAsync();
         }
 
+        // GET: /Media/Image
+        [HttpGet("Image")]
+        public async Task<ActionResult<IEnumerable<Media>>> GetImageMedia(int page = 1, int size = 10)
+        {
+            return await context.PatricioPersonalMedia
+                .Where(el => el.Type == Media.MediaType.IMAGE)
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+        }
+
+        // GET: /Media/Video
+        [HttpGet("Video")]
+        public async Task<ActionResult<IEnumerable<Media>>> GetVideoMedia(int page = 1, int size = 10)
+        {
+            return await context.PatricioPersonalMedia
+                .Where(el => el.Type == Media.MediaType.VIDEO)
+                .OrderByDescending(el => el.Created)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
+        }
+
         // GET: /Media/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Media>> GetMedia(int id)

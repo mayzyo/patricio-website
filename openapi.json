@@ -648,6 +648,122 @@
         }
       }
     },
+    "/Media/Image": {
+      "get": {
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Media/Video": {
+      "get": {
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Media/{id}": {
       "get": {
         "tags": [
@@ -1308,14 +1424,14 @@
         }
       }
     },
-    "/Songs/Genre/{option}": {
+    "/Songs/Genre/{genre}": {
       "get": {
         "tags": [
           "Songs"
         ],
         "parameters": [
           {
-            "name": "option",
+            "name": "genre",
             "in": "path",
             "required": true,
             "schema": {
@@ -2029,7 +2145,6 @@
       "Song": {
         "required": [
           "album",
-          "genre",
           "title"
         ],
         "type": "object",
@@ -2050,7 +2165,8 @@
             "type": "string"
           },
           "genre": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "soundCloud": {
             "type": "string",
@@ -2182,6 +2298,7 @@
       },
       "History": {
         "required": [
+          "count",
           "month",
           "year"
         ],
@@ -2192,6 +2309,10 @@
             "format": "int32"
           },
           "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
             "type": "integer",
             "format": "int32"
           }

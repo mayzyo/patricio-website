@@ -241,6 +241,42 @@ export interface paths {
       };
     };
   };
+  "/Media/Image": {
+    get: {
+      parameters: {
+        query: {
+          page?: number;
+          size?: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["Media"][];
+          "application/json": components["schemas"]["Media"][];
+          "text/json": components["schemas"]["Media"][];
+        };
+      };
+    };
+  };
+  "/Media/Video": {
+    get: {
+      parameters: {
+        query: {
+          page?: number;
+          size?: number;
+        };
+      };
+      responses: {
+        /** Success */
+        200: {
+          "text/plain": components["schemas"]["Media"][];
+          "application/json": components["schemas"]["Media"][];
+          "text/json": components["schemas"]["Media"][];
+        };
+      };
+    };
+  };
   "/Media/{id}": {
     get: {
       parameters: {
@@ -469,11 +505,11 @@ export interface paths {
       };
     };
   };
-  "/Songs/Genre/{option}": {
+  "/Songs/Genre/{genre}": {
     get: {
       parameters: {
         path: {
-          option: string;
+          genre: string;
         };
         query: {
           page?: number;
@@ -728,7 +764,7 @@ export interface components {
       lastModified?: string;
       id?: number;
       title: string;
-      genre: string;
+      genre?: string | null;
       soundCloud?: string | null;
       audio?: string | null;
       album: components["schemas"]["Album"];
@@ -763,6 +799,7 @@ export interface components {
     History: {
       year: number;
       month: number;
+      count: number;
     };
   };
 }

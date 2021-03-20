@@ -1,20 +1,20 @@
 <h1 class="title">Media Archive | 媒体资料库</h1>
 
-<article class="radio-group" role="group">
-    <input type="radio" name="filter" id="all" checked>
+<article class="radio-group" role="group" (change)="changeFilter()">
+    <input type="radio" id="all" name="filter" value="all" [(ngModel)]="filter">
     <label for="all">All</label>
     
-    <input type="radio" name="filter" id="photos">
+    <input type="radio" id="photos" name="filter" value="photos" [(ngModel)]="filter">
     <label for="photos">Photos</label>
     
-    <input type="radio" name="filter" id="videos">
+    <input type="radio" id="videos" name="filter" value="videos" [(ngModel)]="filter">
     <label for="videos">Videos</label>
 </article>
 
 <section class="gallery">
-    <div class="gallery-column" *ngFor="let group of (media.get$ | async | group:(breakpoint$ | async) ? 4 : 2)">
+    <div class="gallery-column" *ngFor="let group of (media.list$ | async | group:(breakpoint$ | async) ? 4 : 2)">
         <button *ngFor="let item of group" (click)="openViewer(item)">
-            <img class="gallery-item" [src]="item.coverImage$ | async" />
+            <img class="gallery-item" [src]="item.url$ | async" />
         </button>
     </div>
 </section>
