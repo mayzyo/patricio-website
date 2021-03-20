@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SwiperModule } from 'swiper/angular';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 import { HomeComponent } from './home/home.component';
 import { UpdatesComponent } from './updates/updates.component';
@@ -32,6 +33,7 @@ import { MusicGallerySongsComponent } from './music-gallery-songs/music-gallery-
   declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, PlayerBannerComponent, FeedHistoryComponent, AlbumComponent, MusicGallerySongsComponent],
   imports: [
     CommonModule,
+    FormsModule,
     SharedModule,
     HomeRoutingModule,
     FontAwesomeModule,

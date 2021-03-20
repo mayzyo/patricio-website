@@ -1,15 +1,15 @@
 <cdk-virtual-scroll-viewport class="feed" itemSize="10">
     <div class="tool-bar">
         <h1 class="title">近期动态 Recent Announcements</h1>
-        <article class="radio-group" role="group">
-            <input type="radio" name="btnradio" id="all" checked>
+        <article class="radio-group" role="group" (change)="changeFilter()">
+            <input type="radio" id="all" name="filter" value="all" [(ngModel)]="filter">
             <label for="all">All</label>
             
-            <input type="radio" name="btnradio" id="events">
+            <input type="radio" id="events" name="filter" value="events" [(ngModel)]="filter">
             <label for="events">Events</label>
             
-            <input type="radio" name="btnradio" id="posts">
-            <label for="posts">Posts</label>
+            <input type="radio" id="updates" name="filter" value="updates" [(ngModel)]="filter">
+            <label for="updates">Posts</label>
         </article>
     </div>
     <app-post-card *cdkVirtualFor="let post of socials.posts$ | async" [datasource]="post"></app-post-card>

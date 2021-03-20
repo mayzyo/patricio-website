@@ -6,7 +6,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { StaticFileService } from '../core/static-file.service';
 import { paths } from '../shared/backend.api';
-import { BaseMedia, BasePost, SimplifiedPost, Post } from './models';
+import { BaseMedia, BasePost, QuickEvent, Post } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +21,11 @@ export class SocialService {
     )
   );
 
-  readonly getAllPosts$ = new BehaviorSubject<null>(null);
-  private readonly allPosts$ = this.getAllPosts$.pipe(
-    switchMap(() =>
+  readonly getPosts$ = new BehaviorSubject<Filter>(Filter.ALL);
+  private readonly allPosts$ = this.getPosts$.pipe(
+    switchMap(res =>
       this.http.get<paths["/Posts"]["get"]["responses"][200]["text/plain"]>(
-        `${environment.backend}/Posts`
+        `${environment.backend}/Posts${res}`
       )
     )
   );
@@ -37,11 +37,11 @@ export class SocialService {
     map(res => res.map(el => this.createPostModel(el)))
   );
 
-  readonly latest$: Observable<SimplifiedPost[]> = this.http.get<paths["/Posts/Event"]["get"]["responses"][200]["text/plain"]>(
+  readonly latest$: Observable<QuickEvent[]> = this.http.get<paths["/Posts/Event"]["get"]["responses"][200]["text/plain"]>(
     `${environment.backend}/Posts/Event`,
     { params: { size: "3" } }
   ).pipe(
-    map(res => res.map(el => this.createSimplifiedPostModel(el)))
+    map(res => res.map(el => this.createQuickEvent(el)))
   );
 
   readonly archive$: Observable<Array<{ year: number, months: number[] }>> = this.http.get<paths["/Posts/History"]["get"]["responses"][200]["text/plain"]>(
@@ -71,10 +71,11 @@ export class SocialService {
     }
   }
 
-  private createSimplifiedPostModel(post: BasePost): SimplifiedPost {
+  private createQuickEvent(post: BasePost): QuickEvent {
     return {
       id: post.id,
       title: post.title,
+      link: post.link,
       created: post.created,
       thumbnail$: this.createThumbnail(post)
     };
@@ -83,7 +84,7 @@ export class SocialService {
   private createMediaModel(media: BaseMedia) {
     return {
       ...media,
-      url$: this.files.get(`${environment.media}/${media.url}`).pipe(
+      url$: this.files.get(media.url).pipe(
         map(res => this.sanitizer.bypassSecurityTrustUrl(res))
       )
     };
@@ -91,11 +92,17 @@ export class SocialService {
 
   private createThumbnail(post: BasePost) {
     if(post.gallery && post.gallery[0]) {
-      return this.files.get(`${environment.media}/${post.gallery[0].url}`).pipe(
+      return this.files.get(post.gallery[0].url).pipe(
         map(res => this.sanitizer.bypassSecurityTrustUrl(res))
       );
     } else {
       return of('assets/images/banner-1.jpg');
     }
   }
+}
+
+export enum Filter {
+  ALL = '',
+  EVENTS = '/Event',
+  POSTS = '/Update'
 }

@@ -1,7 +1,7 @@
 <section class="title">
     <img *ngIf="(datasource.thumbnail$ | async) as thumbnail" [src]="thumbnail" width="60px" height="60px" />
     <div class="text">
-        <h2>{{ datasource.title | limit:20 }}</h2>
+        <h2>{{ datasource.title | limit:40 }}</h2>
         <time class="date" [dateTime]="datasource.created">{{ datasource.created | date:'fullDate' }}</time>
     </div>
 </section>

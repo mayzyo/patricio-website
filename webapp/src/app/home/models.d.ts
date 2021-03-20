@@ -7,7 +7,7 @@ export type BaseMedia = components["schemas"]["Media"];
 export type BaseSong = components["schemas"]["Song"];
 export type BaseAlbum = components["schemas"]["Album"];
 
-export type SimplifiedPost = Pick<Post, "title" | "created" | "id" | "gallery" | "thumbnail$">;
+export type QuickEvent = Pick<Post, "title" | "created" | "id" | "link" | "thumbnail$">;
 export type Article = paths["/Articles"]["get"]["responses"][200]["text/plain"][number];
 
 export interface Media extends BaseMedia {
