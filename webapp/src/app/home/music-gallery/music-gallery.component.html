@@ -17,7 +17,7 @@
             </app-album>
         </ng-container>
 
-        <app-quick-player *ngFor="let song of musics.songs$ | async" [song]="song" [backgroundUrl]="song.coverImage$ | async">
+        <app-quick-player *ngFor="let song of musics.songs$ | async" [song]="song">
             <p>{{ song.title }}</p>
         </app-quick-player>
     </div>

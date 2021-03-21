@@ -1,2 +1,18 @@
-<ng-content></ng-content>
-<a *ngIf="backgroundUrl" class="background blur" [routerLink]="['/music', song.id]" [style.background-image]="'url(' + backgroundUrl + ')'"></a>
+<ng-container *ngIf="isHover; then Controls else Content"></ng-container>
+<div *ngIf="(song.coverImage$ | async) as coverImage" class="background blur"  [style.background-image]="'url(' + coverImage + ')'"></div>
+
+<ng-template #Content>
+    <ng-content></ng-content>
+</ng-template>
+
+<ng-template #Controls>
+    <button *ngIf="song.audio" (click)="play()">
+        <fa-icon [icon]="faPlayCircle" size="lg"></fa-icon>
+    </button>
+    <a *ngIf="song.soundCloud" [href]="song.soundCloud">
+        <fa-icon [icon]="faSoundcloud" size="lg"></fa-icon>
+    </a>
+    <a *ngIf="song.audio" [routerLink]="['/music', song.id]">
+        <fa-icon [icon]="faInfoCircle" size="lg"></fa-icon>
+    </a>
+</ng-template>

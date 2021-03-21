@@ -7,7 +7,7 @@
     </section>
 
 
-    <audio src="assets/mp3.mp3" controls></audio>
+    <audio [src]="song.audio$ | async" controls></audio>
 
     <div *ngIf="(song.coverImage$ | async) as coverImage" class="background" [style.background-image]="'url(' + coverImage + ')'"></div>
 </article>

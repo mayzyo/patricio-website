@@ -11,24 +11,21 @@
     border: 1px map-get(theme.$palettes, black) solid;
     font-size: calc(32rem / #{map-get(theme.$text, std)});
     color: white;
+
+    & > * {
+        z-index: 10;
+    }
+
+    &:hover > .blur, &.__hover > .blur {
+        filter: blur(4px);
+        margin: -5px;
+    }
 }
 
 .background {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     z-index: 9;
- 
-    background-position: center;
-    background-size: cover;
 }
 
 .blur {
     transition: none;
-    &:hover {
-        filter: blur(4px);
-        margin: -5px;
-    }
 }

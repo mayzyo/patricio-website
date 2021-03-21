@@ -20,7 +20,7 @@ const Template: Story<Post> = args => ({
 
 export const Default = Template.bind({});
 Default.args = {
-    heading: 'Christmas Jam at E.T. Brewery',
-    body: 'Voluptatum et et optio. Eaque ipsum voluptate ullam. Dolores officia laboriosam accusantium temporibus quis vitae ea. Enim aspernatur tempore ea fugit quis nisi eum alias.',
+    title: 'Christmas Jam at E.T. Brewery',
+    content: 'Voluptatum et et optio. Eaque ipsum voluptate ullam. Dolores officia laboriosam accusantium temporibus quis vitae ea. Enim aspernatur tempore ea fugit quis nisi eum alias.',
     created: 'Sun Mar 28 2021 15:53'
 };

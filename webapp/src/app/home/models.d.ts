@@ -21,6 +21,7 @@ export interface Post extends BasePost {
 
 export interface Song extends BaseSong {
     coverImage$: Observable<string>;
+    audio$?: Observable<SafeUrl>;
 }
 
 export type TopSong = components["schemas"]["TopSong"];

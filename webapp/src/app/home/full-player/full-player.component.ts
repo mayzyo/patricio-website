@@ -7,14 +7,13 @@ import { Song } from '../models';
 import { MusicService } from '../music.service';
 
 @Component({
-  selector: 'app-player-banner',
-  templateUrl: './player-banner.component.html',
-  styleUrls: ['./player-banner.component.scss']
+  selector: 'app-full-player',
+  templateUrl: './full-player.component.html',
+  styleUrls: ['./full-player.component.scss']
 })
-export class PlayerBannerComponent implements OnInit {
+export class FullPlayerComponent implements OnInit {
   readonly backgroundUrl: string = `--bg: url(${metaData.discographyBannerUrl})`;
-
-  song$: Observable<Song & { coverImage$: any }> = this.route.paramMap.pipe(
+  readonly song$: Observable<Song> = this.route.paramMap.pipe(
     switchMap(params => this.musics.get$(params.get('id') || ''))
   );
 

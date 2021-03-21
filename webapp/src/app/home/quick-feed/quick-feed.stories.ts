@@ -1,22 +1,35 @@
-import { moduleMetadata } from '@storybook/angular';
+import { moduleMetadata, Story } from '@storybook/angular';
 import { QuickFeedComponent } from './quick-feed.component';
-import { HttpClientModule } from '@angular/common/http';
-import { MockDataProvider } from 'src/app/core/mock-data.interceptor';
-import { LimitPipe } from 'src/app/shared/limit.pipe';
 import { PostCardComponent } from '../post-card/post-card.component';
+import { SocialService } from '../social.service';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { Observable, of } from 'rxjs';
+import { QuickEvent } from '../models';
 
 export default {
     title: 'Home/Quick Feed',
     decorators: [
         moduleMetadata({
-            // imports both components to allow component composition with storybook
-            declarations: [QuickFeedComponent, PostCardComponent, LimitPipe],
-            imports: [HttpClientModule],
-            providers: [MockDataProvider]
+            declarations: [QuickFeedComponent, PostCardComponent],
+            imports: [SharedModule]
         }),
     ]
 };
 
-export const Default = () => ({
-    component: QuickFeedComponent,
-});
+const Template: Story<any> = args => {
+    class MockSocialService implements Partial<SocialService> {
+        readonly latest$: Observable<QuickEvent[]> = of([]);
+    }
+
+    return {
+        moduleMetadata: {
+            providers: [{ provide: SocialService, useClass: MockSocialService }]
+        },
+        component: QuickFeedComponent
+    }
+};
+
+export const Default = Template.bind({});
+Default.args = {
+
+};

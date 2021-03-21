@@ -7,7 +7,7 @@ import { Album } from '../models';
   styleUrls: ['./album.component.scss']
 })
 export class AlbumComponent implements OnInit {
-  @Input() album!: Album;
+  @Input() album!: Readonly<Album>;
   @Input() backgroundUrl: string | null = '';
   @Output() selectAlbum = new EventEmitter();
 

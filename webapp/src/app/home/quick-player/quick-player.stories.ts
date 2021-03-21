@@ -1,24 +1,24 @@
-import { moduleMetadata } from '@storybook/angular';
+import { moduleMetadata, Story } from '@storybook/angular';
 import { QuickPlayerComponent } from './quick-player.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { from } from 'rxjs';
+import { of } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterModule } from '@angular/router';
+import { Song } from '../models';
 
 export default {
     title: 'Home/Quick Player',
     decorators: [
         moduleMetadata({
-            // imports both components to allow component composition with storybook
             declarations: [QuickPlayerComponent],
-            imports: [BrowserAnimationsModule],
+            imports: [FontAwesomeModule, RouterModule]
         }),
         (storyFunc: any) => {
             const story = storyFunc();
-
             return {
                 ...story,
                 template: `
-                    <app-quick-player [backgroundUrl]="backgroundUrl">
-                        <p style="z-index: 10; pointer-events: none;">Player Title</p>
+                    <app-quick-player [song]="song" [class]="isHover ? '__hover' : ''">
+                        <p style="z-index: 10; pointer-events: none;">{{ song.title }}</p>
                     </app-quick-player>
                 `,
             };
@@ -26,9 +26,20 @@ export default {
     ]
 };
 
-export const Default = () => ({
+const Template: Story<Song> = args => ({
     component: QuickPlayerComponent,
-    props: {
-        backgroundUrl: 'assets/images/banner-1.jpg'
-    }
+    props: { song: args },
 });
+
+export const Default = Template.bind({});
+Default.args = {
+    title: 'All Of Me',
+    genre: 'Pop',
+    coverImage$: of('assets/images/banner-1.jpg')
+};
+
+export const Hover: Story<Song> = args => ({
+    component: QuickPlayerComponent,
+    props: { song: args, isHover: true },
+});
+Hover.args = Default.args

@@ -6,7 +6,7 @@
     </ng-template>
 
     <ng-template *ngFor="let song of songs$ | async" swiperSlide>
-        <app-quick-player [song]="song" [backgroundUrl]="song.coverImage$ | async">
+        <app-quick-player [song]="song">
             <p>{{ song.title }}</p>
         </app-quick-player>
     </ng-template>

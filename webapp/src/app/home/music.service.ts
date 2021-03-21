@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -31,7 +32,7 @@ export class MusicService {
     map(res => res.songs.map(el => this.createSong(el, res)))
   );
 
-  constructor(private http: HttpClient, private files: StaticFileService) {
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private files: StaticFileService) {
   }
 
   get$(id: string) {
@@ -54,9 +55,15 @@ export class MusicService {
   private createSong(song: BaseSong, album: BaseAlbum): Song {
     return {
       ...song,
+      genre: song.genre ? song.genre : album.genre,
       coverImage$: album.coverImage 
         ? this.files.get(album.coverImage) 
-        : of('assets/images/banner-1.jpg')
+        : of('assets/images/banner-1.jpg'),
+      audio$: song.audio 
+        ? this.files.get(song.audio).pipe(
+            map(res => this.sanitizer.bypassSecurityTrustUrl(res))
+          ) 
+        : undefined
     }
   }
 

@@ -11,8 +11,8 @@ import { MusicService } from '../music.service';
   styleUrls: ['./music-gallery-songs.component.scss']
 })
 export class MusicGallerySongsComponent implements OnInit {
-  @Input() album!: Album;
-  @Input() current!: Album;
+  @Input() album!: Readonly<Album>;
+  @Input() current!: Readonly<Album>;
   readonly songs$ = this.musics.songs$.pipe(
     skipWhile(() => this.current.id != this.album.id)
   );
