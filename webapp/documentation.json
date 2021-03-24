@@ -342,14 +342,292 @@
             "type": "injectable"
         },
         {
+            "name": "MockMusicService",
+            "id": "injectable-MockMusicService-365e9d5a92d6f2cf64ad313618290493",
+            "file": "src/app/home/music-gallery/music-gallery.stories.ts",
+            "properties": [
+                {
+                    "name": "getSongs$",
+                    "defaultValue": "new Subject<Album>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 65,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "songs$",
+                    "defaultValue": "this.getSongs$.pipe(\r\n        switchMap(res =>\r\n            this.http.get<any>(\r\n                `${environment.backend}/Albums/${res.id}`\r\n            )\r\n        ),\r\n        map(res => res.songs.map((el: any) => super.createSong(el, res))),\r\n        withLatestFrom(this.getSongs$),\r\n        map(res => res[0].map((el: any, i: number) => ({ ...el, title: res[1].songs[i].title, id: res[1].songs[i].id }))),\r\n        share()\r\n    )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 66,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "albums$",
+                    "defaultValue": "this.getAlbums$.pipe(\r\n    switchMap(res => this.http.get<paths[\"/Albums\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n      `${environment.backend}/Albums`,\r\n      { params: { ...res } }\r\n    )),\r\n    map(res  => res.map(el => this.createAlbum(el))),\r\n    share()\r\n  )",
+                    "type": "Observable<Album[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "modifierKind": [
+                        132
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "getAlbums$",
+                    "defaultValue": "new Subject<Pagination>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20,
+                    "modifierKind": [
+                        132
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "getSongs$",
+                    "defaultValue": "new Subject<Album>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 30,
+                    "modifierKind": [
+                        132
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "showcase$",
+                    "defaultValue": "this.http.get<paths[\"/Songs/Top\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n    `${environment.backend}/Songs/Top`\r\n  ).pipe(\r\n    map(res => res.map(el => this.topSongToSong(el)))\r\n  )",
+                    "type": "Observable<Song[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 15,
+                    "modifierKind": [
+                        132
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "songs$",
+                    "defaultValue": "this.getSongs$.pipe(\r\n    switchMap(res =>\r\n      this.http.get<paths[\"/Albums/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n        `${environment.backend}/Albums/${res.id}`\r\n      )\r\n    ),\r\n    map(res => res.songs.map(el => this.createSong(el, res))),\r\n    share()\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "modifierKind": [
+                        132
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                }
+            ],
+            "methods": [
+                {
+                    "name": "createAlbum",
+                    "args": [
+                        {
+                            "name": "album",
+                            "type": "BaseAlbum"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Album",
+                    "typeParameters": [],
+                    "line": 52,
+                    "modifierKind": [
+                        113
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "album",
+                            "type": "BaseAlbum",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "createSong",
+                    "args": [
+                        {
+                            "name": "song",
+                            "type": "BaseSong"
+                        },
+                        {
+                            "name": "album",
+                            "type": "BaseAlbum"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Song",
+                    "typeParameters": [],
+                    "line": 61,
+                    "modifierKind": [
+                        113
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "song",
+                            "type": "BaseSong",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "album",
+                            "type": "BaseAlbum",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "get$",
+                    "args": [
+                        {
+                            "name": "id",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 44,
+                    "jsdoctags": [
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                },
+                {
+                    "name": "topSongToSong",
+                    "args": [
+                        {
+                            "name": "topSong",
+                            "type": "TopSong"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Song",
+                    "typeParameters": [],
+                    "line": 76,
+                    "modifierKind": [
+                        113
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "topSong",
+                            "type": "TopSong",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ],
+                    "inheritance": {
+                        "file": "MusicService"
+                    }
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { moduleMetadata, Story } from '@storybook/angular';\r\nimport { MusicGalleryComponent } from './music-gallery.component';\r\nimport { SwiperModule } from 'swiper/angular';\r\nimport { QuickPlayerComponent } from '../quick-player/quick-player.component';\r\nimport { of, Subject } from 'rxjs';\r\nimport { Album } from '../models';\r\nimport { MusicGallerySongsComponent } from '../music-gallery-songs/music-gallery-songs.component';\r\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome';\r\nimport { AlbumCoverComponent } from '../album-cover/album-cover.component';\r\nimport { BrowserAnimationsModule } from '@angular/platform-browser/animations';\r\nimport { RouterTestingModule } from '@angular/router/testing';\r\nimport { HttpClient, HttpClientModule } from '@angular/common/http';\r\nimport { MockModelProvider } from 'src/app/core/mock-model.interceptor';\r\nimport { StaticFileService } from 'src/app/core/static-file.service';\r\nimport { MusicService } from '../music.service';\r\nimport { map, share, switchMap, withLatestFrom } from 'rxjs/operators';\r\nimport { DomSanitizer } from '@angular/platform-browser';\r\nimport { Injectable } from '@angular/core';\r\nimport { environment } from 'src/environments/environment';\r\n\r\nexport default {\r\n    title: 'Home/Music Gallery',\r\n    decorators: [\r\n        moduleMetadata({\r\n            declarations: [MusicGalleryComponent, MusicGallerySongsComponent, AlbumCoverComponent, QuickPlayerComponent],\r\n            imports: [BrowserAnimationsModule, HttpClientModule, RouterTestingModule, SwiperModule, FontAwesomeModule],\r\n            providers: [MockModelProvider]\r\n        }),\r\n    ]\r\n};\r\n\r\nconst Template: Story<Album & { songTitle: string, songAudio: string, count: number }> = args => {\r\n    class MockStaticFileService implements Partial<StaticFileService> {\r\n        get(fileName: string) {\r\n            return of('assets/images/banner-1.jpg');\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [\r\n                { provide: MusicService, useClass: MockMusicService },\r\n                { provide: StaticFileService, useClass: MockStaticFileService }\r\n            ]\r\n        },\r\n        component: MusicGalleryComponent\r\n    }\r\n};\r\n\r\nexport const Default = Template.bind({});\r\nDefault.args = {\r\n    title: 'album title',\r\n    genre: 'genre',\r\n    coverImage: 'assets/images/banner-1.jpg',\r\n    songTitle: 'album song',\r\n    songAudio: 'assets/mp3.mp3',\r\n    count: 10\r\n};\r\n\r\n    // This is necessary to keep data consistent for testing.\r\n@Injectable({\r\n    providedIn: 'root'\r\n})\r\nclass MockMusicService extends MusicService {\r\n    readonly getSongs$ = new Subject<Album>();\r\n    readonly songs$ = this.getSongs$.pipe(\r\n        switchMap(res =>\r\n            this.http.get<any>(\r\n                `${environment.backend}/Albums/${res.id}`\r\n            )\r\n        ),\r\n        map(res => res.songs.map((el: any) => super.createSong(el, res))),\r\n        withLatestFrom(this.getSongs$),\r\n        map(res => res[0].map((el: any, i: number) => ({ ...el, title: res[1].songs[i].title, id: res[1].songs[i].id }))),\r\n        share()\r\n    );\r\n\r\n    constructor(http: HttpClient, sanitizer: DomSanitizer, files: StaticFileService) {\r\n        super(http, sanitizer, files);\r\n    }\r\n}",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    },
+                    {
+                        "name": "sanitizer",
+                        "type": "DomSanitizer"
+                    },
+                    {
+                        "name": "files",
+                        "type": "StaticFileService"
+                    }
+                ],
+                "line": 76,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "sanitizer",
+                        "type": "DomSanitizer",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "files",
+                        "type": "StaticFileService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "extends": "MusicService",
+            "type": "injectable"
+        },
+        {
             "name": "MusicService",
-            "id": "injectable-MusicService-8a79e07c2690c2d6de0d57e4474d0c3c",
+            "id": "injectable-MusicService-0773765ae7b18d09971e93a36cd64da3",
             "file": "src/app/home/music.service.ts",
             "properties": [
                 {
                     "name": "albums$",
-                    "defaultValue": "this.http.get<paths[\"/Albums\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n    `${environment.backend}/Albums`\r\n  ).pipe(\r\n    map(res  => res.map(el => this.createAlbum(el)))\r\n  )",
+                    "defaultValue": "this.getAlbums$.pipe(\r\n    switchMap(res => this.http.get<paths[\"/Albums\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n      `${environment.backend}/Albums`,\r\n      { params: { ...res } }\r\n    )),\r\n    map(res  => res.map(el => this.createAlbum(el))),\r\n    share()\r\n  )",
                     "type": "Observable<Album[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "getAlbums$",
+                    "defaultValue": "new Subject<Pagination>()",
+                    "type": "",
                     "optional": false,
                     "description": "",
                     "line": 20,
@@ -359,11 +637,11 @@
                 },
                 {
                     "name": "getSongs$",
-                    "defaultValue": "new ReplaySubject<Album>()",
+                    "defaultValue": "new Subject<Album>()",
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 25,
+                    "line": 30,
                     "modifierKind": [
                         132
                     ]
@@ -381,11 +659,11 @@
                 },
                 {
                     "name": "songs$",
-                    "defaultValue": "this.getSongs$.pipe(\r\n    switchMap(res =>\r\n      this.http.get<paths[\"/Albums/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n        `${environment.backend}/Albums/${res.id}`\r\n      )\r\n    ),\r\n    map(res => res.songs.map(el => this.createSong(el, res)))\r\n  )",
+                    "defaultValue": "this.getSongs$.pipe(\r\n    switchMap(res =>\r\n      this.http.get<paths[\"/Albums/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n        `${environment.backend}/Albums/${res.id}`\r\n      )\r\n    ),\r\n    map(res => res.songs.map(el => this.createSong(el, res))),\r\n    share()\r\n  )",
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 26,
+                    "line": 31,
                     "modifierKind": [
                         132
                     ]
@@ -403,9 +681,9 @@
                     "optional": false,
                     "returnType": "Album",
                     "typeParameters": [],
-                    "line": 46,
+                    "line": 52,
                     "modifierKind": [
-                        112
+                        113
                     ],
                     "jsdoctags": [
                         {
@@ -432,9 +710,9 @@
                     "optional": false,
                     "returnType": "Song",
                     "typeParameters": [],
-                    "line": 55,
+                    "line": 61,
                     "modifierKind": [
-                        112
+                        113
                     ],
                     "jsdoctags": [
                         {
@@ -464,7 +742,7 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 38,
+                    "line": 44,
                     "jsdoctags": [
                         {
                             "name": "id",
@@ -486,9 +764,9 @@
                     "optional": false,
                     "returnType": "Song",
                     "typeParameters": [],
-                    "line": 70,
+                    "line": 76,
                     "modifierKind": [
-                        112
+                        113
                     ],
                     "jsdoctags": [
                         {
@@ -502,7 +780,7 @@
                 }
             ],
             "description": "",
-            "sourceCode": "import { HttpClient } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { DomSanitizer } from '@angular/platform-browser';\r\nimport { Observable, of, ReplaySubject, Subject } from 'rxjs';\r\nimport { map, shareReplay, switchMap } from 'rxjs/operators';\r\nimport { environment } from 'src/environments/environment';\r\nimport { StaticFileService } from '../core/static-file.service';\r\nimport { paths } from '../shared/backend.api';\r\nimport { Album, BaseAlbum, BaseSong, Song, TopSong } from './models';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class MusicService {\r\n  readonly showcase$: Observable<Song[]> = this.http.get<paths[\"/Songs/Top\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n    `${environment.backend}/Songs/Top`\r\n  ).pipe(\r\n    map(res => res.map(el => this.topSongToSong(el)))\r\n  );\r\n  readonly albums$: Observable<Album[]> = this.http.get<paths[\"/Albums\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n    `${environment.backend}/Albums`\r\n  ).pipe(\r\n    map(res  => res.map(el => this.createAlbum(el)))\r\n  );\r\n  readonly getSongs$ = new ReplaySubject<Album>();\r\n  readonly songs$ = this.getSongs$.pipe(\r\n    switchMap(res =>\r\n      this.http.get<paths[\"/Albums/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n        `${environment.backend}/Albums/${res.id}`\r\n      )\r\n    ),\r\n    map(res => res.songs.map(el => this.createSong(el, res)))\r\n  );\r\n\r\n  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private files: StaticFileService) {\r\n  }\r\n\r\n  get$(id: string) {\r\n    return this.http.get<paths[\"/Songs/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n      `${environment.backend}/Songs/${id}`\r\n    ).pipe(\r\n      map(res => this.createSong(res, res.album)),\r\n    );\r\n  }\r\n\r\n  private createAlbum(album: BaseAlbum): Album {\r\n    return {\r\n      ...album,\r\n      coverImage$: album.coverImage \r\n        ? this.files.get(album.coverImage) \r\n        : of('assets/images/banner-1.jpg')\r\n    };\r\n  }\r\n\r\n  private createSong(song: BaseSong, album: BaseAlbum): Song {\r\n    return {\r\n      ...song,\r\n      genre: song.genre ? song.genre : album.genre,\r\n      coverImage$: album.coverImage \r\n        ? this.files.get(album.coverImage) \r\n        : of('assets/images/banner-1.jpg'),\r\n      audio$: song.audio \r\n        ? this.files.get(song.audio).pipe(\r\n            map(res => this.sanitizer.bypassSecurityTrustUrl(res))\r\n          ) \r\n        : undefined\r\n    }\r\n  }\r\n\r\n  private topSongToSong(topSong: TopSong): Song {\r\n    return {\r\n      ...topSong.song,\r\n      genre: topSong.song.genre ? topSong.song.genre : topSong.song.album.genre,\r\n      coverImage$: topSong.song.album.coverImage \r\n        ? this.files.get(topSong.song.album.coverImage) \r\n        : of()\r\n    };\r\n  }\r\n}",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { DomSanitizer } from '@angular/platform-browser';\r\nimport { Observable, of, ReplaySubject, Subject } from 'rxjs';\r\nimport { map, share, switchMap } from 'rxjs/operators';\r\nimport { environment } from 'src/environments/environment';\r\nimport { StaticFileService } from '../core/static-file.service';\r\nimport { paths } from '../shared/backend.api';\r\nimport { Album, BaseAlbum, BaseSong, Pagination, Song, TopSong } from './models';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class MusicService {\r\n  readonly showcase$: Observable<Song[]> = this.http.get<paths[\"/Songs/Top\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n    `${environment.backend}/Songs/Top`\r\n  ).pipe(\r\n    map(res => res.map(el => this.topSongToSong(el)))\r\n  );\r\n  readonly getAlbums$ = new Subject<Pagination>();\r\n  readonly albums$: Observable<Album[]> = this.getAlbums$.pipe(\r\n    switchMap(res => this.http.get<paths[\"/Albums\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n      `${environment.backend}/Albums`,\r\n      { params: { ...res } }\r\n    )),\r\n    map(res  => res.map(el => this.createAlbum(el))),\r\n    share()\r\n  );\r\n\r\n  readonly getSongs$ = new Subject<Album>();\r\n  readonly songs$ = this.getSongs$.pipe(\r\n    switchMap(res =>\r\n      this.http.get<paths[\"/Albums/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n        `${environment.backend}/Albums/${res.id}`\r\n      )\r\n    ),\r\n    map(res => res.songs.map(el => this.createSong(el, res))),\r\n    share()\r\n  );\r\n\r\n  constructor(protected http: HttpClient, protected sanitizer: DomSanitizer, protected files: StaticFileService) {\r\n  }\r\n\r\n  get$(id: string) {\r\n    return this.http.get<paths[\"/Songs/{id}\"][\"get\"][\"responses\"][200][\"text/plain\"]>(\r\n      `${environment.backend}/Songs/${id}`\r\n    ).pipe(\r\n      map(res => this.createSong(res, res.album)),\r\n    );\r\n  }\r\n\r\n  protected createAlbum(album: BaseAlbum): Album {\r\n    return {\r\n      ...album,\r\n      coverImage$: album.coverImage \r\n        ? this.files.get(album.coverImage) \r\n        : of('assets/images/banner-1.jpg')\r\n    };\r\n  }\r\n\r\n  protected createSong(song: BaseSong, album: BaseAlbum): Song {\r\n    return {\r\n      ...song,\r\n      genre: song.genre ? song.genre : album.genre,\r\n      coverImage$: album.coverImage \r\n        ? this.files.get(album.coverImage) \r\n        : of('assets/images/banner-1.jpg'),\r\n      audio$: song.audio \r\n        ? this.files.get(song.audio).pipe(\r\n            map(res => this.sanitizer.bypassSecurityTrustUrl(res))\r\n          ) \r\n        : undefined\r\n    }\r\n  }\r\n\r\n  protected topSongToSong(topSong: TopSong): Song {\r\n    return {\r\n      ...topSong.song,\r\n      genre: topSong.song.genre ? topSong.song.genre : topSong.song.album.genre,\r\n      coverImage$: topSong.song.album.coverImage \r\n        ? this.files.get(topSong.song.album.coverImage) \r\n        : of()\r\n    };\r\n  }\r\n}",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -520,7 +798,7 @@
                         "type": "StaticFileService"
                     }
                 ],
-                "line": 33,
+                "line": 39,
                 "jsdoctags": [
                     {
                         "name": "http",
@@ -1031,44 +1309,31 @@
     "directives": [],
     "components": [
         {
-            "name": "AlbumComponent",
-            "id": "component-AlbumComponent-8badb23cbadd4ef6da9f41cdfa64b2ec",
-            "file": "src/app/home/album/album.component.ts",
+            "name": "AlbumCoverComponent",
+            "id": "component-AlbumCoverComponent-637f0bc423df4b877fb100ea3a5aaa26",
+            "file": "src/app/home/album-cover/album-cover.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
             "outputs": [],
             "providers": [],
-            "selector": "app-album",
+            "selector": "app-album-cover",
             "styleUrls": [
-                "./album.component.scss"
+                "./album-cover.component.scss"
             ],
             "styles": [],
             "templateUrl": [
-                "./album.component.html"
+                "./album-cover.component.html"
             ],
             "viewProviders": [],
             "inputsClass": [
                 {
-                    "name": "album",
+                    "name": "coverImage",
                     "line": 10,
-                    "type": "Readonly<Album>"
-                },
-                {
-                    "name": "backgroundUrl",
-                    "defaultValue": "''",
-                    "line": 11,
-                    "type": "string | null"
+                    "type": "SafeUrl | string"
                 }
             ],
-            "outputsClass": [
-                {
-                    "name": "selectAlbum",
-                    "defaultValue": "new EventEmitter()",
-                    "line": 12,
-                    "type": "EventEmitter"
-                }
-            ],
+            "outputsClass": [],
             "propertiesClass": [],
             "methodsClass": [
                 {
@@ -1077,7 +1342,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 16
+                    "line": 14
                 }
             ],
             "hostBindings": [],
@@ -1085,12 +1350,12 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';\nimport { Album } from '../models';\n\n@Component({\n  selector: 'app-album',\n  templateUrl: './album.component.html',\n  styleUrls: ['./album.component.scss']\n})\nexport class AlbumComponent implements OnInit {\n  @Input() album!: Readonly<Album>;\n  @Input() backgroundUrl: string | null = '';\n  @Output() selectAlbum = new EventEmitter();\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { SafeUrl } from '@angular/platform-browser';\n\n@Component({\n  selector: 'app-album-cover',\n  templateUrl: './album-cover.component.html',\n  styleUrls: ['./album-cover.component.scss']\n})\nexport class AlbumCoverComponent implements OnInit {\n  @Input() coverImage?: SafeUrl | string;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    height: 45vh;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    overflow: hidden;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(32rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n    width: 100%;\r\n \r\n    background-position: center;\r\n    background-size: cover;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}",
-                    "styleUrl": "./album.component.scss"
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    padding: map-get(theme.$spacing, std);\r\n    display: block;\r\n    overflow: hidden;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(32rem / #{map-get(theme.$text, std)});\r\n    text-transform: capitalize;\r\n    color: white;\r\n\r\n    &:hover > .blur, &.__hover > .blur {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n\r\n    &:hover > .background, &.__hover > .background {\r\n        width: calc(100% + 10px);\r\n    }\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n}",
+                    "styleUrl": "./album-cover.component.scss"
                 }
             ],
             "stylesData": "",
@@ -1098,12 +1363,12 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 12
+                "line": 10
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<ng-content></ng-content>\n<button *ngIf=\"backgroundUrl\" class=\"background blur\" (click)=\"selectAlbum.emit(album)\" [style.background-image]=\"'url(' + backgroundUrl + ')'\"></button>"
+            "templateData": "<ng-content></ng-content>\n<article class=\"background blur\" [style.background-image]=\"'url(' + coverImage + ')'\"></article>"
         },
         {
             "name": "AppComponent",
@@ -1537,7 +1802,7 @@
                 "OnInit",
                 "OnDestroy"
             ],
-            "templateData": "<cdk-virtual-scroll-viewport class=\"feed\" itemSize=\"10\">\n    <div class=\"tool-bar\">\n        <h1 class=\"title\">近期动态 Recent Announcements</h1>\n        <article class=\"radio-group\" role=\"group\" (change)=\"changeFilter()\">\n            <input type=\"radio\" id=\"all\" name=\"filter\" value=\"all\" [(ngModel)]=\"filter\">\n            <label for=\"all\">All</label>\n            \n            <input type=\"radio\" id=\"events\" name=\"filter\" value=\"events\" [(ngModel)]=\"filter\">\n            <label for=\"events\">Events</label>\n            \n            <input type=\"radio\" id=\"updates\" name=\"filter\" value=\"updates\" [(ngModel)]=\"filter\">\n            <label for=\"updates\">Posts</label>\n        </article>\n    </div>\n    <app-post-card *cdkVirtualFor=\"let post of socials.posts$ | async\" [datasource]=\"post\"></app-post-card>\n</cdk-virtual-scroll-viewport>"
+            "templateData": "<cdk-virtual-scroll-viewport class=\"feed\" itemSize=\"10\">\n    <div class=\"tool-bar\">\n        <h1 class=\"title\">近期动态 Recent Announcements</h1>\n        <article class=\"radio-group\" role=\"group\" (change)=\"changeFilter()\">\n            <input type=\"radio\" id=\"all\" name=\"filter\" value=\"all\" [(ngModel)]=\"filter\">\n            <label for=\"all\">All</label>\n            \n            <input type=\"radio\" id=\"events\" name=\"filter\" value=\"events\" [(ngModel)]=\"filter\">\n            <label for=\"events\">Events</label>\n            \n            <input type=\"radio\" id=\"updates\" name=\"filter\" value=\"updates\" [(ngModel)]=\"filter\">\n            <label for=\"updates\">Posts</label>\n        </article>\n    </div>\n    <app-post *cdkVirtualFor=\"let post of socials.posts$ | async\" [post]=\"post\"></app-post>\n</cdk-virtual-scroll-viewport>"
         },
         {
             "name": "FeedHistoryComponent",
@@ -2529,7 +2794,7 @@
         },
         {
             "name": "MusicGalleryComponent",
-            "id": "component-MusicGalleryComponent-89c097624c61a17dfc69c9d4e08b3c0e",
+            "id": "component-MusicGalleryComponent-700760ebcbc59ae7e42274b184772bc4",
             "file": "src/app/home/music-gallery/music-gallery.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -2549,13 +2814,25 @@
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "albums",
-                    "type": "Album[]",
-                    "optional": true,
+                    "name": "activeAlbum$",
+                    "defaultValue": "new ReplaySubject<Album>()",
+                    "type": "",
+                    "optional": false,
                     "description": "",
-                    "line": 20,
+                    "line": 42,
                     "modifierKind": [
-                        112
+                        132
+                    ]
+                },
+                {
+                    "name": "activeIndex$",
+                    "defaultValue": "new Subject<number>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 41,
+                    "modifierKind": [
+                        132
                     ]
                 },
                 {
@@ -2564,36 +2841,61 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 15,
+                    "line": 24,
                     "modifierKind": [
                         132
                     ]
                 },
                 {
-                    "name": "breakpoint$",
-                    "defaultValue": "this.breakpointObserver.observe('(min-width: 1024px)').pipe(\n    map(res => res.matches)\n  )",
+                    "name": "delayedAlbums$",
+                    "defaultValue": "merge(of(null), this.musics.getSongs$).pipe(\n    switchMapTo(\n      merge(of([]), this.animate(this.musics.albums$))\n    )\n  )",
+                    "type": "Observable<Album[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "delayedSongs$",
+                    "defaultValue": "this.musics.getAlbums$.pipe(\n    switchMapTo(\n      merge(of([]), this.animate(this.musics.songs$))\n    )\n  )",
+                    "type": "Observable<Song[]>",
+                    "optional": false,
+                    "description": "",
+                    "line": 36,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "faAngleDoubleLeft",
+                    "defaultValue": "faAngleDoubleLeft",
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 16,
+                    "line": 23,
                     "modifierKind": [
                         132
                     ]
                 },
                 {
-                    "name": "currentAlbum",
-                    "defaultValue": "undefined",
-                    "type": "Album",
-                    "optional": true,
+                    "name": "isMobile$",
+                    "defaultValue": "merge(\n    of(this.breakpointObserver.isMatched('(max-width: 1023px)')),\n    this.breakpointObserver.observe('(max-width: 1023px)').pipe(\n      map(res => res.matches)\n    )\n  )",
+                    "type": "",
+                    "optional": false,
                     "description": "",
-                    "line": 19
+                    "line": 25,
+                    "modifierKind": [
+                        132
+                    ]
                 },
                 {
                     "name": "musics",
                     "type": "MusicService",
                     "optional": false,
                     "description": "",
-                    "line": 23,
+                    "line": 45,
                     "modifierKind": [
                         114
                     ]
@@ -2604,7 +2906,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 21,
+                    "line": 43,
                     "modifierKind": [
                         112,
                         132
@@ -2613,21 +2915,26 @@
             ],
             "methodsClass": [
                 {
-                    "name": "activeIndexChange",
+                    "name": "animate",
                     "args": [
                         {
-                            "name": "e",
-                            "type": "any"
+                            "name": "ob",
+                            "type": "Observable<T[]>"
                         }
                     ],
                     "optional": false,
                     "returnType": "any",
-                    "typeParameters": [],
-                    "line": 51,
+                    "typeParameters": [
+                        "T"
+                    ],
+                    "line": 78,
+                    "modifierKind": [
+                        112
+                    ],
                     "jsdoctags": [
                         {
-                            "name": "e",
-                            "type": "any",
+                            "name": "ob",
+                            "type": "Observable<T[]>",
                             "tagName": {
                                 "text": "param"
                             }
@@ -2635,12 +2942,28 @@
                     ]
                 },
                 {
+                    "name": "backToAlbum",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 74
+                },
+                {
+                    "name": "ngAfterViewInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 65
+                },
+                {
                     "name": "ngOnDestroy",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 42
+                    "line": 61
                 },
                 {
                     "name": "ngOnInit",
@@ -2648,7 +2971,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 25
+                    "line": 47
                 },
                 {
                     "name": "selectAlbum",
@@ -2661,7 +2984,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 46,
+                    "line": 69,
                     "jsdoctags": [
                         {
                             "name": "e",
@@ -2678,11 +3001,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { BreakpointObserver } from '@angular/cdk/layout';\nimport { Component, OnDestroy, OnInit } from '@angular/core';\nimport { combineLatest, Subscription } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport metaData from 'src/meta-data';\nimport { Album } from '../models';\nimport { MusicService } from '../music.service';\n\n@Component({\n  selector: 'app-music-gallery',\n  templateUrl: './music-gallery.component.html',\n  styleUrls: ['./music-gallery.component.scss']\n})\nexport class MusicGalleryComponent implements OnInit, OnDestroy {\n  readonly backgroundUrl: string = `--bg: url(${metaData.discographyBannerUrl})`;\n  readonly breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(\n    map(res => res.matches)\n  );\n  currentAlbum?: Album = undefined;\n  private albums?: Album[];\n  private readonly subscriptions = new Subscription();\n\n  constructor(private breakpointObserver: BreakpointObserver, public musics: MusicService) { }\n\n  ngOnInit(): void {\n    this.subscriptions.add(\n      this.musics.albums$.subscribe(res => this.albums = res)\n    );\n    this.subscriptions.add(\n      combineLatest([\n        this.breakpoint$,\n        this.musics.albums$\n      ]).subscribe(res => {\n        if(res[0] == false && res[1]) {\n          this.currentAlbum = res[1][0];\n          this.musics.getSongs$.next(res[1][0]);\n        }\n      })\n    );\n  }\n\n  ngOnDestroy(): void {\n    this.subscriptions.unsubscribe();\n  }\n\n  selectAlbum(e: Album) {\n    this.currentAlbum = e;\n    this.musics.getSongs$.next(e);\n  }\n\n  activeIndexChange(e: any): any {\n    if(this.albums) {\n      this.currentAlbum = this.albums[e.activeIndex];\n      this.musics.getSongs$.next(this.albums[e.activeIndex]);\n    }\n  }\n}\n",
+            "sourceCode": "import { transition, trigger, useAnimation } from '@angular/animations';\nimport { BreakpointObserver } from '@angular/cdk/layout';\nimport { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';\nimport { combineLatest, from, interval, merge, Observable, of, ReplaySubject, Subject, Subscription, zip } from 'rxjs';\nimport { map, pluck, scan, switchMap, switchMapTo } from 'rxjs/operators';\nimport metaData from 'src/meta-data';\nimport { Album, Song } from '../models';\nimport { MusicService } from '../music.service';\nimport { pressDownAnimation } from '../press-down.animation';\nimport { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';\n\n@Component({\n  selector: 'app-music-gallery',\n  templateUrl: './music-gallery.component.html',\n  styleUrls: ['./music-gallery.component.scss'],\n  animations: [\n    trigger('pressDown', [\n      transition('void => *', [useAnimation(pressDownAnimation)])\n    ])\n  ],\n})\nexport class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {\n  readonly faAngleDoubleLeft = faAngleDoubleLeft;\n  readonly backgroundUrl: string = `--bg: url(${metaData.discographyBannerUrl})`;\n  readonly isMobile$ = merge(\n    of(this.breakpointObserver.isMatched('(max-width: 1023px)')),\n    this.breakpointObserver.observe('(max-width: 1023px)').pipe(\n      map(res => res.matches)\n    )\n  );\n  readonly delayedAlbums$: Observable<Album[]> = merge(of(null), this.musics.getSongs$).pipe(\n    switchMapTo(\n      merge(of([]), this.animate(this.musics.albums$))\n    )\n  );\n  readonly delayedSongs$: Observable<Song[]> = this.musics.getAlbums$.pipe(\n    switchMapTo(\n      merge(of([]), this.animate(this.musics.songs$))\n    )\n  );\n  readonly activeIndex$ = new Subject<number>();\n  readonly activeAlbum$ = new ReplaySubject<Album>();\n  private readonly subscriptions = new Subscription();\n\n  constructor(private breakpointObserver: BreakpointObserver, public musics: MusicService) { }\n\n  ngOnInit(): void {\n    this.subscriptions.add(\n      combineLatest([\n        this.isMobile$,\n        merge(of(0), this.activeIndex$),\n        this.musics.albums$\n      ]).subscribe(res => {\n        if(res[0] && res[2] && res[2].length != 0) {\n          this.selectAlbum(res[2][res[1]]);\n        }\n      })\n    );\n  }\n\n  ngOnDestroy(): void {\n    this.subscriptions.unsubscribe();\n  }\n\n  ngAfterViewInit(): void {\n    this.musics.getAlbums$.next({ page: '1', size: '10' });\n  }\n\n  selectAlbum(e: Album) {\n    this.activeAlbum$.next(e);\n    this.musics.getSongs$.next(e);\n  }\n\n  backToAlbum(): void {\n    this.musics.getAlbums$.next({ page: '1', size: '10' });\n  }\n\n  private animate<T>(ob: Observable<T[]>) {\n    return zip(\n      ob.pipe(\n        switchMap(res => from(res))\n      ),\n      ob.pipe(\n        switchMapTo(merge(of(null), interval(100)))\n      )\n    ).pipe(\n      pluck('0'),\n      scan<T, T[]>((acc, cur) => [...acc, cur], [])\n    );\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n$gap: 12px;\r\n\r\napp-quick-player,app-album {\r\n    height: 100vh;\r\n    margin: 0;\r\n}\r\n\r\nswiper {\r\n    height: 100vh;\r\n}\r\n\r\np {\r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.gallery {\r\n    margin: 0 map-get(theme.$spacing, page-wide);\r\n\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: $gap;\r\n    gap: $gap;\r\n\r\n    & > app-quick-player,app-album {\r\n        $offset: $gap * 3 + map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar2;\r\n        $margin-borders: map-get(theme.$spacing, std) * 2 + (1px * 2);\r\n        height: calc((100vw - #{$offset}) / 4 - #{$margin-borders});\r\n    }\r\n}\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    :host {\r\n        position: relative;\r\n        min-height: 100vh;\r\n        padding: map-get(theme.$spacing, page-wide) 0;\r\n\r\n        display: block;\r\n    }\r\n\r\n    .title { \r\n        margin: 0 map-get(theme.$spacing, page-wide);\r\n        margin-bottom: map-get(theme.$spacing, std);\r\n        color: map-get(theme.$palettes, white);\r\n    }\r\n\r\n    .background {\r\n        height: 80vh;\r\n        background: linear-gradient(transparent 0%, white 75%), var(--bg);\r\n    }\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    color: map-get(theme.$palettes, white);\r\n}\r\n\r\napp-quick-player, app-album-cover {\r\n    height: 100vh;\r\n    // margin: 0;\r\n}\r\n\r\nswiper {\r\n    height: 100vh;\r\n}\r\n\r\np {\r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.gallery {\r\n    $gap: 12px;\r\n\r\n    margin: 0 map-get(theme.$spacing, page-wide);\r\n\r\n    display: grid;\r\n    grid-template-columns: repeat(4, 1fr);\r\n    grid-gap: $gap;\r\n    gap: $gap;\r\n\r\n    & > app-quick-player, & > button > app-album-cover {\r\n        $offset: $gap * 3 + map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar2;\r\n        // It seems like each block need to remove border of all border on the row.\r\n        // It's likely caused by \"box-sizing: border-box\" on all;\r\n        $borders: 1px * 2 * 4;\r\n        height: calc((100vw - #{$offset}) / 4 - #{$borders});\r\n    }\r\n}\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    :host {\r\n        position: relative;\r\n        min-height: 100vh;\r\n        padding: map-get(theme.$spacing, page-wide) 0;\r\n\r\n        display: block;\r\n    }\r\n\r\n    .title {\r\n        margin: 0 map-get(theme.$spacing, page-wide);\r\n        margin-bottom: map-get(theme.$spacing, std);\r\n\r\n        & > * { display: inline; vertical-align: middle; }\r\n    }\r\n\r\n    .background {\r\n        height: 80vh;\r\n        z-index: -2;\r\n\r\n        background: linear-gradient(transparent 0%, white 75%), var(--bg);\r\n    }\r\n}",
                     "styleUrl": "./music-gallery.component.scss"
                 }
             ],
@@ -2700,7 +3023,7 @@
                         "type": "MusicService"
                     }
                 ],
-                "line": 21,
+                "line": 43,
                 "jsdoctags": [
                     {
                         "name": "breakpointObserver",
@@ -2720,13 +3043,14 @@
             },
             "implements": [
                 "OnInit",
-                "OnDestroy"
+                "OnDestroy",
+                "AfterViewInit"
             ],
-            "templateData": "<swiper *ngIf=\"!(breakpoint$ | async)\" [slidesPerView]=\"1\" [direction]=\"'vertical'\" [autoHeight]=\"true\"(activeIndexChange)=\"activeIndexChange($event)\">\n    <ng-container *ngIf=\"currentAlbum\">\n        <ng-template *ngFor=\"let album of musics.albums$ | async\" swiperSlide>\n            <app-music-gallery-songs [album]=\"album\" [current]=\"currentAlbum\"></app-music-gallery-songs>\n        </ng-template>\n    </ng-container>\n</swiper>\n\n<ng-container *ngIf=\"breakpoint$ | async\">\n    <h1 class=\"title\">Composed by Me | 我的作品</h1>\n\n    <div class=\"gallery\">\n        <ng-container *ngIf=\"currentAlbum == undefined\">\n            <app-album *ngFor=\"let album of musics.albums$ | async\" [backgroundUrl]=\"album.coverImage$ | async\"\n                [album]=\"album\" (selectAlbum)=\"selectAlbum($event)\">\n                <p>{{ album.title }}</p>\n            </app-album>\n        </ng-container>\n\n        <app-quick-player *ngFor=\"let song of musics.songs$ | async\" [song]=\"song\">\n            <p>{{ song.title }}</p>\n        </app-quick-player>\n    </div>\n\n    <div class=\"background blur\" [style]=\"backgroundUrl\"></div>\n</ng-container>"
+            "templateData": "<!-- Mobile Viewport -->\n<swiper *ngIf=\"isMobile$ | async\" [slidesPerView]=\"1\" [direction]=\"'vertical'\" [autoHeight]=\"true\" (activeIndexChange)=\"activeIndex$.next($event.activeIndex)\">\n    <ng-template *ngFor=\"let album of musics.albums$ | async\" swiperSlide>\n        <app-music-gallery-songs [album]=\"album\" [songs$]=\"musics.songs$\" [activeAlbum$]=\"activeAlbum$\"></app-music-gallery-songs>\n    </ng-template>\n</swiper>\n\n<!-- Desktop Viewport -->\n<ng-container *ngIf=\"!(isMobile$ | async)\">\n    <section class=\"title\">\n        <button (click)=\"backToAlbum()\">\n            <fa-icon [icon]=\"faAngleDoubleLeft\" size=\"3x\"></fa-icon>\n        </button>\n        <h1>Composed by Me | 我的作品</h1>\n    </section>\n    <section class=\"gallery\">\n        <button *ngFor=\"let album of delayedAlbums$ | async\" (click)=\"selectAlbum(album)\" [@pressDown]>\n            <app-album-cover [coverImage]=\"album.coverImage$ | async\">\n                <p>{{ album.title }}</p>\n            </app-album-cover>\n        </button>\n\n        <app-quick-player *ngFor=\"let song of delayedSongs$ | async\" [song]=\"song\" [@pressDown]>\n            <p>{{ song.title }}</p>\n        </app-quick-player>\n    </section>\n\n    <article class=\"background blur\" [style]=\"backgroundUrl\"></article>\n</ng-container>"
         },
         {
             "name": "MusicGallerySongsComponent",
-            "id": "component-MusicGallerySongsComponent-a8927a12f35d5d1d6e7290e13bf17621",
+            "id": "component-MusicGallerySongsComponent-89884fefd256a9844f7afe69bf9cd257",
             "file": "src/app/home/music-gallery-songs/music-gallery-songs.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -2744,38 +3068,36 @@
             "viewProviders": [],
             "inputsClass": [
                 {
+                    "name": "activeAlbum$",
+                    "line": 16,
+                    "type": "Observable<Album>"
+                },
+                {
                     "name": "album",
                     "line": 14,
                     "type": "Readonly<Album>"
                 },
                 {
-                    "name": "current",
+                    "name": "songs$",
                     "line": 15,
-                    "type": "Readonly<Album>"
+                    "type": "Observable<Song[]>"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "musics",
-                    "type": "MusicService",
-                    "optional": false,
+                    "name": "currentSongs$",
+                    "type": "Observable<any[]>",
+                    "optional": true,
                     "description": "",
-                    "line": 20,
-                    "modifierKind": [
-                        114
-                    ]
+                    "line": 17
                 },
                 {
-                    "name": "songs$",
-                    "defaultValue": "this.musics.songs$.pipe(\n    skipWhile(() => this.current.id != this.album.id)\n  )",
-                    "type": "",
-                    "optional": false,
+                    "name": "isActive$",
+                    "type": "Observable<boolean>",
+                    "optional": true,
                     "description": "",
-                    "line": 16,
-                    "modifierKind": [
-                        132
-                    ]
+                    "line": 18
                 }
             ],
             "methodsClass": [
@@ -2793,11 +3115,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit, Input } from '@angular/core';\nimport { skipWhile } from 'rxjs/operators';\nimport { Album } from '../models';\nimport { MusicService } from '../music.service';\n\n// This component exists because nesting SwiperJS in Angular in the same component creates\n// ExpressionChangeAfter error.\n@Component({\n  selector: 'app-music-gallery-songs',\n  templateUrl: './music-gallery-songs.component.html',\n  styleUrls: ['./music-gallery-songs.component.scss']\n})\nexport class MusicGallerySongsComponent implements OnInit {\n  @Input() album!: Readonly<Album>;\n  @Input() current!: Readonly<Album>;\n  readonly songs$ = this.musics.songs$.pipe(\n    skipWhile(() => this.current.id != this.album.id)\n  );\n\n  constructor(public musics: MusicService) { }\n\n  ngOnInit(): void {\n  }\n}\n",
+            "sourceCode": "import { Component, OnInit, Input } from '@angular/core';\nimport { Observable, of } from 'rxjs';\nimport { map, switchMap } from 'rxjs/operators';\nimport { Album, Song } from '../models';\n\n// This component exists because nesting SwiperJS in Angular in the same component creates\n// ExpressionChangeAfter error.\n@Component({\n  selector: 'app-music-gallery-songs',\n  templateUrl: './music-gallery-songs.component.html',\n  styleUrls: ['./music-gallery-songs.component.scss']\n})\nexport class MusicGallerySongsComponent implements OnInit {\n  @Input() album!: Readonly<Album>;\n  @Input() songs$!: Observable<Song[]>;\n  @Input() activeAlbum$!: Observable<Album>;\n  currentSongs$?: Observable<any[]>;\n  isActive$?: Observable<boolean>;\n\n  constructor() { }\n\n  ngOnInit(): void {\n    this.currentSongs$ = this.activeAlbum$.pipe(\n      switchMap(res => res.id == this.album.id ? this.songs$ : of(this.album.songs).pipe(map(x => x.map(el => ({ ...el, coverImage$: this.album.coverImage$ }))))),\n      // skipWhile(res => res.id != this.album.id),\n      // switchMapTo(this.songs$),\n    );\n\n    this.isActive$ = this.activeAlbum$.pipe(\n      map(res => res.id == this.album.id)\n    )\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n$gap: 12px;\r\n\r\napp-quick-player,app-album {\r\n    height: 100vh;\r\n    margin: 0;\r\n}\r\n\r\nswiper {\r\n    height: 100vh;\r\n}\r\n\r\np {\r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.gallery {\r\n    margin: 0 map-get(theme.$spacing, page-wide);\r\n\r\n    display: grid;\r\n    grid-template-columns: 1fr 1fr 1fr 1fr;\r\n    grid-gap: $gap;\r\n    gap: $gap;\r\n\r\n    & > app-quick-player,app-album {\r\n        $offset: $gap * 3 + map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar2;\r\n        $margin-borders: map-get(theme.$spacing, std) * 2 + (1px * 2);\r\n        height: calc((100vw - #{$offset}) / 4 - #{$margin-borders});\r\n    }\r\n}\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    :host {\r\n        position: relative;\r\n        min-height: 100vh;\r\n        padding: map-get(theme.$spacing, page-wide) 0;\r\n\r\n        display: block;\r\n    }\r\n\r\n    .title { \r\n        margin: 0 map-get(theme.$spacing, page-wide);\r\n        margin-bottom: map-get(theme.$spacing, std);\r\n        color: map-get(theme.$palettes, white);\r\n    }\r\n\r\n    .background {\r\n        height: 80vh;\r\n        background: linear-gradient(transparent 0%, white 75%), var(--bg);\r\n    }\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    color: black !important;\r\n}\r\n\r\n$gap: 12px;\r\n\r\napp-quick-player, app-album-cover {\r\n    height: 100vh;\r\n    margin: 0;\r\n}\r\n\r\nswiper {\r\n    height: 100vh;\r\n}\r\n\r\np {\r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}",
                     "styleUrl": "./music-gallery-songs.component.scss"
                 }
             ],
@@ -2805,27 +3127,13 @@
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
-                "args": [
-                    {
-                        "name": "musics",
-                        "type": "MusicService"
-                    }
-                ],
-                "line": 18,
-                "jsdoctags": [
-                    {
-                        "name": "musics",
-                        "type": "MusicService",
-                        "tagName": {
-                            "text": "param"
-                        }
-                    }
-                ]
+                "args": [],
+                "line": 18
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<swiper [slidesPerView]=\"1\">\n    <ng-template swiperSlide>\n        <app-album [backgroundUrl]=\"album.coverImage$ | async\" [album]=\"album\">\n            <p>{{ album.title }}</p>\n        </app-album>\n    </ng-template>\n\n    <ng-template *ngFor=\"let song of songs$ | async\" swiperSlide>\n        <app-quick-player [song]=\"song\">\n            <p>{{ song.title }}</p>\n        </app-quick-player>\n    </ng-template>\n</swiper>"
+            "templateData": "<swiper [slidesPerView]=\"1\">\n    <ng-template swiperSlide>\n        <app-album-cover [coverImage]=\"album.coverImage$ | async\">\n            <p>{{ album.title }}</p>\n        </app-album-cover>\n    </ng-template>\n    <ng-template *ngFor=\"let song of currentSongs$ | async\" swiperSlide>\n        <app-quick-player [song]=\"song\" [isActive]=\"true\">\n            <p>{{ song.title }}</p>\n        </app-quick-player>\n    </ng-template>\n</swiper>"
         },
         {
             "name": "NoticeComponent",
@@ -2926,28 +3234,28 @@
             "templateData": "<ol>\n    <li *ngFor=\"let message of messages\" [@fadeOut]>\n        <p style=\"background: red;\">{{ message }}</p>\n    </li>\n</ol>"
         },
         {
-            "name": "PostCardComponent",
-            "id": "component-PostCardComponent-2675ccac3533ad5dba842ce13e9595ca",
-            "file": "src/app/home/post-card/post-card.component.ts",
+            "name": "PostComponent",
+            "id": "component-PostComponent-63343124b99c1f1bd9226ab2907755f2",
+            "file": "src/app/home/post/post.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
             "outputs": [],
             "providers": [],
-            "selector": "app-post-card",
+            "selector": "app-post",
             "styleUrls": [
-                "./post-card.component.scss"
+                "./post.component.scss"
             ],
             "styles": [],
             "templateUrl": [
-                "./post-card.component.html"
+                "./post.component.html"
             ],
             "viewProviders": [],
             "inputsClass": [
                 {
-                    "name": "datasource",
+                    "name": "post",
                     "line": 10,
-                    "type": "Partial<Post>"
+                    "type": "Readonly<Post>"
                 }
             ],
             "outputsClass": [],
@@ -2967,12 +3275,12 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { Post } from '../models';\n\n@Component({\n  selector: 'app-post-card',\n  templateUrl: './post-card.component.html',\n  styleUrls: ['./post-card.component.scss']\n})\nexport class PostCardComponent implements OnInit {\n  @Input() datasource!: Partial<Post>;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { Post } from '../models';\n\n@Component({\n  selector: 'app-post',\n  templateUrl: './post.component.html',\n  styleUrls: ['./post.component.scss']\n})\nexport class PostComponent implements OnInit {\n  @Input() post!: Readonly<Post>;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
                     "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    padding: map-get(theme.$spacing, std);\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n\r\n    border: 1px solid map-get(theme.$palettes, black);;\r\n    background-color: map-get(theme.$palettes, white);\r\n}\r\n\r\np {\r\n    margin-bottom: map-get(theme.$spacing, std);\r\n    font-size: calc(14rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.title {\r\n    margin-bottom: map-get(theme.$spacing, std);\r\n\r\n    display: flex;\r\n    align-items: stretch;\r\n\r\n    .text {\r\n        margin-left: 24px;\r\n    \r\n        display: flex;\r\n        flex-direction: column;\r\n        justify-content: space-between;\r\n    \r\n        h2 { font-size: calc(18rem / #{map-get(theme.$text, std)}); margin: 0; }\r\n    \r\n        .date {\r\n            font-size: calc(12rem / #{map-get(theme.$text, std)});\r\n        }\r\n    }\r\n}\r\n\r\n.gallery {\r\n    display: grid;\r\n    grid-auto-columns: 1fr;\r\n    grid-auto-rows: 100px;\r\n    grid-gap: 8px;\r\n    gap: 8px;\r\n\r\n    img {\r\n        object-fit: cover;\r\n        height: 100%;\r\n    }\r\n\r\n    & > :nth-child(2) {\r\n        grid-column: 2;\r\n    }\r\n\r\n    & > :nth-last-child(5) ~ :nth-child(3),\r\n    & > :nth-last-child(7) ~ :nth-child(3), /* 7 = 5 + 2 */\r\n    & > :nth-last-child(9) ~ :nth-child(3) { /* 9 = 7 + 2 */\r\n        grid-column: 3;\r\n    }\r\n\r\n    & > :nth-last-child(1):nth-child(1),\r\n    & > :nth-last-child(2):nth-child(1),\r\n    & > :nth-last-child(1):nth-child(2) {\r\n        grid-row: 1/3;\r\n    }\r\n}\r\n\r\n@media(min-width: map-get(theme.$screens, tablet)) {\r\n    .gallery {\r\n        grid-auto-rows: 200px;\r\n    }\r\n}",
-                    "styleUrl": "./post-card.component.scss"
+                    "styleUrl": "./post.component.scss"
                 }
             ],
             "stylesData": "",
@@ -2985,7 +3293,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<section class=\"title\">\n    <img *ngIf=\"(datasource.thumbnail$ | async) as thumbnail\" [src]=\"thumbnail\" width=\"60px\" height=\"60px\" />\n    <div class=\"text\">\n        <h2>{{ datasource.title | limit:40 }}</h2>\n        <time class=\"date\" [dateTime]=\"datasource.created\">{{ datasource.created | date:'fullDate' }}</time>\n    </div>\n</section>\n\n<p *ngIf=\"datasource.content\">{{ datasource.content }}</p>\n\n<div class=\"gallery\" *ngIf=\"datasource.gallery\">\n    <img *ngFor=\"let media of datasource.gallery\" [src]=\"media.url$ | async\" width=\"100%\" />\n</div>"
+            "templateData": "<section class=\"title\">\n    <img *ngIf=\"(post.thumbnail$ | async) as thumbnail\" [src]=\"thumbnail\" width=\"60px\" height=\"60px\" />\n    <div class=\"text\">\n        <h2>{{ post.title | limit:40 }}</h2>\n        <time class=\"date\" [dateTime]=\"post.created\">{{ post.created | date:'fullDate' }}</time>\n    </div>\n</section>\n\n<p *ngIf=\"post.content\">{{ post.content }}</p>\n\n<div class=\"gallery\" *ngIf=\"post.gallery\">\n    <img *ngFor=\"let media of post.gallery\" [src]=\"media.url$ | async\" width=\"100%\" />\n</div>"
         },
         {
             "name": "QuickFeedComponent",
@@ -3066,11 +3374,11 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<ng-container *ngIf=\"(socials.latest$ | async) as latest\">\n    <ng-container *ngTemplateOutlet=\"latest.length != 0 ? Content : NoContent; context: {latest:latest}\"></ng-container>\n</ng-container>\n\n<ng-template #Content let-latest=\"latest\">\n    <h2 class=\"title\">Upcoming events | 新活动</h2>\n\n    <ol>\n        <li *ngFor=\"let item of latest\">\n            <a [href]=\"item.link\">\n                <app-post-card [datasource]=\"item\"></app-post-card>\n            </a>\n        </li>\n    </ol>\n</ng-template>\n\n<ng-template #NoContent>\n    <h2 class=\"title empty\">No upcoming event | 近期没有活动</h2>\n</ng-template>"
+            "templateData": "<ng-container *ngIf=\"(socials.latest$ | async) as latest\">\n    <ng-container *ngTemplateOutlet=\"latest.length != 0 ? Content : NoContent; context: {latest:latest}\"></ng-container>\n</ng-container>\n\n<ng-template #Content let-latest=\"latest\">\n    <h2 class=\"title\">Upcoming events | 新活动</h2>\n\n    <ol>\n        <li *ngFor=\"let item of latest\">\n            <a [href]=\"item.link\">\n                <app-post [post]=\"item\"></app-post>\n            </a>\n        </li>\n    </ol>\n</ng-template>\n\n<ng-template #NoContent>\n    <h2 class=\"title empty\">No upcoming event | 近期没有活动</h2>\n</ng-template>"
         },
         {
             "name": "QuickPlayerComponent",
-            "id": "component-QuickPlayerComponent-5692d123fea1aba2a10ae06ce692bf28",
+            "id": "component-QuickPlayerComponent-7b1bcf81313a92e8436d5cfcb7063511",
             "file": "src/app/home/quick-player/quick-player.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -3088,8 +3396,14 @@
             "viewProviders": [],
             "inputsClass": [
                 {
+                    "name": "isActive",
+                    "defaultValue": "false",
+                    "line": 17,
+                    "type": "boolean"
+                },
+                {
                     "name": "song",
-                    "line": 15,
+                    "line": 16,
                     "type": "Readonly<Song>"
                 }
             ],
@@ -3101,7 +3415,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 14,
+                    "line": 15,
                     "modifierKind": [
                         132
                     ]
@@ -3123,18 +3437,29 @@
                     "type": "",
                     "optional": false,
                     "description": "",
+                    "line": 14,
+                    "modifierKind": [
+                        132
+                    ]
+                },
+                {
+                    "name": "faStopCircle",
+                    "defaultValue": "faStopCircle",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
                     "line": 13,
                     "modifierKind": [
                         132
                     ]
                 },
                 {
-                    "name": "isHover",
+                    "name": "isAudioOn",
                     "defaultValue": "false",
                     "type": "boolean",
                     "optional": false,
                     "description": "",
-                    "line": 16
+                    "line": 18
                 }
             ],
             "methodsClass": [
@@ -3144,15 +3469,15 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 20
+                    "line": 22
                 },
                 {
-                    "name": "play",
+                    "name": "toggleAudio",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 33
+                    "line": 37
                 }
             ],
             "hostBindings": [],
@@ -3161,23 +3486,23 @@
                     "name": "mouseenter",
                     "args": [],
                     "argsDecorator": [],
-                    "line": 24
+                    "line": 26
                 },
                 {
                     "name": "mouseleave",
                     "args": [],
                     "argsDecorator": [],
-                    "line": 29
+                    "line": 31
                 }
             ],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, HostListener, Input, OnInit } from '@angular/core';\nimport { faPlayCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';\nimport { faSoundcloud } from '@fortawesome/free-brands-svg-icons';\nimport { Song } from \"../models\";\n\n@Component({\n  selector: 'app-quick-player',\n  templateUrl: './quick-player.component.html',\n  styleUrls: ['./quick-player.component.scss']\n})\nexport class QuickPlayerComponent implements OnInit {\n  readonly faPlayCircle = faPlayCircle;\n  readonly faSoundcloud = faSoundcloud;\n  readonly faInfoCircle = faInfoCircle;\n  @Input() song!: Readonly<Song>;\n  isHover: boolean = false;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n  @HostListener('mouseenter')\n  mouseEnter() {\n    this.isHover = true;\n  }\n\n  @HostListener('mouseleave')\n  mouseLeave() {\n    this.isHover = false;\n  }\n\n  play() {\n    console.log('playing song')\n  }\n}",
+            "sourceCode": "import { Component, HostListener, Input, OnInit } from '@angular/core';\nimport { faPlayCircle, faStopCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';\nimport { faSoundcloud } from '@fortawesome/free-brands-svg-icons';\nimport { Song } from \"../models\";\n\n@Component({\n  selector: 'app-quick-player',\n  templateUrl: './quick-player.component.html',\n  styleUrls: ['./quick-player.component.scss']\n})\nexport class QuickPlayerComponent implements OnInit {\n  readonly faPlayCircle = faPlayCircle;\n  readonly faStopCircle = faStopCircle;\n  readonly faSoundcloud = faSoundcloud;\n  readonly faInfoCircle = faInfoCircle;\n  @Input() song!: Readonly<Song>;\n  @Input() isActive: boolean = false;\n  isAudioOn: boolean = false;\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n  @HostListener('mouseenter')\n  mouseEnter() {\n    this.isActive = true;\n  }\n\n  @HostListener('mouseleave')\n  mouseLeave() {\n    if(!this.isAudioOn) {\n      this.isActive = false;\n    }\n  }\n\n  toggleAudio() {\n    this.isAudioOn = !this.isAudioOn;\n  }\n}",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    position: relative;\r\n    height: 45vh;\r\n    padding: 24px;\r\n\r\n    display: flex;\r\n    overflow: hidden;\r\n\r\n    border: 1px map-get(theme.$palettes, black) solid;\r\n    font-size: calc(32rem / #{map-get(theme.$text, std)});\r\n    color: white;\r\n\r\n    & > * {\r\n        z-index: 10;\r\n    }\r\n\r\n    &:hover > .blur, &.__hover > .blur {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}\r\n\r\n.background {\r\n    z-index: 9;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    display: block;\r\n\r\n    & * { z-index: 1; }\r\n}\r\n\r\napp-album-cover {\r\n    height: inherit;\r\n}\r\n\r\n.controls {\r\n    display: flex;\r\n    justify-content: flex-end;\r\n\r\n    & fa-icon { \r\n        margin-left: map-get(theme.$spacing, std); \r\n    }\r\n}\r\n\r\n.audio-toggle {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    top: 0;\r\n    bottom: 0;\r\n    margin: auto;\r\n}\r\n\r\n.content { \r\n    display: block;\r\n}\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    .content { \r\n        display: none;\r\n    }\r\n}",
                     "styleUrl": "./quick-player.component.scss"
                 }
             ],
@@ -3186,12 +3511,12 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 16
+                "line": 18
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<ng-container *ngIf=\"isHover; then Controls else Content\"></ng-container>\n<div *ngIf=\"(song.coverImage$ | async) as coverImage\" class=\"background blur\"  [style.background-image]=\"'url(' + coverImage + ')'\"></div>\n\n<ng-template #Content>\n    <ng-content></ng-content>\n</ng-template>\n\n<ng-template #Controls>\n    <button *ngIf=\"song.audio\" (click)=\"play()\">\n        <fa-icon [icon]=\"faPlayCircle\" size=\"lg\"></fa-icon>\n    </button>\n    <a *ngIf=\"song.soundCloud\" [href]=\"song.soundCloud\">\n        <fa-icon [icon]=\"faSoundcloud\" size=\"lg\"></fa-icon>\n    </a>\n    <a *ngIf=\"song.audio\" [routerLink]=\"['/music', song.id]\">\n        <fa-icon [icon]=\"faInfoCircle\" size=\"lg\"></fa-icon>\n    </a>\n</ng-template>"
+            "templateData": "<app-album-cover [coverImage]=\"song.coverImage$ | async\" [class]=\"isActive ? '__hover' : ''\">\n    <ng-container *ngIf=\"isActive; then Controls else Content\"></ng-container>\n</app-album-cover>\n\n<ng-template #Content>\n    <ng-content></ng-content>\n</ng-template>\n\n<ng-template #Controls>\n    <button *ngIf=\"song.audio\" class=\"audio-toggle\" (click)=\"toggleAudio()\">\n        <fa-icon [icon]=\"isAudioOn ? faStopCircle : faPlayCircle\" size=\"6x\"></fa-icon>\n        <audio *ngIf=\"isAudioOn\" [src]=\"song.audio$ | async\" autoplay></audio>\n    </button>\n\n    <article class=\"controls\">\n        <section class=\"content\">\n            <ng-content></ng-content>\n        </section>\n        <a *ngIf=\"song.soundCloud\" [href]=\"song.soundCloud\">\n            <fa-icon [icon]=\"faSoundcloud\"></fa-icon>\n        </a>\n        <a [routerLink]=\"['/music', song.id]\">\n            <fa-icon [icon]=\"faInfoCircle\"></fa-icon>\n        </a>\n    </article>\n</ng-template>"
         },
         {
             "name": "ScrollableLabelsComponent",
@@ -3251,7 +3576,7 @@
         },
         {
             "name": "ShowcaseComponent",
-            "id": "component-ShowcaseComponent-576b81f4024ef98555386ff55c676e3c",
+            "id": "component-ShowcaseComponent-4a323a2cb0933215a54948dd223fb87c",
             "file": "src/app/home/showcase/showcase.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -3269,8 +3594,8 @@
             "viewProviders": [],
             "inputsClass": [
                 {
-                    "name": "animTrigger$",
-                    "line": 15,
+                    "name": "animate$",
+                    "line": 22,
                     "type": "Observable<void>"
                 }
             ],
@@ -3282,68 +3607,54 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 24
+                    "line": 31
                 },
                 {
                     "name": "hover",
                     "type": "Song",
                     "optional": true,
                     "description": "",
-                    "line": 22
+                    "line": 29
                 },
                 {
                     "name": "items$",
                     "type": "Observable<Song[]>",
                     "optional": true,
                     "description": "",
-                    "line": 21
+                    "line": 28
                 },
                 {
                     "name": "largeItem$",
                     "type": "Observable<Song>",
                     "optional": true,
                     "description": "",
-                    "line": 19
+                    "line": 26
                 },
                 {
                     "name": "oversizeItem$",
                     "type": "Observable<Song>",
                     "optional": true,
                     "description": "",
-                    "line": 18
+                    "line": 25
                 },
                 {
                     "name": "wideItems$",
                     "type": "Observable<Song[]>",
                     "optional": true,
                     "description": "",
-                    "line": 20
+                    "line": 27
                 }
             ],
             "methodsClass": [
                 {
                     "name": "initCollection",
-                    "args": [
-                        {
-                            "name": "animTrigger$",
-                            "type": "Observable<void>"
-                        }
-                    ],
+                    "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 37,
+                    "line": 41,
                     "modifierKind": [
                         112
-                    ],
-                    "jsdoctags": [
-                        {
-                            "name": "animTrigger$",
-                            "type": "Observable<void>",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
                     ]
                 },
                 {
@@ -3352,14 +3663,14 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 30
+                    "line": 37
                 }
             ],
             "hostBindings": [
                 {
                     "name": "style.display",
                     "defaultValue": "'block'",
-                    "line": 16,
+                    "line": 23,
                     "type": "string"
                 }
             ],
@@ -3367,11 +3678,11 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, HostBinding, Input, OnInit } from '@angular/core';\nimport { from, interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, reduce, scan, share, shareReplay, skip, switchMap, take, tap } from 'rxjs/operators';\nimport { MusicService } from '../music.service';\nimport { BreakpointObserver } from '@angular/cdk/layout';\nimport { Song } from '../models';\n\n\n@Component({\n  selector: 'app-showcase',\n  templateUrl: './showcase.component.html',\n  styleUrls: ['./showcase.component.scss']\n})\nexport class ShowcaseComponent implements OnInit {\n  @Input() animTrigger$?: Observable<void>;\n  @HostBinding('style.display') private display: string = 'block';\n\n  oversizeItem$?: Observable<Song>;\n  largeItem$?: Observable<Song>;\n  wideItems$?: Observable<Song[]>;\n  items$?: Observable<Song[]>;\n  hover?: Song;\n\n  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(\n    map(res => res.matches)\n  );\n\n  constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }\n\n  ngOnInit(): void {\n    this.animTrigger$ = of();\n    if(this.animTrigger$) {\n      this.initCollection(this.animTrigger$);\n    }\n  }\n\n  private initCollection(animTrigger$: Observable<void>) {\n    var collection$ = this.musics.showcase$.pipe(\n      tap(res => this.display = res.length == 0 ? 'none' : 'block'),\n      switchMap(res => from(res)),\n      shareReplay()\n    );\n\n    // var collection$ = zip(\n    //   datasource$,\n    //   animTrigger$.pipe(\n    //     take(1),\n    //     switchMap(() => merge(of(null), interval(600)))\n    //   )\n    // ).pipe(\n    //   pluck('0'),\n    //   // tap(res => this.entryFade(res)),\n    //   share()\n    // );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}",
+            "sourceCode": "import { Component, HostBinding, Input, OnInit } from '@angular/core';\nimport { from, interval, merge, Observable, of, zip } from 'rxjs';\nimport { map, pluck, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';\nimport { MusicService } from '../music.service';\nimport { BreakpointObserver } from '@angular/cdk/layout';\nimport { Song } from '../models';\nimport { transition, trigger, useAnimation } from '@angular/animations';\nimport { slideInAnimation } from '../slide-in.animation';\n\n\n@Component({\n  selector: 'app-showcase',\n  templateUrl: './showcase.component.html',\n  styleUrls: ['./showcase.component.scss'],\n  animations: [\n    trigger('slideIn', [\n      transition('void => *', [useAnimation(slideInAnimation)])\n    ])\n  ],\n})\nexport class ShowcaseComponent implements OnInit {\n  @Input() animate$!: Observable<void>;\n  @HostBinding('style.display') private display: string = 'block';\n\n  oversizeItem$?: Observable<Song>;\n  largeItem$?: Observable<Song>;\n  wideItems$?: Observable<Song[]>;\n  items$?: Observable<Song[]>;\n  hover?: Song;\n\n  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(\n    map(res => res.matches)\n  );\n\n  constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }\n\n  ngOnInit(): void {\n    this.initCollection();\n  }\n\n  private initCollection() {\n    var collection$ = zip(\n      this.musics.showcase$.pipe(\n        tap(res => this.display = res.length == 0 ? 'none' : 'block'),\n        switchMap(res => from(res))\n      ),\n      this.animate$.pipe(\n        take(1),\n        switchMap(() => merge(of(null), interval(100)))\n      )\n    ).pipe(\n      pluck('0'),\n      // tap(res => this.entryFade(res)),\n      share()\n    );\n\n    this.oversizeItem$ = collection$.pipe(\n      take(1)\n    );\n    this.largeItem$ = collection$.pipe(\n      skip(1),\n      take(1),\n    );\n    this.wideItems$ = collection$.pipe(\n      skip(2),\n      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),\n      take(3),\n    );\n    this.items$ = collection$.pipe(\n      skip(5),\n      scan<Song, Song[]>((acc, cur) => [...acc, cur], []),\n      take(4)\n    );\n  }\n}",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    display: block;\r\n    padding-top: map-get(theme.$spacing, large);\r\n    background-color: map-get(theme.$palettes, white);\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.title { \r\n    margin: 0 map-get(theme.$spacing, page); \r\n    margin-bottom: map-get(theme.$spacing, std);\r\n}\r\n\r\n.oversize {\r\n    align-items: flex-end;\r\n}\r\n\r\n.large {\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: stretch;\r\n\r\n    & > .subtitle { text-align: end; }\r\n}\r\n\r\n.wide {\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n}\r\n\r\n.small {\r\n    justify-content: flex-end;\r\n    align-items: flex-end;\r\n    text-align: end;\r\n}\r\n\r\n.split {\r\n    margin: 0 24px;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.background {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    z-index: 9;\r\n \r\n    background-position: center;\r\n    background-size: contain;\r\n}\r\n\r\n.blur {\r\n    transition: none;\r\n    &:hover {\r\n        filter: blur(4px);\r\n        margin: -5px;\r\n    }\r\n}\r\n\r\n.grid {\r\n    $gap: 12px;\r\n    // For .small to be square, it's width ratio divides it's height ratio. So (1/4) / (4/12) = 0.75.\r\n    $sqr-ratio: 0.75;\r\n\r\n    height: calc((100vw - (#{map-get(theme.$spacing, page-wide)} * 2) - #{theme.$scrollbar}) * #{$sqr-ratio} - #{$gap});\r\n    margin: 0 map-get(theme.$spacing, page-wide);\r\n\r\n    display: grid;\r\n    grid-template-rows: 6fr 2fr 4fr;\r\n    grid-gap: $gap;\r\n    gap: $gap;\r\n\r\n    & > app-quick-player { height: auto; }\r\n\r\n    & > .oversize { \r\n        grid-area: 1 / auto / auto / span 8;\r\n        font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    }\r\n\r\n    & > .large { grid-area: 1 / auto / auto / span 4; }\r\n\r\n    & > .wide { \r\n        grid-area: auto / auto / auto / span 4;\r\n        font-size: calc(24rem / #{map-get(theme.$text, std)});\r\n    }\r\n\r\n    & > .small {\r\n        grid-area: auto / auto / auto / span 3;\r\n        font-size: calc(24rem / #{map-get(theme.$text, std)});\r\n    }\r\n}\r\n\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    .title { \r\n        margin: 0 map-get(theme.$spacing, page-wide);\r\n        margin-bottom: map-get(theme.$spacing, std);\r\n    }\r\n}",
+                    "data": "@use 'src/assets/scss/theme.scss' as theme;\r\n\r\n:host {\r\n    display: block;\r\n    padding-top: map-get(theme.$spacing, large);\r\n    background-color: map-get(theme.$palettes, white);\r\n}\r\n\r\np, span { \r\n    margin: 0;\r\n    z-index: 10;\r\n    pointer-events: none;\r\n}\r\n\r\n.title { \r\n    margin: 0 map-get(theme.$spacing, page); \r\n    margin-bottom: map-get(theme.$spacing, std);\r\n}\r\n\r\n.oversize .info {\r\n    align-items: flex-end;\r\n}\r\n\r\n.large .subtitle {\r\n    text-align: end;\r\n}\r\n\r\n.large .info, .wide .info {\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n}\r\n\r\n.small .info {\r\n    justify-content: flex-end;\r\n    align-items: flex-end;\r\n}\r\n\r\n.split {\r\n    margin: 0 24px;\r\n}\r\n\r\n.info {\r\n    width: 100%;\r\n    height: 100%;\r\n\r\n    display: flex;\r\n}\r\n\r\n.subtitle {\r\n    font-size: calc(18rem / #{map-get(theme.$text, std)});\r\n}\r\n\r\n.grid {\r\n    $gap: 12px;\r\n    // For .small to be square, it's width ratio divides it's height ratio. So (3/12) / (4/12) = 0.75.\r\n    $sqr-ratio: 0.75;\r\n    $offset: map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar;\r\n    // gap is ignored in height calculation, so we need to remove it.\r\n    // It's likely caused by \"box-sizing: border-box\" on all;\r\n    height: calc((100vw - #{$offset}) * #{$sqr-ratio} - (#{$gap} * 3));\r\n    margin: 0 map-get(theme.$spacing, page-wide);\r\n\r\n    display: grid;\r\n    grid-template-rows: repeat(12, 1fr);\r\n    grid-template-columns: repeat(12, 1fr);\r\n    grid-gap: $gap;\r\n    gap: $gap;\r\n\r\n    & > app-quick-player { height: 100%; }\r\n\r\n    & > .oversize { \r\n        grid-area: auto / auto / span 6 / span 8;\r\n        font-size: calc(36rem / #{map-get(theme.$text, std)});\r\n    }\r\n\r\n    & > .large { grid-area: auto / auto / span 6 / span 4; }\r\n\r\n    & > .wide { \r\n        grid-area: auto / auto / span 2 / span 4;\r\n        font-size: calc(24rem / #{map-get(theme.$text, std)});\r\n    }\r\n\r\n    & > .small {\r\n        grid-area: auto / auto / span 4 / span 3;\r\n        font-size: calc(24rem / #{map-get(theme.$text, std)});\r\n    }\r\n}\r\n\r\n\r\n@media (min-width: map-get(theme.$screens, laptop)) {\r\n    .title { \r\n        margin: 0 map-get(theme.$spacing, page-wide);\r\n        margin-bottom: map-get(theme.$spacing, std);\r\n    }\r\n}",
                     "styleUrl": "./showcase.component.scss"
                 }
             ],
@@ -3389,7 +3700,7 @@
                         "type": "BreakpointObserver"
                     }
                 ],
-                "line": 26,
+                "line": 33,
                 "jsdoctags": [
                     {
                         "name": "musics",
@@ -3410,7 +3721,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<h2 class=\"title\">Showcase | 作品一览</h2>\n\n<swiper *ngIf=\"!(breakpoint$ | async)\" [slidesPerView]=\"1.5\" [spaceBetween]=\"24\" [slidesOffsetBefore]=\"24\" [slidesOffsetAfter]=\"24\">\n    <ng-template *ngIf=\"(oversizeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"large\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngIf=\"(largeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"large\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of wideItems$ | async\" swiperSlide>\n        <app-quick-player class=\"wide\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of items$ | async\" swiperSlide>\n        <app-quick-player class=\"small\" [song]=\"item\">\n            <p>{{ item.title }}</p>\n        </app-quick-player>\n    </ng-template>\n</swiper>\n\n<div class=\"grid\" *ngIf=\"breakpoint$ | async\">\n    <app-quick-player class=\"oversize\" *ngIf=\"(oversizeItem$ | async) as item\" [song]=\"item\">\n        <p>{{ item.title }}</p>\n        <span class=\"split\">|</span>\n        <p class=\"subtitle\">{{ item.genre | limit:40 }}</p>\n    </app-quick-player>\n    <app-quick-player class=\"large\" *ngIf=\"(largeItem$ | async) as item\" [song]=\"item\">\n        <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n    </app-quick-player>\n    <app-quick-player class=\"wide\" *ngFor=\"let item of wideItems$ | async\" [song]=\"item\">\n        <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n    </app-quick-player>\n    <app-quick-player class=\"small\" *ngFor=\"let item of items$ | async\" [song]=\"item\">\n        <p>{{ item.title }}</p>\n    </app-quick-player>\n</div>\n\n<!-- The generic item that is slotted in through ng-container. {item:item} and let-item=\"item\" syntax is for passing template context variables -->\n<ng-template let-item=\"item\" #defaultItem>\n    <p>{{ item.title }}</p>\n    <p class=\"subtitle\">{{ item.genre | limit }}</p>\n</ng-template>"
+            "templateData": "<h2 class=\"title\">Showcase | 作品一览</h2>\n\n<!-- Mobile Viewport -->\n<swiper *ngIf=\"!(breakpoint$ | async)\" [slidesPerView]=\"1.5\" [spaceBetween]=\"24\" [slidesOffsetBefore]=\"24\"\n    [slidesOffsetAfter]=\"24\">\n    <ng-template *ngIf=\"(oversizeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"large\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngIf=\"(largeItem$ | async) as item\" swiperSlide>\n        <app-quick-player class=\"large\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of wideItems$ | async\" swiperSlide>\n        <app-quick-player class=\"wide\" [song]=\"item\">\n            <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n        </app-quick-player>\n    </ng-template>\n    <ng-template *ngFor=\"let item of items$ | async\" swiperSlide>\n        <app-quick-player class=\"small\" [song]=\"item\">\n            <p>{{ item.title }}</p>\n        </app-quick-player>\n    </ng-template>\n</swiper>\n\n<!-- Desktop Viewport -->\n<section class=\"grid\" *ngIf=\"breakpoint$ | async\">\n    <app-quick-player class=\"oversize\" *ngIf=\"(oversizeItem$ | async) as item\" [song]=\"item\" [@slideIn]>\n        <section class=\"info\">\n            <p>{{ item.title }}</p>\n            <span class=\"split\">|</span>\n            <p class=\"subtitle\">{{ item.genre | limit:40 }}</p>\n        </section>\n    </app-quick-player>\n    <app-quick-player class=\"large\" *ngIf=\"(largeItem$ | async) as item\" [song]=\"item\" [@slideIn]>\n        <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n    </app-quick-player>\n    <app-quick-player class=\"wide\" *ngFor=\"let item of wideItems$ | async\" [song]=\"item\" [@slideIn]>\n        <ng-container *ngTemplateOutlet=\"defaultItem; context: {item:item}\"></ng-container>\n    </app-quick-player>\n    <app-quick-player class=\"small\" *ngFor=\"let item of items$ | async\" [song]=\"item\" [@slideIn]>\n        <section class=\"info\">\n            <p>{{ item.title }}</p>\n        </section>\n    </app-quick-player>\n</section>\n\n<!-- The generic item that is slotted in through ng-container. {item:item} and let-item=\"item\" syntax is for passing template context variables -->\n<ng-template let-item=\"item\" #defaultItem>\n    <section class=\"info\">\n        <p>{{ item.title }}</p>\n        <p class=\"subtitle\">{{ item.genre | limit }}</p>\n    </section>\n</ng-template>"
         },
         {
             "name": "UpdatesComponent",
@@ -3614,7 +3925,7 @@
                     "type": "declarations",
                     "elements": [
                         {
-                            "name": "AlbumComponent"
+                            "name": "AlbumCoverComponent"
                         },
                         {
                             "name": "BiographyComponent"
@@ -3659,7 +3970,7 @@
                             "name": "MusicGallerySongsComponent"
                         },
                         {
-                            "name": "PostCardComponent"
+                            "name": "PostComponent"
                         },
                         {
                             "name": "QuickFeedComponent"
@@ -3812,30 +4123,6 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/shared/header/header.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/shared/footer/footer.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/showcase/showcase.stories.ts",
-                "type": "",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "src/app/home/quick-player/quick-player.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
@@ -3852,7 +4139,7 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/post-card/post-card.stories.ts",
+                "file": "src/app/home/post/post.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -3876,31 +4163,7 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/biography/biography.stories.ts",
-                "type": "",
-                "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "src/app/home/full-player/full-player.stories.ts",
-                "type": "",
-                "defaultValue": "Template.bind({})"
-            },
-            {
-                "name": "Default",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/album/album.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -3916,9 +4179,65 @@
                 "name": "Default",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/app/home/feed-history/feed-history.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/showcase/showcase.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/app/home/email-me/email-me.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/biography/biography.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/footer/footer.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/header/header.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/album-cover/album-cover.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                "type": "",
+                "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
             },
             {
                 "name": "environment",
@@ -3948,17 +4267,17 @@
                 "name": "Hover",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/quick-player/quick-player.stories.ts",
-                "type": "Story<Song>",
-                "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { song: args, isHover: true },\r\n})"
+                "file": "src/app/home/album-cover/album-cover.stories.ts",
+                "type": "Story<Album>",
+                "defaultValue": "args => ({\r\n    component: AlbumCoverComponent,\r\n    props: {\r\n        ...args,\r\n        isHover: true,\r\n        // selectId: action('selectId')\r\n    }\r\n})"
             },
             {
                 "name": "Hover",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/album/album.stories.ts",
-                "type": "Story<Album>",
-                "defaultValue": "args => ({\r\n    component: AlbumComponent,\r\n    props: { song: args, isHover: true },\r\n})"
+                "file": "src/app/home/quick-player/quick-player.stories.ts",
+                "type": "Story<>",
+                "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { \r\n        song: { ...args, coverImage$: of(args.coverImage), audio$: of(args.audio) },\r\n        isActive: true\r\n    },\r\n})"
             },
             {
                 "name": "mainModule",
@@ -4017,6 +4336,14 @@
                 "defaultValue": "require('/../openapi.json')"
             },
             {
+                "name": "pressDownAnimation",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/press-down.animation.ts",
+                "type": "",
+                "defaultValue": "animation([\r\n    animate('600ms ease-in', keyframes([\r\n        style({ opacity: 0 }),\r\n        style({ opacity: 1, transform: 'scale(1.03)' }),\r\n        style({ transform: 'scale(1)' })\r\n    ]))\r\n])"
+            },
+            {
                 "name": "require",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -4032,52 +4359,12 @@
                 "defaultValue": "new Subject<Song[]>()"
             },
             {
-                "name": "Template",
+                "name": "slideInAnimation",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/quick-feed/quick-feed.stories.ts",
-                "type": "Story<any>",
-                "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly latest$: Observable<QuickEvent[]> = of([]);\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: QuickFeedComponent\r\n    }\r\n}"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/music-gallery/music-gallery.stories.ts",
-                "type": "Story<any>",
-                "defaultValue": "args => {\r\n    class MockMusicService implements Partial<MusicService> {\r\n        readonly albums$: Observable<Album[]> = of([]);\r\n        readonly getSongs$ = new ReplaySubject<Album>();\r\n        readonly songs$ = this.getSongs$.pipe(\r\n            switchMap(res =>\r\n                of([])\r\n            )\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: MusicGalleryComponent\r\n    }\r\n}"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/feed/feed.stories.ts",
-                "type": "Story<any>",
-                "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        private archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly getPosts$ = new BehaviorSubject<Filter>(Filter.ALL);\r\n        private readonly allPosts$ = this.getPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly posts$: Observable<Post[]> = merge(\r\n          this.allPosts$,\r\n          this.archivedPosts$\r\n        );\r\n      \r\n        readonly archive$: Observable<Array<{ year: number, months: number[] }>> = of([])\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedComponent\r\n    }\r\n}"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/post-card/post-card.stories.ts",
-                "type": "Story<Post>",
-                "defaultValue": "args => ({\r\n    component: PostCardComponent,\r\n    props: { datasource: args },\r\n})"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/showcase/showcase.stories.ts",
-                "type": "Story<>",
-                "defaultValue": "args => {\r\n    showcase$.next(Array.from({ length: args.count }).map(() => args));\r\n    class MockMusicService implements Partial<MusicService> {\r\n        readonly showcase$: Observable<Song[]> = merge(\r\n            of(Array.from({ length: args.count }).map(() => args)), \r\n            showcase$\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: ShowcaseComponent\r\n    }\r\n}"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/app/home/album/album.stories.ts",
-                "type": "Story<Album>",
-                "defaultValue": "args => ({\r\n    component: AlbumComponent,\r\n    props: { song: args },\r\n})"
+                "file": "src/app/home/slide-in.animation.ts",
+                "type": "",
+                "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ opacity: 0, transform: 'translateX(-24px)' }),\r\n        style({ opacity: 1, transform: 'translateX(0)' })\r\n    ]))\r\n])"
             },
             {
                 "name": "Template",
@@ -4091,17 +4378,57 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/home/email-me/email-me.stories.ts",
-                "type": "Story<Email>",
-                "defaultValue": "args => {\r\n    Object.assign(model, args);\r\n    class MockEmailService implements Partial<EmailService> {\r\n        readonly model: Email = model;\r\n\r\n        submit() {\r\n\r\n        }\r\n\r\n        reset() {\r\n\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: EmailService, useClass: MockEmailService }]\r\n        },\r\n        component: EmailMeComponent\r\n    }\r\n}"
+                "file": "src/app/home/post/post.stories.ts",
+                "type": "Story<Post>",
+                "defaultValue": "args => ({\r\n    component: PostComponent,\r\n    props: { post: args },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/album-cover/album-cover.stories.ts",
+                "type": "Story<Album>",
+                "defaultValue": "args => {\r\n    return {\r\n        component: AlbumCoverComponent,\r\n        props: args\r\n    }\r\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/quick-feed/quick-feed.stories.ts",
+                "type": "Story<any>",
+                "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly latest$: Observable<QuickEvent[]> = of([]);\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: QuickFeedComponent\r\n    }\r\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/feed/feed.stories.ts",
+                "type": "Story<any>",
+                "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        private archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly getPosts$ = new BehaviorSubject<Filter>(Filter.ALL);\r\n        private readonly allPosts$ = this.getPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly posts$: Observable<Post[]> = merge(\r\n          this.allPosts$,\r\n          this.archivedPosts$\r\n        );\r\n      \r\n        readonly archive$: Observable<Array<{ year: number, months: number[] }>> = of([])\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedComponent\r\n    }\r\n}"
             },
             {
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
                 "file": "src/app/home/quick-player/quick-player.stories.ts",
-                "type": "Story<Song>",
-                "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { song: args },\r\n})"
+                "type": "Story<>",
+                "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { \r\n        song: { ...args, coverImage$: of(args.coverImage), audio$: of(args.audio) } \r\n    },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/feed-history/feed-history.stories.ts",
+                "type": "Story<any>",
+                "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedHistoryComponent\r\n    }\r\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/music-gallery/music-gallery.stories.ts",
+                "type": "Story<>",
+                "defaultValue": "args => {\r\n    class MockStaticFileService implements Partial<StaticFileService> {\r\n        get(fileName: string) {\r\n            return of('assets/images/banner-1.jpg');\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [\r\n                { provide: MusicService, useClass: MockMusicService },\r\n                { provide: StaticFileService, useClass: MockStaticFileService }\r\n            ]\r\n        },\r\n        component: MusicGalleryComponent\r\n    }\r\n}"
             },
             {
                 "name": "Template",
@@ -4110,6 +4437,22 @@
                 "file": "src/app/home/full-player/full-player.stories.ts",
                 "type": "Story<any>",
                 "defaultValue": "args => {\r\n    class MockMusicService implements Partial<MusicService> {\r\n        get$(id: string) {\r\n            return of({} as any)\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: FullPlayerComponent\r\n    }\r\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/showcase/showcase.stories.ts",
+                "type": "Story<>",
+                "defaultValue": "args => {\r\n    const data = {\r\n        ...args,\r\n        coverImage$: of(args.coverImage),\r\n        audio$: of(args.audio),\r\n    }\r\n\r\n    showcase$.next(Array.from({ length: args.count }).map(() => data));\r\n    // class MockMusicService implements Partial<MusicService> {\r\n    //     readonly showcase$: Observable<Song[]> = merge(\r\n    //         of(Array.from({ length: args.count }).map(() => data)), \r\n    //         showcase$\r\n    //     );\r\n    // }\r\n    class MockStaticFileService implements Partial<StaticFileService> {\r\n        get(fileName: string) {\r\n            return of('assets/images/banner-1.jpg');\r\n        }\r\n    }\r\n\r\n    return {\r\n        // moduleMetadata: {\r\n        //     providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        // },\r\n        moduleMetadata: {\r\n            providers: [{ provide: StaticFileService, useClass: MockStaticFileService }]\r\n        },\r\n        component: ShowcaseComponent,\r\n        props: {\r\n            animate$: of(null)\r\n        }\r\n    }\r\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/home/email-me/email-me.stories.ts",
+                "type": "Story<Email>",
+                "defaultValue": "args => {\r\n    Object.assign(model, args);\r\n    class MockEmailService implements Partial<EmailService> {\r\n        readonly model: Email = model;\r\n\r\n        submit() {\r\n\r\n        }\r\n\r\n        reset() {\r\n\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: EmailService, useClass: MockEmailService }]\r\n        },\r\n        component: EmailMeComponent\r\n    }\r\n}"
             }
         ],
         "functions": [
@@ -4213,32 +4556,156 @@
                     "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ bottom: '*' }),\r\n        style({ bottom: '0' }),\r\n        style({ bottom: '*' })\r\n    ]))\r\n])"
                 }
             ],
-            "src/app/shared/header/header.stories.ts": [
+            "src/app/home/quick-player/quick-player.stories.ts": [
                 {
                     "name": "Default",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/shared/header/header.stories.ts",
+                    "file": "src/app/home/quick-player/quick-player.stories.ts",
                     "type": "",
-                    "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n})"
+                    "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "MenuClosed",
+                    "name": "Hover",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/shared/header/header.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n    props: {\r\n        isActive: false\r\n    },\r\n})"
+                    "file": "src/app/home/quick-player/quick-player.stories.ts",
+                    "type": "Story<>",
+                    "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { \r\n        song: { ...args, coverImage$: of(args.coverImage), audio$: of(args.audio) },\r\n        isActive: true\r\n    },\r\n})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/quick-player/quick-player.stories.ts",
+                    "type": "Story<>",
+                    "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { \r\n        song: { ...args, coverImage$: of(args.coverImage), audio$: of(args.audio) } \r\n    },\r\n})"
                 }
             ],
-            "src/app/shared/footer/footer.stories.ts": [
+            "src/app/home/quick-feed/quick-feed.stories.ts": [
                 {
                     "name": "Default",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "src/app/shared/footer/footer.stories.ts",
+                    "file": "src/app/home/quick-feed/quick-feed.stories.ts",
                     "type": "",
-                    "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/quick-feed/quick-feed.stories.ts",
+                    "type": "Story<any>",
+                    "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly latest$: Observable<QuickEvent[]> = of([]);\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: QuickFeedComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/post/post.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/post/post.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/post/post.stories.ts",
+                    "type": "Story<Post>",
+                    "defaultValue": "args => ({\r\n    component: PostComponent,\r\n    props: { post: args },\r\n})"
+                }
+            ],
+            "src/app/home/music-gallery/music-gallery.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/music-gallery/music-gallery.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/music-gallery/music-gallery.stories.ts",
+                    "type": "Story<>",
+                    "defaultValue": "args => {\r\n    class MockStaticFileService implements Partial<StaticFileService> {\r\n        get(fileName: string) {\r\n            return of('assets/images/banner-1.jpg');\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [\r\n                { provide: MusicService, useClass: MockMusicService },\r\n                { provide: StaticFileService, useClass: MockStaticFileService }\r\n            ]\r\n        },\r\n        component: MusicGalleryComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/landing-banner/landing-banner.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/landing-banner/landing-banner.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/landing-banner/landing-banner.stories.ts",
+                    "type": "Story<any>",
+                    "defaultValue": "args => {\r\n    class MockFamousQuoteService implements Partial<FamousQuoteService> {     \r\n        public random() {\r\n          return {\r\n            author: 'Charles Schwab',\r\n            message: 'Be hearty in your approbation and lavish in your praise.'\r\n          }\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: FamousQuoteService, useClass: MockFamousQuoteService }]\r\n        },\r\n        component: LandingBannerComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/full-player/full-player.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/full-player/full-player.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/full-player/full-player.stories.ts",
+                    "type": "Story<any>",
+                    "defaultValue": "args => {\r\n    class MockMusicService implements Partial<MusicService> {\r\n        get$(id: string) {\r\n            return of({} as any)\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: FullPlayerComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/feed/feed.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/feed/feed.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/feed/feed.stories.ts",
+                    "type": "Story<any>",
+                    "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        private archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly getPosts$ = new BehaviorSubject<Filter>(Filter.ALL);\r\n        private readonly allPosts$ = this.getPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly posts$: Observable<Post[]> = merge(\r\n          this.allPosts$,\r\n          this.archivedPosts$\r\n        );\r\n      \r\n        readonly archive$: Observable<Array<{ year: number, months: number[] }>> = of([])\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/feed-history/feed-history.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/feed-history/feed-history.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/feed-history/feed-history.stories.ts",
+                    "type": "Story<any>",
+                    "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedHistoryComponent\r\n    }\r\n}"
                 }
             ],
             "src/app/home/showcase/showcase.stories.ts": [
@@ -4264,187 +4731,7 @@
                     "subtype": "variable",
                     "file": "src/app/home/showcase/showcase.stories.ts",
                     "type": "Story<>",
-                    "defaultValue": "args => {\r\n    showcase$.next(Array.from({ length: args.count }).map(() => args));\r\n    class MockMusicService implements Partial<MusicService> {\r\n        readonly showcase$: Observable<Song[]> = merge(\r\n            of(Array.from({ length: args.count }).map(() => args)), \r\n            showcase$\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: ShowcaseComponent\r\n    }\r\n}"
-                }
-            ],
-            "src/app/home/quick-player/quick-player.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-player/quick-player.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Hover",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-player/quick-player.stories.ts",
-                    "type": "Story<Song>",
-                    "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { song: args, isHover: true },\r\n})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-player/quick-player.stories.ts",
-                    "type": "Story<Song>",
-                    "defaultValue": "args => ({\r\n    component: QuickPlayerComponent,\r\n    props: { song: args },\r\n})"
-                }
-            ],
-            "src/app/home/quick-feed/quick-feed.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-feed/quick-feed.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/quick-feed/quick-feed.stories.ts",
-                    "type": "Story<any>",
-                    "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly latest$: Observable<QuickEvent[]> = of([]);\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: QuickFeedComponent\r\n    }\r\n}"
-                }
-            ],
-            "src/app/home/post-card/post-card.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/post-card/post-card.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/post-card/post-card.stories.ts",
-                    "type": "Story<Post>",
-                    "defaultValue": "args => ({\r\n    component: PostCardComponent,\r\n    props: { datasource: args },\r\n})"
-                }
-            ],
-            "src/app/home/music-gallery/music-gallery.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/music-gallery/music-gallery.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/music-gallery/music-gallery.stories.ts",
-                    "type": "Story<any>",
-                    "defaultValue": "args => {\r\n    class MockMusicService implements Partial<MusicService> {\r\n        readonly albums$: Observable<Album[]> = of([]);\r\n        readonly getSongs$ = new ReplaySubject<Album>();\r\n        readonly songs$ = this.getSongs$.pipe(\r\n            switchMap(res =>\r\n                of([])\r\n            )\r\n        );\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: MusicGalleryComponent\r\n    }\r\n}"
-                }
-            ],
-            "src/app/home/landing-banner/landing-banner.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/landing-banner/landing-banner.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/landing-banner/landing-banner.stories.ts",
-                    "type": "Story<any>",
-                    "defaultValue": "args => {\r\n    class MockFamousQuoteService implements Partial<FamousQuoteService> {     \r\n        public random() {\r\n          return {\r\n            author: 'Charles Schwab',\r\n            message: 'Be hearty in your approbation and lavish in your praise.'\r\n          }\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: FamousQuoteService, useClass: MockFamousQuoteService }]\r\n        },\r\n        component: LandingBannerComponent\r\n    }\r\n}"
-                }
-            ],
-            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
-                }
-            ],
-            "src/app/home/biography/biography.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/biography/biography.stories.ts",
-                    "type": "",
-                    "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
-                }
-            ],
-            "src/app/home/full-player/full-player.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/full-player/full-player.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/full-player/full-player.stories.ts",
-                    "type": "Story<any>",
-                    "defaultValue": "args => {\r\n    class MockMusicService implements Partial<MusicService> {\r\n        get$(id: string) {\r\n            return of({} as any)\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        },\r\n        component: FullPlayerComponent\r\n    }\r\n}"
-                }
-            ],
-            "src/app/home/album/album.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/album/album.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Hover",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/album/album.stories.ts",
-                    "type": "Story<Album>",
-                    "defaultValue": "args => ({\r\n    component: AlbumComponent,\r\n    props: { song: args, isHover: true },\r\n})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/album/album.stories.ts",
-                    "type": "Story<Album>",
-                    "defaultValue": "args => ({\r\n    component: AlbumComponent,\r\n    props: { song: args },\r\n})"
-                }
-            ],
-            "src/app/home/feed/feed.stories.ts": [
-                {
-                    "name": "Default",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/feed/feed.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
-                    "name": "Template",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/app/home/feed/feed.stories.ts",
-                    "type": "Story<any>",
-                    "defaultValue": "args => {\r\n    class MockSocialService implements Partial<SocialService> {\r\n        readonly getArchivedPosts$ = new Subject<{ year: string | number, month: string | number }>();\r\n        private archivedPosts$ = this.getArchivedPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly getPosts$ = new BehaviorSubject<Filter>(Filter.ALL);\r\n        private readonly allPosts$ = this.getPosts$.pipe(\r\n          switchMap(res => of([]))\r\n        );\r\n      \r\n        readonly posts$: Observable<Post[]> = merge(\r\n          this.allPosts$,\r\n          this.archivedPosts$\r\n        );\r\n      \r\n        readonly archive$: Observable<Array<{ year: number, months: number[] }>> = of([])\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: SocialService, useClass: MockSocialService }]\r\n        },\r\n        component: FeedComponent\r\n    }\r\n}"
+                    "defaultValue": "args => {\r\n    const data = {\r\n        ...args,\r\n        coverImage$: of(args.coverImage),\r\n        audio$: of(args.audio),\r\n    }\r\n\r\n    showcase$.next(Array.from({ length: args.count }).map(() => data));\r\n    // class MockMusicService implements Partial<MusicService> {\r\n    //     readonly showcase$: Observable<Song[]> = merge(\r\n    //         of(Array.from({ length: args.count }).map(() => data)), \r\n    //         showcase$\r\n    //     );\r\n    // }\r\n    class MockStaticFileService implements Partial<StaticFileService> {\r\n        get(fileName: string) {\r\n            return of('assets/images/banner-1.jpg');\r\n        }\r\n    }\r\n\r\n    return {\r\n        // moduleMetadata: {\r\n        //     providers: [{ provide: MusicService, useClass: MockMusicService }]\r\n        // },\r\n        moduleMetadata: {\r\n            providers: [{ provide: StaticFileService, useClass: MockStaticFileService }]\r\n        },\r\n        component: ShowcaseComponent,\r\n        props: {\r\n            animate$: of(null)\r\n        }\r\n    }\r\n}"
                 }
             ],
             "src/app/home/email-me/email-me.stories.ts": [
@@ -4471,6 +4758,80 @@
                     "file": "src/app/home/email-me/email-me.stories.ts",
                     "type": "Story<Email>",
                     "defaultValue": "args => {\r\n    Object.assign(model, args);\r\n    class MockEmailService implements Partial<EmailService> {\r\n        readonly model: Email = model;\r\n\r\n        submit() {\r\n\r\n        }\r\n\r\n        reset() {\r\n\r\n        }\r\n    }\r\n\r\n    return {\r\n        moduleMetadata: {\r\n            providers: [{ provide: EmailService, useClass: MockEmailService }]\r\n        },\r\n        component: EmailMeComponent\r\n    }\r\n}"
+                }
+            ],
+            "src/app/home/biography/biography.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/biography/biography.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: BiographyComponent,\r\n})"
+                }
+            ],
+            "src/app/shared/footer/footer.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/footer/footer.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: FooterComponent,\r\n})"
+                }
+            ],
+            "src/app/shared/header/header.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/header/header.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n})"
+                },
+                {
+                    "name": "MenuClosed",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/header/header.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: HeaderComponent,\r\n    props: {\r\n        isActive: false\r\n    },\r\n})"
+                }
+            ],
+            "src/app/home/album-cover/album-cover.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/album-cover/album-cover.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Hover",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/album-cover/album-cover.stories.ts",
+                    "type": "Story<Album>",
+                    "defaultValue": "args => ({\r\n    component: AlbumCoverComponent,\r\n    props: {\r\n        ...args,\r\n        isHover: true,\r\n        // selectId: action('selectId')\r\n    }\r\n})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/album-cover/album-cover.stories.ts",
+                    "type": "Story<Album>",
+                    "defaultValue": "args => {\r\n    return {\r\n        component: AlbumCoverComponent,\r\n        props: args\r\n    }\r\n}"
+                }
+            ],
+            "src/app/shared/scrollable-labels/scrollable-labels.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/scrollable-labels/scrollable-labels.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => ({\r\n    component: ScrollableLabelsComponent,\r\n    template: `\r\n        <app-scrollable-labels>\r\n            <div class=\"label\">Scrollable Label #1</div>\r\n            <div class=\"label\">Scrollable Label #2</div>\r\n            <div class=\"label\">Scrollable Label #3</div>\r\n            <div class=\"label\">Scrollable Label #4</div>\r\n            <div class=\"label\">Scrollable Label #5</div>\r\n            <div class=\"label\">Scrollable Label #6</div>\r\n            <div class=\"label\">Scrollable Label #7</div>\r\n            <div class=\"label\">Scrollable Label #8</div>\r\n            <div class=\"label\">Scrollable Label #9</div>\r\n            <div class=\"label\">Scrollable Label #10</div>\r\n        </app-scrollable-labels>\r\n        <style>\r\n            .label {\r\n                color: red;\r\n                margin: 0 12px;\r\n            }\r\n        </style>\r\n    `\r\n})"
                 }
             ],
             "src/environments/environment.china.ts": [
@@ -4536,6 +4897,26 @@
                     "subtype": "variable",
                     "file": "src/app/core/mock-model.interceptor.ts",
                     "type": "any"
+                }
+            ],
+            "src/app/home/press-down.animation.ts": [
+                {
+                    "name": "pressDownAnimation",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/press-down.animation.ts",
+                    "type": "",
+                    "defaultValue": "animation([\r\n    animate('600ms ease-in', keyframes([\r\n        style({ opacity: 0 }),\r\n        style({ opacity: 1, transform: 'scale(1.03)' }),\r\n        style({ transform: 'scale(1)' })\r\n    ]))\r\n])"
+                }
+            ],
+            "src/app/home/slide-in.animation.ts": [
+                {
+                    "name": "slideInAnimation",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/home/slide-in.animation.ts",
+                    "type": "",
+                    "defaultValue": "animation([\r\n    animate('600ms ease-out', keyframes([\r\n        style({ opacity: 0, transform: 'translateX(-24px)' }),\r\n        style({ opacity: 1, transform: 'translateX(0)' })\r\n    ]))\r\n])"
                 }
             ]
         },
@@ -4750,16 +5131,16 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/album/album.component.ts",
+                "filePath": "src/app/home/album-cover/album-cover.component.ts",
                 "type": "component",
                 "linktype": "component",
-                "name": "AlbumComponent",
+                "name": "AlbumCoverComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/album/album.stories.ts",
+                "filePath": "src/app/home/album-cover/album-cover.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -4769,7 +5150,7 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/album/album.stories.ts",
+                "filePath": "src/app/home/album-cover/album-cover.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -4779,7 +5160,7 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/album/album.stories.ts",
+                "filePath": "src/app/home/album-cover/album-cover.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -4881,6 +5262,26 @@
                 "name": "FeedHistoryComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/feed-history/feed-history.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/feed-history/feed-history.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -5021,7 +5422,7 @@
                 "linktype": "component",
                 "name": "MusicGallerySongsComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/7",
+                "coverageCount": "0/8",
                 "status": "low"
             },
             {
@@ -5030,7 +5431,16 @@
                 "linktype": "component",
                 "name": "MusicGalleryComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/12",
+                "coverageCount": "0/17",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/music-gallery/music-gallery.stories.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "MockMusicService",
+                "coveragePercent": 0,
+                "coverageCount": "0/13",
                 "status": "low"
             },
             {
@@ -5059,7 +5469,7 @@
                 "linktype": "injectable",
                 "name": "MusicService",
                 "coveragePercent": 0,
-                "coverageCount": "0/10",
+                "coverageCount": "0/11",
                 "status": "low"
             },
             {
@@ -5072,16 +5482,16 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/post-card/post-card.component.ts",
+                "filePath": "src/app/home/post/post.component.ts",
                 "type": "component",
                 "linktype": "component",
-                "name": "PostCardComponent",
+                "name": "PostComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/4",
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/post-card/post-card.stories.ts",
+                "filePath": "src/app/home/post/post.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -5091,11 +5501,21 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/home/post-card/post-card.stories.ts",
+                "filePath": "src/app/home/post/post.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/press-down.animation.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "pressDownAnimation",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
@@ -5144,7 +5564,7 @@
                 "linktype": "component",
                 "name": "QuickPlayerComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/11",
+                "coverageCount": "0/13",
                 "status": "low"
             },
             {
@@ -5212,6 +5632,16 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/home/slide-in.animation.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "slideInAnimation",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

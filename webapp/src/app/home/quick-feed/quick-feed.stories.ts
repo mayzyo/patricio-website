@@ -1,16 +1,16 @@
 import { moduleMetadata, Story } from '@storybook/angular';
 import { QuickFeedComponent } from './quick-feed.component';
-import { PostCardComponent } from '../post-card/post-card.component';
 import { SocialService } from '../social.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Observable, of } from 'rxjs';
 import { QuickEvent } from '../models';
+import { PostComponent } from '../post/post.component';
 
 export default {
     title: 'Home/Quick Feed',
     decorators: [
         moduleMetadata({
-            declarations: [QuickFeedComponent, PostCardComponent],
+            declarations: [QuickFeedComponent, PostComponent],
             imports: [SharedModule]
         }),
     ]

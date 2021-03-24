@@ -11,27 +11,32 @@ export type QuickEvent = Pick<Post, "title" | "created" | "id" | "link" | "thumb
 export type Article = paths["/Articles"]["get"]["responses"][200]["text/plain"][number];
 
 export interface Media extends BaseMedia {
-    url$: Observable<SafeUrl>;
+    url$: Observable<SafeUrl | string>;
 }
 
 export interface Post extends BasePost {
-    thumbnail$: Observable<SafeUrl>;
+    thumbnail$: Observable<SafeUrl | string>;
     gallery?: Media[];
 }
 
 export interface Song extends BaseSong {
-    coverImage$: Observable<string>;
-    audio$?: Observable<SafeUrl>;
+    coverImage$: Observable<SafeUrl | string>;
+    audio$?: Observable<SafeUrl | string>;
 }
 
 export type TopSong = components["schemas"]["TopSong"];
 
 export interface Album extends BaseAlbum {
-    coverImage$: Observable<string>;
+    coverImage$: Observable<SafeUrl | string>;
 }
 export interface Email {
     address: string;
     message: string;
     title: string;
     template: string;
+}
+
+export interface Pagination {
+    page: string;
+    size: string;
 }

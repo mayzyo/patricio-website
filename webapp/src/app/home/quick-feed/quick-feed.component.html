@@ -8,7 +8,7 @@
     <ol>
         <li *ngFor="let item of latest">
             <a [href]="item.link">
-                <app-post-card [datasource]="item"></app-post-card>
+                <app-post [post]="item"></app-post>
             </a>
         </li>
     </ol>

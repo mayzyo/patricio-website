@@ -1,10 +1,12 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-$gap: 12px;
+:host {
+    color: map-get(theme.$palettes, white);
+}
 
-app-quick-player,app-album {
+app-quick-player, app-album-cover {
     height: 100vh;
-    margin: 0;
+    // margin: 0;
 }
 
 swiper {
@@ -18,17 +20,21 @@ p {
 }
 
 .gallery {
+    $gap: 12px;
+
     margin: 0 map-get(theme.$spacing, page-wide);
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: $gap;
     gap: $gap;
 
-    & > app-quick-player,app-album {
+    & > app-quick-player, & > button > app-album-cover {
         $offset: $gap * 3 + map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar2;
-        $margin-borders: map-get(theme.$spacing, std) * 2 + (1px * 2);
-        height: calc((100vw - #{$offset}) / 4 - #{$margin-borders});
+        // It seems like each block need to remove border of all border on the row.
+        // It's likely caused by "box-sizing: border-box" on all;
+        $borders: 1px * 2 * 4;
+        height: calc((100vw - #{$offset}) / 4 - #{$borders});
     }
 }
 
@@ -41,14 +47,17 @@ p {
         display: block;
     }
 
-    .title { 
+    .title {
         margin: 0 map-get(theme.$spacing, page-wide);
         margin-bottom: map-get(theme.$spacing, std);
-        color: map-get(theme.$palettes, white);
+
+        & > * { display: inline; vertical-align: middle; }
     }
 
     .background {
         height: 80vh;
+        z-index: -2;
+
         background: linear-gradient(transparent 0%, white 75%), var(--bg);
     }
 }

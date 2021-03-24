@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { skipWhile } from 'rxjs/operators';
-import { Album } from '../models';
-import { MusicService } from '../music.service';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Album, Song } from '../models';
 
 // This component exists because nesting SwiperJS in Angular in the same component creates
 // ExpressionChangeAfter error.
@@ -12,13 +12,22 @@ import { MusicService } from '../music.service';
 })
 export class MusicGallerySongsComponent implements OnInit {
   @Input() album!: Readonly<Album>;
-  @Input() current!: Readonly<Album>;
-  readonly songs$ = this.musics.songs$.pipe(
-    skipWhile(() => this.current.id != this.album.id)
-  );
+  @Input() songs$!: Observable<Song[]>;
+  @Input() activeAlbum$!: Observable<Album>;
+  currentSongs$?: Observable<any[]>;
+  isActive$?: Observable<boolean>;
 
-  constructor(public musics: MusicService) { }
+  constructor() { }
 
   ngOnInit(): void {
+    this.currentSongs$ = this.activeAlbum$.pipe(
+      switchMap(res => res.id == this.album.id ? this.songs$ : of(this.album.songs).pipe(map(x => x.map(el => ({ ...el, coverImage$: this.album.coverImage$ }))))),
+      // skipWhile(res => res.id != this.album.id),
+      // switchMapTo(this.songs$),
+    );
+
+    this.isActive$ = this.activeAlbum$.pipe(
+      map(res => res.id == this.album.id)
+    )
   }
 }

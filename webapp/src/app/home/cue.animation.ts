@@ -1,7 +1,4 @@
-import {
-    animation, trigger, animateChild, group,
-    transition, animate, style, query, state, keyframes
-} from '@angular/animations';
+import { animation, animate, style, keyframes } from '@angular/animations';
 
 export const cueAnimation = animation([
     animate('600ms ease-out', keyframes([

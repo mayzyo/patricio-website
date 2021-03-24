@@ -17,18 +17,21 @@ export class MockModelInterceptor implements HttpInterceptor {
         return of(null).pipe(
             mergeMap(() => {
 
-                if(request.url.startsWith(environment.backend)) {
-                    if(request.method == 'GET') {
+                if (request.url.startsWith(environment.backend)) {
+                    if (request.method == 'GET') {
                         var path = request.url
                             .substring(environment.backend.length, request.url.length)
                             .split('?')[0];
 
                         const subRoutes = path.split('/');
-                        path = subRoutes.length > 2 == true ? `/${subRoutes[1]}/{id}` : path;
+                        if (subRoutes.length > 2 && !Object.keys(openapi["paths"]).includes(path)) {
+                            path = `/${subRoutes[1]}/{id}`;
+                        }
+                        // path = subRoutes.length > 2 == true ? `/${subRoutes[1]}/{id}` : path;
                         return of(new HttpResponse({ status: 200, body: this.generate(path) }));
                     }
-                } else if(request.url.startsWith(environment.media)) {
-                    if(request.method == 'GET') {
+                } else if (request.url.startsWith(environment.media)) {
+                    if (request.method == 'GET') {
                         const sizes = ['1080x1080', '1280x720', '600x400', '400x600', '768x1024', '1024x680'];
                         return this.http.get(
                             `http://localhost:5004/generated/${sizes[Math.floor(Math.random() * 6)]}`,
@@ -53,10 +56,9 @@ export class MockModelInterceptor implements HttpInterceptor {
 
         var data = "";
         for (var propertyName in model) {
-            data = data.concat(`"${propertyName}": "${this.buildModel(propertyName, model[propertyName])}",`);
+            data = data.concat(`"${propertyName}": ${this.buildModel(propertyName, model[propertyName])},`);
         }
         data = `{ ${data.substring(0, data.length - 1)} }`;
-
         if (isArray) {
             var array = '';
             for (let i = 0; i < 10; i++) {
@@ -68,20 +70,52 @@ export class MockModelInterceptor implements HttpInterceptor {
         return JSON.parse(faker.fake(data));
     }
 
-    private buildModel(name: string, obj: { type: string, format: string }) {
+    private buildModel(name: string, obj: { type: string, format: string, "$ref"?: string, items?: { "$ref": string } }, depth: number = 1) {
         if (name == "id")
-            return "{{random.uuid}}";
+            return "\"{{random.uuid}}\"";
+
+        if (obj["$ref"]) {
+            if (depth > 1) {
+                return null;
+            }
+            var comp = obj["$ref"].split('/')
+            var model = openapi["components"]["schemas"][comp[comp.length - 1]]["properties"];
+            var data = "";
+            for (var propertyName in model) {
+                data = data.concat(`"${propertyName}": ${this.buildModel(propertyName, model[propertyName], depth + 1)},`);
+            }
+            return `{ ${data.substring(0, data.length - 1)} }`;
+        }
+
         switch (obj.type) {
             case "string":
                 return obj.format == "date-time"
-                    ? "{{date.recent}}"
-                    : "{{lorem.sentence}}";
+                    ? "\"{{date.recent}}\""
+                    : "\"{{lorem.sentence}}\"";
             case "integer":
-                return "{{random.number}}";
+                return "\"{{random.number}}\"";
             case "boolean":
-                return "{{random.boolean}}";
+                return "\"{{random.boolean}}\"";
+            case "array":
+                if(depth > 1) {
+                    return null
+                }
+
+                var comp = obj.items!["$ref"].split('/')
+                var model = openapi["components"]["schemas"][comp[comp.length - 1]]["properties"];
+                var data = "";
+
+                for (var propertyName in model) {
+                    data = data.concat(`"${propertyName}": ${this.buildModel(propertyName, model[propertyName], depth + 1)},`);
+                }
+                data = `{ ${data.substring(0, data.length - 1)} }`;
+                var array = '';
+                for (let i = 0; i < 5; i++) {
+                    array = array.concat(data, ',');
+                }
+                return `[ ${array.substring(0, array.length - 1)} ]`;
             default:
-                return "N/A";
+                return null;
         }
     }
 }

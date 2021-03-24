@@ -1,0 +1,26 @@
+@use 'src/assets/scss/theme.scss' as theme;
+
+:host {
+    position: relative;
+    padding: map-get(theme.$spacing, std);
+    display: block;
+    overflow: hidden;
+
+    border: 1px map-get(theme.$palettes, black) solid;
+    font-size: calc(32rem / #{map-get(theme.$text, std)});
+    text-transform: capitalize;
+    color: white;
+
+    &:hover > .blur, &.__hover > .blur {
+        filter: blur(4px);
+        margin: -5px;
+    }
+
+    &:hover > .background, &.__hover > .background {
+        width: calc(100% + 10px);
+    }
+}
+
+.blur {
+    transition: none;
+}

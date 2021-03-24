@@ -1,18 +1,25 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { from, interval, merge, Observable, of, zip } from 'rxjs';
-import { map, pluck, reduce, scan, share, shareReplay, skip, switchMap, take, tap } from 'rxjs/operators';
+import { map, pluck, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Song } from '../models';
+import { transition, trigger, useAnimation } from '@angular/animations';
+import { slideInAnimation } from '../slide-in.animation';
 
 
 @Component({
   selector: 'app-showcase',
   templateUrl: './showcase.component.html',
-  styleUrls: ['./showcase.component.scss']
+  styleUrls: ['./showcase.component.scss'],
+  animations: [
+    trigger('slideIn', [
+      transition('void => *', [useAnimation(slideInAnimation)])
+    ])
+  ],
 })
 export class ShowcaseComponent implements OnInit {
-  @Input() animTrigger$?: Observable<void>;
+  @Input() animate$!: Observable<void>;
   @HostBinding('style.display') private display: string = 'block';
 
   oversizeItem$?: Observable<Song>;
@@ -28,30 +35,24 @@ export class ShowcaseComponent implements OnInit {
   constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
-    this.animTrigger$ = of();
-    if(this.animTrigger$) {
-      this.initCollection(this.animTrigger$);
-    }
+    this.initCollection();
   }
 
-  private initCollection(animTrigger$: Observable<void>) {
-    var collection$ = this.musics.showcase$.pipe(
-      tap(res => this.display = res.length == 0 ? 'none' : 'block'),
-      switchMap(res => from(res)),
-      shareReplay()
+  private initCollection() {
+    var collection$ = zip(
+      this.musics.showcase$.pipe(
+        tap(res => this.display = res.length == 0 ? 'none' : 'block'),
+        switchMap(res => from(res))
+      ),
+      this.animate$.pipe(
+        take(1),
+        switchMap(() => merge(of(null), interval(100)))
+      )
+    ).pipe(
+      pluck('0'),
+      // tap(res => this.entryFade(res)),
+      share()
     );
-
-    // var collection$ = zip(
-    //   datasource$,
-    //   animTrigger$.pipe(
-    //     take(1),
-    //     switchMap(() => merge(of(null), interval(600)))
-    //   )
-    // ).pipe(
-    //   pluck('0'),
-    //   // tap(res => this.entryFade(res)),
-    //   share()
-    // );
 
     this.oversizeItem$ = collection$.pipe(
       take(1)

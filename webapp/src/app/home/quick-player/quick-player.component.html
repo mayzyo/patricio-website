@@ -1,18 +1,26 @@
-<ng-container *ngIf="isHover; then Controls else Content"></ng-container>
-<div *ngIf="(song.coverImage$ | async) as coverImage" class="background blur"  [style.background-image]="'url(' + coverImage + ')'"></div>
+<app-album-cover [coverImage]="song.coverImage$ | async" [class]="isActive ? '__hover' : ''">
+    <ng-container *ngIf="isActive; then Controls else Content"></ng-container>
+</app-album-cover>
 
 <ng-template #Content>
     <ng-content></ng-content>
 </ng-template>
 
 <ng-template #Controls>
-    <button *ngIf="song.audio" (click)="play()">
-        <fa-icon [icon]="faPlayCircle" size="lg"></fa-icon>
+    <button *ngIf="song.audio" class="audio-toggle" (click)="toggleAudio()">
+        <fa-icon [icon]="isAudioOn ? faStopCircle : faPlayCircle" size="6x"></fa-icon>
+        <audio *ngIf="isAudioOn" [src]="song.audio$ | async" autoplay></audio>
     </button>
-    <a *ngIf="song.soundCloud" [href]="song.soundCloud">
-        <fa-icon [icon]="faSoundcloud" size="lg"></fa-icon>
-    </a>
-    <a *ngIf="song.audio" [routerLink]="['/music', song.id]">
-        <fa-icon [icon]="faInfoCircle" size="lg"></fa-icon>
-    </a>
+
+    <article class="controls">
+        <section class="content">
+            <ng-content></ng-content>
+        </section>
+        <a *ngIf="song.soundCloud" [href]="song.soundCloud">
+            <fa-icon [icon]="faSoundcloud"></fa-icon>
+        </a>
+        <a [routerLink]="['/music', song.id]">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+        </a>
+    </article>
 </ng-template>

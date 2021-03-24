@@ -1,26 +1,29 @@
-<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true"(activeIndexChange)="activeIndexChange($event)">
-    <ng-container *ngIf="currentAlbum">
-        <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
-            <app-music-gallery-songs [album]="album" [current]="currentAlbum"></app-music-gallery-songs>
-        </ng-template>
-    </ng-container>
+<!-- Mobile Viewport -->
+<swiper *ngIf="isMobile$ | async" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true" (activeIndexChange)="activeIndex$.next($event.activeIndex)">
+    <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
+        <app-music-gallery-songs [album]="album" [songs$]="musics.songs$" [activeAlbum$]="activeAlbum$"></app-music-gallery-songs>
+    </ng-template>
 </swiper>
 
-<ng-container *ngIf="breakpoint$ | async">
-    <h1 class="title">Composed by Me | 我的作品</h1>
-
-    <div class="gallery">
-        <ng-container *ngIf="currentAlbum == undefined">
-            <app-album *ngFor="let album of musics.albums$ | async" [backgroundUrl]="album.coverImage$ | async"
-                [album]="album" (selectAlbum)="selectAlbum($event)">
+<!-- Desktop Viewport -->
+<ng-container *ngIf="!(isMobile$ | async)">
+    <section class="title">
+        <button (click)="backToAlbum()">
+            <fa-icon [icon]="faAngleDoubleLeft" size="3x"></fa-icon>
+        </button>
+        <h1>Composed by Me | 我的作品</h1>
+    </section>
+    <section class="gallery">
+        <button *ngFor="let album of delayedAlbums$ | async" (click)="selectAlbum(album)" [@pressDown]>
+            <app-album-cover [coverImage]="album.coverImage$ | async">
                 <p>{{ album.title }}</p>
-            </app-album>
-        </ng-container>
+            </app-album-cover>
+        </button>
 
-        <app-quick-player *ngFor="let song of musics.songs$ | async" [song]="song">
+        <app-quick-player *ngFor="let song of delayedSongs$ | async" [song]="song" [@pressDown]>
             <p>{{ song.title }}</p>
         </app-quick-player>
-    </div>
+    </section>
 
-    <div class="background blur" [style]="backgroundUrl"></div>
+    <article class="background blur" [style]="backgroundUrl"></article>
 </ng-container>

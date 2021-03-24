@@ -1,39 +1,58 @@
+import { transition, trigger, useAnimation } from '@angular/animations';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, from, interval, merge, Observable, of, ReplaySubject, Subject, Subscription, zip } from 'rxjs';
+import { map, pluck, scan, switchMap, switchMapTo } from 'rxjs/operators';
 import metaData from 'src/meta-data';
-import { Album } from '../models';
+import { Album, Song } from '../models';
 import { MusicService } from '../music.service';
+import { pressDownAnimation } from '../press-down.animation';
+import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-music-gallery',
   templateUrl: './music-gallery.component.html',
-  styleUrls: ['./music-gallery.component.scss']
+  styleUrls: ['./music-gallery.component.scss'],
+  animations: [
+    trigger('pressDown', [
+      transition('void => *', [useAnimation(pressDownAnimation)])
+    ])
+  ],
 })
-export class MusicGalleryComponent implements OnInit, OnDestroy {
+export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
+  readonly faAngleDoubleLeft = faAngleDoubleLeft;
   readonly backgroundUrl: string = `--bg: url(${metaData.discographyBannerUrl})`;
-  readonly breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
-    map(res => res.matches)
+  readonly isMobile$ = merge(
+    of(this.breakpointObserver.isMatched('(max-width: 1023px)')),
+    this.breakpointObserver.observe('(max-width: 1023px)').pipe(
+      map(res => res.matches)
+    )
   );
-  currentAlbum?: Album = undefined;
-  private albums?: Album[];
+  readonly delayedAlbums$: Observable<Album[]> = merge(of(null), this.musics.getSongs$).pipe(
+    switchMapTo(
+      merge(of([]), this.animate(this.musics.albums$))
+    )
+  );
+  readonly delayedSongs$: Observable<Song[]> = this.musics.getAlbums$.pipe(
+    switchMapTo(
+      merge(of([]), this.animate(this.musics.songs$))
+    )
+  );
+  readonly activeIndex$ = new Subject<number>();
+  readonly activeAlbum$ = new ReplaySubject<Album>();
   private readonly subscriptions = new Subscription();
 
   constructor(private breakpointObserver: BreakpointObserver, public musics: MusicService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.musics.albums$.subscribe(res => this.albums = res)
-    );
-    this.subscriptions.add(
       combineLatest([
-        this.breakpoint$,
+        this.isMobile$,
+        merge(of(0), this.activeIndex$),
         this.musics.albums$
       ]).subscribe(res => {
-        if(res[0] == false && res[1]) {
-          this.currentAlbum = res[1][0];
-          this.musics.getSongs$.next(res[1][0]);
+        if(res[0] && res[2] && res[2].length != 0) {
+          this.selectAlbum(res[2][res[1]]);
         }
       })
     );
@@ -43,15 +62,30 @@ export class MusicGalleryComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
+  ngAfterViewInit(): void {
+    this.musics.getAlbums$.next({ page: '1', size: '10' });
+  }
+
   selectAlbum(e: Album) {
-    this.currentAlbum = e;
+    this.activeAlbum$.next(e);
     this.musics.getSongs$.next(e);
   }
 
-  activeIndexChange(e: any): any {
-    if(this.albums) {
-      this.currentAlbum = this.albums[e.activeIndex];
-      this.musics.getSongs$.next(this.albums[e.activeIndex]);
-    }
+  backToAlbum(): void {
+    this.musics.getAlbums$.next({ page: '1', size: '10' });
+  }
+
+  private animate<T>(ob: Observable<T[]>) {
+    return zip(
+      ob.pipe(
+        switchMap(res => from(res))
+      ),
+      ob.pipe(
+        switchMapTo(merge(of(null), interval(100)))
+      )
+    ).pipe(
+      pluck('0'),
+      scan<T, T[]>((acc, cur) => [...acc, cur], [])
+    );
   }
 }

@@ -1,19 +1,19 @@
 import { moduleMetadata, Story } from '@storybook/angular';
 import { FeedComponent } from './feed.component';
 import { SwiperModule } from 'swiper/angular';
-import { PostCardComponent } from '../post-card/post-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Filter, SocialService } from '../social.service';
 import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Post } from '../models';
+import { PostComponent } from '../post/post.component';
 
 export default {
     title: 'Home/Feed',
     decorators: [
         moduleMetadata({
-            declarations: [FeedComponent, PostCardComponent],
+            declarations: [FeedComponent, PostComponent],
             imports: [SharedModule, SwiperModule, ScrollingModule]
         }),
     ]

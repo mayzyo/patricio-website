@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { map, share, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { StaticFileService } from '../core/static-file.service';
 import { paths } from '../shared/backend.api';
-import { Album, BaseAlbum, BaseSong, Song, TopSong } from './models';
+import { Album, BaseAlbum, BaseSong, Pagination, Song, TopSong } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,22 +17,28 @@ export class MusicService {
   ).pipe(
     map(res => res.map(el => this.topSongToSong(el)))
   );
-  readonly albums$: Observable<Album[]> = this.http.get<paths["/Albums"]["get"]["responses"][200]["text/plain"]>(
-    `${environment.backend}/Albums`
-  ).pipe(
-    map(res  => res.map(el => this.createAlbum(el)))
+  readonly getAlbums$ = new Subject<Pagination>();
+  readonly albums$: Observable<Album[]> = this.getAlbums$.pipe(
+    switchMap(res => this.http.get<paths["/Albums"]["get"]["responses"][200]["text/plain"]>(
+      `${environment.backend}/Albums`,
+      { params: { ...res } }
+    )),
+    map(res  => res.map(el => this.createAlbum(el))),
+    share()
   );
-  readonly getSongs$ = new ReplaySubject<Album>();
+
+  readonly getSongs$ = new Subject<Album>();
   readonly songs$ = this.getSongs$.pipe(
     switchMap(res =>
       this.http.get<paths["/Albums/{id}"]["get"]["responses"][200]["text/plain"]>(
         `${environment.backend}/Albums/${res.id}`
       )
     ),
-    map(res => res.songs.map(el => this.createSong(el, res)))
+    map(res => res.songs.map(el => this.createSong(el, res))),
+    share()
   );
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private files: StaticFileService) {
+  constructor(protected http: HttpClient, protected sanitizer: DomSanitizer, protected files: StaticFileService) {
   }
 
   get$(id: string) {
@@ -43,7 +49,7 @@ export class MusicService {
     );
   }
 
-  private createAlbum(album: BaseAlbum): Album {
+  protected createAlbum(album: BaseAlbum): Album {
     return {
       ...album,
       coverImage$: album.coverImage 
@@ -52,7 +58,7 @@ export class MusicService {
     };
   }
 
-  private createSong(song: BaseSong, album: BaseAlbum): Song {
+  protected createSong(song: BaseSong, album: BaseAlbum): Song {
     return {
       ...song,
       genre: song.genre ? song.genre : album.genre,
@@ -67,7 +73,7 @@ export class MusicService {
     }
   }
 
-  private topSongToSong(topSong: TopSong): Song {
+  protected topSongToSong(topSong: TopSong): Song {
     return {
       ...topSong.song,
       genre: topSong.song.genre ? topSong.song.genre : topSong.song.album.genre,

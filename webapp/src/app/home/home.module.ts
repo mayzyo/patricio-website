@@ -22,15 +22,15 @@ import { MusicComponent } from './music/music.component';
 import { LegalComponent } from './legal/legal.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { QuickPlayerComponent } from './quick-player/quick-player.component';
-import { PostCardComponent } from './post-card/post-card.component';
 import { FeedHistoryComponent } from './feed-history/feed-history.component';
-import { AlbumComponent } from './album/album.component';
 import { MusicGallerySongsComponent } from './music-gallery-songs/music-gallery-songs.component';
 import { FullPlayerComponent } from './full-player/full-player.component';
+import { PostComponent } from './post/post.component';
+import { AlbumCoverComponent } from './album-cover/album-cover.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, PostCardComponent, FeedHistoryComponent, AlbumComponent, MusicGallerySongsComponent, FullPlayerComponent],
+  declarations: [HomeComponent, UpdatesComponent, DiscographyComponent, MediaComponent, LandingBannerComponent, ShowcaseComponent, BiographyComponent, EmailMeComponent, QuickFeedComponent, FeedComponent, MusicGalleryComponent, MusicComponent, LegalComponent, ImageViewerComponent, QuickPlayerComponent, FeedHistoryComponent, MusicGallerySongsComponent, FullPlayerComponent, PostComponent, AlbumCoverComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -1,0 +1,13 @@
+<section class="title">
+    <img *ngIf="(post.thumbnail$ | async) as thumbnail" [src]="thumbnail" width="60px" height="60px" />
+    <div class="text">
+        <h2>{{ post.title | limit:40 }}</h2>
+        <time class="date" [dateTime]="post.created">{{ post.created | date:'fullDate' }}</time>
+    </div>
+</section>
+
+<p *ngIf="post.content">{{ post.content }}</p>
+
+<div class="gallery" *ngIf="post.gallery">
+    <img *ngFor="let media of post.gallery" [src]="media.url$ | async" width="100%" />
+</div>

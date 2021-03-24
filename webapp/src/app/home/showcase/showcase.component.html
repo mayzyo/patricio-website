@@ -1,6 +1,8 @@
 <h2 class="title">Showcase | 作品一览</h2>
 
-<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1.5" [spaceBetween]="24" [slidesOffsetBefore]="24" [slidesOffsetAfter]="24">
+<!-- Mobile Viewport -->
+<swiper *ngIf="!(breakpoint$ | async)" [slidesPerView]="1.5" [spaceBetween]="24" [slidesOffsetBefore]="24"
+    [slidesOffsetAfter]="24">
     <ng-template *ngIf="(oversizeItem$ | async) as item" swiperSlide>
         <app-quick-player class="large" [song]="item">
             <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
@@ -23,25 +25,32 @@
     </ng-template>
 </swiper>
 
-<div class="grid" *ngIf="breakpoint$ | async">
-    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [song]="item">
-        <p>{{ item.title }}</p>
-        <span class="split">|</span>
-        <p class="subtitle">{{ item.genre | limit:40 }}</p>
+<!-- Desktop Viewport -->
+<section class="grid" *ngIf="breakpoint$ | async">
+    <app-quick-player class="oversize" *ngIf="(oversizeItem$ | async) as item" [song]="item" [@slideIn]>
+        <section class="info">
+            <p>{{ item.title }}</p>
+            <span class="split">|</span>
+            <p class="subtitle">{{ item.genre | limit:40 }}</p>
+        </section>
     </app-quick-player>
-    <app-quick-player class="large" *ngIf="(largeItem$ | async) as item" [song]="item">
+    <app-quick-player class="large" *ngIf="(largeItem$ | async) as item" [song]="item" [@slideIn]>
         <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
     </app-quick-player>
-    <app-quick-player class="wide" *ngFor="let item of wideItems$ | async" [song]="item">
+    <app-quick-player class="wide" *ngFor="let item of wideItems$ | async" [song]="item" [@slideIn]>
         <ng-container *ngTemplateOutlet="defaultItem; context: {item:item}"></ng-container>
     </app-quick-player>
-    <app-quick-player class="small" *ngFor="let item of items$ | async" [song]="item">
-        <p>{{ item.title }}</p>
+    <app-quick-player class="small" *ngFor="let item of items$ | async" [song]="item" [@slideIn]>
+        <section class="info">
+            <p>{{ item.title }}</p>
+        </section>
     </app-quick-player>
-</div>
+</section>
 
 <!-- The generic item that is slotted in through ng-container. {item:item} and let-item="item" syntax is for passing template context variables -->
 <ng-template let-item="item" #defaultItem>
-    <p>{{ item.title }}</p>
-    <p class="subtitle">{{ item.genre | limit }}</p>
+    <section class="info">
+        <p>{{ item.title }}</p>
+        <p class="subtitle">{{ item.genre | limit }}</p>
+    </section>
 </ng-template>

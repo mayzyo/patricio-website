@@ -17,86 +17,71 @@ p, span {
     margin-bottom: map-get(theme.$spacing, std);
 }
 
-.oversize {
+.oversize .info {
     align-items: flex-end;
 }
 
-.large {
+.large .subtitle {
+    text-align: end;
+}
+
+.large .info, .wide .info {
     flex-direction: column;
     justify-content: space-between;
-    align-items: stretch;
-
-    & > .subtitle { text-align: end; }
 }
 
-.wide {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.small {
+.small .info {
     justify-content: flex-end;
     align-items: flex-end;
-    text-align: end;
 }
 
 .split {
     margin: 0 24px;
 }
 
+.info {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+}
+
 .subtitle {
     font-size: calc(18rem / #{map-get(theme.$text, std)});
 }
 
-.background {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9;
- 
-    background-position: center;
-    background-size: contain;
-}
-
-.blur {
-    transition: none;
-    &:hover {
-        filter: blur(4px);
-        margin: -5px;
-    }
-}
-
 .grid {
     $gap: 12px;
-    // For .small to be square, it's width ratio divides it's height ratio. So (1/4) / (4/12) = 0.75.
+    // For .small to be square, it's width ratio divides it's height ratio. So (3/12) / (4/12) = 0.75.
     $sqr-ratio: 0.75;
-
-    height: calc((100vw - (#{map-get(theme.$spacing, page-wide)} * 2) - #{theme.$scrollbar}) * #{$sqr-ratio} - #{$gap});
+    $offset: map-get(theme.$spacing, page-wide) * 2 + theme.$scrollbar;
+    // gap is ignored in height calculation, so we need to remove it.
+    // It's likely caused by "box-sizing: border-box" on all;
+    height: calc((100vw - #{$offset}) * #{$sqr-ratio} - (#{$gap} * 3));
     margin: 0 map-get(theme.$spacing, page-wide);
 
     display: grid;
-    grid-template-rows: 6fr 2fr 4fr;
+    grid-template-rows: repeat(12, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     grid-gap: $gap;
     gap: $gap;
 
-    & > app-quick-player { height: auto; }
+    & > app-quick-player { height: 100%; }
 
     & > .oversize { 
-        grid-area: 1 / auto / auto / span 8;
+        grid-area: auto / auto / span 6 / span 8;
         font-size: calc(36rem / #{map-get(theme.$text, std)});
     }
 
-    & > .large { grid-area: 1 / auto / auto / span 4; }
+    & > .large { grid-area: auto / auto / span 6 / span 4; }
 
     & > .wide { 
-        grid-area: auto / auto / auto / span 4;
+        grid-area: auto / auto / span 2 / span 4;
         font-size: calc(24rem / #{map-get(theme.$text, std)});
     }
 
     & > .small {
-        grid-area: auto / auto / auto / span 3;
+        grid-area: auto / auto / span 4 / span 3;
         font-size: calc(24rem / #{map-get(theme.$text, std)});
     }
 }

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PostCardComponent } from './post-card.component';
+import { AlbumCoverComponent } from './album-cover.component';
 
-describe('PostCardComponent', () => {
-  let component: PostCardComponent;
-  let fixture: ComponentFixture<PostCardComponent>;
+describe('AlbumCoverComponent', () => {
+  let component: AlbumCoverComponent;
+  let fixture: ComponentFixture<AlbumCoverComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostCardComponent ]
+      declarations: [ AlbumCoverComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PostCardComponent);
+    fixture = TestBed.createComponent(AlbumCoverComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

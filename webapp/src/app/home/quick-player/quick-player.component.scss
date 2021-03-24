@@ -1,31 +1,39 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 :host {
-    position: relative;
-    height: 45vh;
-    padding: 24px;
+    display: block;
 
+    & * { z-index: 1; }
+}
+
+app-album-cover {
+    height: inherit;
+}
+
+.controls {
     display: flex;
-    overflow: hidden;
+    justify-content: flex-end;
 
-    border: 1px map-get(theme.$palettes, black) solid;
-    font-size: calc(32rem / #{map-get(theme.$text, std)});
-    color: white;
-
-    & > * {
-        z-index: 10;
-    }
-
-    &:hover > .blur, &.__hover > .blur {
-        filter: blur(4px);
-        margin: -5px;
+    & fa-icon { 
+        margin-left: map-get(theme.$spacing, std); 
     }
 }
 
-.background {
-    z-index: 9;
+.audio-toggle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
 }
 
-.blur {
-    transition: none;
+.content { 
+    display: block;
+}
+
+@media (min-width: map-get(theme.$screens, laptop)) {
+    .content { 
+        display: none;
+    }
 }

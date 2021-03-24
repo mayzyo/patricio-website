@@ -1,21 +1,21 @@
 import { moduleMetadata, Story } from '@storybook/angular';
-import { LimitPipe } from 'src/app/shared/limit.pipe';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { Post } from '../models';
-import { PostCardComponent } from './post-card.component';
+import { PostComponent } from './post.component';
 
 export default {
-    title: 'Home/Post Card',
+    title: 'Home/Post',
     decorators: [
         moduleMetadata({
-            // imports both components to allow component composition with storybook
-            declarations: [PostCardComponent, LimitPipe]
+            declarations: [PostComponent],
+            imports: [SharedModule]
         }),
     ]
 };
 
 const Template: Story<Post> = args => ({
-    component: PostCardComponent,
-    props: { datasource: args },
+    component: PostComponent,
+    props: { post: args },
 });
 
 export const Default = Template.bind({});

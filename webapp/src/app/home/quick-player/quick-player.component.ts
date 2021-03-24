@@ -1,5 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { faPlayCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlayCircle, faStopCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 import { Song } from "../models";
 
@@ -10,10 +10,12 @@ import { Song } from "../models";
 })
 export class QuickPlayerComponent implements OnInit {
   readonly faPlayCircle = faPlayCircle;
+  readonly faStopCircle = faStopCircle;
   readonly faSoundcloud = faSoundcloud;
   readonly faInfoCircle = faInfoCircle;
   @Input() song!: Readonly<Song>;
-  isHover: boolean = false;
+  @Input() isActive: boolean = false;
+  isAudioOn: boolean = false;
 
   constructor() { }
 
@@ -22,15 +24,17 @@ export class QuickPlayerComponent implements OnInit {
 
   @HostListener('mouseenter')
   mouseEnter() {
-    this.isHover = true;
+    this.isActive = true;
   }
 
   @HostListener('mouseleave')
   mouseLeave() {
-    this.isHover = false;
+    if(!this.isAudioOn) {
+      this.isActive = false;
+    }
   }
 
-  play() {
-    console.log('playing song')
+  toggleAudio() {
+    this.isAudioOn = !this.isAudioOn;
   }
 }

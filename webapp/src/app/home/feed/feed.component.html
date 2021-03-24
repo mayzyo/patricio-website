@@ -12,5 +12,5 @@
             <label for="updates">Posts</label>
         </article>
     </div>
-    <app-post-card *cdkVirtualFor="let post of socials.posts$ | async" [datasource]="post"></app-post-card>
+    <app-post *cdkVirtualFor="let post of socials.posts$ | async" [post]="post"></app-post>
 </cdk-virtual-scroll-viewport>
