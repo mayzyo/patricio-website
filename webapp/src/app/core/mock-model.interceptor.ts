@@ -75,7 +75,7 @@ export class MockModelInterceptor implements HttpInterceptor {
             return "\"{{random.uuid}}\"";
 
         if (obj["$ref"]) {
-            if (depth > 1) {
+            if (depth > 2) {
                 return null;
             }
             var comp = obj["$ref"].split('/')

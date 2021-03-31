@@ -1,3 +1,5 @@
+<article class="background blur" [style]="backgroundUrl"></article>
+
 <article *ngIf="(song$ | async) as song" class="player">
     <section>
         <div>
@@ -11,5 +13,3 @@
 
     <div *ngIf="(song.coverImage$ | async) as coverImage" class="background" [style.background-image]="'url(' + coverImage + ')'"></div>
 </article>
-
-<div class="background blur" [style]="backgroundUrl"></div>

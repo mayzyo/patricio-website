@@ -1,8 +1,8 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, from, interval, merge, Observable, of, ReplaySubject, Subject, Subscription, zip } from 'rxjs';
-import { map, pluck, scan, switchMap, switchMapTo } from 'rxjs/operators';
+import { combineLatest, from, interval, merge, Observable, of, Subject, Subscription, zip } from 'rxjs';
+import { map, pluck, scan, share, switchMap, switchMapTo } from 'rxjs/operators';
 import metaData from 'src/meta-data';
 import { Album, Song } from '../models';
 import { MusicService } from '../music.service';
@@ -28,6 +28,7 @@ export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
       map(res => res.matches)
     )
   );
+  readonly activeIndex$ = new Subject<number>();
   readonly delayedAlbums$: Observable<Album[]> = merge(of(null), this.musics.getSongs$).pipe(
     switchMapTo(
       merge(of([]), this.animate(this.musics.albums$))
@@ -38,8 +39,24 @@ export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
       merge(of([]), this.animate(this.musics.songs$))
     )
   );
-  readonly activeIndex$ = new Subject<number>();
-  readonly activeAlbum$ = new ReplaySubject<Album>();
+  readonly albumWithSongs$: Observable<Array<Album & { songs: Song[] }>> = combineLatest([
+    // this.musics.getSongs$,
+    merge(of(0), this.activeIndex$),
+    this.musics.albums$,
+    this.musics.songs$
+  ]).pipe(
+    scan((acc, cur) => {
+      acc.forEach((el, i) => cur[1][i].songs = el.songs);
+      // const albumId = cur[0].id || 0;
+      // const album = cur[1].find(el => el.id == albumId) || { songs: undefined };
+      // album.songs = cur[2];
+      cur[1][cur[0]].songs = cur[2];
+      console.log('test', acc)
+      return cur[1] as Array<Album & { songs: Song[] }>;
+    }, new Array<Album & { songs: Song[] }>()),
+    share()
+  );
+  // readonly activeAlbum$ = new ReplaySubject<Album>();
   private readonly subscriptions = new Subscription();
 
   constructor(private breakpointObserver: BreakpointObserver, public musics: MusicService) { }
@@ -67,12 +84,16 @@ export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectAlbum(e: Album) {
-    this.activeAlbum$.next(e);
+    // this.activeAlbum$.next(e);
     this.musics.getSongs$.next(e);
   }
 
   backToAlbum(): void {
     this.musics.getAlbums$.next({ page: '1', size: '10' });
+  }
+
+  activeIndexChange(e: any) {
+    this.activeIndex$.next(e.activeIndex)
   }
 
   private animate<T>(ob: Observable<T[]>) {

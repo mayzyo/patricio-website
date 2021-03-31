@@ -6,6 +6,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Song } from '../models';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { slideInAnimation } from '../slide-in.animation';
+import { sequence } from 'src/app/utils/custom-operators';
 
 
 @Component({
@@ -39,6 +40,11 @@ export class ShowcaseComponent implements OnInit {
   }
 
   private initCollection() {
+    // var collection$ = this.musics.showcase$.pipe(
+    //   tap(res => this.display = res.length == 0 ? 'none' : 'block'),
+    //   sequence(100, this.animate$),
+    //   share()
+    // );
     var collection$ = zip(
       this.musics.showcase$.pipe(
         tap(res => this.display = res.length == 0 ? 'none' : 'block'),

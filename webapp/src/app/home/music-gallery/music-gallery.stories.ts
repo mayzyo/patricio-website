@@ -39,7 +39,7 @@ const Template: Story<Album & { songTitle: string, songAudio: string, count: num
     return {
         moduleMetadata: {
             providers: [
-                { provide: MusicService, useClass: MockMusicService },
+                // { provide: MusicService, useClass: MockMusicService },
                 { provide: StaticFileService, useClass: MockStaticFileService }
             ]
         },

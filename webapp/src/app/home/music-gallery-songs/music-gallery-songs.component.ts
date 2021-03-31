@@ -11,23 +11,23 @@ import { Album, Song } from '../models';
   styleUrls: ['./music-gallery-songs.component.scss']
 })
 export class MusicGallerySongsComponent implements OnInit {
-  @Input() album!: Readonly<Album>;
-  @Input() songs$!: Observable<Song[]>;
-  @Input() activeAlbum$!: Observable<Album>;
-  currentSongs$?: Observable<any[]>;
-  isActive$?: Observable<boolean>;
+  @Input() album!: Readonly<Album & { songs: Song[] }>;
+  // @Input() songs$!: Observable<Song[]>;
+  // @Input() activeAlbum$!: Observable<Album>;
+  // currentSongs$?: Observable<any[]>;
+  // isActive$?: Observable<boolean>;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.currentSongs$ = this.activeAlbum$.pipe(
-      switchMap(res => res.id == this.album.id ? this.songs$ : of(this.album.songs).pipe(map(x => x.map(el => ({ ...el, coverImage$: this.album.coverImage$ }))))),
-      // skipWhile(res => res.id != this.album.id),
-      // switchMapTo(this.songs$),
-    );
+    // this.currentSongs$ = this.activeAlbum$.pipe(
+    //   switchMap(res => res.id == this.album.id ? this.songs$ : of(this.album.songs).pipe(map(x => x.map(el => ({ ...el, coverImage$: this.album.coverImage$ }))))),
+    //   // skipWhile(res => res.id != this.album.id),
+    //   // switchMapTo(this.songs$),
+    // );
 
-    this.isActive$ = this.activeAlbum$.pipe(
-      map(res => res.id == this.album.id)
-    )
+    // this.isActive$ = this.activeAlbum$.pipe(
+    //   map(res => res.id == this.album.id)
+    // )
   }
 }

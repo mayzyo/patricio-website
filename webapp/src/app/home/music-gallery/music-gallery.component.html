@@ -1,12 +1,17 @@
 <!-- Mobile Viewport -->
-<swiper *ngIf="isMobile$ | async" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true" (activeIndexChange)="activeIndex$.next($event.activeIndex)">
-    <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
-        <app-music-gallery-songs [album]="album" [songs$]="musics.songs$" [activeAlbum$]="activeAlbum$"></app-music-gallery-songs>
+<swiper *ngIf="isMobile$ | async" [slidesPerView]="1" [direction]="'vertical'" [autoHeight]="true" (activeIndexChange)="activeIndexChange($event)">
+    <ng-template *ngFor="let album of albumWithSongs$ | async" swiperSlide>
+        <app-music-gallery-songs [album]="album"></app-music-gallery-songs>
     </ng-template>
+    <!-- <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
+        <app-music-gallery-songs [album]="album" [songs$]="musics.songs$" [activeAlbum$]="activeAlbum$"></app-music-gallery-songs>
+    </ng-template> -->
 </swiper>
 
 <!-- Desktop Viewport -->
 <ng-container *ngIf="!(isMobile$ | async)">
+    <article class="background blur" [style]="backgroundUrl"></article>
+
     <section class="title">
         <button (click)="backToAlbum()">
             <fa-icon [icon]="faAngleDoubleLeft" size="3x"></fa-icon>
@@ -24,6 +29,4 @@
             <p>{{ song.title }}</p>
         </app-quick-player>
     </section>
-
-    <article class="background blur" [style]="backgroundUrl"></article>
 </ng-container>

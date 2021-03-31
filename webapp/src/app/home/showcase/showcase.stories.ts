@@ -26,16 +26,16 @@ export default {
     ],
 };
 
-const showcase$ = new Subject<Song[]>();
+// const showcase$ = new Subject<Song[]>();
 
 const Template: Story<Song & { count: number, coverImage: string, audio: string }> = args => {
-    const data = {
-        ...args,
-        coverImage$: of(args.coverImage),
-        audio$: of(args.audio),
-    }
+    // const data = {
+    //     ...args,
+    //     coverImage$: of(args.coverImage),
+    //     audio$: of(args.audio),
+    // }
 
-    showcase$.next(Array.from({ length: args.count }).map(() => data));
+    // showcase$.next(Array.from({ length: args.count }).map(() => data));
     // class MockMusicService implements Partial<MusicService> {
     //     readonly showcase$: Observable<Song[]> = merge(
     //         of(Array.from({ length: args.count }).map(() => data)), 

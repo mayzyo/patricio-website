@@ -52,6 +52,7 @@ export class MusicService {
   protected createAlbum(album: BaseAlbum): Album {
     return {
       ...album,
+      songs: [],
       coverImage$: album.coverImage 
         ? this.files.get(album.coverImage) 
         : of('assets/images/banner-1.jpg')

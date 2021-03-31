@@ -14,8 +14,8 @@ swiper {
 }
 
 p {
+    position: inherit;
     margin: 0;
-    z-index: 10;
     pointer-events: none;
 }
 
@@ -35,6 +35,11 @@ p {
         // It's likely caused by "box-sizing: border-box" on all;
         $borders: 1px * 2 * 4;
         height: calc((100vw - #{$offset}) / 4 - #{$borders});
+    }
+
+    & > app-quick-player, & > button {
+        padding: 0;
+        overflow: hidden;
     }
 }
 
@@ -56,8 +61,6 @@ p {
 
     .background {
         height: 80vh;
-        z-index: -2;
-
         background: linear-gradient(transparent 0%, white 75%), var(--bg);
     }
 }

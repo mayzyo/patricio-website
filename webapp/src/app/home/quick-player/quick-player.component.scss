@@ -2,8 +2,6 @@
 
 :host {
     display: block;
-
-    & * { z-index: 1; }
 }
 
 app-album-cover {
@@ -30,6 +28,7 @@ app-album-cover {
 
 .content { 
     display: block;
+    align-self: flex-end;
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {

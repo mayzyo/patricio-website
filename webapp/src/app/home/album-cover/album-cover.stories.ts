@@ -18,7 +18,7 @@ export default {
             `,
             styles: [`
                 app-album-cover { height: 100vh; }
-                .content { pointer-events: none; z-index: 1; }
+                .content { position: inherit; pointer-events: none; }
             `]
         })
     ]

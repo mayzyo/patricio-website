@@ -14,7 +14,7 @@
 
     <article class="controls">
         <section class="content">
-            <ng-content></ng-content>
+            <ng-container *ngTemplateOutlet="Content"></ng-container>
         </section>
         <a *ngIf="song.soundCloud" [href]="song.soundCloud">
             <fa-icon [icon]="faSoundcloud"></fa-icon>
