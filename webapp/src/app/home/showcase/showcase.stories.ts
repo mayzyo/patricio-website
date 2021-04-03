@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { moduleMetadata, Story } from '@storybook/angular';
-import { merge, Observable, of, Subject } from 'rxjs';
+import { merge, Observable, of, Subject, timer } from 'rxjs';
 import { MockModelProvider } from 'src/app/core/mock-model.interceptor';
 import { StaticFileService } from 'src/app/core/static-file.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -57,7 +57,7 @@ const Template: Story<Song & { count: number, coverImage: string, audio: string 
         },
         component: ShowcaseComponent,
         props: {
-            animate$: of(null)
+            animate$: timer(500)
         }
     }
 };

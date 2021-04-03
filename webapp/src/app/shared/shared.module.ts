@@ -10,11 +10,12 @@ import { ScrollableLabelsComponent } from './scrollable-labels/scrollable-labels
 import { LimitPipe } from './limit.pipe';
 import { GroupPipe } from './group.pipe';
 import { NoticeComponent } from './notice/notice.component';
+import { TimeFromNowPipe } from './time-from-now.pipe';
 
 
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent, LimitPipe, GroupPipe, NoticeComponent],
+  declarations: [HeaderComponent, FooterComponent, ScrollableLabelsComponent, LimitPipe, GroupPipe, NoticeComponent, TimeFromNowPipe],
   imports: [
     CommonModule,
     FontAwesomeModule,
@@ -25,7 +26,8 @@ import { NoticeComponent } from './notice/notice.component';
     HeaderComponent,
     FooterComponent,
     LimitPipe,
-    GroupPipe
+    GroupPipe,
+    TimeFromNowPipe
   ]
 })
 export class SharedModule { }

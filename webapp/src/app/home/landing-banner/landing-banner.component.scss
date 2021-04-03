@@ -2,7 +2,7 @@
 
 :host {
     position: relative;
-    height: 100vh;
+    height: calc(100vh - #{theme.$header});
 
     display: flex;
     flex-direction: column;
@@ -11,6 +11,8 @@
 
     color: map-get(theme.$palettes, white);
 }
+
+section { position: inherit; }
 
 .message {
     font-size: calc(36rem / #{map-get(theme.$text, std)});

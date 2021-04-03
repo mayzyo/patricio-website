@@ -1,6 +1,6 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-app-post-card {
+app-post {
     margin: map-get(theme.$spacing, std) map-get(theme.$spacing, page);
 }
 
@@ -24,7 +24,7 @@ app-post-card {
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
-    app-post-card {
+    app-post {
         width: calc(50% - 48px - 17.5px);
         margin: map-get(theme.$spacing, std) auto;
     }

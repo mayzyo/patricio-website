@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { from, interval, merge, Observable, of, zip } from 'rxjs';
-import { map, pluck, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, scan, share, skip, take, tap } from 'rxjs/operators';
 import { MusicService } from '../music.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Song } from '../models';
@@ -29,34 +29,16 @@ export class ShowcaseComponent implements OnInit {
   items$?: Observable<Song[]>;
   hover?: Song;
 
-  breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
+  readonly breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
     map(res => res.matches)
   );
 
   constructor(private musics: MusicService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
-    this.initCollection();
-  }
-
-  private initCollection() {
-    // var collection$ = this.musics.showcase$.pipe(
-    //   tap(res => this.display = res.length == 0 ? 'none' : 'block'),
-    //   sequence(100, this.animate$),
-    //   share()
-    // );
-    var collection$ = zip(
-      this.musics.showcase$.pipe(
-        tap(res => this.display = res.length == 0 ? 'none' : 'block'),
-        switchMap(res => from(res))
-      ),
-      this.animate$.pipe(
-        take(1),
-        switchMap(() => merge(of(null), interval(100)))
-      )
-    ).pipe(
-      pluck('0'),
-      // tap(res => this.entryFade(res)),
+    var collection$ = this.musics.showcase$.pipe(
+      tap(res => this.display = res.length == 0 ? 'none' : 'block'),
+      sequence(100, combineLatest([this.animate$, this.musics.showcase$])),
       share()
     );
 

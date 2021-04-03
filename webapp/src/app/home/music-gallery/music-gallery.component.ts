@@ -1,13 +1,14 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, from, interval, merge, Observable, of, Subject, Subscription, zip } from 'rxjs';
-import { map, pluck, scan, share, switchMap, switchMapTo } from 'rxjs/operators';
+import { combineLatest, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { map, scan, share, switchMapTo } from 'rxjs/operators';
 import metaData from 'src/meta-data';
 import { Album, Song } from '../models';
 import { MusicService } from '../music.service';
 import { pressDownAnimation } from '../press-down.animation';
 import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
+import { clearWhen, sequence } from 'src/app/utils/custom-operators';
 
 @Component({
   selector: 'app-music-gallery',
@@ -29,15 +30,15 @@ export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
     )
   );
   readonly activeIndex$ = new Subject<number>();
-  readonly delayedAlbums$: Observable<Album[]> = merge(of(null), this.musics.getSongs$).pipe(
-    switchMapTo(
-      merge(of([]), this.animate(this.musics.albums$))
-    )
+  readonly delayedAlbums$: Observable<Album[]> = this.musics.albums$.pipe(
+    sequence(100, this.musics.albums$),
+    scan((acc, cur) => [...acc, cur], new Array<Album>()),
+    clearWhen(this.musics.getSongs$)
   );
-  readonly delayedSongs$: Observable<Song[]> = this.musics.getAlbums$.pipe(
-    switchMapTo(
-      merge(of([]), this.animate(this.musics.songs$))
-    )
+  readonly delayedSongs$: Observable<Song[]> = this.musics.songs$.pipe(
+    sequence(100, this.musics.songs$), 
+    scan((acc, cur) => [...acc, cur], new Array<Song>()),
+    clearWhen(this.musics.getAlbums$)
   );
   readonly albumWithSongs$: Observable<Array<Album & { songs: Song[] }>> = combineLatest([
     // this.musics.getSongs$,
@@ -94,19 +95,5 @@ export class MusicGalleryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   activeIndexChange(e: any) {
     this.activeIndex$.next(e.activeIndex)
-  }
-
-  private animate<T>(ob: Observable<T[]>) {
-    return zip(
-      ob.pipe(
-        switchMap(res => from(res))
-      ),
-      ob.pipe(
-        switchMapTo(merge(of(null), interval(100)))
-      )
-    ).pipe(
-      pluck('0'),
-      scan<T, T[]>((acc, cur) => [...acc, cur], [])
-    );
   }
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map, share, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { StaticFileService } from '../core/static-file.service';
@@ -15,7 +15,8 @@ export class MusicService {
   readonly showcase$: Observable<Song[]> = this.http.get<paths["/Songs/Top"]["get"]["responses"][200]["text/plain"]>(
     `${environment.backend}/Songs/Top`
   ).pipe(
-    map(res => res.map(el => this.topSongToSong(el)))
+    map(res => res.map(el => this.topSongToSong(el))),
+    share()
   );
   readonly getAlbums$ = new Subject<Pagination>();
   readonly albums$: Observable<Album[]> = this.getAlbums$.pipe(

@@ -53,6 +53,8 @@ p {
     }
 
     .title {
+        position: inherit;
+
         margin: 0 map-get(theme.$spacing, page-wide);
         margin-bottom: map-get(theme.$spacing, std);
 

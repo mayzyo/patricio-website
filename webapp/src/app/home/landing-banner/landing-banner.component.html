@@ -1,13 +1,13 @@
+<article class="background blur" [style]="backgroundUrl"></article>
 <!-- <div *ngIf="(famousQuotes.random$ | async) as quote">
     <p class="message">{{ quote.message }}</p>
     <p class="author">{{ quote.author }}</p>
 </div> -->
-<div *ngIf="quote">
+<section *ngIf="quote">
     <p class="message">{{ quote.message }}</p>
     <p class="author">{{ quote.author }}</p>
-</div>
+</section>
+
 <button class="scroll-btn" [@cue]="cueActive$ | async" (click)="scrollDown()">
     <fa-icon [icon]="faAngleDoubleDown" size="3x"></fa-icon>
 </button>
-
-<div class="background blur" [style]="backgroundUrl"></div>

@@ -2,7 +2,7 @@
     <img *ngIf="(post.thumbnail$ | async) as thumbnail" [src]="thumbnail" width="60px" height="60px" />
     <div class="text">
         <h2>{{ post.title | limit:40 }}</h2>
-        <time class="date" [dateTime]="post.created">{{ post.created | date:'fullDate' }}</time>
+        <time class="date" [dateTime]="post.created">posted {{ post.created | timeFromNow | async }}</time>
     </div>
 </section>
 

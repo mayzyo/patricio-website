@@ -1,15 +1,18 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-// :host{
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-// }
+$navbar: theme.$header * 0.66;
+$dial-menu: theme.$header * 0.34;
+
+.space-padding {
+    height: theme.$header;
+}
 
 .navbar {
-    position: relative;
-    height: 48px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $navbar;
     z-index: 10;
     padding: 0 map-get(theme.$spacing, std);
 
@@ -26,7 +29,12 @@
 .nav-menu { display: none; }
 
 .tab-menu {
-    height: 34px;
+    position: fixed;
+    top: $navbar;
+    left: 0;
+    right: 0;
+    height: $dial-menu;
+    z-index: 10;
 
     color: map-get(theme.$palettes, white);
     background-color: map-get(theme.$palettes, black);
@@ -62,8 +70,10 @@
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
-    .navbar { 
-        height: 88px;
+    .navbar {
+        position: absolute;
+        height: theme.$header;
+
         > button { display: none }
     }
 

@@ -1,4 +1,4 @@
-<ng-container *ngIf="(socials.latest$ | async) as latest">
+<ng-container *ngIf="(latest$ | async) as latest">
     <ng-container *ngTemplateOutlet="latest.length != 0 ? Content : NoContent; context: {latest:latest}"></ng-container>
 </ng-container>
 
@@ -6,7 +6,7 @@
     <h2 class="title">Upcoming events | 新活动</h2>
 
     <ol>
-        <li *ngFor="let item of latest">
+        <li *ngFor="let item of latest" [@pressDown]>
             <a [href]="item.link">
                 <app-post [post]="item"></app-post>
             </a>
