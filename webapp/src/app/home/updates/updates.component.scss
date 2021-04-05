@@ -1,23 +1,34 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
+// Margin for Feed is kept within component to ensure correct position of scrollbar in mobile viewport.
+
+$margins: map-get(theme.$spacing, std) * 3;
+
 app-footer {
     position: absolute;
     top: 0;
-    left: 17.5px;
-    width: calc(25% - 17.5px - 74px);
-    height: calc(100vh - 88px);
+    left: map-get(theme.$spacing, std);
+    width: calc(25% - #{$margins});
+    height: calc(100vh - #{theme.$header});
     margin: 0 map-get(theme.$spacing, std);
     padding: 0;
 
     display: none;
-    justify-content: space-between;
 
     color: map-get(theme.$palettes, black);
     background-color: transparent;
 }
 
 app-feed-history {
+    position: absolute;
+    right: map-get(theme.$spacing, std);
+    top: 0;
+    width: calc(25% - #{$margins});
+    margin: map-get(theme.$spacing, std);
+    padding: map-get(theme.$spacing, std);
+
     display: none;
+    border: 1px solid map-get(theme.$palettes, black);
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
@@ -28,6 +39,7 @@ app-feed-history {
 
     app-footer {
         display: flex;
+        justify-content: space-between;
     }
 
     app-feed-history {

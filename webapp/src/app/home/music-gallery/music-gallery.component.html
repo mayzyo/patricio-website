@@ -3,9 +3,6 @@
     <ng-template *ngFor="let album of albumWithSongs$ | async" swiperSlide>
         <app-music-gallery-songs [album]="album"></app-music-gallery-songs>
     </ng-template>
-    <!-- <ng-template *ngFor="let album of musics.albums$ | async" swiperSlide>
-        <app-music-gallery-songs [album]="album" [songs$]="musics.songs$" [activeAlbum$]="activeAlbum$"></app-music-gallery-songs>
-    </ng-template> -->
 </swiper>
 
 <!-- Desktop Viewport -->

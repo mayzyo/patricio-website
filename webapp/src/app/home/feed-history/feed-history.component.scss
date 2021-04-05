@@ -1,12 +1,12 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
-.history {
-    position: absolute;
-    right: 17.5px;
-    top: 0;
-    width: calc(25% - 17.5px - 74px);
-    margin: map-get(theme.$spacing, std);
-    padding: map-get(theme.$spacing, std);
+// .history {
+//     position: absolute;
+//     right: 17.5px;
+//     top: 0;
+//     width: calc(25% - 17.5px - 74px);
+//     margin: map-get(theme.$spacing, std);
+//     padding: map-get(theme.$spacing, std);
 
-    border: 1px solid map-get(theme.$palettes, black);
-}
+//     border: 1px solid map-get(theme.$palettes, black);
+// }

@@ -1,12 +1,17 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 app-post {
-    margin: map-get(theme.$spacing, std) map-get(theme.$spacing, page);
+    margin: 0 map-get(theme.$spacing, page);
+    margin-bottom: map-get(theme.$spacing, std);
+}
+
+.scroll-area {
+    height: calc(100vh - #{theme.$header});
+    background-color: map-get(theme.$palettes, white);
 }
 
 .tool-bar {
-    width: 100%;
-    margin: 0 map-get(theme.$spacing, page);
+    margin: map-get(theme.$spacing, std) map-get(theme.$spacing, page);
 
     .title {
         display: none;
@@ -19,19 +24,17 @@ app-post {
     }
 }
 
-.feed {
-    height: calc(100vh - 88px);
-}
-
 @media (min-width: map-get(theme.$screens, laptop)) {
     app-post {
-        width: calc(50% - 48px - 17.5px);
-        margin: map-get(theme.$spacing, std) auto;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .tool-bar {
-        width: calc(50% - 17.5px);
+        width: 50%;
         margin: auto;
+        margin-top: map-get(theme.$spacing, std);
     
         display: flex;
         justify-content: space-between;
