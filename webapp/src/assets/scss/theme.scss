@@ -24,7 +24,8 @@ $screens: (
 
 $text: (
     std: 16,
-    heading: calc(24rem / 16)
+    heading: 24rem / 16,
+    subtitle: 14rem / 16
 );
 
 $scrollbar: 5px;

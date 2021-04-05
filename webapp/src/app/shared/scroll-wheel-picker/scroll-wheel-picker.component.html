@@ -1,0 +1,26 @@
+<swiper [slidesPerView]="1.5" [centeredSlides]="true">
+    <ng-template swiperSlide>
+        <a class="menu-item" routerLink="/updates">
+            动态
+            <span class="dot"></span>
+            updates
+        </a> 
+    </ng-template>
+    <ng-template swiperSlide>
+        <a class="menu-item" routerLink="/discography">
+            作品集
+            <span class="dot"></span>
+            discography
+        </a>
+    </ng-template>
+    <ng-template swiperSlide>
+        <a class="menu-item" routerLink="/media">
+            媒体
+            <span class="dot"></span>
+            media
+        </a>
+    </ng-template>
+</swiper>
+
+<span class="edge-fade left"></span>
+<span class="edge-fade right"></span>

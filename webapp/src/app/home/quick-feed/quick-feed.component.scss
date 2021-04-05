@@ -1,18 +1,21 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 :host {
-    margin: 0 map-get(theme.$spacing, page);
     display: block;
+    background-color: map-get(theme.$palettes, white);
 }
 
-app-post-card {
+app-post {
     border: none;
     padding: 0;
 }
 
 .title {
+    margin-bottom: map-get(theme.$spacing, std);
+
     text-align: center;
-    font-size: map-get(theme.$text, heading);
+    font-size: map-get(theme.$text, subtitle);
+    letter-spacing: 4px;
 
     &.empty {
         padding-bottom: 15vh;
@@ -20,11 +23,11 @@ app-post-card {
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
-    :host {
-        margin: 0 map-get(theme.$spacing, page-wide);
+    .title {
+        font-size: map-get(theme.$text, heading);
     }
 
-    ol {
+    .feed {
         display: flex;
         justify-content: space-between;
     }

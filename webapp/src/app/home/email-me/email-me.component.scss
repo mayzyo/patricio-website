@@ -1,7 +1,6 @@
 @use 'src/assets/scss/theme.scss' as theme;
 
 :host {
-    padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page);
     display: block;
     
     color: map-get(theme.$palettes, white);
@@ -48,10 +47,6 @@
 }
 
 @media (min-width: map-get(theme.$screens, laptop)) {
-    :host {
-        padding: map-get(theme.$spacing, large) map-get(theme.$spacing, page-wide);
-    }
-
     .email {
         flex-direction: row;
 

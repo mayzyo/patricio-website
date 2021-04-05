@@ -5,7 +5,7 @@
 <ng-template #Content let-latest="latest">
     <h2 class="title">Upcoming events | 新活动</h2>
 
-    <ol>
+    <ol class="feed">
         <li *ngFor="let item of latest" [@pressDown]>
             <a [href]="item.link">
                 <app-post [post]="item"></app-post>

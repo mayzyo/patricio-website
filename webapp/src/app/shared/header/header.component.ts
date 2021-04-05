@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { faGuitar, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { faGuitar, faMusic, faHome } from '@fortawesome/free-solid-svg-icons';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -7,17 +9,16 @@ import { faGuitar, faMusic } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  faGuitar = faGuitar;
-  faMusic = faMusic;
-  @Input() isActive = true;
+  readonly faGuitar = faGuitar;
+  readonly faMusic = faMusic;
+  readonly faHome = faHome;
 
-  constructor() { }
+  readonly breakpoint$ = this.breakpointObserver.observe('(min-width: 1024px)').pipe(
+    map(res => res.matches)
+  );
+
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
-  }
-
-  onMenuClick() {
-    console.log('clicked')
-    this.isActive = !this.isActive;
   }
 }

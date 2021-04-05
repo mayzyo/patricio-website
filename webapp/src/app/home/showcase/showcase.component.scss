@@ -2,19 +2,28 @@
 
 :host {
     display: block;
-    padding-top: map-get(theme.$spacing, large);
     background-color: map-get(theme.$palettes, white);
 }
 
+app-quick-player { 
+    height: 45vh;
+}
+
 p, span {
-    position: inherit;
     margin: 0;
     pointer-events: none;
 }
 
-.title { 
-    margin: 0 map-get(theme.$spacing, page); 
+.title {
     margin-bottom: map-get(theme.$spacing, std);
+}
+
+.info {
+    position: inherit;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
 }
 
 .oversize .info {
@@ -39,14 +48,6 @@ p, span {
     margin: 0 24px;
 }
 
-.info {
-    position: inherit;
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-}
-
 .subtitle {
     font-size: calc(18rem / #{map-get(theme.$text, std)});
 }
@@ -59,7 +60,7 @@ p, span {
     // gap is ignored in height calculation, so we need to remove it.
     // It's likely caused by "box-sizing: border-box" on all;
     height: calc((100vw - #{$offset}) * #{$sqr-ratio} - (#{$gap} * 3));
-    margin: 0 map-get(theme.$spacing, page-wide);
+    // margin: 0 map-get(theme.$spacing, page-wide);
 
     display: grid;
     grid-template-rows: repeat(12, 1fr);
@@ -84,13 +85,5 @@ p, span {
     & > .small {
         grid-area: auto / auto / span 4 / span 3;
         font-size: calc(24rem / #{map-get(theme.$text, std)});
-    }
-}
-
-
-@media (min-width: map-get(theme.$screens, laptop)) {
-    .title { 
-        margin: 0 map-get(theme.$spacing, page-wide);
-        margin-bottom: map-get(theme.$spacing, std);
     }
 }
