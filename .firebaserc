@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "patricio-website": {
+      "hosting": {
+        "patricio-website": [
+          "patricio-website"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "patricio-website"
+  }
+}

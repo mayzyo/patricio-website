@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "patricio-website",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

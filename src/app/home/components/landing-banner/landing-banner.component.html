@@ -1,0 +1,16 @@
+<div class="full-bg jumbotron jumbotron-fluid vh-100 mb-0">
+    <div class="container h-100 d-flex flex-column justify-content-center">
+
+        <blockquote class="blockquote text-right" *ngIf="(quote$ | async) as quote">
+            <h1 class="quote mb-3 text-white display-4">"{{ quote.message }}"</h1>
+            <footer class="blockquote-footer" *ngIf="quote.author">
+                {{ quote.author }}
+            </footer>
+        </blockquote>
+
+    </div>
+</div>
+
+<button *ngIf="!disabled" class="scrolldown btn btn-link text-white position-absolute w-100" (click)="scrolldown()">
+    <fa-icon [icon]="faArrowDown" size="lg"></fa-icon>
+</button>

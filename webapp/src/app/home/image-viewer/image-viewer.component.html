@@ -1,4 +1,0 @@
-<ng-container *ngIf="(media.current$ | async) as current">
-    <img class="viewer" [src]="current.url$ | async" height="80%" width="80%" />
-    <time [dateTime]="current.created">{{ current.created | date }}</time>
-</ng-container>

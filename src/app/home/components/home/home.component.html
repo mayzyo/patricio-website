@@ -1,0 +1,62 @@
+<app-landing-banner [disabled]="isArrowDisabled" (scrolldownChange)="scrolldown()">
+</app-landing-banner>
+
+<div class="container my-5 py-5">
+
+    <div style="min-height: 30vh;" #HighlightRef>
+        <div class="d-flex align-items-center">
+                <fa-icon *ngIf="!loggedIn; else SongEditor" [icon]="faRecordVinyl" size="2x"></fa-icon>
+            <h1 class="h2 ml-2">Highlights | 作品一览</h1>
+        </div>
+        <app-highlight *ngIf="highlightTrigger$ | async as highlightTrigger" [isTriggered]="highlightTrigger">
+        </app-highlight>
+    </div>
+
+    <hr />
+
+    <!-- <div #UpcomingRef>
+        <div style="min-height: 30vh;" [ngClass]="(upcoming$ | async) ? 'd-block' : 'd-none'">
+            <h1 class="lead text-center">Upcoming Events | 最新活动</h1>
+            <app-listing [animTrigger$]="listingTrigger$" [datasource$]="upcoming$" [showDate]="true"></app-listing>
+        </div>
+        <h1 class="lead text-center" [ngClass]="(upcoming$ | async) ? 'd-none' : 'd-block'">
+            No upcoming events | 暂无新活动
+        </h1>
+    </div> -->
+
+</div>
+
+<!-- <div class="jumbotron jumbotron-fluid mb-0 bg-dark text-white" style="min-height: 30vh;" #BiographyRef>
+    <div class="container">
+
+        <div class="d-flex align-items-center mb-4">
+            <ng-container *ngIf="!loggedIn; else BioEditor">
+                <fa-icon [classes]="['text-secondary']" icon="portrait" size="2x"></fa-icon>
+            </ng-container>
+            <ng-template #BioEditor>
+                <button class="btn btn-link" (click)="edit('biography')">
+                    <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
+                </button>
+            </ng-template>
+            <h1 class="h2 ml-2">Biography | 简介</h1>
+        </div>
+
+        <div *ngIf="(biography$ | async) as biography" class="row mx-n3">
+            <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
+                {{ biography[0] }}
+            </p>
+            <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
+                {{ biography[1] }}
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<app-email></app-email> -->
+
+<ng-template #SongEditor>
+    <button class="btn btn-link" (click)="edit('music')">
+        <fa-icon [icon]="['far', 'edit']" size="2x"></fa-icon>
+    </button>
+</ng-template>

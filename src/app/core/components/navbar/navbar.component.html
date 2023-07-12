@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-secondary ml-3" routerLink="/home">
+            <div class="name" [ngClass]="!(animState$ | async) ? '' : 'reverse'">Kaze Patricio Chan</div>
+            <div class="name" [ngClass]="(animState$ | async) ? '' : 'reverse'">陈 蔚 风 | OFFICIAL</div>
+        </a>
+    
+        <button
+            class="navbar-toggler"
+            type="button"
+            (click)="open(content)"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end">
+            <ng-template [ngTemplateOutlet]="navmenu"></ng-template>
+        </div>
+    </div>
+</nav>
+
+<ng-template #navmenu>
+    <ul class="navbar-nav">
+    
+        <li class="nav-item">
+            <a class="nav-link text-lg-center px-3" [ngClass]="currentUrl == '/updates' ? 'shadow' : ''"
+                routerLink="/updates">
+                <div class="d-inline d-lg-block label">动态</div>
+                <div class="d-inline d-lg-block text-monospace sub-label">Updates</div>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-lg-center px-3" [ngClass]="currentUrl == '/discography' ? 'shadow' : ''"
+                routerLink="/discography">
+                <div class="d-inline d-lg-block label">作品集</div>
+                <div class="d-inline d-lg-block text-monospace sub-label">Discography</div>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-lg-center px-3" [ngClass]="currentUrl == '/media' ? 'shadow' : ''"
+                routerLink="/media">
+                <div class="d-inline d-lg-block label">媒体</div>
+                <div class="d-inline d-lg-block text-monospace sub-label">Media</div>
+            </a>
+        </li>
+
+    </ul>
+</ng-template>
+
+<ng-template #content let-offcanvas>
+
+    <div class="offcanvas-header text-bg-dark justify-content-end">
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+
+	<div class="offcanvas-body text-bg-dark">
+        <ng-template [ngTemplateOutlet]="navmenu"></ng-template>
+	</div>
+</ng-template>
