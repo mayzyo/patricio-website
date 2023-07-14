@@ -1,14 +1,13 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { Observable, from, map, switchMap, filter, share, delayWhen, Subject, BehaviorSubject, of } from 'rxjs';
-import { Highlight } from '../../types/highlight';
-import { Listing } from '../../types/listing';
-import { Filter } from '../../enums/filter';
+import { Observable, from, map, switchMap, filter, share, delayWhen, Subject, BehaviorSubject } from 'rxjs';
 import { Profile } from 'src/app/models/profile';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { QuotesService } from '../../services/quotes.service';
 import { AdminService } from 'src/app/core/services/admin.service';
 import { UpdateService } from '../../services/update.service';
-import { faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
+import { faRecordVinyl, faPortrait } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import { UpdateAsync } from '../../classes/update-async';
 
 @Component({
     selector: 'app-home',
@@ -21,11 +20,11 @@ export class HomeComponent {
     @ViewChild('BiographyRef', { static: true }) biographyRef!: ElementRef;
 
     readonly quote$ = this.quotes.unique$('home');
-    // readonly upcoming$: Observable<Listing> = this.updates.filtered$(Filter.EVENT).pipe(
-    //   switchMap((res: any) => from(res)),
-    //   filter((res: any) => res.date > new Date()),
-    //   share()
-    // );
+    readonly upcoming$: Observable<UpdateAsync> = this.updates.results$.pipe(
+      switchMap(res => from(res)),
+      filter(res => res.date > new Date()),
+      share()
+    );
 
     readonly biography$: Observable<string[]>;
 
@@ -35,6 +34,8 @@ export class HomeComponent {
     biographyTrigger$ = new Subject<void>();
     protected isArrowDisabled: boolean = false;
     protected readonly faRecordVinyl = faRecordVinyl;
+    protected readonly faPortrait = faPortrait;
+    protected readonly faEdit = faEdit;
 
     constructor(
         private quotes: QuotesService,
@@ -42,8 +43,10 @@ export class HomeComponent {
         private admin: AdminService,
         private firestore: Firestore
     ) {
-        const itemCollection = collection(this.firestore, 'profile');
-        this.biography$ = (collectionData(itemCollection) as Observable<Profile[]>).pipe(
+        const readCollection = collection(this.firestore, 'profile');
+        const fetchedProfile$ = collectionData(readCollection) as Observable<Profile[]>;
+
+        this.biography$ = fetchedProfile$.pipe(
             map(res => res[0].socialMedia.biography),
             map(res => {
                 const cutoff = this.languageCut(res)
@@ -55,20 +58,20 @@ export class HomeComponent {
         );
     }
 
-    @HostListener('window:scroll', ['$event'])
-    onScrollEvent($event: unknown) {
+    @HostListener('window:scroll')
+    onScrollEvent() {
         if (this.scrollOffset(this.highlightRef)) {
             this.highlightTrigger$.next(true);
             this.isArrowDisabled = true;
         }
 
-        // if (this.scrollOffset(this.upcomingRef)) {
-        //     this.listingTrigger$.next();
-        // }
+        if (this.scrollOffset(this.upcomingRef)) {
+            this.listingTrigger$.next();
+        }
 
-        // if (this.scrollOffset(this.biographyRef)) {
-        //     this.biographyTrigger$.next();
-        // }
+        if (this.scrollOffset(this.biographyRef)) {
+            this.biographyTrigger$.next();
+        }
     }
 
     scrolldown() {

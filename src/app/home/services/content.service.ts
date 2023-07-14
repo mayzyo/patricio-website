@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable, fromEvent, map, of, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +9,13 @@ import { Observable, fromEvent, map, of, switchMap } from 'rxjs';
 export class ContentService {
   readonly portrait$ = this.get('api/image/portrait');
 
-  constructor(private sanitizer: DomSanitizer, private firestore: Firestore) { }
+  constructor(private sanitizer: DomSanitizer,private http: HttpClient) { }
 
   get(url: string): Observable<SafeUrl> {
-    return of({});
-    // return this.http.get(this.baseUrl.concat(url), { responseType: 'blob' }).pipe(
-    //   map(res => window.URL.createObjectURL(res)),
-    //   map(res => this.sanitizer.bypassSecurityTrustUrl(res))
-    // )
+    return this.http.get('https://destinesiahub.blob.core.windows.net/patriciopersonal-dev/'.concat(url), { responseType: 'blob' }).pipe(
+      map(res => window.URL.createObjectURL(res)),
+      map(res => this.sanitizer.bypassSecurityTrustUrl(res))
+    )
   }
 
   stockGallery(index?: number) {

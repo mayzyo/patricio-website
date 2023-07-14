@@ -1,3 +1,5 @@
+import { Timestamp } from "@angular/fire/firestore";
+
 export interface Update {
 	id: number;
 
@@ -9,5 +11,5 @@ export interface Update {
 
 	thumbnail: string;
 
-	date: Date;
+	date: Timestamp;
 }

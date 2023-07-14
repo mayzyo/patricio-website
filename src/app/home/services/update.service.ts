@@ -1,75 +1,61 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { Observable, Subject, iif, merge, of, scan, switchMap, tap, map, shareReplay, combineLatest } from 'rxjs';
+import { DocumentData, Firestore, collection, collectionData, limit, orderBy, query, startAt, where, Query } from '@angular/fire/firestore';
+import { Observable, Subject, iif, merge, of } from 'rxjs';
+import { scan, switchMap, tap, map, shareReplay } from 'rxjs/operators';
 import { Update } from 'src/app/models/update';
 import { Filter } from '../enums/filter';
+import { UpdateAsync } from '../classes/update-async';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UpdateService {
-  public readonly pageSize: number = 10;
-  public get EndReached() { return this.endReached; }
-  private readonly load$ = new Subject<void>();
-  private readonly refresh$ = new Subject<void>();
-  private endReached: boolean = false;
+    public readonly pageSize: number = 10;
+    public get EndReached() { return this.endReached; }
+    private readonly load$ = new Subject<void>();
+    private readonly refresh$ = new Subject<Filter>();
+    private endReached: boolean = false;
 
-  // readonly results$ = merge(of(null), this.refresh$).pipe(
-  //   tap(() => this.endReached = false),
-  //   switchMap(() => merge(of(null), this.load$).pipe(
-  //     scan(acc => acc + 1, 0),
-  //     switchMap(res => iif(
-  //       () => !this.endReached,
-  //       this.http.get<Update[]>(`${this.baseUrl}updates`, { params: { page: res.toString(), size: this.pageSize.toString() } }),
-  //       of([])
-  //     )),
-  //     map<Update[], UpdateAsync[]>(res => res.map(el => new UpdateAsync(el))),
-  //     scan<UpdateAsync[], UpdateAsync[]>((acc, cur) => acc.concat(cur), []),
-  //     tap(res => this.endReached = res.length % this.pageSize != 0)
-  //   )),
-  //   shareReplay(1),
-  // );
+    readonly results$ = this.refresh$.pipe(
+        tap(() => this.endReached = false),
+        switchMap(filter => merge(of(null), this.load$).pipe(
+            scan(acc => acc + 1, 0),
+            switchMap(page => {
+                const readCollection = collection(this.firestore, 'feeds');
+                let readQuery: Query<DocumentData>;
+                switch (filter) {
+                    case Filter.EVENT:
+                        readQuery = query(readCollection, where('link', '!=', null), orderBy('link'), orderBy('date'), startAt(page), limit(this.pageSize));
+                        break;
+                    case Filter.POST:
+                        readQuery = query(readCollection, where('link', '==', null), orderBy('link'), orderBy('date'), startAt(page), limit(this.pageSize));
+                        break;
+                    default:
+                    case Filter.ALL:
+                        readQuery = query(readCollection, orderBy('date'), startAt(page), limit(this.pageSize));
+                }
+                const fetchedUpdates$ = collectionData(readQuery) as Observable<Update[]>;
+                
+                return iif(
+                    () => !this.endReached,
+                    fetchedUpdates$,
+                    of([])
+                )
+            }),
+            map<Update[], UpdateAsync[]>(res => res.map(el => new UpdateAsync(el))),
+            scan<UpdateAsync[], UpdateAsync[]>((acc, cur) => acc.concat(cur), []),
+            tap(res => this.endReached = res.length % this.pageSize != 0),
+        )),
+        shareReplay(1),
+    );
 
-  constructor(private firestore: Firestore) { }
+    constructor(private firestore: Firestore) { }
 
-  refresh() {
-    this.refresh$.next();
-  }
+    refresh(filter: Filter) {
+        this.refresh$.next(filter);
+    }
 
-  load() {
-    this.load$.next();
-  }
-
-  // Apply filter to the total results
-  // filteredResults$(filter$: Observable<Filter>) {
-  //   return combineLatest(this.results$, filter$).pipe(
-  //     map(res => {
-  //       switch(res[1]) {
-  //         case Filter.ALL:
-  //           return res[0];
-  //         case Filter.EVENT:
-  //           return res[0].filter((el: any) => el.link != null);
-  //         case Filter.POST:
-  //           return res[0].filter((el: any) => el.link == null);
-  //       }
-  //     }),
-  //   );
-  // }
-
-  // If filtered results isn't sufficient, call API with filter.
-  // filtered$(filter: Filter, size = 4) {
-  //   return this.filteredResults$(of(filter)).pipe(
-  //     switchMap(res => iif(() => 
-  //       res.length >= size,
-  //         of(res as UpdateAsync[]).pipe(
-  //           map(x => x.slice(0, size)),
-  //         ),
-  //         this.http.get<Update[]>(`${this.baseUrl}updates`, { params: { page: '1', size: size.toString(), filter } }).pipe(
-  //           map(x => x.map(el => new UpdateAsync(el))),
-  //         )
-  //       )
-  //     ),
-  //     share()
-  //   );
-  // }
+    load() {
+        this.load$.next();
+    }
 }

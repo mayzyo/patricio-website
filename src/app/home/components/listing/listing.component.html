@@ -1,1 +1,34 @@
-<div>asdf</div>
+<ul class="list-group list-group-flush">
+    <li *ngFor="let item of upcoming$ | async" class="fade-in list-group-item d-flex align-items-center">
+        <fa-icon
+            *ngIf="!item.link"
+            [icon]="faBullhorn"
+            size="3x"
+            [classes]="['mr-3']"
+            [styles]="{ 'color': '#DF6795' }"
+        >
+        </fa-icon>
+
+        <div class="flex-grow-1 d-flex flex-column justify-content-center">
+            <p class="mb-0" [ngClass]="item.link ? 'h5' : ''" [innerHTML]="item.description || item.title"></p>
+            <small class="text-right" *ngIf="!item.link">
+                {{ item.date.toDateString() }}
+            </small>
+            <ng-container *ngIf="item.link">
+                <a [href]="item.link" target="_blank" *ngIf="showDate">
+                    {{ item.date | timeFromNow }} left! {{ item.description ? item.title : "event detail here..." }}
+                </a>
+                <a [href]="item.link" target="_blank" *ngIf="!showDate">
+                    {{ item.description ? item.title : "event detail here..." }}
+                </a>
+            </ng-container>
+        </div>
+
+        <a *ngIf="item.link" [href]="item.link" target="_blank">
+            <img
+                class="event-img border border-dark"
+                [src]="item.image$ | async"
+            >
+        </a>
+    </li>
+</ul>

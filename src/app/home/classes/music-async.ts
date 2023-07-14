@@ -34,13 +34,13 @@ export class MusicAsync implements Music {
         this.id = ob.id;
         this.date = new Date(ob.date);
 
-        this.audio$ = musics.contents.get(`musics/audios/${ob.audioKey}`).pipe(
+        this.audio$ = musics.contents.get(ob.audioKey).pipe(
             tap(() => musics.onAudioLoad$.next(ob.audioKey))
         );
         
         this.cover$ = merge(
             of(ob.thumbnail),
-            musics.contents.get(`musics/covers/${ob.coverKey}`)
+            musics.contents.get(ob.coverKey)
         );
     }
 }
