@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbCollapseModule, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -16,6 +17,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    RouterModule,
     FontAwesomeModule,
     NgbCollapseModule,
     NgbOffcanvasModule

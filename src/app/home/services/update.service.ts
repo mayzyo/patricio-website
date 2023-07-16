@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DocumentData, Firestore, collection, collectionData, limit, orderBy, query, startAt, where, Query } from '@angular/fire/firestore';
 import { Observable, Subject, iif, merge, of } from 'rxjs';
-import { scan, switchMap, tap, map, shareReplay } from 'rxjs/operators';
+import { scan, switchMap, tap, map, shareReplay, startWith } from 'rxjs/operators';
 import { Update } from 'src/app/models/update';
 import { Filter } from '../enums/filter';
 import { UpdateAsync } from '../classes/update-async';
@@ -10,15 +10,15 @@ import { UpdateAsync } from '../classes/update-async';
     providedIn: 'root'
 })
 export class UpdateService {
-    public readonly pageSize: number = 10;
-    public get EndReached() { return this.endReached; }
+    readonly pageSize: number = 10;
+    get endReached() { return this._endReached; }
     private readonly load$ = new Subject<void>();
     private readonly refresh$ = new Subject<Filter>();
-    private endReached: boolean = false;
+    private _endReached: boolean = false;
 
-    readonly results$ = this.refresh$.pipe(
-        tap(() => this.endReached = false),
-        switchMap(filter => merge(of(null), this.load$).pipe(
+    readonly list$ = this.refresh$.pipe(
+        switchMap(filter => this.load$.pipe(
+            startWith(null),
             scan(acc => acc + 1, 0),
             switchMap(page => {
                 const readCollection = collection(this.firestore, 'feeds');
@@ -44,7 +44,7 @@ export class UpdateService {
             }),
             map<Update[], UpdateAsync[]>(res => res.map(el => new UpdateAsync(el))),
             scan<UpdateAsync[], UpdateAsync[]>((acc, cur) => acc.concat(cur), []),
-            tap(res => this.endReached = res.length % this.pageSize != 0),
+            tap(res => this._endReached = res.length % this.pageSize != 0),
         )),
         shareReplay(1),
     );
@@ -52,6 +52,7 @@ export class UpdateService {
     constructor(private firestore: Firestore) { }
 
     refresh(filter: Filter) {
+        this._endReached = false;
         this.refresh$.next(filter);
     }
 

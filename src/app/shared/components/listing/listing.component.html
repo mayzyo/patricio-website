@@ -1,5 +1,5 @@
 <ul class="list-group list-group-flush">
-    <li *ngFor="let item of upcoming$ | async" class="fade-in list-group-item d-flex align-items-center">
+    <li *ngFor="let item of feed$ | async" class="fade-in list-group-item d-flex align-items-center">
         <fa-icon
             *ngIf="!item.link"
             [icon]="faBullhorn"

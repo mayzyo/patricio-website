@@ -20,7 +20,7 @@ export class HomeComponent {
     @ViewChild('BiographyRef', { static: true }) biographyRef!: ElementRef;
 
     readonly quote$ = this.quotes.unique$('home');
-    readonly upcoming$: Observable<UpdateAsync> = this.updates.results$.pipe(
+    readonly upcoming$: Observable<UpdateAsync> = this.updates.list$.pipe(
       switchMap(res => from(res)),
       filter(res => res.date > new Date()),
       share()

@@ -1,0 +1,61 @@
+<app-banner [quote]="quote$ | async" [backgroundUrl]="'banner-1.jpg'" [altColour]="'#216B8C'"></app-banner>
+
+<div class="container my-5 pt-5" style="min-height: 50vh;">
+    <div class="row">
+
+        <div class="col-lg-9 col-md-12">
+            <div class="d-flex align-items-center">
+                <h1 class="h2">Recent Announcements | 近期动态</h1>
+                <button class="btn btn-link ml-2" *ngIf="loggedIn" (click)="edit('update')">
+                    <fa-icon [icon]="faEdit" size="2x"></fa-icon>
+                </button>
+            </div>
+
+            <br />
+
+            <div class="d-flex justify-content-end">
+                <div class="btn-group mr-3" role="group">
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="selectedFilter == Filter.ALL ? 'active' : ''" (click)="toggleFilter(Filter.ALL)">
+                        All
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="selectedFilter == Filter.EVENT ? 'active' : ''" (click)="toggleFilter(Filter.EVENT)">
+                        Events
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" [ngClass]="selectedFilter == Filter.POST ? 'active' : ''" (click)="toggleFilter(Filter.POST)">
+                        Posts
+                    </button>
+                </div>
+            </div>
+
+            <br />
+
+            <app-listing [filter]="selectedFilter" [futureOnly]="false"></app-listing>
+        </div>
+
+        <div class="col-lg-3 col-md-12 d-none d-md-block" *ngIf="(history$ | async) as history">
+            <div class="anim-obj">
+                <h1>
+                    <span class="display-4">历史记录</span>
+                    <span class="h1 text-monospace text-uppercase">History</span>
+                </h1>
+                <div class="infinite-scroll" style="height: 14rem;">
+                    <ul infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
+                        (scrolled)="onScroll()">
+                        <li *ngFor="let feed of history">
+                            <ng-container *ngIf="!feed.link; else LinkAvailable">
+                                {{ feed.title }}
+                            </ng-container>
+                            <ng-template #LinkAvailable>
+                                <a href="{{ feed.link }}">{{ feed.title }}</a>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-email-me></app-email-me>
+

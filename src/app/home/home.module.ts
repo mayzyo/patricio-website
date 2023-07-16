@@ -5,7 +5,6 @@ import { LandingBannerComponent } from './components/landing-banner/landing-bann
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HighlightComponent } from './components/highlight/highlight.component';
 import { SharedModule } from '../shared/shared.module';
-import { ListingComponent } from './components/listing/listing.component';
 
 
 
@@ -14,7 +13,6 @@ import { ListingComponent } from './components/listing/listing.component';
     HomeComponent,
     LandingBannerComponent,
     HighlightComponent,
-    ListingComponent
   ],
   imports: [
     CommonModule,
