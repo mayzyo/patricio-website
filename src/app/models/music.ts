@@ -1,3 +1,4 @@
+import { Timestamp } from "@angular/fire/firestore";
 import { Article } from "./article"
 
 export interface Music {
@@ -7,7 +8,7 @@ export interface Music {
 
 	genre: string;
 
-	date: Date;
+	date: Timestamp;
 
 	thumbnail: string;
 

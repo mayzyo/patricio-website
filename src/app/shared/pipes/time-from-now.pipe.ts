@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Observable, interval } from 'rxjs';
 
 @Pipe({
+    standalone: true,
     name: 'timeFromNow',
     pure: false
 })

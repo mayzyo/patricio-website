@@ -1,11 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Quote } from 'src/app/models/quote';
 
 @Component({
+    standalone: true,
     selector: 'app-banner',
     templateUrl: './banner.component.html',
-    styleUrls: ['./banner.component.scss']
+    styleUrls: ['./banner.component.scss'],
+    imports: [
+        CommonModule
+    ]
 })
 export class BannerComponent {
     @Input() quote: Quote | null = null;
@@ -14,11 +18,11 @@ export class BannerComponent {
 
     onStyle() {
         return {
-          'background-color': this.altColour,
-          'background-image': `url(../../assets/images/${this.backgroundUrl})`, 
-          'background-size': 'cover',
-          'background-position': '50% 75%',
-          height: '55vh' 
+            'background-color': this.altColour,
+            'background-image': `url(../../assets/images/${this.backgroundUrl})`,
+            'background-size': 'cover',
+            'background-position': '50% 75%',
+            height: '55vh'
         };
-      }
+    }
 }

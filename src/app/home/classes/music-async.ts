@@ -5,7 +5,7 @@ import { MusicService } from "../services/music.service";
 import { Article } from "src/app/models/article";
 import { SafeUrl } from '@angular/platform-browser';
 
-export class MusicAsync implements Music {
+export class MusicAsync {
     id: number;
     title: string;
     genre: string;
@@ -32,7 +32,7 @@ export class MusicAsync implements Music {
         this.articleId = ob.articleId;
         this.article = ob.article;
         this.id = ob.id;
-        this.date = new Date(ob.date);
+        this.date = ob.date.toDate();
 
         this.audio$ = musics.contents.get(ob.audioKey).pipe(
             tap(() => musics.onAudioLoad$.next(ob.audioKey))

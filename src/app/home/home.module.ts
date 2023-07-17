@@ -4,7 +4,9 @@ import { HomeComponent } from './components/home/home.component';
 import { LandingBannerComponent } from './components/landing-banner/landing-banner.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HighlightComponent } from './components/highlight/highlight.component';
-import { SharedModule } from '../shared/shared.module';
+import { BannerComponent } from '../shared/components/banner/banner.component';
+import { EmailMeComponent } from '../shared/components/email-me/email-me.component';
+import { ListingComponent } from '../shared/components/listing/listing.component';
 
 
 
@@ -18,7 +20,9 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     FontAwesomeModule,
 
-    SharedModule
+    BannerComponent,
+    EmailMeComponent,
+    ListingComponent
   ]
 })
 export class HomeModule { }

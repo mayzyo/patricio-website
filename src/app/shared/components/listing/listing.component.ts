@@ -4,14 +4,23 @@ import { switchMap, filter, scan, map, tap } from 'rxjs/operators';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { ContentService } from '../../../home/services/content.service';
 import { UpdateService } from '../../../home/services/update.service';
-import { delayInterval } from 'src/app/utils/custom-operators';
 import { UpdateAsync } from '../../../home/classes/update-async';
 import { Filter } from '../../../home/enums/filter';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TimeFromNowPipe } from '../../pipes/time-from-now.pipe';
+import { delayInterval } from '../../operators/delay-interval';
 
 @Component({
+    standalone: true,
     selector: 'app-listing',
     templateUrl: './listing.component.html',
-    styleUrls: ['./listing.component.scss']
+    styleUrls: ['./listing.component.scss'],
+    imports: [
+        CommonModule,
+        FontAwesomeModule,
+        TimeFromNowPipe
+    ]
 })
 export class ListingComponent implements AfterViewInit {
     @Input() animTrigger$?: Observable<void>;
@@ -29,7 +38,6 @@ export class ListingComponent implements AfterViewInit {
     );
 
     protected readonly faBullhorn = faBullhorn;
-    tester$ = of(null).pipe(tap(() => console.log('hey')))
 
     constructor(private updates: UpdateService, private contents: ContentService) { }
 

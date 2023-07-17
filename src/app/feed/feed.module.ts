@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedComponent } from './components/feed/feed.component';
-import { SharedModule } from '../shared/shared.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BannerComponent } from '../shared/components/banner/banner.component';
+import { EmailMeComponent } from '../shared/components/email-me/email-me.component';
+import { ListingComponent } from '../shared/components/listing/listing.component';
 
 
 
@@ -16,7 +18,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FontAwesomeModule,
     InfiniteScrollModule,
 
-    SharedModule
+    BannerComponent,
+    EmailMeComponent,
+    ListingComponent
   ]
 })
 export class FeedModule { }

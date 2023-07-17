@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 import { EmailService } from '../../services/email.service';
 import { Email, Purpose, Sender } from 'src/app/models/email';
+import { CommonModule } from '@angular/common';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+    standalone: true,
     selector: 'app-email-me',
     templateUrl: './email-me.component.html',
-    styleUrls: ['./email-me.component.scss']
+    styleUrls: ['./email-me.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgbAlertModule,
+    ]
 })
 export class EmailMeComponent {
     updateSuccess$ = new BehaviorSubject<string | null>(null);
