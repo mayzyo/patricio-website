@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable, from, map, switchMap, filter, share, delayWhen, Subject, BehaviorSubject } from 'rxjs';
 import { Profile } from 'src/app/models/profile';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
@@ -18,6 +18,7 @@ export class HomeComponent {
     @ViewChild('HighlightRef', { static: true }) highlightRef!: ElementRef;
     @ViewChild('UpcomingRef', { static: true }) upcomingRef!: ElementRef;
     @ViewChild('BiographyRef', { static: true }) biographyRef!: ElementRef;
+    @ViewChild("BiographyEditor", { read: ViewContainerRef }) biographyEditor!: ViewContainerRef;
 
     readonly quote$ = this.quotes.unique$('home');
     readonly upcoming$: Observable<UpdateAsync> = this.updates.list$.pipe(
@@ -41,7 +42,8 @@ export class HomeComponent {
         private quotes: QuotesService,
         private updates: UpdateService,
         private admin: AdminService,
-        private firestore: Firestore
+        private firestore: Firestore,
+        private viewContainerRef: ViewContainerRef,
     ) {
         const readCollection = collection(this.firestore, 'profile');
         const fetchedProfile$ = collectionData(readCollection) as Observable<Profile[]>;
@@ -78,9 +80,13 @@ export class HomeComponent {
         this.highlightRef.nativeElement.scrollIntoView({ behavior: "smooth" });
     }
 
-    loggedIn = this.admin.loggedIn;
-    edit(editorType: string) {
-        this.admin.open(editorType);
+    // loggedIn = this.admin.loggedIn;
+    loggedIn = true;
+    async edit(editorType: string) {
+        const { BiographyComponent } = await import("../../../admin/components/biography/biography.component");
+        this.biographyEditor.clear();
+        this.biographyEditor.createComponent(BiographyComponent);
+        // this.admin.open(editorType);
     }
 
     private scrollOffset(elRef: ElementRef) {

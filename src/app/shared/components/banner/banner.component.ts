@@ -1,15 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Quote } from 'src/app/models/quote';
 
 @Component({
-    standalone: true,
     selector: 'app-banner',
     templateUrl: './banner.component.html',
     styleUrls: ['./banner.component.scss'],
-    imports: [
-        CommonModule
-    ]
 })
 export class BannerComponent {
     @Input() quote: Quote | null = null;

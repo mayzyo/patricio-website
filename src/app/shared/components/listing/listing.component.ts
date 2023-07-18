@@ -1,26 +1,17 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import { switchMap, filter, scan, map, tap } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { switchMap, filter, scan, map } from 'rxjs/operators';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { UpdateAsync } from '../../classes/update-async';
 import { Filter } from '../../enums/filter';
-import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TimeFromNowPipe } from '../../pipes/time-from-now.pipe';
 import { delayInterval } from '../../operators/delay-interval';
 import { ContentService } from '../../services/content.service';
 import { UpdateService } from '../../services/update.service';
 
 @Component({
-    standalone: true,
     selector: 'app-listing',
     templateUrl: './listing.component.html',
     styleUrls: ['./listing.component.scss'],
-    imports: [
-        CommonModule,
-        FontAwesomeModule,
-        TimeFromNowPipe
-    ]
 })
 export class ListingComponent implements AfterViewInit {
     @Input() animTrigger$?: Observable<void>;
