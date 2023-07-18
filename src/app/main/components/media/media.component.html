@@ -1,0 +1,38 @@
+<app-banner [quote]="quote$ | async" [backgroundUrl]="'banner-3.jpg'" [altColour]="'#6538EE'"></app-banner>
+
+<div class="container my-5 pt-5" style="min-height: 50vh;">
+
+    <div class="d-flex align-items-center">
+        <h1 class="h2">Image Gallery | 媒体库</h1>
+        <button class="btn btn-link ml-2" *ngIf="loggedIn" (click)="edit('moments')">
+            <fa-icon [icon]="faEdit" size="2x"></fa-icon>
+        </button>
+    </div>
+
+    <hr />
+
+    <div class="row justify-content-center">
+        <!-- Main image display -->
+        <div class="col-10">
+            <img class="w-100" style="object-fit: cover; transition: all .3s ease;" [src]="current.image$ | async" *ngIf="current">
+        </div>
+        <!-- Image preview strip -->
+        <div class="infinite-scroll col-2">
+            <ul class="list-group list-group-flush" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll()">
+                <li *ngFor="let moment of moments$ | async">
+                    <button class="fade-in btn btn-link w-100" (click)="onSelect(moment)">
+                        <img class="w-100" [ngClass]="moment == current ? 'border border-secondary shadow' : ''" [src]="moment.image$ | async">
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <ng-container *ngIf="current">
+        <div class="d-flex mt-3">
+            <fa-icon [icon]="faClock" size="sm"></fa-icon>
+            <small class="ml-1">{{ current.date.toDateString() }}</small>
+        </div>
+        <p class="display-4">{{ current.description }}</p>
+    </ng-container>
+</div>

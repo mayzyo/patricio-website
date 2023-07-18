@@ -2,12 +2,12 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, from } from 'rxjs';
 import { map, scan, switchMap } from 'rxjs/operators';
 import { PlayerState } from '../../enums/player-state';
-import { QuotesService } from 'src/app/home/services/quotes.service';
-import { MusicService } from 'src/app/home/services/music.service';
+import { QuotesService } from 'src/app/shared/services/quotes.service';
 import { AdminService } from 'src/app/core/services/admin.service';
 import { delayInterval } from 'src/app/shared/operators/delay-interval';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
-import { MusicAsync } from 'src/app/home/classes/music-async';
+import { MusicAsync } from 'src/app/shared/classes/music-async';
+import { MusicService } from 'src/app/shared/services/music.service';
 
 @Component({
     selector: 'app-discography',

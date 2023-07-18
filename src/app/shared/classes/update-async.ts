@@ -3,7 +3,7 @@ import { of, Observable } from 'rxjs';
 import { Update } from "src/app/models/update";
 
 export class UpdateAsync {
-    id: number;
+    id: string;
     title: string;
     description: string;
     link: string;

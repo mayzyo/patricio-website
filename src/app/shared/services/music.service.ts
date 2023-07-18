@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, iif, of } from 'rxjs';
 import { map, scan, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { ContentService } from './content.service';
 import { Music } from 'src/app/models/music';
-import { MusicAsync } from '../classes/music-async';
+import { MusicAsync } from '../../shared/classes/music-async';
+import { ContentService } from 'src/app/shared/services/content.service';
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +31,7 @@ export class MusicService {
                     of([])
                 )
             }),
-            map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
+            map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this, this.contents))),
             scan<MusicAsync[], MusicAsync[]>((acc, cur) => acc.concat(cur), []),
             // Check length of current to be equal to size per page, determining if there is more
             tap(res => this.endReached = res.length % this.pageSize != 0)
@@ -42,15 +42,12 @@ export class MusicService {
     readonly onAudioLoad$ = new Subject<string>();
     readonly favourite$: Observable<MusicAsync[]>;
 
-    constructor(
-        private firestore: Firestore,
-        public contents: ContentService,
-    ) {
+    constructor(private firestore: Firestore, private contents: ContentService) {
         const musicsCollection = collection(this.firestore, 'musics');
         const favouriteQuery = query(musicsCollection, where('favourite', '==', true));
         const fetchedFavourite$ = collectionData(favouriteQuery) as Observable<Music[]>;
         this.favourite$ = fetchedFavourite$.pipe(
-            map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this))),
+            map<Music[], MusicAsync[]>(res => res.map(el => new MusicAsync(el, this, contents))),
             shareReplay(10)
         );
     }

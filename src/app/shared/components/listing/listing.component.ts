@@ -2,14 +2,14 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { switchMap, filter, scan, map, tap } from 'rxjs/operators';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
-import { ContentService } from '../../../home/services/content.service';
-import { UpdateService } from '../../../home/services/update.service';
-import { UpdateAsync } from '../../../home/classes/update-async';
-import { Filter } from '../../../home/enums/filter';
+import { UpdateAsync } from '../../classes/update-async';
+import { Filter } from '../../enums/filter';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TimeFromNowPipe } from '../../pipes/time-from-now.pipe';
 import { delayInterval } from '../../operators/delay-interval';
+import { ContentService } from '../../services/content.service';
+import { UpdateService } from '../../services/update.service';
 
 @Component({
     standalone: true,

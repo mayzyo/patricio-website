@@ -2,7 +2,7 @@ import { Timestamp } from "@angular/fire/firestore";
 import { Article } from "./article"
 
 export interface Music {
-	id: number;
+	id: string;
 
 	title: string;
 

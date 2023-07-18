@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DocumentData, Firestore, collection, collectionData, limit, orderBy, query, startAt, where, Query } from '@angular/fire/firestore';
-import { Observable, Subject, iif, merge, of } from 'rxjs';
+import { Observable, Subject, iif, of } from 'rxjs';
 import { scan, switchMap, tap, map, shareReplay, startWith } from 'rxjs/operators';
 import { Update } from 'src/app/models/update';
+import { UpdateAsync } from '../../shared/classes/update-async';
 import { Filter } from '../enums/filter';
-import { UpdateAsync } from '../classes/update-async';
 
 @Injectable({
     providedIn: 'root'

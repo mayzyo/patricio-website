@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { AdminService } from 'src/app/core/services/admin.service';
-import { Filter } from 'src/app/home/enums/filter';
-import { QuotesService } from 'src/app/home/services/quotes.service';
-import { UpdateService } from 'src/app/home/services/update.service';
+import { Filter } from 'src/app/shared/enums/filter';
+import { QuotesService } from 'src/app/shared/services/quotes.service';
+import { UpdateService } from 'src/app/shared/services/update.service';
 
 @Component({
     selector: 'app-feed',

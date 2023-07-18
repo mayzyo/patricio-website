@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { Quote } from 'src/app/models/quote';
-import { QuotesService } from '../../services/quotes.service';
+import { QuotesService } from 'src/app/shared/services/quotes.service';
 
 @Component({
   selector: 'app-landing-banner',

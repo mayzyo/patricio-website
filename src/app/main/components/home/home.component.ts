@@ -2,12 +2,12 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Observable, from, map, switchMap, filter, share, delayWhen, Subject, BehaviorSubject } from 'rxjs';
 import { Profile } from 'src/app/models/profile';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { QuotesService } from '../../services/quotes.service';
+import { QuotesService } from '../../../shared/services/quotes.service';
 import { AdminService } from 'src/app/core/services/admin.service';
-import { UpdateService } from '../../services/update.service';
 import { faRecordVinyl, faPortrait } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
-import { UpdateAsync } from '../../classes/update-async';
+import { UpdateAsync } from '../../../shared/classes/update-async';
+import { UpdateService } from 'src/app/shared/services/update.service';
 
 @Component({
     selector: 'app-home',

@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { Observable, BehaviorSubject, from, interval, merge, of, zip } from 'rxjs';
 import { map, scan, share, skip, switchMap, take, tap } from 'rxjs/operators';
 import { Highlight } from '../../types/highlight';
-import { ContentService } from '../../services/content.service';
-import { MusicService } from '../../services/music.service';
+import { ContentService } from 'src/app/shared/services/content.service';
+import { MusicService } from 'src/app/shared/services/music.service';
 
 @Component({
     selector: 'app-highlight',

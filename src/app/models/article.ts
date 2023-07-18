@@ -1,7 +1,7 @@
 export interface Article {
-	id: number
+	id: string;
 
-	content: string
+	content: string;
 
-	date: Date
+	date: Date;
 }

@@ -8,6 +8,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
+import { MainModule } from './main/main.module';
 
 
 
@@ -22,7 +23,9 @@ import { AppComponent } from './app.component';
         provideFirebaseApp(() => initializeApp(environment.firebase)),
         provideAuth(() => getAuth()),
         provideFirestore(() => getFirestore()),
-        CoreModule
+
+        CoreModule,
+        MainModule
     ],
     providers: [],
     bootstrap: [AppComponent]

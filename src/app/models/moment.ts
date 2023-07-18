@@ -1,15 +1,13 @@
 import { Timestamp } from "@angular/fire/firestore";
 
-export interface Update {
+export interface Moment {
 	id: string;
-
-	title: string;
-
-	description: string;
-
-	link: string;
 
 	thumbnail: string;
 
+	description: string;
+
 	date: Timestamp;
+
+	imageKey: string;
 }

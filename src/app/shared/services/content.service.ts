@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class ContentService {
   readonly portrait$ = this.get('api/image/portrait');
 
-  constructor(private sanitizer: DomSanitizer,private http: HttpClient) { }
+  constructor(private sanitizer: DomSanitizer, private http: HttpClient) { }
 
   get(url: string): Observable<SafeUrl> {
     return this.http.get('https://destinesiahub.blob.core.windows.net/patriciopersonal-dev/'.concat(url), { responseType: 'blob' }).pipe(
