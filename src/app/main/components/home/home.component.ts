@@ -1,13 +1,11 @@
 import { Component, ElementRef, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
-import { Observable, from, map, switchMap, filter, share, delayWhen, Subject, BehaviorSubject } from 'rxjs';
-import { Profile } from 'src/app/models/profile';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Observable, from, switchMap, filter, share, delayWhen, Subject, BehaviorSubject, tap, of } from 'rxjs';
 import { QuotesService } from '../../../shared/services/quotes.service';
-import { AdminService } from 'src/app/core/services/admin.service';
 import { faRecordVinyl, faPortrait } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { UpdateAsync } from '../../../shared/classes/update-async';
 import { UpdateService } from 'src/app/shared/services/update.service';
+import { BiographyService } from 'src/app/shared/services/biography.service';
 
 @Component({
     selector: 'app-home',
@@ -20,6 +18,15 @@ export class HomeComponent {
     @ViewChild('BiographyRef', { static: true }) biographyRef!: ElementRef;
     @ViewChild("BiographyEditor", { read: ViewContainerRef }) biographyEditor!: ViewContainerRef;
 
+    protected readonly faRecordVinyl = faRecordVinyl;
+    protected readonly faPortrait = faPortrait;
+    protected readonly faEdit = faEdit;
+
+    // Boolean because it is used to trigger the disabling of arrow down in banner-landing component
+    highlightTrigger$ = new BehaviorSubject<boolean>(false);
+    listingTrigger$ = new Subject<void>();
+    biographyTrigger$ = new Subject<void>();
+
     readonly quote$ = this.quotes.unique$('home');
     readonly upcoming$: Observable<UpdateAsync> = this.updates.list$.pipe(
       switchMap(res => from(res)),
@@ -27,38 +34,18 @@ export class HomeComponent {
       share()
     );
 
-    readonly biography$: Observable<string[]>;
+    readonly biography$: Observable<string[]> = of(null).pipe(
+        delayWhen(() => this.biographyTrigger$),
+        switchMap(() => this.biography.paragraphs$)
+    );
 
-    // Boolean because it is used to trigger the disabling of arrow down in banner-landing component
-    highlightTrigger$ = new BehaviorSubject<boolean>(false);
-    listingTrigger$ = new Subject<void>();
-    biographyTrigger$ = new Subject<void>();
     protected isArrowDisabled: boolean = false;
-    protected readonly faRecordVinyl = faRecordVinyl;
-    protected readonly faPortrait = faPortrait;
-    protected readonly faEdit = faEdit;
 
     constructor(
         private quotes: QuotesService,
         private updates: UpdateService,
-        private admin: AdminService,
-        private firestore: Firestore,
-        private viewContainerRef: ViewContainerRef,
-    ) {
-        const readCollection = collection(this.firestore, 'profile');
-        const fetchedProfile$ = collectionData(readCollection) as Observable<Profile[]>;
-
-        this.biography$ = fetchedProfile$.pipe(
-            map(res => res[0].socialMedia.biography),
-            map(res => {
-                const cutoff = this.languageCut(res)
-                return cutoff != -1
-                    ? [res.slice(0, cutoff), res.slice(cutoff, res.length)]
-                    : [res]
-            }),
-            delayWhen(() => this.biographyTrigger$),
-        );
-    }
+        private biography: BiographyService
+    ) { }
 
     @HostListener('window:scroll')
     onScrollEvent() {

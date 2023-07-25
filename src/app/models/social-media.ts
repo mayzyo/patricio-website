@@ -1,6 +1,4 @@
 export interface SocialMedia {
-	biography: string;
-
 	facebook: string;
 
 	linkedIn: string;
