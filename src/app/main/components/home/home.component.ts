@@ -16,7 +16,7 @@ export class HomeComponent {
     @ViewChild('HighlightRef', { static: true }) highlightRef!: ElementRef;
     @ViewChild('UpcomingRef', { static: true }) upcomingRef!: ElementRef;
     @ViewChild('BiographyRef', { static: true }) biographyRef!: ElementRef;
-    @ViewChild("BiographyEditor", { read: ViewContainerRef }) biographyEditor!: ViewContainerRef;
+    @ViewChild("EditorRef", { read: ViewContainerRef }) editorRef!: ViewContainerRef;
 
     protected readonly faRecordVinyl = faRecordVinyl;
     protected readonly faPortrait = faPortrait;
@@ -69,24 +69,19 @@ export class HomeComponent {
 
     // loggedIn = this.admin.loggedIn;
     loggedIn = true;
-    async edit(editorType: string) {
+    async openBiographyAdmin() {
         const { BiographyComponent } = await import("../../../admin/components/biography/biography.component");
-        this.biographyEditor.clear();
-        this.biographyEditor.createComponent(BiographyComponent);
-        // this.admin.open(editorType);
+        this.editorRef.clear();
+        this.editorRef.createComponent(BiographyComponent);
+    }
+
+    async openSongAdmin() {
+        const { SongComponent } = await import("../../../admin/components/song/song.component");
+        this.editorRef.clear();
+        this.editorRef.createComponent(SongComponent);
     }
 
     private scrollOffset(elRef: ElementRef) {
         return window.scrollY >= elRef.nativeElement.offsetTop - (window.innerHeight / 1.35)
-    }
-
-    private languageCut(msg: string) {
-        for (var i = 0, n = msg.length; i < n; i++) {
-            // Chinese characters are above the 30,000 range in Unicode
-            if (msg.charCodeAt(i) > 30000) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

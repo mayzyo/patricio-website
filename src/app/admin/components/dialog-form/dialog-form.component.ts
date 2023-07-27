@@ -13,14 +13,14 @@ import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 export class DialogFormComponent implements AfterViewInit {
     @ViewChild('content') content?: ComponentRef<any>; 
 
-    constructor(private modal: NgbModal) {}
+    constructor(protected modal: NgbModal) {}
 
     ngAfterViewInit() {
         if(!this.content) {
             throw new Error('Child not initialised!');
         }
 
-        this.modal.open(this.content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+        this.modal.open(this.content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then(
             (result) => {
                 // this.closeResult = `Closed with: ${result}`;
             },
