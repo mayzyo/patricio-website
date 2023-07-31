@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable, map, share, tap, from } from 'rxjs';
-import { AdminService } from '../../services/admin.service';
-import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
-import { SocialMedia } from 'src/app/models/social-media';
-import { Profile } from 'src/app/models/profile';
+import { map, share } from 'rxjs/operators';
+import { Auth, signInWithPopup, GoogleAuthProvider, user, signOut } from '@angular/fire/auth';
+import { faFacebookSquare, faLinkedin, faInstagram, faWeixin, faWeibo } from '@fortawesome/free-brands-svg-icons';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import { EditorService } from 'src/app/admin/services/editor.service';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 
 @Component({
     selector: 'app-footer',
@@ -13,48 +12,36 @@ import { Profile } from 'src/app/models/profile';
     styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-    protected readonly socialMedia$: Observable<SocialMedia>;
     protected readonly faFacebookSquare = faFacebookSquare;
+    protected readonly faLinkedin = faLinkedin;
+    protected readonly faInstagram = faInstagram;
+    protected readonly faWeixin = faWeixin;
+    protected readonly faWeibo = faWeibo;
+    protected readonly faEdit = faEdit;
+    
+    protected readonly socialMedia$ = this.profile.socialMedia$;
+    protected readonly isSignedIn$ = user(this.auth).pipe(
+        map(res => res != null),
+        share()
+    );
 
     constructor(
         private auth: Auth,
-        private firestore: Firestore,
-        private admin: AdminService
-    ) {
-        const profile$ = collectionData(collection(this.firestore, 'profile')) as Observable<Profile[]>;
-        this.socialMedia$ = profile$.pipe(
-            map(res => res[0].socialMedia),
-            share()
-        );
-    }
+        private profile: ProfileService,
+        private editor: EditorService
+    ) { }
 
-    login() {
+    signIn() {
         const provider = new GoogleAuthProvider();
-        from(signInWithPopup(this.auth, provider))
-            .subscribe(res => console.log('tester', res));
-        // localStorage.setItem('AUTH', 'true');
-        // //creating an invisible element 
-        // var element = document.createElement('a');
-        // element.setAttribute('href', '/.auth/login/google?post_login_redirect_url=/home');
-        // document.body.appendChild(element);
-        // //onClick property 
-        // element.click();
-        // document.body.removeChild(element);
+        signInWithPopup(this.auth, provider);
     }
 
-    logout() {
-        localStorage.removeItem('AUTH');
-        //creating an invisible element 
-        var element = document.createElement('a');
-        element.setAttribute('href', '/.auth/logout?post_logout_redirect_uri=/home');
-        document.body.appendChild(element);
-        //onClick property 
-        element.click();
-        document.body.removeChild(element);
+    signOut() {
+        signOut(this.auth);
     }
 
-    loggedIn = this.admin.loggedIn;
-    edit(editorType: string) {
-        this.admin.open(editorType);
+    async openSocialMediaAdmin() {
+        const { ProfileComponent } = await import("../../../admin/components/profile/profile.component");
+        this.editor.open(ProfileComponent);
     }
 }

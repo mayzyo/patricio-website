@@ -23,48 +23,52 @@
                 </div>
 
                 <div class="col-md-3 col-sm-12">
-                    <h1 class="h4 ml-3">
+                    <div class="d-flex align-items-center ml-3">
+                        <h1 class="h4 m-0">Social Media</h1>
+
+                        <button *ngIf="isSignedIn$ | async" class="btn btn-link" (click)="openSocialMediaAdmin()">
+                            <fa-icon [icon]="faEdit" size="lg"></fa-icon>
+                        </button>            
+                    </div>
+                    <!-- <h1 class="h4 ml-3">
                         Social Media
-                        <button *ngIf="loggedIn" class="btn btn-link" (click)="edit('social-media')">
-                            <fa-icon [icon]="['far', 'edit']" size="lg"></fa-icon>
+                        <button *ngIf="isSignedIn$ | async" class="btn btn-link" (click)="openSocialMediaAdmin()">
+                            <fa-icon [icon]="faEdit" size="lg"></fa-icon>
                         </button>
-                    </h1>
+                    </h1> -->
                     <ul class="nav flex-column" *ngIf="(socialMedia$ | async) as socialMedia">
 
                         <li class="nav-item" *ngIf="socialMedia.facebook">
                             <a class="nav-link" href="{{ socialMedia.facebook }}">
-                                <fa-icon [icon]="faFacebookSquare" size="lg"
-                                    [styles]="{ 'color': '#4267B2'}"></fa-icon>
+                                <fa-icon [icon]="faFacebookSquare" size="lg" [styles]="{ 'color': '#4267B2'}"></fa-icon>
                                 <div class="align-middle d-inline ml-3">Facebook</div>
                             </a>
                         </li>
 
                         <li class="nav-item" *ngIf="socialMedia.linkedIn">
                             <a class="nav-link" href="{{ socialMedia.linkedIn }}">
-                                <fa-icon [icon]="['fab', 'linkedin']" size="lg" [styles]="{ 'color': 'teal'}"></fa-icon>
+                                <fa-icon [icon]="faLinkedin" size="lg" [styles]="{ 'color': 'teal'}"></fa-icon>
                                 <div class="align-middle d-inline ml-3">LinkedIn</div>
                             </a>
                         </li>
 
                         <li class="nav-item" *ngIf="socialMedia.instagram">
                             <a class="nav-link" href="{{ socialMedia.instagram }}">
-                                <fa-icon [icon]="['fab', 'instagram']" size="lg"
-                                    [styles]="{ 'color': 'orange'}"></fa-icon>
+                                <fa-icon [icon]="faInstagram" size="lg" [styles]="{ 'color': 'orange'}"></fa-icon>
                                 <div class="align-middle d-inline ml-3">Instagram</div>
                             </a>
                         </li>
 
                         <li class="nav-item" *ngIf="socialMedia.weChat">
                             <a class="nav-link" href="{{ socialMedia.weChat }}">
-                                <fa-icon [icon]="['fab', 'weixin']" size="lg"
-                                    [styles]="{ 'color': '#7bb32e'}"></fa-icon>
+                                <fa-icon [icon]="faWeixin" size="lg" [styles]="{ 'color': '#7bb32e'}"></fa-icon>
                                 <div class="align-middle d-inline ml-3">微信</div>
                             </a>
                         </li>
 
                         <li class="nav-item" *ngIf="socialMedia.weibo">
                             <a class="nav-link" href="{{ socialMedia.weibo }}">
-                                <fa-icon [icon]="['fab', 'weibo']" size="lg" [styles]="{ 'color': '#df2029'}"></fa-icon>
+                                <fa-icon [icon]="faWeibo" size="lg" [styles]="{ 'color': '#df2029'}"></fa-icon>
                                 <div class="align-middle d-inline ml-3">新浪微博</div>
                             </a>
                         </li>
@@ -82,10 +86,7 @@
                             <a class="nav-link" routerLink="/terms-of-service">Terms of Service | 条款及规则</a>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link btn btn-link" *ngIf="!loggedIn" (click)="login()">
-                                Admin Portal
-                            </button>
-                            <button class="nav-link btn btn-link" *ngIf="loggedIn" (click)="logout()">
+                            <button class="nav-link btn btn-link" *ngIf="isSignedIn$ | async; else login" (click)="signOut()">
                                 Sign out
                             </button>
                         </li>
@@ -105,3 +106,9 @@
         </div>
     </div>
 </div>
+
+<ng-template #login>
+    <button class="nav-link btn btn-link" (click)="signIn()">
+        Admin Portal
+    </button>
+</ng-template>
