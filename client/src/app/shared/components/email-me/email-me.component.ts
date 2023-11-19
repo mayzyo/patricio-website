@@ -1,22 +1,27 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EmailService } from '../../services/email.service';
-import { Email, Purpose, Sender } from 'src/app/models/email';
+import { Email, Purpose, Sender } from '../../../models/email';
 
 @Component({
     selector: 'app-email-me',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, FontAwesomeModule],
     templateUrl: './email-me.component.html',
-    styleUrls: ['./email-me.component.scss'],
+    styleUrl: './email-me.component.scss'
 })
 export class EmailMeComponent {
-    updateSuccess$ = new BehaviorSubject<string | null>(null);
-    success$ = this.updateSuccess$.pipe(
-        debounceTime(2000)
-    )
+    private readonly updateSuccess$ = new BehaviorSubject<string | null>(null);
+    protected readonly success$ = this.updateSuccess$.pipe(debounceTime(2000));
 
-    attemptedSubmit = false;
-    submitting = false;
+    attemptedSubmit = signal(false);
+    submitting = signal(false);
 
     contactDetail = this.fb.group({
         message: ['', Validators.required],
@@ -25,15 +30,19 @@ export class EmailMeComponent {
         purpose: [null],
     });
 
-    constructor(private fb: FormBuilder, private emails: EmailService) { }
+    constructor(private fb: FormBuilder, private email: EmailService) { }
+
+    onClose(): void {
+        this.updateSuccess$.next(null);
+    }
 
     onSubmit() {
-        this.attemptedSubmit = true;
+        this.attemptedSubmit.set(true);
 
-        if (this.contactDetail.valid && !this.submitting) {
+        if (this.contactDetail.valid && !this.submitting()) {
             this.updateSuccess$.next(`message sending...`);
 
-            this.submitting = true;
+            this.submitting.set(true);
             const email: Email = {
                 message: this.contactDetail.get('message')?.value ?? '',
                 sender: this.contactDetail.get('sender')?.value ?? '',
@@ -41,11 +50,11 @@ export class EmailMeComponent {
                 purpose: this.contactDetail.get('purpose')?.value ?? Purpose.OTHER
             }
 
-            this.emails.sendEmail(email).subscribe(() => {
+            this.email.sendEmail(email).subscribe(() => {
                 this.updateSuccess$.next(`thanks for your enquiry!`);
                 this.contactDetail.reset();
-                this.submitting = false;
-                this.attemptedSubmit = false;
+                this.submitting.set(false);
+                this.attemptedSubmit.set(false);
             });
         }
     }

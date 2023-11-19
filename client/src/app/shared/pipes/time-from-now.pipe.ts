@@ -1,15 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Observable, interval } from 'rxjs';
 
 @Pipe({
     name: 'timeFromNow',
+    standalone: true,
     pure: false
 })
 export class TimeFromNowPipe implements PipeTransform {
-    value!: Date;
-    timer!: Observable<string>;
+    private value?: Date;
 
-    transform(obj: any): any {
+    transform(obj: Date | null): string | null {
         if (obj instanceof Date) {
             this.value = obj;
 
@@ -39,4 +38,5 @@ export class TimeFromNowPipe implements PipeTransform {
 
         return obj;
     }
+
 }

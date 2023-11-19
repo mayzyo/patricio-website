@@ -1,0 +1,11 @@
+@if (viewOnly$ | async) {
+    @if (icon) {
+        <fa-icon [classes]="['text-secondary']" [icon]="icon" size="2x"></fa-icon>
+    }
+} @else {
+    <button class="btn btn-link" (click)="editClick.emit()">
+        <fa-icon [icon]="faEdit" size="2x"></fa-icon>
+    </button>
+}
+
+<h1 class="h2 m-0">{{ text }}</h1>

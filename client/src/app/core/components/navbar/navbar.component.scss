@@ -13,6 +13,40 @@
     margin-left: 1rem;
 }
 
+.name {
+    animation: name .4s ease-in forwards;
+    position: absolute;
+    top: 1.5rem;
+}
+
+.reverse.name {
+    animation: name-reverse .4s ease-in forwards;
+}
+
+@keyframes name {
+    0% {
+        transform: none;
+        filter: blur(5px);
+    }
+
+    100% {
+        transform: translateY(-7rem) skewY(20deg) scaleY(5);
+        filter: none;
+    }
+}
+
+@keyframes name-reverse {
+    0% {
+        transform: translateY(7rem) skewY(-20deg) scaleY(5);
+        filter: blur(5px);
+    }
+
+    100% {
+        transform: none;
+        filter: none;
+    }
+}
+
 @include media-breakpoint-up(lg) {
     .sub-label {
         font-size: 0.75rem;

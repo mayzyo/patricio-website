@@ -6,10 +6,12 @@ describe('EmailMeComponent', () => {
   let component: EmailMeComponent;
   let fixture: ComponentFixture<EmailMeComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [EmailMeComponent]
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [EmailMeComponent]
+    })
+    .compileComponents();
+    
     fixture = TestBed.createComponent(EmailMeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

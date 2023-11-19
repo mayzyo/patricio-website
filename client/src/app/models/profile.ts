@@ -5,7 +5,17 @@ export interface Profile {
     
     email: string;
 
-    biography: string;
+    biographyEn: string;
 
-    socialMedia: SocialMedia;
+    biographyCh: string;
+
+    facebook?: string;
+
+	linkedIn?: string;
+
+	instagram?: string;
+
+	weChat?: string;
+
+	weibo?: string;
 }

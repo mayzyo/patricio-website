@@ -1,0 +1,76 @@
+<div class="row">
+    @for(song of songs$ | async; track song.id) {
+        <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3">
+            <div class="card bg-dark text-white" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+
+                <img
+                    class="card-img square"
+                    default="assets/images/record-vinyl-solid.svg"
+                    [src]="buildImage(song.thumbnail, song.coverId) | async"
+                    [style.filter]="hoverTarget() == song || playerTarget() == song ? 'opacity(.5) blur(5px)' : ''"
+                />
+
+                <div class="card-img-overlay">
+                    @if(hoverTarget() == song || playerTarget() == song) {
+                        @if(playerTarget() == song) {
+                            @if((loading$ | async) == true) {
+                                <!-- Loading State -->
+                                <div class="d-flex justify-content-center align-items-center h-100" (click)="back(song)">
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                </div>
+                            } @else {
+                                <!-- Playing State -->
+                                <div class="d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <h5 class="card-title">{{ song.title }}</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="card-text my-2">{{ song.genre }}</p>
+                                            <div>
+                                                <button class="btn btn-link" (click)="redirect(song)" [hidden]="!song.soundCloud">
+                                                    <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'"></fa-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <audio controls autoplay [src]="audio()"></audio>
+                                </div>
+                            }
+                        } @else {
+                            <!-- Hover State -->
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <button class="btn btn-link text-white" (click)="play(song)" [hidden]="!song.audioId">
+                                    <fa-icon [icon]="faCirclePlay" size="2x"></fa-icon>
+                                </button>
+                                <a class="btn btn-link text-white" [routerLink]="'/discography/' + song.id">
+                                    <fa-icon [icon]="faCircleInfo" size="2x"></fa-icon>
+                                </a>
+                            </div>
+                        }
+                    } @else {
+                        <!-- Neutral State -->
+                        <div class="d-flex flex-column justify-content-between h-100">
+                            <div>
+                                <h5 class="card-title">{{ song.title }}</h5>
+                                <p class="card-text my-2">{{ song.genre }}</p>
+                            </div>
+                            <small class="card-text">
+                                {{ song.date.toDate() | date:'fullDate' }}
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mb-5 justify-content-center">
+    <div class="col-auto">
+        <button class="btn btn-secondary btn-lg shadow text-white" (click)="showMore()" [hidden]="!more()">
+            Show More
+        </button>
+    </div>
+</div>

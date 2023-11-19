@@ -1,0 +1,28 @@
+@import "../../../../mixin.scss";
+
+.background {
+    background:
+        linear-gradient($tertiary 0%, red 90%), 
+        linear-gradient(to right, $tertiary 0%, yellow 90%), 
+        url('/assets/images/home-banner.jpg') 30px,
+        url('/assets/images/home-banner.jpg') 20px;
+    background-blend-mode: screen, difference, lighten;
+    background-size: cover;
+    background-position: center;
+    width: 105%;
+    margin-left: -5%;
+}
+
+.scrolldown {
+    top: 90vh;
+    animation: scrolldown 6s ease-out infinite;
+}
+  
+@keyframes scrolldown {
+    0% { transform: translateY(0); opacity: 1; }
+    80% { transform: translateY(0); opacity: 1; }
+    85% { transform: translateY(5vh); opacity: .5; }
+    90% { transform: translateY(0); opacity: 1; }
+    95% { transform: translateY(5vh); opacity: .5; }
+    100% { transform: translateY(0); opacity: 1; }
+}

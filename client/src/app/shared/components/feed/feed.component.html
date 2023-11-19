@@ -1,0 +1,40 @@
+<ul class="list-group list-group-flush">
+    @for(data of _dataSource(); track data.id) {
+        <li class="fade-in list-group-item d-flex align-items-center">
+            @if(!data.link) {
+                <fa-icon
+                    [icon]="faBullhorn"
+                    size="3x"
+                    [classes]="['mr-3']"
+                    [styles]="{ 'color': '#DF6795' }"
+                >
+                </fa-icon>
+            }
+            <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                <p class="mb-0" [class.h5]="data.link" [innerHTML]="data.description || data.title"></p>
+                @if(!data.link) {
+                    <small class="text-right">
+                        {{ data.date.toString() }}
+                    </small>
+                }
+                @if(data.link) {
+                    @if(showDate) {
+                        <a [href]="data.link" target="_blank">
+                            {{ data.date.toDate() | timeFromNow }} left! {{ data.description ? data.title : "event detail here..." }}
+                        </a>
+                    } @else {
+                        <a [href]="data.link" target="_blank">
+                            {{ data.description ? data.title : "event detail here..." }}
+                        </a>
+                    }
+                }
+            </div>
+    
+            @if(data.link) {
+                <a [href]="data.link" target="_blank">
+                    <img class="event-img border border-dark" [src]="data.thumbnail">
+                </a>
+            }
+        </li>
+    }
+</ul>

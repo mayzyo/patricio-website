@@ -1,0 +1,10 @@
+@if(upcomingEvents$ | async; as upcomingEvents) {
+    <div style="min-height: 30vh">
+        <h1 class="lead text-center">Upcoming Events | 最新活动</h1>
+        <app-feed [dataSource]="upcomingEvents" [showDate]="true"></app-feed>
+    </div>
+} @else {
+    <h1 class="lead text-center">
+        No upcoming events | 暂无新活动
+    </h1>
+}

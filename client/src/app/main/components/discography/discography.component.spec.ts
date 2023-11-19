@@ -6,10 +6,12 @@ describe('DiscographyComponent', () => {
   let component: DiscographyComponent;
   let fixture: ComponentFixture<DiscographyComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [DiscographyComponent]
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DiscographyComponent]
+    })
+    .compileComponents();
+    
     fixture = TestBed.createComponent(DiscographyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

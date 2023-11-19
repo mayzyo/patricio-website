@@ -1,0 +1,36 @@
+<app-landing-banner [arrowDisabled]="arrowDisabled()"></app-landing-banner>
+
+<div class="container my-5 py-5">
+    <div #SpotlightRef>
+        <app-title
+            class="mb-4"
+            text="Spotlight | 作品一览"
+            [icon]="faRecordVinyl"
+            (editClick)="openMusicEditor()"
+        >
+        </app-title>
+        
+        <app-spotlight class="row" [triggered]="spotlightTriggered()"></app-spotlight>
+    </div>
+
+    <hr/>
+
+    <div #UpcomingRef>
+        <app-upcoming-event [triggered]="upcomingTriggered()"></app-upcoming-event>
+    </div>
+</div>
+
+<div #BiographyRef class="container-fluid bg-dark text-white py-5">
+    <div class="container py-5">
+        <app-title
+            class="mb-4"
+            text="Biography | 简介"
+            [icon]="faPortrait"
+            (editClick)="openBiographyEditor()"
+        >
+        </app-title>
+        <app-biography class="row" [triggered]="biographyTriggered()"></app-biography>
+    </div>
+</div>
+
+<app-email-me></app-email-me>

@@ -1,81 +1,15 @@
-<app-banner [quote]="quote$ | async" [backgroundUrl]="'banner-2.jpg'" [altColour]="'#C61C49'"></app-banner>
+<app-banner backgroundUrl="banner-2.jpg" altColour="#C61C49"></app-banner>
 
-<button class="btn btn-link ml-5" *ngIf="loggedIn" (click)="edit('music')">
-    <fa-icon [icon]="faEdit" size="2x"></fa-icon>
-    <h4 class="d-inline ml-2">Edit Music Backlog</h4>
-</button>
-
-<h1 class="d-none">Discography | 作品集</h1>
-
-<div class="container my-5 pt-5" style="min-height: 50vh;">
-    
+<main class="container my-5 pt-5">
     <div class="row">
-        <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3" *ngFor="let song of songs$ | async">
-            <div class="card bg-dark text-white" (mouseenter)="hover = song" (mouseleave)="onMouseLeave()">
+        <app-title
+            class="d-none flex-row-reverse justify-content-end mb-4"
+            text="Discography | 作品集"
+        >
+        </app-title>
 
-                <!-- Image overlay -->
-                <img class="card-img square" [ngStyle]="{ filter: hoverStyle(song), height: '14rem' }" [src]="(song.cover$ | async) || ''" default="assets/images/record-vinyl-solid.svg">
-
-                <div class="card-img-overlay" [ngSwitch]="song.state">
-
-                    <!-- Neutral State -->
-                    <div class="d-flex flex-column justify-content-between h-100" *ngSwitchCase="PlayerState.INACTIVE" (click)="activate(song)">
-                        <div [ngClass]="hover == song ? 'd-none' : ''">
-                            <h5 class="card-title">{{ song.title }}</h5>
-                            <p class="card-text my-2">{{ song.genre }}</p>
-                        </div>
-                        <small class="card-text" [ngClass]="hover == song ? 'd-none' : ''">
-                            {{ song.date | date:'fullDate' }}
-                        </small>
-                    </div>
-
-                    <!-- Active State -->
-                    <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="PlayerState.ACTIVE">
-                        <button class="btn btn-link text-white" (click)="play(song)" [hidden]="!song.audioKey">
-                            <fa-icon [icon]="['far', 'play-circle']" size="2x"></fa-icon>
-                        </button>
-                        <a class="btn btn-link text-white" [routerLink]="'/discography/' + song.id">
-                            <fa-icon icon="info-circle" size="2x"></fa-icon>
-                        </a>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div class="d-flex justify-content-center align-items-center h-100" *ngSwitchCase="PlayerState.LOADING" (click)="back(song)">
-                        <div class="spinner-grow text-primary" role="status"></div>
-                        <div class="spinner-grow text-primary" role="status"></div>
-                        <div class="spinner-grow text-primary" role="status"></div>
-                    </div>
-
-                    <!-- Playing State -->
-                    <div class="flex-column justify-content-between h-100" [ngClass]="song.state == PlayerState.LOADING ? 'd-none' : 'd-flex'" *ngIf="song.state == PlayerState.LOADING || song.state == PlayerState.PLAYING">
-                        <div>
-                            <h5 class="card-title">{{ song.title }}</h5>
-                            <div class="d-flex justify-content-between">
-                                <p class="card-text my-2">{{ song.genre }}</p>
-                                <div>
-                                    <button class="btn btn-link" (click)="redirect(song)" [hidden]="!song.soundCloud">
-                                        <fa-icon [icon]="['fab', 'soundcloud']" [styles]="{ 'color': '#FF4300' }"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <audio #Player (play)="onPlay($event)" [src]="(song.audio$ | async) || ''" controls style="width: 130%; transform: scale(0.8); margin-left: -15%;"></audio>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        <app-song-backlog class="container"></app-song-backlog>
     </div>
-
-    <div class="row mb-5 justify-content-center">
-        <div class="col-auto">
-            <button class="btn btn-secondary btn-lg shadow" (click)="showMore()" [hidden]="!More">
-                Show More
-            </button>
-        </div>
-    </div>
-</div>
+</main>
 
 <app-email-me></app-email-me>

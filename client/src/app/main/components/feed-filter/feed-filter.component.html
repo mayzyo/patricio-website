@@ -1,0 +1,11 @@
+<div class="btn-group mr-3" role="group">
+    <button type="button" class="btn btn-outline-secondary" [class.active]="_selected() == FeedFilter.ALL" (click)="filterChange.emit(FeedFilter.ALL)">
+        All
+    </button>
+    <button type="button" class="btn btn-outline-secondary" [class.active]="_selected() == FeedFilter.EVENT" (click)="filterChange.emit(FeedFilter.EVENT)">
+        Events
+    </button>
+    <button type="button" class="btn btn-outline-secondary" [class.active]="_selected() == FeedFilter.POST" (click)="filterChange.emit(FeedFilter.POST)">
+        Posts
+    </button>
+</div>

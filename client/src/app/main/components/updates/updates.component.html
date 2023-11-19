@@ -1,0 +1,35 @@
+<app-banner backgroundUrl="banner-1.jpg" altColour="#216B8C"></app-banner>
+
+<main class="container my-5 pt-5">
+    <div class="row">
+
+        <div class="col-lg-9 col-md-12">
+            <app-title
+                class="flex-row-reverse justify-content-end mb-4"
+                text="Recent Announcements | 近期动态"
+            >
+            </app-title>
+
+            <br />
+
+            <app-feed-filter
+                [selected]="selectedFilter()"
+                (filterChange)="selectedFilter.set($event)"
+            >
+            </app-feed-filter>
+
+            <br />
+
+            <app-feed [dataSource]="feed$ | async"></app-feed>
+        </div>
+
+        @if(history$ | async; as history) {
+            <div class="col-lg-3 col-md-12 d-none d-md-block">
+                <app-feed-history [dataSource]="history" (scrolled)="onScroll()"></app-feed-history>
+            </div>
+        }
+
+    </div>
+</main>
+
+<app-email-me></app-email-me>

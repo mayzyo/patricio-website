@@ -1,0 +1,51 @@
+@for(song of songs$ | async; track song.id) {
+    @if ($index == 0) {
+        <!-- One large block -->
+        <div class="col-md-8 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+            <a class="fade-in card bg-dark text-white w-100 card-big" style="height:20rem; white-space: pre-line;" [href]="song.url">
+                <img class="card-img" [src]="buildImage(song.thumbnail, song.coverId) | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
+                <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
+                    <h2 class="display-3 card-text flex-grow-1 d-flex justify-content-end align-items-end">
+                        {{ song.title }} | <span class="h3">{{ song.genre }}</span>
+                    </h2>
+                </div>
+            </a>
+        </div>
+    } @else if($index == 1) {
+        <!-- Second large block -->
+        <div class="col-md-4 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+            <a class="fade-in card bg-dark text-white w-100 card-big" style="height: 20rem;" [href]="song.url">
+                <img class="card-img" [src]="buildImage(song.thumbnail, song.coverId) | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
+                <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
+                    <h2 class="h1 card-text">{{ song.title }}</h2>
+                    <p class="h3 card-text flex-grow-1 d-flex d-flex justify-content-end align-items-end">
+                        {{ song.genre }}
+                    </p>
+                </div>
+            </a>
+        </div>
+    } @else if($index < 5) {
+        <!-- Wide sized blocks -->
+        <div class="col-md-4 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+            <a class="fade-in card bg-dark text-white w-100 card-mid" style="height: 8rem;" [href]="song.url">
+                <img class="card-img" [src]="buildImage(song.thumbnail, song.coverId) | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
+                <div class="card-img-overlay" [style.opacity]="hoverTarget() == song ? '1' : '0'">
+                    <h2 class="h5 card-text">{{ song.title }}</h2>
+                    <p class="card-text">{{ song.genre }}</p>
+                </div>
+            </a>
+        </div>
+    } @else {
+        <!-- Small blocks, all remaining -->
+        <div class="col-md-3 d-md-block d-none p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+            <a class="fade-in card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="song.url">
+                <img class="card-img" [src]="buildImage(song.thumbnail, song.coverId) | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
+                <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
+                    <h2 class="h4 card-text flex-grow-1 d-flex align-items-end text-right">
+                        {{ song.title }}
+                    </h2>
+                </div>
+            </a>
+        </div>
+    }
+}

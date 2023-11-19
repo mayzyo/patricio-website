@@ -7,11 +7,23 @@
 @import "bootstrap/scss/mixins/_breakpoints";
 
 h1, h2, h3, h4, p {
-  white-space: pre-line;
+    white-space: pre-line;
+}
+  
+.fade-in {
+    animation: fade-in .8s ease forwards;
 }
 
-textarea {
-    resize: none;
+@keyframes fade-in {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: none;
+        opacity: 1;
+    }
 }
 
 .card-img {
@@ -21,20 +33,9 @@ textarea {
 }
 
 .event-img {
-  object-fit: cover; 
-  width: 16rem; 
-  height: 4rem;
-}
-
-.sub-bg.jumbotron-fluid {
-  background: map-get($theme-colors, 'primary');
-  -moz-box-shadow:    inset 0 8px 10px -10px #000000;
-  -webkit-box-shadow: inset 0 8px 10px -10px #000000;
-  box-shadow:         inset 0 8px 10px -10px #000000;
-}
-
-.biography {
-  line-height: 200%;
+    object-fit: cover;
+    width: 16rem;
+    height: 4rem;
 }
 
 .infinite-scroll {
@@ -65,97 +66,25 @@ textarea {
     animation: infinite 3s linear infinite;
 }
 
-@keyframes infinite {
-    0% {
-      width: 0%;
-    }
-    100% {
-      width: 100%;
-    }
-}
-
-.fade-in {
-  animation: fade-in .8s ease forwards;
-}
-
-@keyframes fade-in {
-    0% {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    100% {
-        transform: none;
-        opacity: 1;
-    }
-}
-
-.name {
-  animation: name .4s ease-in forwards;
-  position: absolute;
-  top: 1.5rem;
-}
-
-.reverse.name {
-  animation: name-reverse .4s ease-in forwards;
-}
-
-@keyframes name {
-  0% {
-    transform: none;
-    filter: blur(5px);
-  }
-
-  100% {
-    transform: translateY(-7rem) skewY(20deg) scaleY(5);
-    filter: none;
-  }
-}
-
-@keyframes name-reverse {
-  0% {
-    transform: translateY(7rem) skewY(-20deg) scaleY(5);
-    filter: blur(5px);
-  }
-
-  100% {
-    transform: none;
-    filter: none;
-  }
-}
-
-.scrolldown {
-  top: 90vh;
-  animation: scrolldown 6s ease-out infinite;
-}
-
-@keyframes scrolldown {
-  0% { transform: translateY(0); opacity: 1; }
-  80% { transform: translateY(0); opacity: 1; }
-  85% { transform: translateY(5vh); opacity: .5; }
-  90% { transform: translateY(0); opacity: 1; }
-  95% { transform: translateY(5vh); opacity: .5; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
 @include media-breakpoint-down(md) {
-  .quote.display-4 {
-    font-size: 2rem;
-  }
+    .quote.display-4 {
+        font-size: 2rem;
+    }
 
-  .name {
-    top: .75rem;
-  }
+    .name {
+        top: .75rem;
+    }
 
-  .card-img-overlay {
-    opacity: 1 !important;
-  }
+    .card-img-overlay {
+        opacity: 1 !important;
+    }
 
-  .card-img {
-    opacity: .5;
-  }
+    .card-img {
+        opacity: .5;
+    }
 
-  .event-img {
-    width: 5rem; 
-    height: 5rem;
-  }
+    .event-img {
+        width: 5rem;
+        height: 5rem;
+    }
 }

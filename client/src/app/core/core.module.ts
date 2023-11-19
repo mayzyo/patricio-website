@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbCollapseModule, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
-import { FooterComponent } from './components/footer/footer.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { RouterModule } from '@angular/router';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 
 
 
 @NgModule({
   declarations: [
+    NavbarComponent,
     FooterComponent,
-    NavbarComponent
+    SocialMediaComponent
   ],
   imports: [
     CommonModule,
-    BrowserAnimationsModule,
     RouterModule,
     FontAwesomeModule,
     NgbCollapseModule,

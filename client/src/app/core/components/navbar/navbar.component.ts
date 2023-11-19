@@ -1,41 +1,42 @@
+import { Component, ChangeDetectionStrategy, TemplateRef, signal, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { interval, scan, share } from 'rxjs';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { interval } from 'rxjs';
-import { scan } from 'rxjs/operators';
 
 @Component({
     selector: 'app-navbar',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
-    readonly animState$ = interval(20000).pipe(
-        scan(acc => !acc, false)
+    protected readonly animState$ = interval(20000).pipe(
+        scan(acc => !acc, false),
+        share()
     );
 
-    isCollapsed = true;
-    currentUrl: string = '';
+    protected isCollapsed = signal(true);
+    protected currentUrl = signal('');
 
     constructor(private location: Location, private offcanvasService: NgbOffcanvas) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.location.onUrlChange(res => {
-            this.currentUrl = res;
-            this.isCollapsed = true;
+            this.currentUrl.set(res);
+            this.isCollapsed.set(true);
         });
     }
 
-    open(content: any) {
-        this.isCollapsed = false;
+    open(content: TemplateRef<unknown>) {
+        this.isCollapsed.set(false);
 
 		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title', position: 'end' }).result.then(
 			(result) => {
-                this.isCollapsed = true;
+                this.isCollapsed.set(true);
 				// this.closeResult = `Closed with: ${result}`;
 			},
 			(reason) => {
-                this.isCollapsed = true;
+                this.isCollapsed.set(true);
 				// this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 			},
 		);

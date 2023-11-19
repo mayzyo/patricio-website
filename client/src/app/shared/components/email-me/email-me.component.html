@@ -10,17 +10,19 @@
                 <textarea 
                     class="form-control" 
                     rows="9" 
-                    placeholder="write your message here thanks..."
+                    placeholder="write your message here, thanks..."
                     id="message" 
                     name="message"
                     formControlName="message"
                     required
                 >
                 </textarea>
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && contactDetail.get('message')?.invalid">
-                    Please leave a quick message for me
-                </div>
-                
+                @if(attemptedSubmit() && contactDetail.get('message')?.invalid) {
+                    <div class="text-danger font-italic">
+                        Please leave a quick message for me
+                    </div>
+                }
+
             </div>
             <div class="col-md-6 col-sm-12">
 
@@ -57,15 +59,17 @@
                     id="sender" 
                     name="sender"
                     formControlName="sender"
-                    placeholder="e.g. email_address@provider.com..."
+                    placeholder="name@example.com..."
                     required
                     email
                 >
-                <div class="text-danger font-italic" *ngIf="attemptedSubmit && contactDetail.get('sender')?.invalid">
-                    Please provide a valid email address
-                </div>
+                @if(attemptedSubmit() && contactDetail.get('sender')?.invalid) {
+                    <div class="text-danger font-italic" >
+                        Please provide a valid email address
+                    </div>
+                }
 
-                <button class="btn btn-secondary mt-2 shadow" type="submit" [disabled]="submitting">
+                <button class="btn btn-secondary mt-2 shadow text-white" type="submit" [disabled]="submitting">
                     Send | 发送
                 </button>
 
@@ -75,8 +79,11 @@
     </div>
 </div>
 
-<div style="position: fixed; top: 5px; left: 0; width: 100%; z-index: 3; margin: auto; text-align: center;">
-    <ngb-alert *ngIf="success$ | async as successMessage" type="info" (close)="updateSuccess$.next(null)">
-        {{ successMessage }}
-    </ngb-alert>
-</div>
+@if(success$ | async; as successMessage) {
+    <div style="position: fixed; top: 5px; left: 0; width: 100%; z-index: 3; margin: auto; text-align: center;">
+        <ngb-alert type="info" (close)="onClose()">
+            {{ successMessage }}
+        </ngb-alert>
+    </div>
+}
+
