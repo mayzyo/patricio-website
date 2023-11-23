@@ -11,8 +11,8 @@ export const generateSong = (): Song => ({
     soundCloud: faker.internet.url(),
     coverId: faker.string.uuid(),
     audioId: faker.string.uuid(),
-    favourite: faker.datatype.boolean(),
-    articleId: faker.string.uuid(),
+    spotlight: faker.datatype.boolean(),
+    blogId: faker.string.uuid(),
 })
 
 export const generateSongs = (size = 10) => faker.helpers.multiple(generateSong, { count: size })

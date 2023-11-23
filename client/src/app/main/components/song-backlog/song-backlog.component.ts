@@ -30,10 +30,7 @@ export class SongBacklogComponent {
     protected readonly more = signal(true);
 
     constructor(private musicPlayer: MusicPlayerService) {
-        this.musicPlayer.audio$.pipe(takeUntilDestroyed()).subscribe(res => {
-            console.log('audio', res)
-            this.audio.set(res);
-        });
+        this.musicPlayer.audio$.pipe(takeUntilDestroyed()).subscribe(res => this.audio.set(res));
     }
 
     activate(song: BacklogView): void {
@@ -60,14 +57,14 @@ export class SongBacklogComponent {
         // this.musics.load();
     }
 
-    protected buildImage(thumbnail: string, coverId: string): Observable<any> {
+    protected buildImage(thumbnail?: string, coverId?: string): Observable<any> {
         return of(thumbnail);
     }
 
     private initialiseSongs(): Observable<BacklogView[]> {
         return of(generateSongs()).pipe(
             switchMap(res => from(res)),
-            map(res => ({ ...res, url: `/discography/${res.id}`, state: PlayerState.INACTIVE })),
+            map(res => ({ ...res, url: `/blog/${res.id}`, state: PlayerState.INACTIVE })),
             scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
         );
     }

@@ -1,7 +1,7 @@
 import { Timestamp } from "@angular/fire/firestore";
 
 export interface Song {
-	id: string;
+	id?: string;
 
 	title: string;
 
@@ -9,15 +9,15 @@ export interface Song {
 
 	date: Timestamp;
 
-	thumbnail: string;
+	thumbnail?: string;
 
-	soundCloud: string;
+	soundCloud?: string;
 
-	coverId: string;
+	coverId?: string;
 
 	audioId: string;
 
-	favourite: boolean;
+	spotlight: boolean;
 
-	articleId: string;
+	blogId?: string;
 }

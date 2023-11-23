@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { MediaComponent } from './components/media/media.component';
 import { PhotoGalleryComponent } from './components/photo-gallery/photo-gallery.component';
 import { GalleryModule } from 'ng-gallery';
+import { BlogComponent } from './components/blog/blog.component';
 
 
 
@@ -28,6 +29,7 @@ import { GalleryModule } from 'ng-gallery';
     FeedHistoryComponent,
     SongBacklogComponent,
     PhotoGalleryComponent,
+    BlogComponent,
   ],
   imports: [
     CommonModule,

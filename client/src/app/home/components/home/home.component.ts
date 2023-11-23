@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
 import { faPortrait, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { EditorService } from '../../../admin/services/editor.service';
 
@@ -8,7 +8,7 @@ import { EditorService } from '../../../admin/services/editor.service';
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
     @ViewChild('SpotlightRef', { static: true }) spotlightRef?: ElementRef<HTMLElement>;
     @ViewChild('UpcomingRef', { static: true }) upcomingRef?: ElementRef<HTMLElement>;
     @ViewChild('BiographyRef', { static: true }) biographyRef?: ElementRef<HTMLElement>;
@@ -22,6 +22,10 @@ export class HomeComponent {
     protected readonly biographyTriggered = signal(false);
 
     constructor(private editor: EditorService) {}
+
+    ngAfterViewInit(): void {
+        this.openSongEditor();
+    }
 
     @HostListener('window:scroll')
     onScrollEvent(): void {
@@ -39,14 +43,14 @@ export class HomeComponent {
         }
     }
 
-    async openBiographyEditor() {
-        // const { BiographyComponent } = await import("../../../admin/components/biography/biography.component");
-        // this.editor.open(BiographyComponent);
+    async openSongEditor() {
+        const { SongComponent } = await import("../../../admin/components/song/song.component");
+        this.editor.open(SongComponent);
     }
 
-    async openMusicEditor() {
-        // const { SongComponent } = await import("../../../admin/components/song/song.component");
-        // this.editor.open(SongComponent);
+    async openBiographyEditor() {
+        const { BiographyComponent } = await import("../../../admin/components/biography/biography.component");
+        this.editor.open(BiographyComponent);
     }
 
     private scrollOffset(elRef: ElementRef<HTMLElement>): boolean {

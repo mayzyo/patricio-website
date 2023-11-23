@@ -22,7 +22,7 @@ export class SpotlightComponent {
 
     protected readonly hoverTarget = signal<SpotlightView | null>(null);
 
-    protected buildImage(thumbnail: string, coverId: string): Observable<any> {
+    protected buildImage(thumbnail?: string, coverId?: string): Observable<any> {
         return of(thumbnail);
     }
 

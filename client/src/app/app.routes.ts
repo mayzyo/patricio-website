@@ -3,6 +3,7 @@ import { UpdatesComponent } from './main/components/updates/updates.component';
 import { HomeComponent } from './home/components/home/home.component';
 import { DiscographyComponent } from './main/components/discography/discography.component';
 import { MediaComponent } from './main/components/media/media.component';
+import { BlogComponent } from './main/components/blog/blog.component';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,10 @@ export const routes: Routes = [
     {
         path: 'media',
         component: MediaComponent,
+    },
+    {
+        path: 'blog/:id',
+        component: BlogComponent,
     },
     {
         path: '',
