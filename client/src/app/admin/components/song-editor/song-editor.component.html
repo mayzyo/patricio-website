@@ -1,6 +1,6 @@
 <form
     class="d-flex flex-column h-100 was-validated"
-    [class.was-validated]="validating$ | async"
+    [class.was-validated]="validating()"
     novalidate
     [formGroup]="form"
     (ngSubmit)="onSubmit()"
@@ -16,7 +16,6 @@
                 name="title"
                 placeholder="...Symphony No. 40"
                 required
-                [readOnly]="submitting()"
             >
             <div class="invalid-feedback">
                 Please give it a title.
@@ -33,7 +32,6 @@
                 name="genre"
                 placeholder="...Classical"
                 required
-                [readOnly]="submitting()"
             >
             <div class="invalid-feedback">
                 Please give it a genre.
@@ -49,7 +47,6 @@
                 id="date"
                 name="date"
                 required
-                [readOnly]="submitting()"
             >
             <div class="invalid-feedback">
                 Please select a date.
@@ -64,7 +61,6 @@
                 type="text"
                 id="soundCloud"
                 name="soundCloud"
-                [readOnly]="submitting()"
             >
         </div>
 
@@ -75,7 +71,6 @@
                 type="checkbox"
                 id="spotlight"
                 name="spotlight"
-                [readOnly]="submitting()"
             >
             <label for="spotlight" class="form-check-label">Show On Home Page</label>
         </div>
@@ -87,7 +82,7 @@
                     [props]="{ hideUploadButton: true, height: 400, disabled: submitting() }"
                     [uppy]="audioUploader"
                 />
-                @if(!audioSelected() && (validating$ | async)) {
+                @if(!(audioIdExists$ | async) && !audioSelected() && validating()) {
                     <div class="invalid-feedback d-block">
                         Please upload the song's audio file.
                     </div>

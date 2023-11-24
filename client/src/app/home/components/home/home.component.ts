@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
 import { faPortrait, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { EditorService } from '../../../admin/services/editor.service';
 
@@ -8,7 +8,7 @@ import { EditorService } from '../../../admin/services/editor.service';
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent {
     @ViewChild('SpotlightRef', { static: true }) spotlightRef?: ElementRef<HTMLElement>;
     @ViewChild('UpcomingRef', { static: true }) upcomingRef?: ElementRef<HTMLElement>;
     @ViewChild('BiographyRef', { static: true }) biographyRef?: ElementRef<HTMLElement>;
@@ -22,10 +22,6 @@ export class HomeComponent implements AfterViewInit {
     protected readonly biographyTriggered = signal(false);
 
     constructor(private editor: EditorService) {}
-
-    ngAfterViewInit(): void {
-        this.openSongEditor();
-    }
 
     @HostListener('window:scroll')
     onScrollEvent(): void {

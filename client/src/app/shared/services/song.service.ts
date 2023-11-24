@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from } from 'rxjs';
 import { map, scan, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
 import { Song } from '../../models/song';
@@ -11,8 +11,10 @@ export class SongService {
     private readonly load$ = new Subject<void>();
     private readonly refresh$ = new Subject<void>();
     private readonly pageSize = 10;
+    readonly spotlightSize = 9;
 
     readonly list$: Observable<Song[]> = this.initialiseList();
+    readonly spotlight$: Observable<Song[]> = this.initialiseFiltered('spotlight', this.spotlightSize);
     
     constructor(private firestore: Firestore) {}
 
@@ -55,5 +57,11 @@ export class SongService {
         return from(getCountFromServer(songQuery)).pipe(
             map(res => res.data().count)
         );
+    }
+
+    private initialiseFiltered(filterProp: string, size = this.pageSize): Observable<Song[]> {
+        const songs = collection(this.firestore, 'songs');
+        const filteredQuery = query(songs, orderBy('date'), where(filterProp, '==', true), limit(size));
+        return collectionData(filteredQuery) as Observable<Song[]>;
     }
 }

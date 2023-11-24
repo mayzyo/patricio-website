@@ -6,11 +6,13 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
         importProvidersFrom(BrowserAnimationsModule),
+        importProvidersFrom(HttpClientModule),
         importProvidersFrom(
             provideFirebaseApp(() => initializeApp({
                 "projectId": "patricio-website",

@@ -6,7 +6,8 @@ import { SongEditorComponent } from '../song-editor/song-editor.component';
 import { SongService } from '../../../shared/services/song.service';
 import { Song } from '../../../models/song';
 import { SongFormService } from '../../services/song-form.service';
-import { tap } from 'rxjs/operators';
+import { ImageDefaultDirective } from '../../../shared/directives/image-default.directive';
+import { SongEditorAction } from '../../interfaces/song-editor-action';
 
 @Component({
     selector: 'app-song',
@@ -16,25 +17,20 @@ import { tap } from 'rxjs/operators';
         CommonModule,
         InfiniteScrollModule,
         EditorModalComponent,
-        SongEditorComponent
+        SongEditorComponent,
+        ImageDefaultDirective
     ],
     templateUrl: './song.component.html',
     styleUrl: './song.component.scss',
     providers: [SongFormService],
 })
 export class SongComponent implements AfterViewInit {
-    protected readonly songs$ = this.song.list$.pipe(tap(res => console.log('tester', res)));
+    protected readonly songs$ = this.song.list$;
+
     protected readonly selected = signal<Song | null>(null);
 
     constructor(private song: SongService, private songForm: SongFormService) {
-        effect(() => {
-            const selected = this.selected();
-            if(selected != null) {
-                this.songForm.assign(selected);
-            } else {
-                this.songForm.clear();
-            }
-        });
+        this.RespondToSelection();
     }
 
     ngAfterViewInit(): void {
@@ -49,7 +45,22 @@ export class SongComponent implements AfterViewInit {
         
     }
 
-    protected onSaved(): void {
+    protected onAction(action: SongEditorAction): void {
+        if(action.clearSelection) {
+            this.selected.set(null);
+        }
+
         this.song.refresh();
+    }
+
+    private RespondToSelection(): void {
+        effect(() => {
+            const selected = this.selected();
+            if(selected != null) {
+                this.songForm.assign(selected);
+            } else {
+                this.songForm.clear();
+            }
+        });
     }
 }

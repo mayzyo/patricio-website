@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Observable, from, of } from 'rxjs';
-import { filter, map, scan, share, switchMap, take } from 'rxjs/operators';
-import { generateSongs } from '../../../../test/generators/song';
+import { Observable, from } from 'rxjs';
+import { filter, map, scan, share, switchMap } from 'rxjs/operators';
 import { delayInterval } from '../../../shared/operators/delay-interval';
 import { SpotlightView } from '../../interfaces/spotlight-view';
+import { SongService } from '../../../shared/services/song.service';
+import { ContentService } from '../../../shared/services/content.service';
 
 @Component({
     selector: 'app-spotlight',
@@ -22,9 +23,7 @@ export class SpotlightComponent {
 
     protected readonly hoverTarget = signal<SpotlightView | null>(null);
 
-    protected buildImage(thumbnail?: string, coverId?: string): Observable<any> {
-        return of(thumbnail);
-    }
+    constructor(private song: SongService, private content: ContentService) { }
 
     private initialiseSongs(): Observable<SpotlightView[]> {
         const triggered$ = toObservable(this._triggered).pipe(
@@ -33,10 +32,13 @@ export class SpotlightComponent {
             share()
         );
 
-        return of(generateSongs()).pipe(
+        return this.song.spotlight$.pipe(
             switchMap(res => from(res)),
-            take(9),
-            map(res => ({ ...res, url: `/discography/${res.id}` })),
+            map(res => ({
+                ...res,
+                url: `/discography/${res.id}`,
+                cover$: this.content.getImage(res.thumbnail, res.coverId)
+            })),
             delayInterval(300, triggered$),
             scan((acc, curr) => [...acc, curr], new Array<SpotlightView>()),
         );

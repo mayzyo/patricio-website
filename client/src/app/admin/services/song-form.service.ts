@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Firestore, Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, from, throwError } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Song } from '../../models/song';
+import { DateConverter } from '../../shared/classes/date-converter';
 
 @Injectable()
 export class SongFormService {
@@ -11,7 +12,7 @@ export class SongFormService {
         id: [''],
         title: ['', Validators.required],
         genre: ['', Validators.required],
-        date: [new Date()],
+        date: [''],
         soundCloud: [''],
         thumbnail: [''],
         spotlight: [false],
@@ -28,7 +29,7 @@ export class SongFormService {
             id: song.id ?? '',
             title: song.title,
             genre: song.genre,
-            date: song.date.toDate(),
+            date: DateConverter.toInput(song.date.toDate()),
             soundCloud: song.soundCloud ?? '',
             thumbnail: song.thumbnail ?? '',
             spotlight: song.spotlight,
