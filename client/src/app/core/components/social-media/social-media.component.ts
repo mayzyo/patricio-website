@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
 import { of } from 'rxjs';
 import { faFacebookSquare, faInstagram, faLinkedin, faWeibo, faWeixin } from '@fortawesome/free-brands-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import { EditorService } from '../../../admin/services/editor.service';
 
 @Component({
     selector: 'app-social-media',
@@ -9,7 +10,7 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
     templateUrl: './social-media.component.html',
     styleUrl: './social-media.component.scss'
 })
-export class SocialMediaComponent {
+export class SocialMediaComponent implements AfterViewInit {
     protected readonly faFacebookSquare = faFacebookSquare;
     protected readonly faLinkedin = faLinkedin;
     protected readonly faInstagram = faInstagram;
@@ -25,13 +26,15 @@ export class SocialMediaComponent {
         weibo: 'https://www.google.com',
     });
 
-    protected readonly _isSignedIn = signal(false);
-    @Input() set isSignedIn(value: boolean) {
-        this._isSignedIn.set(value);
+    protected readonly viewOnly$ = this.editor.viewOnly$;
+    
+    constructor(private editor: EditorService) { }
+    ngAfterViewInit(): void {
+        this.openSocialMediaEditor();
     }
 
-    protected async openSocialMediaAdmin() {
-        // const { ProfileComponent } = await import("../../../admin/components/profile/profile.component");
-        // this.editor.open(ProfileComponent);
+    protected async openSocialMediaEditor() {
+        const { SocialMediaComponent } = await import("../../../admin/components/social-media/social-media.component");
+        this.editor.open(SocialMediaComponent);
     }
 }

@@ -9,6 +9,6 @@ export const generateProfile = (): Profile => ({
     facebook: faker.internet.url(),
     linkedIn: faker.internet.url(),
     instagram: faker.internet.url(),
-    weChat: faker.internet.url(),
+    weChatQrCode: faker.image.avatar(),
     weibo: faker.internet.url(),
 })

@@ -1,21 +1,8 @@
-import { SocialMedia } from "./social-media"
+import { Biography } from "./biography";
+import { SocialMedia } from "./social-media";
 
-export interface Profile {
-    id: string;
+export interface Profile extends SocialMedia, Biography {
+    id?: string;
     
     email: string;
-
-    biographyEn: string;
-
-    biographyCh: string;
-
-    facebook?: string;
-
-	linkedIn?: string;
-
-	instagram?: string;
-
-	weChat?: string;
-
-	weibo?: string;
 }

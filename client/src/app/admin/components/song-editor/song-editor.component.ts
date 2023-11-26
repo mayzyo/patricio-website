@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { UppyAngularDashboardModule } from '@uppy/angular';
 import { EditorService } from '../../services/editor.service';
 import { SongFormService } from '../../services/song-form.service';
 import { SongEditorAction } from '../../interfaces/song-editor-action';
+import { ImageConverter } from '../../classes/image.converter';
 
 @Component({
     selector: 'app-song-editor',
@@ -31,6 +32,7 @@ import { SongEditorAction } from '../../interfaces/song-editor-action';
 export class SongEditorComponent {
     @Output() action = new EventEmitter<SongEditorAction>();
 
+    private readonly clearUploaders$ = new Subject<void>();
     protected coverUploader$ = this.initialiseUploader();
     protected audioUploader$ = this.initialiseUploader();
     protected readonly thumbnail$ = this.initialiseThumbnail(this.coverUploader$);
@@ -44,9 +46,12 @@ export class SongEditorComponent {
     protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
-    private readonly clearUploaders$ = new Subject<void>();
-
-    constructor(private http: HttpClient, private editor: EditorService, private songForm: SongFormService) {
+    constructor(
+        private destroyRef: DestroyRef,
+        private http: HttpClient,
+        private editor: EditorService,
+        private songForm: SongFormService
+    ) {
         this.RespondToSetThumbnailValue();
         this.RespondToClearUploaders();
         this.RespondToFormPristine();
@@ -59,7 +64,7 @@ export class SongEditorComponent {
     protected onSubmit(): void {
         this.validating.set(true);
 
-        if(this.form.valid) {
+        if(this.form.valid && !this.submitting()) {
             this.submitting.set(true);
             const uploadCover$ = this.initialiseUploadFile(this.coverUploader$, 'coverId');
             const uploadAudio$ = this.initialiseUploadFile(this.audioUploader$, 'audioId');
@@ -68,8 +73,10 @@ export class SongEditorComponent {
                 () => this.coverSelected() == true,
                 forkJoin([uploadCover$, uploadAudio$]),
                 uploadAudio$
-            ).pipe(switchMap(() => this.songForm.save()))
-                .subscribe(() => this.onComplete({ clearSelection: false }));
+            ).pipe(
+                switchMap(() => this.songForm.save()),
+                takeUntilDestroyed(this.destroyRef)
+            ).subscribe(() => this.onComplete({ clearSelection: false }));
         }
     }
 
@@ -78,7 +85,10 @@ export class SongEditorComponent {
 
         if(id) {
             this.submitting.set(true);
-            this.songForm.remove(id).subscribe(() => this.onComplete({ clearSelection: true }));
+            
+            this.songForm.remove(id)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe(() => this.onComplete({ clearSelection: true }));
         }
     }
 
@@ -102,7 +112,10 @@ export class SongEditorComponent {
         });
 
         this.thumbnail$.pipe(takeUntilDestroyed())
-            .subscribe(thumbnail => this.form.get('thumbnail')?.setValue(thumbnail));
+            .subscribe(thumbnail => {
+                this.form.get('thumbnail')?.setValue(thumbnail);
+                this.form.get('thumbnail')?.markAsDirty();
+            });
     }
 
     private RespondToClearUploaders(): void {
@@ -165,18 +178,7 @@ export class SongEditorComponent {
                 uploader.on('thumbnail:generated', (_, preview) => subscriber.next(preview));
             })),
             switchMap(preview => this.http.get(preview, { responseType: 'blob' })),
-            switchMap(blob => this.blobToBase64(blob))
+            switchMap(blob => ImageConverter.blobToBase64(blob))
         );
-    }
-
-    private blobToBase64(blob: Blob): Observable<string> {
-        return new Observable(subscriber => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                subscriber.next(reader.result as string);
-                subscriber.complete();
-            };
-            reader.readAsDataURL(blob);
-        });
     }
 }

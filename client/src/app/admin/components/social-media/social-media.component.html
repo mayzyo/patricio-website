@@ -1,0 +1,92 @@
+<app-editor-modal>
+    <form
+        class="was-validated"
+        novalidate
+        [class.was-validated]="validating()"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+    >
+
+        <div class="modal-body d-flex flex-column h-100">
+            <div class="form-group mb-3">
+                <label for="facebook" class="form-label">Facebook Link</label>
+                <input
+                    formControlName="facebook"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="facebook" 
+                    name="facebook"
+                />
+            </div>
+            <div class="form-group mb-3">
+                <label for="linkedIn" class="form-label">LinkedIn Link</label>
+                <input
+                    formControlName="linkedIn"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="linkedIn" 
+                    name="linkedIn"
+                />
+            </div>
+            <div class="form-group mb-3">
+                <label for="instagram" class="form-label">Instagram Link</label>
+                <input
+                    formControlName="instagram"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="instagram" 
+                    name="instagram"
+                />
+            </div>
+            <div class="form-group">
+                <label for="weibo" class="form-label">Weibo Link</label>
+                <input
+                    formControlName="weibo"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="weibo" 
+                    name="weibo"
+                />
+            </div>
+            <hr />
+            <div class="form-group mb-2">
+                <label>Wechat QR Code File</label>
+                @if(wechatQrCode() && !qrCodeSelected()) {
+                    <button
+                        class="btn btn-danger shadow m-2 d-block"
+                        [disabled]="submitting()"
+                        (click)="onRemoveWeChatQrCode()"
+                    >
+                        Remove QR Code
+                    </button>
+                } @else {
+                    @if(qrCodeUploader$ | async; as qrCodeUploader) {
+                        <uppy-dashboard
+                            [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
+                            [uppy]="qrCodeUploader"
+                        />
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                class="btn btn-secondary shadow text-white flex-grow-1 m-2"
+                type="submit"
+                [disabled]="submitting() || pristine()"
+            >
+                @if(submitting()) {
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                } @else {
+                    Change
+                }
+            </button>
+        </div>
+        
+    </form>
+</app-editor-modal>
+
+<ng-template #spinner>
+    <span class="spinner-border spinner-border-sm" role="status"></span>
+</ng-template>

@@ -20,11 +20,9 @@ export class SongFormService {
         audioId: ['']
     });
 
-    private songs = collection(this.firestore, 'songs');
-    
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
-    assign(song: Song) {
+    assign(song: Song): void {
         this.form.setValue({
             id: song.id ?? '',
             title: song.title,
@@ -55,20 +53,23 @@ export class SongFormService {
         const id = this.form.get('id')?.value;
 
         if(id) {
-            return from(updateDoc(doc(this.firestore, 'songs', id), model as any)).pipe(
+            const targetDoc = doc(this.firestore, 'songs', id);
+            return from(updateDoc(targetDoc, model as any)).pipe(
                 map(() => model),
                 take(1)
             );
         }
 
-        return from(addDoc(this.songs, model)).pipe(
+        const targetCol = collection(this.firestore, 'songs');
+        return from(addDoc(targetCol, model)).pipe(
             map(() => model),
             take(1)
         );
     }
 
     remove(id: string): Observable<void> {
-        return from(deleteDoc(doc(this.firestore, 'songs', id))).pipe(
+        const targetDoc = doc(this.firestore, 'songs', id);
+        return from(deleteDoc(targetDoc)).pipe(
             take(1)
         );
     }

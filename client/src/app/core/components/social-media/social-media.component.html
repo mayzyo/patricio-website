@@ -1,14 +1,13 @@
 <div class="d-flex align-items-center mb-2">
     <h1 class="h4 m-0">Social Media</h1>
-    @if (_isSignedIn()) {
-        <button class="btn btn-link" (click)="openSocialMediaAdmin()">
+    @if (viewOnly$ | async) {
+        <button class="btn btn-link" (click)="openSocialMediaEditor()">
             <fa-icon [icon]="faEdit" size="lg"></fa-icon>
         </button>      
     }    
 </div>
 
 <ul class="nav flex-column">
-
     @if (socialMedia$ | async; as socialMedia) {
         @if (socialMedia.facebook) {
             <li class="nav-item">
@@ -53,5 +52,4 @@
             </li>
         }
     }
-
 </ul>

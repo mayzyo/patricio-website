@@ -1,5 +1,63 @@
 <app-editor-modal>
-    <div class="modal-body d-flex">
-        <p>biography works!</p>
-    </div>
+    <form
+        class="was-validated"
+        novalidate
+        [class.was-validated]="validating()"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+    >
+        <div class="modal-body container-fluid">
+            <div class="row">
+
+                <div class="form-group col-6">
+                    <label for="biographyEn" class="form-label">English Content</label>
+                    <textarea
+                        formControlName="biographyEn"
+                        class="form-control" 
+                        rows="24"
+                        placeholder="Write something about yourself..."
+                        id="biographyEn" 
+                        name="biographyEn"
+                        required
+                    >
+                    </textarea>
+                    <div class="invalid-feedback">
+                        Please write about yourself briefly in English.
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label for="biographyCh" class="form-label">Chinese Content</label>
+                    <textarea
+                        formControlName="biographyCh"
+                        class="form-control" 
+                        rows="24"
+                        placeholder="Now write it again in Chinese..."
+                        id="biographyCh" 
+                        name="biographyCh"
+                        required
+                    >
+                    </textarea>
+                    <div class="invalid-feedback">
+                        Please write about yourself briefly in Chinese.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                class="btn btn-secondary shadow text-white flex-grow-1 m-2"
+                type="submit"
+                [disabled]="submitting() || pristine()"
+            >
+                @if(submitting()) {
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                } @else {
+                    Change
+                }
+            </button>
+        </div>
+        
+    </form>
 </app-editor-modal>

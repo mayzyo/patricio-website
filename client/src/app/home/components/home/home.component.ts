@@ -50,6 +50,6 @@ export class HomeComponent {
     }
 
     private scrollOffset(elRef: ElementRef<HTMLElement>): boolean {
-        return window.scrollY >= elRef.nativeElement.offsetTop - (window.innerHeight / 1.35)
+        return window.scrollY >= elRef.nativeElement.offsetTop - (window.innerHeight / 1.35);
     }
 }

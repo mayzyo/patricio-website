@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { delayWhen, filter, map, share } from 'rxjs/operators';
 import { faEdit, faPortrait } from '@fortawesome/free-solid-svg-icons';
-import { generateProfile } from '../../../../test/generators/profile';
-import { Profile } from '../../../models/profile';
+import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
     selector: 'app-biography',
@@ -12,39 +11,31 @@ import { Profile } from '../../../models/profile';
     templateUrl: './biography.component.html',
     styleUrl: './biography.component.scss'
 })
-export class BiographyComponent {
+export class BiographyComponent implements AfterViewInit {
+    protected readonly faPortrait = faPortrait;
+    protected readonly faEdit = faEdit;
+
     private _triggered = signal(false);
     @Input() set triggered(value: boolean) {
         this._triggered.set(value);
     }
 
-    protected readonly faPortrait = faPortrait;
-    protected readonly faEdit = faEdit;
+    protected readonly biography$ = this.initialiseBiography();
 
-    protected readonly english$: Observable<string>;
-    protected readonly chinese$: Observable<string>;
+    constructor(private profile: ProfileService) { }
 
-    constructor() {
-        const profile$ = of(generateProfile());
+    ngAfterViewInit(): void {
+        this.profile.refresh();
+    }
+
+    private initialiseBiography(): Observable<string[]> {
         const triggered$ = toObservable(this._triggered).pipe(
             filter(res => res),
             map<boolean, void>(() => null),
             share()
         );
-        this.english$ = this.initialiseEnglish(triggered$, profile$);
-        this.chinese$ = this.initialiseChinese(triggered$, profile$);
-    }
 
-    private initialiseEnglish(triggered$: Observable<void>, profile$: Observable<Profile>): Observable<string> {
-        return profile$.pipe(
-            map(({ biographyEn }) => biographyEn),
-            delayWhen(() => triggered$),
-        );
-    }
-
-    private initialiseChinese(triggered$: Observable<void>, profile$: Observable<Profile>): Observable<string> {
-        return profile$.pipe(
-            map(({ biographyCh }) => biographyCh),
+        return this.profile.biography$.pipe(
             delayWhen(() => triggered$),
         );
     }

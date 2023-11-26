@@ -1,11 +1,11 @@
 export interface SocialMedia {
-	facebook?: string;
+    facebook?: string;
 
 	linkedIn?: string;
 
 	instagram?: string;
 
-	weChat?: string;
+	weChatQrCode?: string;
 
 	weibo?: string;
 }
