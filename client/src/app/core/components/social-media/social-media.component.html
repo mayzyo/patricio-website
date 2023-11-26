@@ -34,12 +34,21 @@
             </li>
         }
     
-        @if (socialMedia.weChat) {
+        @if (socialMedia.weChatQrCode) {
             <li class="nav-item">
-                <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.weChat }}">
+                <button
+                    class="nav-link px-0 d-flex align-items-center"
+                    placement="top"
+                    [ngbPopover]="popContent"
+                    popoverTitle="微信二维码"
+                >
                     <fa-icon [icon]="faWeixin" size="lg" [style.color]="'#7bb32e'"></fa-icon>
                     <div class="ms-3">微信</div>
-                </a>
+                </button>
+
+                <ng-template #popContent>
+                    <img class="card-img" [src]="socialMedia.weChatQrCode">
+                </ng-template>
             </li>
         }
     

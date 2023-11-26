@@ -4,7 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbCollapseModule, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbOffcanvasModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { SocialMediaComponent } from './components/social-media/social-media.component';
 
 
@@ -20,7 +20,8 @@ import { SocialMediaComponent } from './components/social-media/social-media.com
     RouterModule,
     FontAwesomeModule,
     NgbCollapseModule,
-    NgbOffcanvasModule
+    NgbOffcanvasModule,
+    NgbPopoverModule
   ],
   exports: [
     NavbarComponent,
