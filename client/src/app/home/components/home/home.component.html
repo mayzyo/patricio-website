@@ -1,4 +1,4 @@
-<app-landing-banner [arrowDisabled]="arrowDisabled()"></app-landing-banner>
+<app-landing-banner [arrowDisabled]="arrowDisabled()" />
 
 <div class="container my-5 py-5">
     <div #SpotlightRef>
@@ -7,16 +7,15 @@
             text="Spotlight | 作品一览"
             [icon]="faRecordVinyl"
             (editClick)="openSongEditor()"
-        >
-        </app-title>
+        />
         
-        <app-spotlight class="row" [triggered]="spotlightTriggered()"></app-spotlight>
+        <app-spotlight class="row" [triggered]="spotlightTriggered()" />
     </div>
 
     <hr/>
 
     <div #UpcomingRef>
-        <app-upcoming-event [triggered]="upcomingTriggered()"></app-upcoming-event>
+        <app-upcoming-event [triggered]="upcomingTriggered()" />
     </div>
 </div>
 
@@ -27,10 +26,9 @@
             text="Biography | 简介"
             [icon]="faPortrait"
             (editClick)="openBiographyEditor()"
-        >
-        </app-title>
-        <app-biography class="row" [triggered]="biographyTriggered()"></app-biography>
+        />
+        <app-biography class="row" [triggered]="biographyTriggered()" />
     </div>
 </div>
 
-<app-email-me></app-email-me>
+<app-email-me />

@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { of } from 'rxjs';
-import { FeedFilter } from '../../enums/feed-filter';
-import { generateFeeds } from '../../../../test/generators/feed';
+import { ChangeDetectionStrategy, Component, effect, signal, untracked } from '@angular/core';
+import { EditorService } from '../../../admin/services/editor.service';
+import { FeedService } from '../../../shared/services/feed.service';
+import { FeedType } from '../../../shared/enums/feed-type';
 
 @Component({
     selector: 'app-updates',
@@ -10,11 +10,26 @@ import { generateFeeds } from '../../../../test/generators/feed';
     styleUrl: './updates.component.scss'
 })
 export class UpdatesComponent {
-    protected readonly selectedFilter = signal(FeedFilter.ALL);
-    protected readonly feed$ = of(generateFeeds());
-    protected readonly history$ = of(generateFeeds());
+    protected readonly selectedFilter = signal(FeedType.ALL);
+    protected readonly recent$ = this.feed.recent$;
+    protected readonly archived$ = this.feed.archived$;
+
+    constructor(private feed: FeedService, private editor: EditorService) {
+        this.respondToFilterChange();
+    }
 
     onScroll(): void {
-        
+        this.feed.loadArchived();
+    }
+    
+    async openFeedEditor() {
+        const { FeedComponent } = await import("../../../admin/components/feed/feed.component");
+        this.editor.open(FeedComponent);
+    }
+
+    private respondToFilterChange(): void {
+        effect(() => {
+            this.feed.refresh(this.selectedFilter());
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { EditorModalComponent } from '../editor-modal/editor-modal.component';
@@ -7,7 +7,7 @@ import { SongService } from '../../../shared/services/song.service';
 import { Song } from '../../../models/song';
 import { SongFormService } from '../../services/song-form.service';
 import { ImageDefaultDirective } from '../../../shared/directives/image-default.directive';
-import { SongEditorAction } from '../../interfaces/song-editor-action';
+import { EditorAction } from '../../interfaces/editor-action';
 
 @Component({
     selector: 'app-song',
@@ -42,10 +42,10 @@ export class SongComponent implements AfterViewInit {
     }
 
     protected onScroll(): void {
-        
+        this.song.load();
     }
 
-    protected onAction(action: SongEditorAction): void {
+    protected onAction(action: EditorAction): void {
         if(action.clearSelection) {
             this.selected.set(null);
         }
@@ -56,10 +56,11 @@ export class SongComponent implements AfterViewInit {
     private RespondToSelection(): void {
         effect(() => {
             const selected = this.selected();
+            
             if(selected != null) {
-                this.songForm.assign(selected);
+                untracked(() => this.songForm.assign(selected));
             } else {
-                this.songForm.clear();
+                untracked(() => this.songForm.clear());
             }
         });
     }

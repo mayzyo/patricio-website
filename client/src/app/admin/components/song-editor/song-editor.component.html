@@ -77,7 +77,7 @@
         <hr />
         @if(audioUploader$ | async; as audioUploader) {
             <div class="form-group mb-2">
-                <label>Song Audio File</label>
+                <label class="form-label">Song Audio File</label>
                 <uppy-dashboard
                     [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
                     [uppy]="audioUploader"
@@ -92,7 +92,7 @@
         <hr />
         @if(coverUploader$ | async; as coverUploader) {
             <div class="form-group mb-2">
-                <label>Cover Art</label>
+                <label class="form-label">Cover Art</label>
                 <uppy-dashboard
                     [props]="{ hideUploadButton: true, height: 400, width: 'auto', waitForThumbnailsBeforeUpload: true, disabled: submitting() }"
                     [uppy]="coverUploader"

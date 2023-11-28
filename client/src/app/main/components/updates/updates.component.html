@@ -1,35 +1,43 @@
-<app-banner backgroundUrl="banner-1.jpg" altColour="#216B8C"></app-banner>
+<app-banner backgroundUrl="banner-1.jpg" altColour="#216B8C" />
 
 <main class="container my-5 pt-5">
     <div class="row">
 
-        <div class="col-lg-9 col-md-12">
+        <div class="col-lg col-md-12">
             <app-title
                 class="flex-row-reverse justify-content-end mb-4"
                 text="Recent Announcements | 近期动态"
-            >
-            </app-title>
+                (editClick)="openFeedEditor()"
+            />
 
             <br />
 
             <app-feed-filter
                 [selected]="selectedFilter()"
                 (filterChange)="selectedFilter.set($event)"
-            >
-            </app-feed-filter>
+            />
 
             <br />
 
-            <app-feed [dataSource]="feed$ | async"></app-feed>
+            @if(recent$ | async; as recent) {
+                @if(recent.length != 0) {
+                    <app-feed [dataSource]="recent" />
+                } @else {
+                    <h1 class="lead text-center">
+                        No Annonouncements set | 暂无动态
+                    </h1>
+                }
+            }
         </div>
 
-        @if(history$ | async; as history) {
-            <div class="col-lg-3 col-md-12 d-none d-md-block">
-                <app-feed-history [dataSource]="history" (scrolled)="onScroll()"></app-feed-history>
-            </div>
+        @if(archived$ | async; as archived) {
+            @if(archived.length != 0) {
+                <div class="col-lg-3 col-md-12 d-none d-md-block">
+                    <app-feed-history [dataSource]="archived" (scrolled)="onScroll()" />
+                </div>
+            }
         }
-
     </div>
 </main>
 
-<app-email-me></app-email-me>
+<app-email-me />

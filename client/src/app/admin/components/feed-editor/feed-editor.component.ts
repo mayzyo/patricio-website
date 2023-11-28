@@ -3,19 +3,19 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Observable, Subject, forkJoin, from, iif, of } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
+import { EMPTY, Observable, Subject } from 'rxjs';
+import { filter, map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
 import { UppyAngularDashboardModule } from '@uppy/angular';
 import { EditorService } from '../../services/editor.service';
-import { SongFormService } from '../../services/song-form.service';
 import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
+import { FeedFormService } from '../../services/feed-form.service';
 
 @Component({
-    selector: 'app-song-editor',
+    selector: 'app-feed-editor',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
@@ -23,22 +23,21 @@ import { ImageConverter } from '../../classes/image.converter';
         ReactiveFormsModule,
         UppyAngularDashboardModule,
     ],
-    templateUrl: './song-editor.component.html',
-    styleUrl: './song-editor.component.scss',
+    templateUrl: './feed-editor.component.html',
+    styleUrl: './feed-editor.component.scss',
     host: { class: 'card' }
 })
-export class SongEditorComponent {
+export class FeedEditorComponent {
     @Output() action = new EventEmitter<EditorAction>();
 
     private readonly clearUploaders$ = new Subject<void>();
-    protected coverUploader$ = this.initialiseUploader();
-    protected audioUploader$ = this.initialiseUploader();
-    protected readonly thumbnail$ = this.initialiseThumbnail(this.coverUploader$);
-    protected readonly audioSelected = this.initialiseFileSelected(this.audioUploader$);
-    private readonly coverSelected = this.initialiseFileSelected(this.coverUploader$);
+    protected previewUploader$ = this.initialiseUploader();
+    protected readonly thumbnail$ = this.initialiseThumbnail(this.previewUploader$);
+    protected readonly previewSelected = this.initialiseFileSelected(this.previewUploader$);
 
-    protected readonly form = this.songForm.form;
+    protected readonly form = this.feedForm.form;
 
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
     protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
@@ -48,10 +47,10 @@ export class SongEditorComponent {
         private destroyRef: DestroyRef,
         private http: HttpClient,
         private editor: EditorService,
-        private songForm: SongFormService
+        private feedForm: FeedFormService
     ) {
         this.RespondToSetThumbnailValue();
-        this.RespondToClearUploaders();
+        this.RespondToClearUploader();
         this.RespondToFormPristine();
     }
 
@@ -59,22 +58,20 @@ export class SongEditorComponent {
         this.clearUploaders$.next();
     }
 
+    protected onRemoveThumbnail(): void {
+        this.form.get('thumbnail')?.setValue('');
+        this.form.get('thumbnail')?.markAsDirty();
+    }
+
     protected onSubmit(): void {
         this.validating.set(true);
 
         if(this.form.valid && !this.submitting()) {
             this.submitting.set(true);
-            const uploadCover$ = this.initialiseUploadFile(this.coverUploader$, 'coverId');
-            const uploadAudio$ = this.initialiseUploadFile(this.audioUploader$, 'audioId');
             
-            iif(
-                () => this.coverSelected() == true,
-                forkJoin([uploadCover$, uploadAudio$]),
-                uploadAudio$
-            ).pipe(
-                switchMap(() => this.songForm.save()),
-                takeUntilDestroyed(this.destroyRef)
-            ).subscribe(() => this.onComplete({ clearSelection: false }));
+            this.feedForm.save()
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe(() => this.onComplete({ clearSelection: true }));
         }
     }
 
@@ -84,7 +81,7 @@ export class SongEditorComponent {
         if(id) {
             this.submitting.set(true);
             
-            this.songForm.remove(id)
+            this.feedForm.remove(id)
                 .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe(() => this.onComplete({ clearSelection: true }));
         }
@@ -96,13 +93,13 @@ export class SongEditorComponent {
 
         this.action.emit(editorAction);
 
-        this.songForm.clear();
+        this.feedForm.clear();
         this.clearUploaders();
     }
 
     private RespondToSetThumbnailValue(): void {
         effect(() => {
-            if(!this.coverSelected()) {
+            if(!this.previewSelected()) {
                 untracked(() => this.form.get('thumbnail')?.setValue(''));
             }
         });
@@ -113,14 +110,11 @@ export class SongEditorComponent {
         });
     }
 
-    private RespondToClearUploaders(): void {
+    private RespondToClearUploader(): void {
         this.clearUploaders$.pipe(
-            switchMap(() => forkJoin([this.coverUploader$.pipe(take(1)), this.audioUploader$.pipe(take(1))])),
+            switchMap(() => this.previewUploader$.pipe(take(1))),
             takeUntilDestroyed()
-        ).subscribe(([coverUploader, audioUploader]) => {
-            coverUploader.cancelAll({ reason: 'user' });
-            audioUploader.cancelAll({ reason: 'user' });
-        });
+        ).subscribe(previewUploader => previewUploader.cancelAll({ reason: 'user' }));
     }
 
     private RespondToFormPristine(): void {
@@ -141,19 +135,6 @@ export class SongEditorComponent {
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })
-        );
-    }
-
-    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string) {
-        return uploader$.pipe(
-            switchMap(uploader => iif(
-                () => uploader.getFiles().length == 0,
-                of(null),
-                from(uploader.upload()).pipe(
-                    tap((res: any) => this.form.get(formKey)?.setValue(res.successful[0].response?.body))
-                )
-            )),
-            take(1)
         );
     }
 

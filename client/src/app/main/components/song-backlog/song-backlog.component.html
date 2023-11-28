@@ -1,7 +1,11 @@
 <div class="row">
     @for(song of songs$ | async; track song.id) {
         <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3">
-            <div class="card bg-dark text-white" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
+            <div
+                class="card bg-dark text-white"
+                (mouseenter)="hoverTarget.set(song)"
+                (mouseleave)="hoverTarget.set(null)"
+            >
 
                 <img
                     class="card-img square"
@@ -28,8 +32,12 @@
                                         <div class="d-flex justify-content-between">
                                             <p class="card-text my-2">{{ song.genre }}</p>
                                             <div>
-                                                <button class="btn btn-link" (click)="redirect(song)" [hidden]="!song.soundCloud">
-                                                    <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'"></fa-icon>
+                                                <button
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.soundCloud"
+                                                    (click)="redirect(song)"
+                                                >
+                                                    <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'" />
                                                 </button>
                                             </div>
                                         </div>
@@ -42,10 +50,10 @@
                             <!-- Hover State -->
                             <div class="d-flex justify-content-center align-items-center h-100">
                                 <button class="btn btn-link text-white" (click)="play(song)" [hidden]="!song.audioId">
-                                    <fa-icon [icon]="faCirclePlay" size="2x"></fa-icon>
+                                    <fa-icon [icon]="faCirclePlay" size="2x" />
                                 </button>
                                 <a class="btn btn-link text-white" [routerLink]="'/blog/' + song.blogId">
-                                    <fa-icon [icon]="faCircleInfo" size="2x"></fa-icon>
+                                    <fa-icon [icon]="faCircleInfo" size="2x" />
                                 </a>
                             </div>
                         }
@@ -69,7 +77,7 @@
 
 <div class="row mb-5 justify-content-center">
     <div class="col-auto">
-        <button class="btn btn-secondary btn-lg shadow text-white" (click)="showMore()" [hidden]="!more()">
+        <button class="btn btn-secondary btn-lg shadow text-white" [hidden]="!more()" (click)="showMore()">
             Show More
         </button>
     </div>

@@ -8,14 +8,13 @@
             [counter]="false"
             [items]="photos"
             (indexChange)="onIndexChange($event)"
-        >
-        </gallery>
+        />
     }
 </div>
 
 @if(selectedPhoto$ | async; as selectedPhoto) {
     <div class="d-flex mt-3">
-        <fa-icon [icon]="faClock" size="sm"></fa-icon>
+        <fa-icon [icon]="faClock" size="sm" />
         <small class="ms-1">{{ selectedPhoto.date.toDate().toDateString() }}</small>
     </div>
     <p class="display-5">{{ selectedPhoto.description }}</p>

@@ -1,4 +1,4 @@
-export enum FeedFilter {
+export enum FeedType {
     ALL = 'ALL',
     EVENT = 'EVENT',
     POST = 'POST'

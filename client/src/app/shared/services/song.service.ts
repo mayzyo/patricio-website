@@ -13,8 +13,8 @@ export class SongService {
     private readonly pageSize = 10;
     readonly spotlightSize = 9;
 
-    readonly list$: Observable<Song[]> = this.initialiseList();
-    readonly spotlight$: Observable<Song[]> = this.initialiseFiltered('spotlight', this.spotlightSize);
+    readonly list$ = this.initialiseList();
+    readonly spotlight$ = this.initialiseSpotlight();
     
     constructor(private firestore: Firestore) {}
 
@@ -33,8 +33,6 @@ export class SongService {
     }
 
     private initialiseLoad(): Observable<Song[]> {
-        const songs = collection(this.firestore, 'songs');
-        
         return combineLatest({
             page: this.load$.pipe(
                 startWith(null),
@@ -43,25 +41,29 @@ export class SongService {
             total: this.initialiseTotal()
         }).pipe(
             takeWhile(({ page, total }) => page * this.pageSize < total),
-            map(({ page }) => query(songs, orderBy('date'), startAt(page * this.pageSize), limit(this.pageSize))),
-            switchMap(query => 
-                (collectionData(query, { idField: 'id' }) as Observable<Song[]>).pipe(take(1))
-            ),
+            switchMap(({ page }) => this.initialiseSongs(page)),
             scan((acc, cur) => acc.concat(cur), new Array<Song>()),
         );
     }
 
     private initialiseTotal(): Observable<number> {
         const songs = collection(this.firestore, 'songs');
-        const songQuery = query(songs);
-        return from(getCountFromServer(songQuery)).pipe(
+        return from(getCountFromServer(query(songs))).pipe(
             map(res => res.data().count)
         );
     }
 
-    private initialiseFiltered(filterProp: string, size = this.pageSize): Observable<Song[]> {
+    private initialiseSpotlight(): Observable<Song[]> {
         const songs = collection(this.firestore, 'songs');
-        const filteredQuery = query(songs, orderBy('date'), where(filterProp, '==', true), limit(size));
-        return collectionData(filteredQuery) as Observable<Song[]>;
+        const filteredQuery = query(songs, orderBy('date'), where('spotlight', '==', true), limit(this.spotlightSize));
+        const filtered$ = collectionData(filteredQuery) as Observable<Song[]>;
+        return filtered$.pipe(take(1));
+    }
+
+    private initialiseSongs(page: number): Observable<Song[]> {
+        const songs = collection(this.firestore, 'songs');
+        const songsQuery = query(songs, orderBy('date'), startAt(page * this.pageSize), limit(this.pageSize));
+        const songs$ = collectionData(songsQuery, { idField: 'id' }) as Observable<Song[]>;
+        return songs$.pipe(take(1));
     }
 }

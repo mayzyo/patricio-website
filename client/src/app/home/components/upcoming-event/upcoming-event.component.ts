@@ -1,8 +1,8 @@
 import { Component, Input, signal } from '@angular/core';
-import { Feed } from '../../../models/feed';
+import { FeedItem } from '../../../models/feed-item';
 import { Observable, from, of } from 'rxjs';
 import { filter, map, scan, share, switchMap, take } from 'rxjs/operators';
-import { generateFeeds } from '../../../../test/generators/feed';
+import { generateFeed } from '../../../../test/generators/feed-item';
 import { delayInterval } from '../../../shared/operators/delay-interval';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -19,18 +19,18 @@ export class UpcomingEventComponent {
 
     protected readonly upcomingEvents$ = this.initialiseUpcomingEvents();
 
-    private initialiseUpcomingEvents(): Observable<Feed[]> {
+    private initialiseUpcomingEvents(): Observable<FeedItem[]> {
         const triggered$ = toObservable(this._triggered).pipe(
             filter(res => res),
             map<boolean, void>(() => null),
             share()
         );
 
-        return of(generateFeeds()).pipe(
+        return of(generateFeed()).pipe(
             switchMap(res => from(res)),
             take(6),
             delayInterval(300, triggered$),
-            scan((acc, curr) => [...acc, curr], new Array<Feed>()),
+            scan((acc, curr) => [...acc, curr], new Array<FeedItem>()),
         );
     }
 }

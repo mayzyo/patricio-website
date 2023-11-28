@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { TimeFromNowPipe } from '../../pipes/time-from-now.pipe';
-import { Feed } from '../../../models/feed';
+import { FeedItem } from '../../../models/feed-item';
 
 @Component({
     selector: 'app-feed',
@@ -14,12 +14,12 @@ import { Feed } from '../../../models/feed';
     styleUrl: './feed.component.scss'
 })
 export class FeedComponent {
+    protected readonly faBullhorn = faBullhorn;
+
     @Input() showDate?: boolean;
 
-    protected readonly _dataSource = signal(new Array<Feed>());
-    @Input() set dataSource(value: Feed[] | null) {
+    protected readonly _dataSource = signal(new Array<FeedItem>());
+    @Input() set dataSource(value: FeedItem[] | null) {
         value && this._dataSource.set(value);
     }
-
-    protected readonly faBullhorn = faBullhorn;
 }

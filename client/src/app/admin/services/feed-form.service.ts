@@ -3,65 +3,56 @@ import { Firestore, Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } f
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { Song } from '../../models/song';
 import { DateConverter } from '../../shared/classes/date-converter';
+import { FeedItem } from '../../models/feed-item';
 
 @Injectable()
-export class SongFormService {
+export class FeedFormService {
     readonly form = this.fb.group({
         id: [''],
         title: ['', Validators.required],
-        genre: ['', Validators.required],
+        description: [''],
         date: [''],
-        soundCloud: [''],
+        link: [''],
         thumbnail: [''],
-        spotlight: [false],
-        coverId: [''],
-        audioId: ['']
     });
 
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
-    assign(song: Song): void {
+    assign(feed: FeedItem): void {
         this.form.setValue({
-            id: song.id ?? '',
-            title: song.title,
-            genre: song.genre,
-            date: DateConverter.toInput(song.date.toDate()),
-            soundCloud: song.soundCloud ?? '',
-            thumbnail: song.thumbnail ?? '',
-            spotlight: song.spotlight,
-            coverId: song.coverId ?? '',
-            audioId: song.audioId
+            id: feed.id ?? '',
+            title: feed.title,
+            description: feed.description ?? '',
+            date: DateConverter.toInput(feed.date.toDate()),
+            link: feed.link ?? '',
+            thumbnail: feed.thumbnail ?? '',
         });
     }
 
-    save(): Observable<Song> {
+    save(): Observable<FeedItem> {
         const rawDate = this.form.get('date')?.value ?? '';
         const date = rawDate == '' ? new Date() : new Date(rawDate);
 
-        const model: Song = {
+        const model: FeedItem = {
             title: this.form.get('title')?.value ?? '',
-            genre: this.form.get('genre')?.value ?? '',
+            description: this.form.get('description')?.value ?? '',
             date: Timestamp.fromDate(date),
-            soundCloud: this.form.get('soundCloud')?.value ?? '',
+            link: this.form.get('link')?.value ?? '',
             thumbnail: this.form.get('thumbnail')?.value ?? '',
-            spotlight: this.form.get('spotlight')?.value ?? false,
-            coverId: this.form.get('coverId')?.value ?? '',
-            audioId: this.form.get('audioId')?.value ?? '',
         };
 
         const id = this.form.get('id')?.value;
 
         if(id) {
-            const targetDoc = doc(this.firestore, 'songs', id);
+            const targetDoc = doc(this.firestore, 'feed', id);
             return from(updateDoc(targetDoc, model as any)).pipe(
                 map(() => model),
                 take(1)
             );
         }
 
-        const targetCol = collection(this.firestore, 'songs');
+        const targetCol = collection(this.firestore, 'feed');
         return from(addDoc(targetCol, model)).pipe(
             map(() => model),
             take(1)
@@ -69,7 +60,7 @@ export class SongFormService {
     }
 
     remove(id: string): Observable<void> {
-        const targetDoc = doc(this.firestore, 'songs', id);
+        const targetDoc = doc(this.firestore, 'feed', id);
         return from(deleteDoc(targetDoc)).pipe(take(1));
     }
 
