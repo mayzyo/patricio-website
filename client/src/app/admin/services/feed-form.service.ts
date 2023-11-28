@@ -40,6 +40,7 @@ export class FeedFormService {
             date: Timestamp.fromDate(date),
             link: this.form.get('link')?.value ?? '',
             thumbnail: this.form.get('thumbnail')?.value ?? '',
+            isEvent: this.form.get('link')?.value == ''
         };
 
         const id = this.form.get('id')?.value;

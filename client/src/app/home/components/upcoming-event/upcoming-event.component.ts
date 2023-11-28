@@ -1,23 +1,29 @@
-import { Component, Input, signal } from '@angular/core';
+import { AfterViewInit, Component, Input, signal } from '@angular/core';
 import { FeedItem } from '../../../models/feed-item';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { filter, map, scan, share, switchMap, take } from 'rxjs/operators';
-import { generateFeed } from '../../../../test/generators/feed-item';
 import { delayInterval } from '../../../shared/operators/delay-interval';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { FeedService } from '../../../shared/services/feed.service';
 
 @Component({
     selector: 'app-upcoming-event',
     templateUrl: './upcoming-event.component.html',
     styleUrl: './upcoming-event.component.scss'
 })
-export class UpcomingEventComponent {
+export class UpcomingEventComponent implements AfterViewInit {
     protected readonly _triggered = signal(false);
     @Input() set triggered(value: boolean) {
         this._triggered.set(value);
     }
 
     protected readonly upcomingEvents$ = this.initialiseUpcomingEvents();
+
+    constructor(private feed: FeedService) { }
+
+    ngAfterViewInit(): void {
+        this.feed.refresh();
+    }
 
     private initialiseUpcomingEvents(): Observable<FeedItem[]> {
         const triggered$ = toObservable(this._triggered).pipe(
@@ -26,7 +32,7 @@ export class UpcomingEventComponent {
             share()
         );
 
-        return of(generateFeed()).pipe(
+        return this.feed.upcoming$.pipe(
             switchMap(res => from(res)),
             take(6),
             delayInterval(300, triggered$),

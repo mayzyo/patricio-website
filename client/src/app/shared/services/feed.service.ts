@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, Firestore, Query, QueryConstraint, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
-import { Observable, Subject, combineLatest, from } from 'rxjs';
+import { DocumentData, Firestore, Query, and, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
+import { Observable, Subject, combineLatest, from, zip } from 'rxjs';
 import { map, scan, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
 import { FeedItem } from '../../models/feed-item';
 import { FeedType } from '../enums/feed-type';
-import { FeedPeriod } from '../enums/feed-period';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FeedService {
-    private readonly loadArchived$ = new Subject<void>();
-    private readonly load$ = new Subject<void>();
     private readonly refresh$ = new Subject<FeedType>();
+    private readonly load$ = new Subject<void>();
+    private readonly loadArchived$ = new Subject<void>();
     private readonly pageSize = 10;
 
     readonly list$ = this.initialiseList();
@@ -46,14 +45,10 @@ export class FeedService {
                 startWith(null),
                 scan(acc => acc + 1, -1)
             ),
-            total: this.initialiseTotal(type, FeedPeriod.ALL)
+            total: this.initialiseTotal(type, false)
         }).pipe(
             takeWhile(({ page, total }) => page * this.pageSize < total),
-            map(({ page }) => this.buildFilteredQuery(
-                type,
-                FeedPeriod.ALL,
-                page
-            )),
+            map(({ page }) => this.buildFilteredQuery(type, false, page)),
             switchMap(filteredQuery => this.initialiseFiltered(filteredQuery)),
             scan((acc, curr) => acc.concat(curr), new Array<FeedItem>()),
         );
@@ -61,25 +56,28 @@ export class FeedService {
 
     private initialiseUpcoming(): Observable<FeedItem[]> {
         return this.refresh$.pipe(
-            map(() => this.buildFilteredQuery(FeedType.EVENT, FeedPeriod.FUTURE)),
+            map(() => this.buildFilteredQuery(FeedType.EVENT, true)),
             switchMap(filteredQuery => this.initialiseFiltered(filteredQuery)),
         );
     }
 
     private initialiseRecent(): Observable<FeedItem[]> {
         return this.refresh$.pipe(
-            map(type => this.buildFilteredQuery(type, FeedPeriod.ALL)),
+            map(type => this.buildFilteredQuery(type, false)),
             switchMap(filteredQuery => this.initialiseFiltered(filteredQuery)),
         );
     }
 
     private initialiseArchived(): Observable<FeedItem[]> {
-        return this.recent$.pipe(
-            switchMap(recent => this.initialiseLoadArchived(recent)),
+        return zip(
+            this.recent$,
+            this.refresh$
+        ).pipe(
+            switchMap(([ recent, type ]) => this.initialiseLoadArchived(recent, type)),
         );
     }
 
-    private initialiseLoadArchived(recent: FeedItem[]): Observable<FeedItem[]> {
+    private initialiseLoadArchived(recent: FeedItem[], type: FeedType): Observable<FeedItem[]> {
         const recentPageCount = this.getRecentPageCount(recent);
 
         return combineLatest({
@@ -87,13 +85,13 @@ export class FeedService {
                 startWith(null),
                 scan(acc => acc + 1, recentPageCount - 1)
             ),
-            total: this.initialiseTotal(FeedType.ALL, FeedPeriod.ALL)
+            total: this.initialiseTotal(type, false)
         }).pipe(
             takeWhile(({ page, total }) => page * this.pageSize < total),
             // Load as many additional pages as recent$ contains items.
             map(({ page }, index) => this.buildFilteredQuery(
-                FeedType.ALL,
-                FeedPeriod.ALL,
+                type,
+                false,
                 index == 0 ? 0 : page,
                 index == 0 ? recentPageCount * this.pageSize : this.pageSize
             )),
@@ -103,8 +101,8 @@ export class FeedService {
         );
     }
 
-    private initialiseTotal(type: FeedType, period: FeedPeriod): Observable<number> {
-        const filteredQuery = this.buildFilteredQuery(type, period);
+    private initialiseTotal(type: FeedType, futureOnly: boolean): Observable<number> {
+        const filteredQuery = this.buildFilteredQuery(type, futureOnly);
         return from(getCountFromServer(filteredQuery)).pipe(
             map(res => res.data().count)
         );
@@ -115,53 +113,54 @@ export class FeedService {
         return filtered$.pipe(take(1));
     }
 
-    private buildFilteredQuery(type: FeedType, period: FeedPeriod, page?: number, pageSize = this.pageSize): Query<DocumentData> {
+    private buildFilteredQuery(type: FeedType, futureOnly: boolean, page?: number, pageSize = this.pageSize): Query<DocumentData> {
         const feed = collection(this.firestore, 'feed');
-        const typeConstraint = this.buildTypeConstraint(type);
-        const periodConstraint = this.buildPeriodConstraint(period);
+        const constraints = this.buildConstraints(type, futureOnly);
 
         return query(feed,
-                ...typeConstraint,
-                ...periodConstraint,
+                ...constraints,
                 ...(page ? [
-                    orderBy('date'),
                     startAt(page),
                     limit(pageSize)
                 ] : [])
             );
     }
 
-    private buildTypeConstraint(type: FeedType): QueryConstraint[] {
+    private buildConstraints(type: FeedType, futureOnly: boolean): any[] {
         switch (type) {
             case FeedType.EVENT:
-                return [
-                    where('link', '!=', ''),
-                    orderBy('link')
-                ];
+                if(futureOnly) {
+                    return [
+                        orderBy('date'),
+                        and(where('isEvent', '==', true), where('date','>', new Date())),
+                        orderBy('isEvent'),
+                    ];
+                } else {
+                    return [
+                        orderBy('date'),
+                        where('isEvent', '==', true),
+                        orderBy('isEvent'),
+                    ];
+                }
             case FeedType.POST:
-                return [
-                    where('link', '==', ''),
-                    orderBy('link')
-                ];
+                if(futureOnly) {
+                    return [
+                        orderBy('date'),
+                        and(where('isEvent', '==', false), where('date','>', new Date())),
+                        orderBy('isEvent'),
+                    ];
+                } else {
+                    return [
+                        orderBy('date'),
+                        where('isEvent', '==', false),
+                        orderBy('isEvent'),
+                    ];
+                }
             default:
             case FeedType.ALL:
-                return [];
-        }
-    }
-
-    private buildPeriodConstraint(period: FeedPeriod): QueryConstraint[] {
-        switch (period) {
-            case FeedPeriod.FUTURE:
                 return [
-                    where('date','>=', new Date())
+                    orderBy('date')
                 ];
-            case FeedPeriod.PAST:
-                return [
-                    where('date','<', new Date())
-                ];
-            default:
-            case FeedPeriod.ALL:
-                return [];
         }
     }
 
