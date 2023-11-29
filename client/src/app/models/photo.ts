@@ -1,11 +1,11 @@
 import { Timestamp } from "@angular/fire/firestore";
 
 export interface Photo {
-	id: string;
+	id?: string;
 
 	thumbnail: string;
 
-	description: string;
+	description?: string;
 
 	date: Timestamp;
 
