@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from } from 'rxjs';
-import { map, scan, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
+import { map, scan, share, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
 import { Song } from '../../models/song';
 
 @Injectable({
@@ -13,10 +13,12 @@ export class SongService {
     private readonly pageSize = 10;
     readonly spotlightSize = 9;
 
+    private pagination$ = this.initialisePagination();
     readonly list$ = this.initialiseList();
     readonly spotlight$ = this.initialiseSpotlight();
+    readonly endReached$ = this.initialiseEndReached();
     
-    constructor(private firestore: Firestore) {}
+    constructor(private firestore: Firestore) { }
 
     refresh(): void {
         this.refresh$.next();
@@ -34,17 +36,21 @@ export class SongService {
     }
 
     private initialiseLoad(): Observable<Song[]> {
+        return this.pagination$.pipe(
+            takeWhile(({ page, total }) => page * this.pageSize < total),
+            switchMap(({ page }) => this.initialiseSongs(page)),
+            scan((acc, cur) => acc.concat(cur), new Array<Song>()),
+        );
+    }
+
+    private initialisePagination() : Observable<{ page: number, total: number }> {
         return combineLatest({
             page: this.load$.pipe(
                 startWith(null),
                 scan(acc => acc + 1, -1)
             ),
             total: this.initialiseTotal()
-        }).pipe(
-            takeWhile(({ page, total }) => page * this.pageSize < total),
-            switchMap(({ page }) => this.initialiseSongs(page)),
-            scan((acc, cur) => acc.concat(cur), new Array<Song>()),
-        );
+        }).pipe(share());
     }
 
     private initialiseTotal(): Observable<number> {
@@ -66,5 +72,11 @@ export class SongService {
         const filteredQuery = query(songs, orderBy('date'), where('spotlight', '==', true), limit(this.spotlightSize));
         const filtered$ = collectionData(filteredQuery) as Observable<Song[]>;
         return filtered$.pipe(take(1));
+    }
+
+    private initialiseEndReached(): Observable<boolean> {
+        return this.pagination$.pipe(
+            map(({ page, total }) => (page + 1) * this.pageSize >= total)
+        );
     }
 }
