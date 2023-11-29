@@ -28,6 +28,7 @@ export class SongService {
 
     private initialiseList(): Observable<Song[]> {
         return this.refresh$.pipe(
+            startWith(null),
             switchMap(() => this.initialiseLoad()),
         );
     }
@@ -53,17 +54,17 @@ export class SongService {
         );
     }
 
-    private initialiseSpotlight(): Observable<Song[]> {
-        const songs = collection(this.firestore, 'songs');
-        const filteredQuery = query(songs, orderBy('date'), where('spotlight', '==', true), limit(this.spotlightSize));
-        const filtered$ = collectionData(filteredQuery) as Observable<Song[]>;
-        return filtered$.pipe(take(1));
-    }
-
     private initialiseSongs(page: number): Observable<Song[]> {
         const songs = collection(this.firestore, 'songs');
         const songsQuery = query(songs, orderBy('date'), startAt(page * this.pageSize), limit(this.pageSize));
         const songs$ = collectionData(songsQuery, { idField: 'id' }) as Observable<Song[]>;
         return songs$.pipe(take(1));
+    }
+
+    private initialiseSpotlight(): Observable<Song[]> {
+        const songs = collection(this.firestore, 'songs');
+        const filteredQuery = query(songs, orderBy('date'), where('spotlight', '==', true), limit(this.spotlightSize));
+        const filtered$ = collectionData(filteredQuery) as Observable<Song[]>;
+        return filtered$.pipe(take(1));
     }
 }

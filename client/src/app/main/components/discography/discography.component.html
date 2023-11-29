@@ -3,11 +3,13 @@
 <main class="container my-5 pt-5">
     <div class="row">
         <app-title
-            class="d-none flex-row-reverse justify-content-end mb-4"
+            class="flex-row-reverse justify-content-end mb-4"
+            [class.d-none]="viewOnly$ | async"
             text="Discography | 作品集"
+            (editClick)="openSongEditor()"
         />
 
-        <app-song-backlog class="container" />
+        <app-song-backlog />
     </div>
 </main>
 

@@ -11,9 +11,7 @@ import { IconDefinition, faEdit } from '@fortawesome/free-regular-svg-icons';
     imports: [CommonModule, FontAwesomeModule],
     templateUrl: './title.component.html',
     styleUrl: './title.component.scss',
-    host: {
-        class: 'd-flex align-items-center'
-    }
+    host: { class: 'd-flex align-items-center' }
 })
 export class TitleComponent {
     @Input() text = '';

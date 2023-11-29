@@ -1,20 +1,21 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { map, scan, switchMap } from 'rxjs/operators';
-import { generateSongs } from '../../../../test/generators/song';
 import { BacklogView } from '../../interfaces/backlog-view';
 import { PlayerState } from '../../enums/player-state';
 import { faCircleInfo, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 import { MusicPlayerService } from '../../services/music-player.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SongService } from '../../../shared/services/song.service';
 
 @Component({
     selector: 'app-song-backlog',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './song-backlog.component.html',
     styleUrl: './song-backlog.component.scss',
-    providers: [MusicPlayerService]
+    providers: [MusicPlayerService],
+    host: { class: 'container' }
 })
 export class SongBacklogComponent {
     protected readonly faCircleInfo = faCircleInfo;
@@ -29,7 +30,7 @@ export class SongBacklogComponent {
     protected readonly audio = signal<any | null>(null);
     protected readonly more = signal(true);
 
-    constructor(private musicPlayer: MusicPlayerService) {
+    constructor(private song: SongService, private musicPlayer: MusicPlayerService) {
         this.musicPlayer.audio$.pipe(takeUntilDestroyed()).subscribe(res => this.audio.set(res));
     }
 
@@ -40,7 +41,6 @@ export class SongBacklogComponent {
     }
 
     play(song: BacklogView): void {
-        console.log('here', song)
         this.playerTarget.set(song);
         this.musicPlayer.loadAudio(song.audioId);
     }
@@ -54,7 +54,7 @@ export class SongBacklogComponent {
     }
 
     showMore(): void {
-        // this.musics.load();
+        this.song.load();
     }
 
     protected buildImage(thumbnail?: string, coverId?: string): Observable<any> {
@@ -62,7 +62,7 @@ export class SongBacklogComponent {
     }
 
     private initialiseSongs(): Observable<BacklogView[]> {
-        return of(generateSongs()).pipe(
+        return this.song.list$.pipe(
             switchMap(res => from(res)),
             map(res => ({ ...res, url: `/blog/${res.id}`, state: PlayerState.INACTIVE })),
             scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
