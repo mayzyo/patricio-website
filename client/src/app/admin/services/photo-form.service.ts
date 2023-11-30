@@ -10,10 +10,10 @@ import { Photo } from '../../models/photo';
 export class PhotoFormService {
     readonly form = this.fb.group({
         id: [''],
-        thumbnail: ['', Validators.required],
+        thumbnail: [''],
         description: [''],
         date: ['', Validators.required],
-        imageId: ['', Validators.required],
+        imageId: [''],
     });
 
     constructor(private fb: FormBuilder, private firestore: Firestore) { }

@@ -14,7 +14,7 @@
                         @for(item of feed$ | async; track item.id) {
                             <li 
                                 class="list-group-item d-flex align-items-center"
-                                [class.active]="selected()?.title == item.title" 
+                                [class.active]="selected()?.id == item.id" 
                                 (click)="selectItem(item)"
                             >
                                 @if(!item.link) {

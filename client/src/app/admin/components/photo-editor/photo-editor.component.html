@@ -44,6 +44,11 @@
                     [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
                     [uppy]="imageUploader"
                 />
+                @if(!(imageExists$ | async) && !imageSelected() && validating()) {
+                    <div class="invalid-feedback d-block">
+                        Please upload a photo.
+                    </div>
+                }
             </div>
         }
     </div>
@@ -54,9 +59,9 @@
             type="submit"
             [disabled]="submitting()"
         >
-            {{ (songSelected$ | async) ? "Change" : "Add" }}
+            {{ (photoSelected$ | async) ? "Change" : "Add" }}
         </button>
-        @if(songSelected$ | async) {
+        @if(photoSelected$ | async) {
             <button
                 class="btn btn-danger shadow m-2"
                 type="button"

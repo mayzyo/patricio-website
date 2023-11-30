@@ -1,12 +1,12 @@
 <div class="gallery-wrapper row justify-content-center">
-    @if(photos$ | async; as photos) {
+    @if(galleryImages$ | async; as galleryImages) {
         <gallery
             thumbPosition="right"
             slidingDirection="vertical"
             [autoPlay]="true"
             [playerInterval]="5000"
             [counter]="false"
-            [items]="photos"
+            [items]="galleryImages"
             (indexChange)="onIndexChange($event)"
         />
     }
@@ -17,5 +17,5 @@
         <fa-icon [icon]="faClock" size="sm" />
         <small class="ms-1">{{ selectedPhoto.date.toDate().toDateString() }}</small>
     </div>
-    <p class="display-5">{{ selectedPhoto.description }}</p>
+    <p class="display-6">{{ selectedPhoto.description }}</p>
 }

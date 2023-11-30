@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { EMPTY, Observable } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { EMPTY, Observable, Subject, from, iif, of } from 'rxjs';
+import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
@@ -30,17 +30,17 @@ import { PhotoFormService } from '../../services/photo-form.service';
 export class PhotoEditorComponent {
     @Output() action = new EventEmitter<EditorAction>();
 
+    private readonly clearUploader$ = new Subject<void>();
     protected imageUploader$ = this.initialiseUploader();
     protected readonly thumbnail$ = this.initialiseThumbnail(this.imageUploader$);
-    protected readonly previewSelected = this.initialiseFileSelected(this.imageUploader$);
+    protected readonly imageSelected = this.initialiseFileSelected(this.imageUploader$);
 
     protected readonly form = this.photoForm.form;
 
-    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
-    protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
-    protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
+    protected readonly photoSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
+    protected readonly imageExists$ = this.form.get('imageId')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
         private destroyRef: DestroyRef,
@@ -49,18 +49,25 @@ export class PhotoEditorComponent {
         private photoForm: PhotoFormService
     ) {
         this.RespondToSetThumbnailValue();
+        this.RespondToClearUploaders();
         this.RespondToFormPristine();
+    }
+
+    clearUploader(): void {
+        this.clearUploader$.next();
     }
 
     protected onSubmit(): void {
         this.validating.set(true);
 
-        if(this.form.valid && !this.submitting()) {
+        if(this.form.valid && !this.submitting() && this.imageSelected()) {
             this.submitting.set(true);
+            const uploadImage$ = this.initialiseUploadFile(this.imageUploader$, 'imageId');
             
-            this.photoForm.save()
-                .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe(() => this.onComplete({ clearSelection: true }));
+            uploadImage$.pipe(
+                switchMap(() => this.photoForm.save()),
+                takeUntilDestroyed(this.destroyRef)
+            ).subscribe(() => this.onComplete({ clearSelection: true }));
         }
     }
 
@@ -81,13 +88,14 @@ export class PhotoEditorComponent {
         this.validating.set(false);
 
         this.action.emit(editorAction);
-
+        
         this.photoForm.clear();
+        this.clearUploader();
     }
 
     private RespondToSetThumbnailValue(): void {
         effect(() => {
-            if(!this.previewSelected()) {
+            if(!this.imageSelected()) {
                 untracked(() => this.form.get('thumbnail')?.setValue(''));
             }
         });
@@ -96,6 +104,13 @@ export class PhotoEditorComponent {
             this.form.get('thumbnail')?.setValue(thumbnail);
             this.form.get('thumbnail')?.markAsDirty();
         });
+    }
+
+    private RespondToClearUploaders(): void {
+        this.clearUploader$.pipe(
+            switchMap(() => this.imageUploader$.pipe(take(1))),
+            takeUntilDestroyed()
+        ).subscribe(imageUploader => imageUploader.cancelAll({ reason: 'user' }));
     }
 
     private RespondToFormPristine(): void {
@@ -116,6 +131,19 @@ export class PhotoEditorComponent {
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })
+        );
+    }
+
+    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string) {
+        return uploader$.pipe(
+            switchMap(uploader => iif(
+                () => uploader.getFiles().length == 0,
+                of(null),
+                from(uploader.upload()).pipe(
+                    tap((res: any) => this.form.get(formKey)?.setValue(res.successful[0].response?.body))
+                )
+            )),
+            take(1)
         );
     }
 

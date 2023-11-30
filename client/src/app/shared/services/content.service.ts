@@ -10,19 +10,23 @@ import { map } from 'rxjs/operators';
 export class ContentService {
     constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
 
-    getImage(thumbnail?: string, coverId?: string): Observable<any> {
+    getImage(thumbnail?: string, id?: string): Observable<any> {
         return iif(
-            () => coverId != '',
+            () => id != '',
             concat(
                 of(thumbnail),
                 // This is preferred to just sending the url because the thumbnail will be displayed while the highres image is still loading.
-                this.http.get('https://patriciowebsite.blob.core.windows.net/dev/'.concat(coverId as string), { responseType: 'blob' }).pipe(
+                this.http.get('https://patriciowebsite.blob.core.windows.net/dev/'.concat(id as string), { responseType: 'blob' }).pipe(
                     map(res => window.URL.createObjectURL(res)),
                     map(res => this.sanitizer.bypassSecurityTrustUrl(res))
                 )
             ),
             this.stockGallery()
         );
+    }
+
+    getImageUrl(id: string): string {
+        return 'https://patriciowebsite.blob.core.windows.net/dev/'.concat(id as string);
     }
 
     stockGallery(index?: number) {

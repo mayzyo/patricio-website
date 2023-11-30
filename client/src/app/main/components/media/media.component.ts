@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { EditorService } from '../../../admin/services/editor.service';
 
 @Component({
@@ -7,11 +7,8 @@ import { EditorService } from '../../../admin/services/editor.service';
     templateUrl: './media.component.html',
     styleUrl: './media.component.scss'
 })
-export class MediaComponent implements AfterViewInit {
+export class MediaComponent {
     constructor(private editor: EditorService) { }
-    ngAfterViewInit(): void {
-        this.openPhotoEditor();
-    }
 
     async openPhotoEditor() {
         const { PhotoComponent } = await import("../../../admin/components/photo/photo.component");

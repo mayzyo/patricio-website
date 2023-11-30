@@ -62,7 +62,7 @@ export class SongEditorComponent {
     protected onSubmit(): void {
         this.validating.set(true);
 
-        if(this.form.valid && !this.submitting()) {
+        if(this.form.valid && !this.submitting() && this.audioSelected()) {
             this.submitting.set(true);
             const uploadCover$ = this.initialiseUploadFile(this.coverUploader$, 'coverId');
             const uploadAudio$ = this.initialiseUploadFile(this.audioUploader$, 'audioId');

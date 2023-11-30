@@ -19,7 +19,7 @@
                         @if(playerTarget() == song) {
                             @if((loading$ | async) == true) {
                                 <!-- Loading State -->
-                                <div class="d-flex justify-content-center align-items-center h-100" (click)="back(song)">
+                                <div class="d-flex justify-content-center align-items-center h-100" (click)="cancelLoad()">
                                     <div class="spinner-grow text-primary" role="status"></div>
                                     <div class="spinner-grow text-primary" role="status"></div>
                                     <div class="spinner-grow text-primary" role="status"></div>
@@ -32,13 +32,13 @@
                                         <div class="d-flex justify-content-between">
                                             <p class="card-text my-2">{{ song.genre }}</p>
                                             <div>
-                                                <button
+                                                <a
                                                     class="btn btn-link"
                                                     [hidden]="!song.soundCloud"
-                                                    (click)="redirect(song)"
+                                                    [href]="song.soundCloud"
                                                 >
                                                     <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'" />
-                                                </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -54,6 +54,9 @@
                                 </button>
                                 <a class="btn btn-link text-white" [routerLink]="'/blog/' + song.blogId">
                                     <fa-icon [icon]="faCircleInfo" size="2x" />
+                                </a>
+                                <a class="btn btn-link" [hidden]="!song.soundCloud" [href]="song.soundCloud">
+                                    <fa-icon [icon]="faSoundcloud" size="2x" [style.color]="'#FF4300'" />
                                 </a>
                             </div>
                         }

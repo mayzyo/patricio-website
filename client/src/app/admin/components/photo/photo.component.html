@@ -2,7 +2,7 @@
     <div class="modal-body container-fluid">
         <div class="row">
             <div class="col-6" style="max-height: 75vh;">
-                <!-- <div class="infinite-scroll h-100">
+                <div class="infinite-scroll h-100">
                     <ul
                         class="list-group"
                         infiniteScroll
@@ -11,21 +11,21 @@
                         [scrollWindow]="false"
                         (scrolled)="onScroll()"
                     >
-                        @for(item of feed$ | async; track item.id) {
+                        @for(photo of photos$ | async; track photo.id) {
                             <li 
                                 class="list-group-item d-flex align-items-center"
-                                [class.active]="selected()?.title == item.title" 
-                                (click)="selectItem(item)"
+                                [class.active]="selected()?.id == photo.id" 
+                                (click)="selectPhoto(photo)"
                             >
-                                <img src="{{ item.thumbnail }}" height="100" width="100">
+                                <img src="{{ photo.thumbnail }}" height="100" width="100">
                                 <div class="flex-1 mx-2 d-flex flex-column justify-content-end">
-                                    <p>{{ item.description }}</p>
-                                    <p><small>{{ item.date | date:'fullDate' }}</small></p>
+                                    <p>{{ photo.description }}</p>
+                                    <p><small>{{ photo.date.toDate() | date:'fullDate' }}</small></p>
                                 </div>
                             </li>
                         }
                     </ul>
-                </div> -->
+                </div>
             </div>
             <app-photo-editor class="col-6" style="max-height: 75vh;" (action)="onAction($event)"/>
         </div>

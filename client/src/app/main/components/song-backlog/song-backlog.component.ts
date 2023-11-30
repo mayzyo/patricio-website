@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
 import { map, scan, startWith, switchMap } from 'rxjs/operators';
-import { BacklogView } from '../../interfaces/backlog-view';
-import { PlayerState } from '../../enums/player-state';
 import { faCircleInfo, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
+import { BacklogView } from '../../interfaces/backlog-view';
+import { PlayerState } from '../../enums/player-state';
 import { MusicPlayerService } from '../../services/music-player.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SongService } from '../../../shared/services/song.service';
 import { ContentService } from '../../../shared/services/content.service';
 
@@ -35,19 +35,13 @@ export class SongBacklogComponent {
         this.respondToMusicPlayerAudio();
     }
 
-    activate(song: BacklogView): void {
-        if (song.soundCloud || song.audioId) {
-            song.state = PlayerState.ACTIVE;
-        }
-    }
-
     play(song: BacklogView): void {
         this.playerTarget.set(song);
         this.musicPlayer.loadAudio(song.audioId);
     }
 
-    back(song: BacklogView): void {
-        throw new Error("Not Implemented!");
+    cancelLoad(): void {
+        this.playerTarget.set(null);
     }
 
     redirect(song: BacklogView): void {
