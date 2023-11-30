@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
-import { of } from 'rxjs';
-import { generateQuote } from '../../../../test/generators/quote';
+import { filter, switchMap } from 'rxjs/operators';
+import { QuoteService } from '../../../shared/services/quote.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-banner',
@@ -19,7 +20,10 @@ export class BannerComponent {
         this._altColour.set(value);
     }
 
-    protected readonly scrolled = signal(false);
+    protected readonly quote$ = toObservable(this._backgroundUrl).pipe(
+        filter(bgUrl => bgUrl != ''),
+        switchMap(bgUrl => this.quote.unique$(bgUrl))
+    );
 
-    protected readonly quote$ = of(generateQuote());
+    constructor(private quote: QuoteService) { }
 }
