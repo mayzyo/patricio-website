@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { FeedItem } from '../../../models/feed-item';
 import { Observable, from } from 'rxjs';
 import { filter, map, scan, share, switchMap, take } from 'rxjs/operators';
@@ -11,8 +11,8 @@ import { FeedService } from '../../../shared/services/feed.service';
     templateUrl: './upcoming-event.component.html',
     styleUrl: './upcoming-event.component.scss'
 })
-export class UpcomingEventComponent implements AfterViewInit {
-    protected readonly _triggered = signal(false);
+export class UpcomingEventComponent {
+    private readonly _triggered = signal(false);
     @Input() set triggered(value: boolean) {
         this._triggered.set(value);
     }
@@ -20,10 +20,6 @@ export class UpcomingEventComponent implements AfterViewInit {
     protected readonly upcomingEvents$ = this.initialiseUpcomingEvents();
 
     constructor(private feed: FeedService) { }
-
-    ngAfterViewInit(): void {
-        this.feed.refresh();
-    }
 
     private initialiseUpcomingEvents(): Observable<FeedItem[]> {
         const triggered$ = toObservable(this._triggered).pipe(

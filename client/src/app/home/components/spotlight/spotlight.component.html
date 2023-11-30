@@ -6,7 +6,7 @@
                 class="fade-in card bg-dark text-white w-100 card-big"
                 style="height:20rem; white-space: pre-line;"
                 [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
-                [queryParams]="{ song: song.id }"
+                [queryParams]="{ songId: song.id }"
             >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
@@ -23,7 +23,7 @@
                 class="fade-in card bg-dark text-white w-100 card-big"
                 style="height: 20rem;"
                 [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
-                [queryParams]="{ song: song.id }"
+                [queryParams]="{ songId: song.id }"
             >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
@@ -40,7 +40,7 @@
             <a
                 class="fade-in card bg-dark text-white w-100 card-mid" style="height: 8rem;"
                 [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
-                [queryParams]="{ song: song.id }"
+                [queryParams]="{ songId: song.id }"
             >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay" [style.opacity]="hoverTarget() == song ? '1' : '0'">
@@ -56,7 +56,7 @@
                 class="fade-in card bg-dark text-white w-100 card-small"
                 style="height: 12rem;"
                 [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
-                [queryParams]="{ song: song.id }"
+                [queryParams]="{ songId: song.id }"
             >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">

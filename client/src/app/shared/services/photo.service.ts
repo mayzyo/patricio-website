@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from } from 'rxjs';
-import { map, scan, share, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
+import { map, scan, share, shareReplay, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
 import { Photo } from '../../models/photo';
 
 @Injectable({
@@ -30,6 +30,7 @@ export class PhotoService {
         return this.refresh$.pipe(
             startWith(null),
             switchMap(() => this.initialiseLoad()),
+            shareReplay(1)
         );
     }
 

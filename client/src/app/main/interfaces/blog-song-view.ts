@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { Song } from "../../models/song";
 
-export interface BacklogView extends Song {
+export interface BlogSongView extends Song {
     cover$: Observable<any>
 }

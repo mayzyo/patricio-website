@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from } from 'rxjs';
-import { map, scan, share, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
+import { map, scan, share, shareReplay, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
 import { Song } from '../../models/song';
 
 @Injectable({
@@ -32,6 +32,7 @@ export class SongService {
         return this.refresh$.pipe(
             startWith(null),
             switchMap(() => this.initialiseLoad()),
+            shareReplay(1)
         );
     }
 
@@ -70,7 +71,7 @@ export class SongService {
     private initialiseSpotlight(): Observable<Song[]> {
         const songs = collection(this.firestore, 'songs');
         const filteredQuery = query(songs, orderBy('date'), where('spotlight', '==', true), limit(this.spotlightSize));
-        const filtered$ = collectionData(filteredQuery) as Observable<Song[]>;
+        const filtered$ = collectionData(filteredQuery, { idField: 'id' }) as Observable<Song[]>;
         return filtered$.pipe(take(1));
     }
 

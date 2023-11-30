@@ -5,7 +5,6 @@ import { map, scan, startWith, switchMap } from 'rxjs/operators';
 import { faCircleInfo, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 import { BacklogView } from '../../interfaces/backlog-view';
-import { PlayerState } from '../../enums/player-state';
 import { MusicPlayerService } from '../../services/music-player.service';
 import { SongService } from '../../../shared/services/song.service';
 import { ContentService } from '../../../shared/services/content.service';
@@ -22,7 +21,6 @@ export class SongBacklogComponent {
     protected readonly faCircleInfo = faCircleInfo;
     protected readonly faCirclePlay = faCirclePlay;
     protected readonly faSoundcloud = faSoundcloud;
-    protected readonly PlayerState = PlayerState;
 
     protected readonly songs$ = this.initialiseSongs();
     protected readonly loading$ = this.musicPlayer.loading$;
@@ -44,10 +42,6 @@ export class SongBacklogComponent {
         this.playerTarget.set(null);
     }
 
-    redirect(song: BacklogView): void {
-        throw new Error("Not Implemented!");
-    }
-
     showMore(): void {
         this.song.load();
     }
@@ -61,8 +55,6 @@ export class SongBacklogComponent {
             switchMap(res => from(res)),
             map(res => ({
                 ...res,
-                url: `/blog/${res.id}`,
-                state: PlayerState.INACTIVE,
                 cover$: this.content.getImage(res.thumbnail, res.coverId)
             })),
             scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
