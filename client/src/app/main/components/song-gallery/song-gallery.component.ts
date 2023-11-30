@@ -10,14 +10,14 @@ import { SongService } from '../../../shared/services/song.service';
 import { ContentService } from '../../../shared/services/content.service';
 
 @Component({
-    selector: 'app-song-backlog',
+    selector: 'app-song-gallery',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: './song-backlog.component.html',
-    styleUrl: './song-backlog.component.scss',
+    templateUrl: './song-gallery.component.html',
+    styleUrl: './song-gallery.component.scss',
     providers: [MusicPlayerService],
     host: { class: 'container' }
 })
-export class SongBacklogComponent {
+export class SongGalleryComponent {
     protected readonly faCircleInfo = faCircleInfo;
     protected readonly faCirclePlay = faCirclePlay;
     protected readonly faSoundcloud = faSoundcloud;
