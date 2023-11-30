@@ -52,7 +52,11 @@
                                 <button class="btn btn-link text-white" (click)="play(song)" [hidden]="!song.audioId">
                                     <fa-icon [icon]="faCirclePlay" size="2x" />
                                 </button>
-                                <a class="btn btn-link text-white" [routerLink]="'/blog/' + song.blogId">
+                                <a
+                                    class="btn btn-link text-white"
+                                    [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                                    [queryParams]="{ song: song.id }"
+                                >
                                     <fa-icon [icon]="faCircleInfo" size="2x" />
                                 </a>
                                 <a class="btn btn-link" [hidden]="!song.soundCloud" [href]="song.soundCloud">

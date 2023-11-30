@@ -2,7 +2,12 @@
     @if ($index == 0) {
         <!-- One large block -->
         <div class="col-md-8 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
-            <a class="fade-in card bg-dark text-white w-100 card-big" style="height:20rem; white-space: pre-line;" [href]="song.url">
+            <a
+                class="fade-in card bg-dark text-white w-100 card-big"
+                style="height:20rem; white-space: pre-line;"
+                [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                [queryParams]="{ song: song.id }"
+            >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
                     <h2 class="display-3 card-text flex-grow-1 d-flex justify-content-end align-items-end">
@@ -14,7 +19,12 @@
     } @else if($index == 1) {
         <!-- Second large block -->
         <div class="col-md-4 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
-            <a class="fade-in card bg-dark text-white w-100 card-big" style="height: 20rem;" [href]="song.url">
+            <a
+                class="fade-in card bg-dark text-white w-100 card-big"
+                style="height: 20rem;"
+                [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                [queryParams]="{ song: song.id }"
+            >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
                     <h2 class="h1 card-text">{{ song.title }}</h2>
@@ -27,7 +37,11 @@
     } @else if($index < 5) {
         <!-- Wide sized blocks -->
         <div class="col-md-4 col-12 p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
-            <a class="fade-in card bg-dark text-white w-100 card-mid" style="height: 8rem;" [href]="song.url">
+            <a
+                class="fade-in card bg-dark text-white w-100 card-mid" style="height: 8rem;"
+                [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                [queryParams]="{ song: song.id }"
+            >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay" [style.opacity]="hoverTarget() == song ? '1' : '0'">
                     <h2 class="h5 card-text">{{ song.title }}</h2>
@@ -38,7 +52,12 @@
     } @else {
         <!-- Small blocks, all remaining -->
         <div class="col-md-3 d-md-block d-none p-3" (mouseenter)="hoverTarget.set(song)" (mouseleave)="hoverTarget.set(null)">
-            <a class="fade-in card bg-dark text-white w-100 card-small" style="height: 12rem;" [href]="song.url">
+            <a
+                class="fade-in card bg-dark text-white w-100 card-small"
+                style="height: 12rem;"
+                [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                [queryParams]="{ song: song.id }"
+            >
                 <img class="card-img" [src]="song.cover$ | async" [style.filter]="hoverTarget() == song ? 'opacity(.5) blur(5px)' : ''">
                 <div class="card-img-overlay d-flex flex-column" [style.opacity]="hoverTarget() == song ? '1' : '0'">
                     <h2 class="h4 card-text flex-grow-1 d-flex align-items-end text-right">

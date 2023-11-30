@@ -36,7 +36,6 @@ export class SpotlightComponent {
             switchMap(res => from(res)),
             map(res => ({
                 ...res,
-                url: `/discography/${res.id}`,
                 cover$: this.content.getImage(res.thumbnail, res.coverId)
             })),
             delayInterval(300, triggered$),

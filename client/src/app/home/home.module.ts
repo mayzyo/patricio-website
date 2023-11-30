@@ -9,6 +9,7 @@ import { FeedComponent } from '../shared/components/feed/feed.component';
 import { TitleComponent } from '../shared/components/title/title.component';
 import { UpcomingEventComponent } from './components/upcoming-event/upcoming-event.component';
 import { EmailMeComponent } from '../shared/components/email-me/email-me.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -22,6 +23,7 @@ import { EmailMeComponent } from '../shared/components/email-me/email-me.compone
     ],
     imports: [
         CommonModule,
+        RouterModule,
         FontAwesomeModule,
         TitleComponent,
         FeedComponent,

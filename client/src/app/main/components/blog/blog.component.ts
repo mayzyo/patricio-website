@@ -21,6 +21,9 @@ export class BlogComponent {
 
     ngOnInit() {
         const blogId = this.route.snapshot.paramMap.get('id');
+        const songId = this.route.snapshot.queryParamMap.get('song');
+        console.log('blogId', blogId)
+        console.log('songId', songId)
     }
 
     redirect(song: Song): void {
