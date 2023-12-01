@@ -33,13 +33,14 @@ export class SpotlightComponent {
         );
 
         return this.song.spotlight$.pipe(
-            switchMap(res => from(res)),
-            map(res => ({
-                ...res,
-                cover$: this.content.getImage(res.thumbnail, res.coverId)
-            })),
-            delayInterval(300, triggered$),
-            scan((acc, curr) => [...acc, curr], new Array<SpotlightView>()),
+            switchMap(res => from(res).pipe(
+                map(res => ({
+                    ...res,
+                    cover$: this.content.getImage(res.thumbnail, res.coverId)
+                })),
+                delayInterval(300, triggered$),
+                scan((acc, curr) => [...acc, curr], new Array<SpotlightView>()),
+            )),
         );
     }
 }

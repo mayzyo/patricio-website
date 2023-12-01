@@ -57,6 +57,7 @@ export class FeedService {
 
     private initialiseUpcoming(): Observable<FeedItem[]> {
         return this.refresh$.pipe(
+            startWith(null),
             map(() => this.buildFilteredQuery(FeedType.EVENT, true)),
             switchMap(filteredQuery => this.initialiseFiltered(filteredQuery)),
         );

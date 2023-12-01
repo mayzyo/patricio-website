@@ -29,10 +29,11 @@ export class UpcomingEventComponent {
         );
 
         return this.feed.upcoming$.pipe(
-            switchMap(res => from(res)),
-            take(6),
-            delayInterval(300, triggered$),
-            scan((acc, curr) => [...acc, curr], new Array<FeedItem>()),
+            switchMap(res => from(res).pipe(
+                take(6),
+                delayInterval(300, triggered$),
+                scan((acc, curr) => [...acc, curr], new Array<FeedItem>()),
+            )),
         );
     }
 }

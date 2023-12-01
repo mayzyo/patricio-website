@@ -52,12 +52,13 @@ export class SongGalleryComponent {
 
     private initialiseSongs(): Observable<BacklogView[]> {
         return this.song.list$.pipe(
-            switchMap(res => from(res)),
-            map(res => ({
-                ...res,
-                cover$: this.content.getImage(res.thumbnail, res.coverId)
-            })),
-            scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
+            switchMap(res => from(res).pipe(
+                map(res => ({
+                    ...res,
+                    cover$: this.content.getImage(res.thumbnail, res.coverId)
+                })),
+                scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
+            ))
         );
     }
 }

@@ -1,8 +1,7 @@
-// import { HttpClient } from '@angular/common/http';
 import { Injectable, Type, ViewContainerRef } from '@angular/core';
-import { Auth, user } from '@angular/fire/auth';
-import { Observable, from, throwError } from 'rxjs';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { Auth, idToken, user } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -10,19 +9,23 @@ import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 export class EditorService {
     private editorRef?: ViewContainerRef;
     readonly viewOnly$ = user(this.auth).pipe(
-        tap(res => console.log('auth', res)),
         map(res => res == null),
         shareReplay(1)
     );
 
     readonly idToken$ = this.initialiseIdToken();
 
-    constructor(private auth: Auth) {
-        // this.subscribeToIdToken();
-    }
+    constructor(private auth: Auth) { }
 
     initialise(editorRef: ViewContainerRef) {
         this.editorRef = editorRef;
+    }
+
+    signIn(): void {
+    }
+
+    signOut(): void {
+        this.auth.signOut();
     }
 
     open<T>(componentType: Type<T>) {
@@ -31,9 +34,9 @@ export class EditorService {
     }
 
     private initialiseIdToken(): Observable<string> {
-        return user(this.auth).pipe(
-            filter(user => user != null),
-            switchMap(user => user ? from(user.getIdToken()) : throwError(() => new Error('auth user is null'))),
+        return idToken(this.auth).pipe(
+            filter(idToken => idToken != null),
+            map(idToken => idToken as string),
             shareReplay({ bufferSize: 1, refCount: true })
         );
     }
