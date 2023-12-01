@@ -3,6 +3,7 @@ import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable, Subject } from 'rxjs';
 import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { Profile } from '../../models/profile';
+import { EmailConfig } from '../../models/email-config';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class ProfileService {
 
     readonly profile$ = this.initialiseProfile();
     readonly biography$ = this.initialiseBiography(this.profile$);
-    readonly email$ = this.initialiseEmail(this.profile$);
+    readonly emailConfig$ = this.initialiseEmailConfig(this.profile$);
 
     constructor(private firestore: Firestore) { }
 
@@ -35,7 +36,7 @@ export class ProfileService {
         return profile$.pipe(map(({ biographyCh, biographyEn }) => [biographyCh, biographyEn]));
     }
 
-    private initialiseEmail(profile$: Observable<Profile>): Observable<string> {
-        return profile$.pipe(map(({ email }) => email));
+    private initialiseEmailConfig(profile$: Observable<Profile>): Observable<EmailConfig> {
+        return profile$.pipe(map(({ purpose, senderType }) => ({ purpose, senderType })));
     }
 }

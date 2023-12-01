@@ -2,17 +2,20 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EmailService } from '../../services/email.service';
 import { Email, Purpose, Sender } from '../../../models/email';
+import { TitleComponent } from '../title/title.component';
+import { EditorService } from '../../../admin/services/editor.service';
+import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
     selector: 'app-email-me',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, FontAwesomeModule],
+    imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, FontAwesomeModule, TitleComponent],
     templateUrl: './email-me.component.html',
     styleUrl: './email-me.component.scss'
 })
@@ -20,6 +23,10 @@ export class EmailMeComponent {
     private readonly updateSuccess$ = new BehaviorSubject<string | null>(null);
     protected readonly success$ = this.updateSuccess$.pipe(debounceTime(2000));
 
+    protected purposeOptions$ = this.profile.emailConfig$.pipe(map(({ purpose }) => purpose));
+    protected purposeTotal$ = this.purposeOptions$.pipe(map(purpose => purpose.length));
+    protected senderTypeOptions$ = this.profile.emailConfig$.pipe(map(({ senderType }) => senderType));
+    protected senderTypeTotal$ = this.senderTypeOptions$.pipe(map(senderType => senderType.length));
     attemptedSubmit = signal(false);
     submitting = signal(false);
 
@@ -30,7 +37,17 @@ export class EmailMeComponent {
         purpose: [null],
     });
 
-    constructor(private fb: FormBuilder, private email: EmailService) { }
+    constructor(
+        private fb: FormBuilder,
+        private profile: ProfileService,
+        private email: EmailService,
+        private editor: EditorService
+    ) { }
+
+    async openEmailEditor() {
+        const { EmailComponent } = await import("../../../admin/components/email/email.component");
+        this.editor.open(EmailComponent);
+    }
 
     onClose(): void {
         this.updateSuccess$.next(null);

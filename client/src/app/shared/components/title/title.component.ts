@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, booleanAttribute } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditorService } from '../../../admin/services/editor.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -15,6 +15,8 @@ import { IconDefinition, faEdit } from '@fortawesome/free-regular-svg-icons';
 })
 export class TitleComponent {
     @Input() text = '';
+    @Input() textClass = 'h2';
+    @Input({ transform: booleanAttribute }) altColourEdit = false;
     @Input() icon?: IconDefinition;
     @Output() editClick = new EventEmitter<void>();
 
