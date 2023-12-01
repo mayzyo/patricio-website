@@ -1,7 +1,7 @@
 import { Injectable, Type, ViewContainerRef } from '@angular/core';
 import { Auth, idToken, user } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay, tap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -19,13 +19,6 @@ export class EditorService {
 
     initialise(editorRef: ViewContainerRef) {
         this.editorRef = editorRef;
-    }
-
-    signIn(): void {
-    }
-
-    signOut(): void {
-        this.auth.signOut();
     }
 
     open<T>(componentType: Type<T>) {

@@ -21,7 +21,7 @@ export class HomeComponent {
     protected readonly upcomingTriggered = signal(false);
     protected readonly biographyTriggered = signal(false);
 
-    constructor(private editor: EditorService) {}
+    constructor(private editor: EditorService) { }
 
     @HostListener('window:scroll')
     onScrollEvent(): void {

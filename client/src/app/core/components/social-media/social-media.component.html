@@ -1,10 +1,10 @@
 <div class="d-flex align-items-center mb-2">
     <h1 class="h4 m-0">Social Media</h1>
-    @if (viewOnly$ | async) {
+    @if (!(viewOnly$ | async)) {
         <button class="btn btn-link" (click)="openSocialMediaEditor()">
             <fa-icon [icon]="faEdit" size="lg"></fa-icon>
-        </button>      
-    }    
+        </button>
+    }
 </div>
 
 <ul class="nav flex-column">
@@ -17,14 +17,12 @@
                 </a>
             </li>
         }
-    
         @if (socialMedia.linkedIn) {
             <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.linkedIn }}">
                 <fa-icon [icon]="faLinkedin" size="lg" [style.color]="'teal'"></fa-icon>
                 <div class="ms-3">LinkedIn</div>
             </a>
         }
-    
         @if (socialMedia.instagram) {
             <li class="nav-item">
                 <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.instagram }}">
@@ -33,7 +31,6 @@
                 </a>
             </li>
         }
-    
         @if (socialMedia.weChatQrCode) {
             <li class="nav-item">
                 <button
@@ -51,7 +48,6 @@
                 </ng-template>
             </li>
         }
-    
         @if (socialMedia.weibo) {
             <li class="nav-item">
                 <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.weibo }}">
