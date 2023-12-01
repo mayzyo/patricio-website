@@ -30,7 +30,7 @@ import { FeedFormService } from '../../services/feed-form.service';
 export class FeedEditorComponent {
     @Output() action = new EventEmitter<EditorAction>();
 
-    private readonly clearUploaders$ = new Subject<void>();
+    private readonly clearUploader$ = new Subject<void>();
     protected previewUploader$ = this.initialiseUploader();
     protected readonly thumbnail$ = this.initialiseThumbnail(this.previewUploader$);
     protected readonly previewSelected = this.initialiseFileSelected(this.previewUploader$);
@@ -49,13 +49,10 @@ export class FeedEditorComponent {
         private editor: EditorService,
         private feedForm: FeedFormService
     ) {
-        this.RespondToSetThumbnailValue();
-        this.RespondToClearUploader();
-        this.RespondToFormPristine();
-    }
-
-    clearUploaders(): void {
-        this.clearUploaders$.next();
+        this.respondToSetThumbnailValue();
+        this.respondToClearUploader();
+        this.respondToFormPristine();
+        this.respondToIsEvent();
     }
 
     protected onRemoveThumbnail(): void {
@@ -94,10 +91,14 @@ export class FeedEditorComponent {
         this.action.emit(editorAction);
 
         this.feedForm.clear();
-        this.clearUploaders();
+        this.clearUploader();
     }
 
-    private RespondToSetThumbnailValue(): void {
+    private clearUploader(): void {
+        this.clearUploader$.next();
+    }
+
+    private respondToSetThumbnailValue(): void {
         effect(() => {
             if(!this.previewSelected()) {
                 untracked(() => this.form.get('thumbnail')?.setValue(''));
@@ -110,18 +111,29 @@ export class FeedEditorComponent {
         });
     }
 
-    private RespondToClearUploader(): void {
-        this.clearUploaders$.pipe(
+    private respondToClearUploader(): void {
+        this.clearUploader$.pipe(
             switchMap(() => this.previewUploader$.pipe(take(1))),
             takeUntilDestroyed()
         ).subscribe(previewUploader => previewUploader.cancelAll({ reason: 'user' }));
     }
 
-    private RespondToFormPristine(): void {
+    private respondToFormPristine(): void {
         this.form.statusChanges.pipe(
             filter(() => this.form.pristine),
             takeUntilDestroyed()
         ).subscribe(() => untracked(() => this.validating.set(false)));
+    }
+
+    private respondToIsEvent(): void {
+        this.form.get('isEvent')?.valueChanges.pipe(
+            takeUntilDestroyed()
+        ).subscribe(isEvent => {
+            if(isEvent == false) {
+                this.feedForm.clearEvents();
+                this.clearUploader();
+            }
+        });
     }
 
     private initialiseUploader(): Observable<Uppy> {

@@ -5,6 +5,7 @@ import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { DateConverter } from '../../shared/classes/date-converter';
 import { FeedItem } from '../../models/feed-item';
+import { eventRequiredValidator } from '../directives/event-required.directive';
 
 @Injectable()
 export class FeedFormService {
@@ -15,7 +16,8 @@ export class FeedFormService {
         date: [''],
         link: [''],
         thumbnail: [''],
-    });
+        isEvent: [false]
+    }, { validators: eventRequiredValidator });
 
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
@@ -27,6 +29,7 @@ export class FeedFormService {
             date: DateConverter.toInput(feed.date.toDate()),
             link: feed.link ?? '',
             thumbnail: feed.thumbnail ?? '',
+            isEvent: feed.isEvent
         });
     }
 
@@ -40,7 +43,7 @@ export class FeedFormService {
             date: Timestamp.fromDate(date),
             link: this.form.get('link')?.value ?? '',
             thumbnail: this.form.get('thumbnail')?.value ?? '',
-            isEvent: this.form.get('link')?.value == ''
+            isEvent: this.form.get('isEvent')?.value ?? false
         };
 
         const id = this.form.get('id')?.value;
@@ -67,5 +70,11 @@ export class FeedFormService {
 
     clear(): void {
         this.form.reset();
+    }
+
+    clearEvents(): void {
+        this.form.get('date')?.reset();
+        this.form.get('link')?.reset();
+        this.form.get('thumbnail')?.reset();
     }
 }

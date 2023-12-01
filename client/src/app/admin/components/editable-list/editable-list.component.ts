@@ -55,9 +55,9 @@ export class EditableListComponent implements ControlValueAccessor {
             inputElement.value = '';
             this.editedValue = '';
             this._value.update(prev => {
-                const v = [...prev, newValue];
-                this.onChange(v);
-                return v;
+                const arr = [...prev, newValue];
+                this.onChange(arr);
+                return arr;
             });
         }
     }
