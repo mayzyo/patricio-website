@@ -8,11 +8,11 @@ export const eventRequiredValidator: ValidatorFn = (
     const link = control.get('link');
     const date = control.get('date');
 
-    if(isEvent?.value == false) {
+    if(!isEvent?.value) {
         return null;
     }
 
-    return link?.value && thumbnail?.value && date?.value
+    return !link?.value || !thumbnail?.value || !date?.value
         ? { require: true }
         : null;
 };
