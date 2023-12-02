@@ -15,7 +15,13 @@ import { ProfileService } from '../../../core/services/profile.service';
     selector: 'app-email-me',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, NgbAlertModule, FontAwesomeModule, TitleComponent],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgbAlertModule,
+        FontAwesomeModule,
+        TitleComponent
+    ],
     templateUrl: './email-me.component.html',
     styleUrl: './email-me.component.scss'
 })

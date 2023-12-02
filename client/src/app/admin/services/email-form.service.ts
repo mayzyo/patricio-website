@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, forkJoin, from } from 'rxjs';
@@ -28,14 +28,14 @@ export class EmailFormService {
         this.profile.refresh();
     }
 
-    update(): Observable<EmailConfig & { email: string }> {
+    update(): Observable<EmailConfig & { emailRecipient: string }> {
         const model: EmailConfig = {
             purpose: this.form.get('purpose')?.value ?? [],
             senderType: this.form.get('senderType')?.value ?? [],
         };
         
         const privateModel: ProfilePrivate = {
-            email: this.form.get('email')?.value ?? ''
+            emailRecipient: this.form.get('email')?.value ?? ''
         };
 
         return forkJoin([

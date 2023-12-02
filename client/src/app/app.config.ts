@@ -2,9 +2,10 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp, getApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideAppCheck, initializeAppCheck, ReCaptchaV3Provider } from '@angular/fire/app-check';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -24,6 +25,9 @@ export const appConfig: ApplicationConfig = {
                 "measurementId": "G-3JJVTG62Z5"
             }))),
             importProvidersFrom(provideAuth(() => getAuth())),
-            importProvidersFrom(provideFirestore(() => getFirestore()))
+            importProvidersFrom(provideFirestore(() => getFirestore())),
+            importProvidersFrom(provideAppCheck(() => initializeAppCheck(getApp(), {
+                provider: new ReCaptchaV3Provider('6LeRpSMpAAAAAAR1S4Lb5ehO1igl1XHdASZJH51y'),
+            })))
         ]
 };

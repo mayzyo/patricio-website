@@ -1,20 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Email, Purpose, Sender } from '../../models/email';
-import { Observable } from 'rxjs';
+import { Email } from '../../models/email';
+import { Observable, forkJoin, from } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { ProfileService } from '../../core/services/profile.service';
+import { AppCheck, getToken } from '@angular/fire/app-check';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EmailService {
-    sendEmail(email: Email): Observable<any> {
-        email.purpose || (email.purpose = Purpose.OTHER);
-        email.senderType || (email.senderType = Sender.OTHER);
+    constructor(
+        private http: HttpClient,
+        private profile: ProfileService,
+        private appCheck: AppCheck
+    ) { }
 
-        const fd = new FormData();
-        fd.append('message', email.message);
-        fd.append('sender', email.sender);
-        fd.append('purpose', email.purpose.toString());
-        fd.append('senderType', email.senderType.toString());
-        throw new Error('Not implemented');
+    sendEmail(email: Email): Observable<void> {
+        return forkJoin([
+            from(getToken(this.appCheck)),
+            this.profile.profile$.pipe(take(1))
+        ]).pipe(
+            switchMap(([{ token }, { id }]) => this.http.post<void>(
+                'https://patricio-website-admin-dev.azurewebsites.net/api/send-mail',
+                { ...email, id },
+                { headers: { 'Authorization': token ?? '' } }
+            ))
+        );
+    }
+
+    tester(): Observable<any> {
+        return from(getToken(this.appCheck));
     }
 }

@@ -8,7 +8,7 @@ import { Observable, forkJoin, from } from 'rxjs';
 @Injectable()
 export class ProfilePrivateService {
     private readonly profile$ = this.initialiseProfile();
-    readonly email$ = this.profile$.pipe(map(({ email }) => email));
+    readonly email$ = this.profile$.pipe(map(({ emailRecipient }) => emailRecipient));
 
     constructor(private firestore: Firestore, private profile: ProfileService) { }
 
@@ -27,7 +27,7 @@ export class ProfilePrivateService {
         return this.profile.profile$.pipe(
             switchMap(({ id }) => {
                 const privateCol = collection(this.firestore, `profile/${id}/private`);
-                return (collectionData(privateCol, { idField: 'id' }) as Observable<Array<{ email: string }>>).pipe(take(1))
+                return (collectionData(privateCol, { idField: 'id' }) as Observable<Array<{ emailRecipient: string }>>).pipe(take(1))
             }),
             map(res => res[0]),
             share()

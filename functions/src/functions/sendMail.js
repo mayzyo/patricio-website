@@ -10,22 +10,32 @@ app.http('send-mail', {
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
 
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-        const confirmMsg = {
-            from: 'no-reply@destinesiastudio.com.au',
-            // from: 'no-reply@kazepatriciochan.com',
-            subject: 'Thanks for taking an Interest!',
-            text: 'This is an automated reply, I have received the message you left me',
-            html: `
-                <div>
-                    <h3 style=\"color: #4EBFD9;\">Thanks For Taking an Interest</h3>
-                    <hr />
-                    <p>This is an automated reply, I have received the message you left me</p>
-                    <p>I will get back to you as soon as I can</p>
-                </div>
-            `,
+        const recaptchaToken = request.headers.get('Authorization');
+        if(!recaptchaToken) {
+            return {
+                status: 401,
+                body: 'forbidden'
+            }
         }
+
+        const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            body: {
+                secret: process.env.RECAPTCHA_SECRET_KEY,
+                response: recaptchaToken,
+            }
+        });
+
+        const { success } = await response.json();
+        context.log('recaptcha check successfull', success);
+        if(!success) {
+            return {
+                status: 401,
+                body: 'forbidden'
+            }
+        }
+
+        const result = await request.json();
 
         const serviceAccount = {
             "type": "service_account",
@@ -41,53 +51,54 @@ app.http('send-mail', {
             "universe_domain": "googleapis.com"
         }
 
-        const id = request.headers.get('Authorization');
-        if(!id) {
-            return {
-                status: 401
-            }
-        }
-
-        const result = await request.json();
-
         const firebaseConfig = {
             credential: credential.cert(serviceAccount)
         };
 
         const firebase = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
         
-        // const test1 = await getFirestore(firebase).collection('profile').doc(id).listCollections().then(subCollections => {
-        //     subCollections.forEach(subCollection => {
-        //         subCollection.get().then(arr => arr.docs.forEach(doc => console.log('test1', doc.data())))
-        //     })
-        // });
-        // console.log('test1', test1.docs[0].private)
-        // const test2 = await getFirestore(firebase).collection(`profile/${id}/private`).get();
-        // console.log('test2', test2.docs)
-        // const querySnapshot = await getFirestore(firebase).collection('profile').doc(id).collection('private').get();
-        // const targetEmail = querySnapshot.docs[0].email;
-        const targetEmail ='michaelziyumay@hotmail.com'
+        const querySnapshot = await getFirestore(firebase).collection('profile').doc(id).collection('private').get();
+        const { emailRecipient, emailSender } = querySnapshot.docs[0].data();
+        
+        context.log('emailRecipient', emailRecipient);
+        context.log('emailSender', emailSender);
+        context.log('emailSource', result.email);
 
-        // Send mail
-        await sgMail.send({
-            from: 'no-reply@destinesiastudio.com.au',
-            // from: 'no-reply@kazepatriciochan.com',
-            to: targetEmail,
-            subject: `${result.purpose} - ${result.senderType}`,
-            text: result.content,
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+        const confirmMsg = {
+            from: emailSender,
+            subject: 'Thanks for taking an Interest!',
+            text: 'This is an automated reply, I have received the message you left me',
             html: `
                 <div>
-                    <h3 style=\"color: #4EBFD9;\">Message Received from Personal Website</h3>
+                    <h3 style=\"color: #4EBFD9;\">Thanks For Taking an Interest</h3>
                     <hr />
-                    <p>${ result.content }</p>
-                    <hr />
-                    <p>Email from: ${result.email}</p>
+                    <p>This is an automated reply, I have received the message you left me</p>
+                    <p>I will get back to you as soon as I can</p>
                 </div>
-            `
-        });
+            `,
+        }
 
-        // Send confirmation mail
-        await sgMail.send({ ...confirmMsg, to: result.email });
+        // // Send mail
+        // await sgMail.send({
+        //     from: emailSender,
+        //     to: emailRecipient,
+        //     subject: `${result.purpose} - ${result.senderType}`,
+        //     text: result.content,
+        //     html: `
+        //         <div>
+        //             <h3 style=\"color: #4EBFD9;\">Message Received from Personal Website</h3>
+        //             <hr />
+        //             <p>${ result.content }</p>
+        //             <hr />
+        //             <p>Email from: ${result.email}</p>
+        //         </div>
+        //     `
+        // });
+
+        // // Send confirmation mail
+        // await sgMail.send({ ...confirmMsg, to: result.email });
 
         return { body: 'success' };
     }
