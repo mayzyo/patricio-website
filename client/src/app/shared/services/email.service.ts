@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Email } from '../../models/email';
-import { Observable, forkJoin, from } from 'rxjs';
+import { Observable, forkJoin, from, iif, of, throwError } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from '../../core/services/profile.service';
@@ -16,20 +16,17 @@ export class EmailService {
         private appCheck: AppCheck
     ) { }
 
-    sendEmail(email: Email): Observable<void> {
+    sendEmail(email: Email): Observable<string> {
         return forkJoin([
             from(getToken(this.appCheck)),
             this.profile.profile$.pipe(take(1))
         ]).pipe(
-            switchMap(([{ token }, { id }]) => this.http.post<void>(
+            switchMap(([{ token }, { id }]) => this.http.post(
                 'https://patricio-website-admin-dev.azurewebsites.net/api/send-mail',
                 { ...email, id },
-                { headers: { 'Authorization': token ?? '' } }
-            ))
+                { headers: { 'Authorization': token ?? '' }, responseType: 'text' }
+            )),
+            switchMap(res => iif(() => res == 'success', of(res), throwError(() => 'unsuccessful')))
         );
-    }
-
-    tester(): Observable<any> {
-        return from(getToken(this.appCheck));
     }
 }

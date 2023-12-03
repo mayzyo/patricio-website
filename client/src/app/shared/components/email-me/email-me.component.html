@@ -9,76 +9,83 @@
             (editClick)="openEmailEditor()"
         />
 
-        <form class="row mt-3" (ngSubmit)="onSubmit()" [formGroup]="contactDetail">
+        <form
+            class="row mt-3 was-validated"
+            novalidate
+            [class.was-validated]="validating()"
+            [formGroup]="form"
+            (ngSubmit)="onSubmit()"
+        >
             <div class="col-md-6 col-sm-12">
-
                 <label for="message" class="form-label">Your message - 信息内容</label>
                 <textarea 
+                    formControlName="message"
                     class="form-control" 
                     rows="10" 
                     placeholder="write your message here, thanks..."
                     id="message" 
                     name="message"
-                    formControlName="message"
                     required
                 >
                 </textarea>
-                @if(attemptedSubmit() && contactDetail.get('message')?.invalid) {
-                    <div class="text-danger font-italic">
-                        Please leave a quick message for me
-                    </div>
-                }
-
+                <div class="invalid-feedback">
+                    Please leave a quick message for me
+                </div>
             </div>
+
             <div class="col-md-6 col-sm-12">
 
                 <label for="purpose" class="form-label">What's it about - 消息抬头</label>
                 <select 
+                    formControlName="purpose"
                     class="form-select mb-2" 
                     id="purpose"
                     name="purpose"
-                    formControlName="purpose"
+                    required
                 >
-                    <option [value]="null">Select an option - 选择抬头</option>
+                    <option value="">Select an option - 选择抬头</option>
                     @for(purpose of purposeOptions$ | async; track purpose) {
-                        <option [value]="$index">{{ purpose }}</option>
+                        <option [value]="purpose">{{ purpose }}</option>
                     }
-                    <option [value]="purposeTotal$ | async">Others - 其它</option>
+                    <option value="Others - 其它">Others - 其它</option>
                 </select>
 
                 <label for="senderType" class="form-label">A bit about yourself - 如何描述您</label>
                 <select 
+                    formControlName="senderType"
                     class="form-select mb-2" 
                     id="senderType"
                     name="senderType"
-                    formControlName="senderType"
+                    required
                 >
-                    <option [value]="null">Select an option - 选择描述</option>
+                    <option value="">Select an option - 选择描述</option>
                     @for(senderType of senderTypeOptions$ | async; track senderType) {
-                        <option [value]="$index">{{ senderType }}</option>
+                        <option [value]="senderType">{{ senderType }}</option>
                     }
-                    <option [value]="senderTypeTotal$ | async">Others - 其它</option>
+                    <option value="Others - 其它">Others - 其它</option>
                 </select>
 
                 <label for="sender" class="form-label">Your email - 您的邮箱</label>
                 <input 
+                    formControlName="sender"
                     class="form-control mb-2" 
                     type="email" 
                     id="sender" 
                     name="sender"
-                    formControlName="sender"
                     placeholder="name@example.com..."
                     required
                     email
                 >
-                @if(attemptedSubmit() && contactDetail.get('sender')?.invalid) {
-                    <div class="text-danger font-italic" >
-                        Please provide a valid email address
-                    </div>
-                }
+                <div class="invalid-feedback" >
+                    Please provide a valid email address
+                </div>
 
                 <button class="btn btn-secondary mt-2 shadow text-white" type="submit">
-                    Send | 发送
+                    @if(submitting()) {
+                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                    } @else {
+                        Send | 发送
+                    }
                 </button>
 
             </div>
@@ -88,10 +95,13 @@
 </div>
 
 @if(success$ | async; as successMessage) {
-    <div style="position: fixed; top: 5px; left: 0; width: 100%; z-index: 3; margin: auto; text-align: center;">
-        <ngb-alert type="info" (close)="onClose()">
-            {{ successMessage }}
-        </ngb-alert>
-    </div>
+    <ngb-alert type="info" (close)="onClose()">
+        {{ successMessage }}
+    </ngb-alert>
 }
 
+@if(failed$ | async; as failedMessage) {
+    <ngb-alert type="warning" (close)="onClose()">
+        {{ failedMessage }}
+    </ngb-alert>
+}

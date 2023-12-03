@@ -3,20 +3,7 @@ export interface Email {
 
 	sender: string;
 
-	purpose: Purpose;
+	purpose: string;
 
-	senderType: Sender;
-}
-
-export enum Purpose {
-	DEAL,
-
-	OTHER,
-}
-export enum Sender {
-	DIRECTOR,
-
-	MUSICIAN,
-
-	OTHER,
+	senderType: string;
 }

@@ -23,11 +23,13 @@ app.http('save-media', {
             sharedKeyCredential
         )
 
+        // The private key listed in the Firebase JSON file need to be converted to Bas64 via btoa() first.
+        // Because the Env variables set in Configuration Settings on Azure reads it wrong.
         const serviceAccount = {
             "type": "service_account",
             "project_id": "patricio-website",
             "private_key_id": process.env.FIREBASE_ADMIN_SDK_PRIVATE_KEY_ID,
-            "private_key": process.env.FIREBASE_ADMIN_SDK_PRIVATE_KEY,
+            "private_key": atob(process.env.FIREBASE_ADMIN_SDK_PRIVATE_KEY_BASE64),
             "client_email": process.env.FIREBASE_ADMIN_SDK_CLIENT_EMAIL,
             "client_id": process.env.FIREBASE_ADMIN_SDK_CLIENT_ID,
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",

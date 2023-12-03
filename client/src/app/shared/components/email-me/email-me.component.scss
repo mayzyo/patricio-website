@@ -1,3 +1,19 @@
+:host {
+    position: relative;
+}
+
 textarea {
     resize: none;
+}
+
+ngb-alert {
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -10%);
+
+    min-width: 50vw;
+    max-width: 75vw;
+    opacity: .8;
 }
