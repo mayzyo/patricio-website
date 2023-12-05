@@ -93,7 +93,10 @@ export class FeedEditorComponent {
 
         this.action.emit(editorAction);
 
-        this.feedForm.clear();
+        if(editorAction.clearSelection) {
+            this.feedForm.clear();
+        }
+
         this.clearUploader();
     }
 

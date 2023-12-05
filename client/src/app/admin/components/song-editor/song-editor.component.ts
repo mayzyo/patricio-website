@@ -110,7 +110,10 @@ export class SongEditorComponent {
 
         this.action.emit(editorAction);
 
-        this.songForm.clear();
+        if(editorAction.clearSelection) {
+            this.songForm.clear();
+        }
+        
         this.clearUploaders();
     }
 

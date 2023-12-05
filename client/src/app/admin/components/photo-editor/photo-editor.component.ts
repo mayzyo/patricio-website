@@ -91,8 +91,11 @@ export class PhotoEditorComponent {
         this.validating.set(false);
 
         this.action.emit(editorAction);
+
+        if(editorAction.clearSelection) {
+            this.photoForm.clear();
+        }
         
-        this.photoForm.clear();
         this.clearUploader();
     }
 
