@@ -13,6 +13,12 @@ export interface Song {
 
 	soundCloud?: string;
 
+	youtube?: string;
+
+	vimeo?: string;
+
+	bilibili?: string;
+
 	coverId?: string;
 
 	audioId: string;

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Firestore, Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { Song } from '../../models/song';
 import { DateConverter } from '../../shared/classes/date-converter';
 
@@ -14,13 +15,20 @@ export class SongFormService {
         genre: ['', Validators.required],
         date: ['', Validators.required],
         soundCloud: [''],
+        youtube: [''],
+        vimeo: [''],
+        bilibili: [''],
         thumbnail: [''],
         spotlight: [false],
         coverId: [''],
         audioId: ['']
     });
 
-    constructor(private fb: FormBuilder, private firestore: Firestore) { }
+    constructor(private fb: FormBuilder, private firestore: Firestore) {
+        this.respondToYoutubeLink();
+        this.respondToVimeoLink();
+        this.respondToBilibiliLink();
+    }
 
     assign(song: Song): void {
         this.form.markAsPristine();
@@ -31,6 +39,9 @@ export class SongFormService {
             genre: song.genre,
             date: DateConverter.toInput(song.date.toDate()),
             soundCloud: song.soundCloud ?? '',
+            youtube: song.youtube ?? '',
+            bilibili: song.bilibili ?? '',
+            vimeo: song.vimeo ?? '',
             thumbnail: song.thumbnail ?? '',
             spotlight: song.spotlight,
             coverId: song.coverId ?? '',
@@ -47,6 +58,9 @@ export class SongFormService {
             genre: this.form.get('genre')?.value ?? '',
             date: Timestamp.fromDate(date),
             soundCloud: this.form.get('soundCloud')?.value ?? '',
+            youtube: this.form.get('youtube')?.value ?? '',
+            vimeo: this.form.get('vimeo')?.value ?? '',
+            bilibili: this.form.get('bilibili')?.value ?? '',
             thumbnail: this.form.get('thumbnail')?.value ?? '',
             spotlight: this.form.get('spotlight')?.value ?? false,
             coverId: this.form.get('coverId')?.value ?? '',
@@ -78,4 +92,69 @@ export class SongFormService {
     clear(): void {
         this.form.reset();
     }
+
+    private respondToYoutubeLink(): void {
+        const youtubeCtrl = this.form.get('youtube');
+        youtubeCtrl?.valueChanges.pipe(
+            filter(res => res != null),
+            takeUntilDestroyed()
+        ).subscribe(res => {
+            if(res != null) {
+                if(res.includes('iframe')) {
+                    const startIndex = res.indexOf('src="') + 5;
+                    const endIndex = res.indexOf('"', startIndex);
+                    const url = res.slice(startIndex, endIndex);
+
+                    if(url != res) {
+                        youtubeCtrl.setValue(url);
+                    }
+                }
+            }
+        })
+    }
+
+    private respondToBilibiliLink(): void {
+        const bilibiliCtrl = this.form.get('bilibili');
+        bilibiliCtrl?.valueChanges.pipe(
+            filter(res => res != null),
+            takeUntilDestroyed()
+        ).subscribe(res => {
+            if(res != null) {
+                if(res.includes('iframe')) {
+                    const startIndex = res.indexOf('src="') + 5;
+                    const endIndex = res.indexOf('"', startIndex);
+                    let url = res.slice(startIndex, endIndex);
+
+                    if(!url.includes('https:')) {
+                        url = `https:${url}`;
+                    }
+
+                    if(url != res) {
+                        bilibiliCtrl.setValue(url);
+                    }
+                }
+            }
+        })
+    }
+
+    private respondToVimeoLink(): void {
+        const vimeoCtrl = this.form.get('vimeo');
+        vimeoCtrl?.valueChanges.pipe(
+            filter(res => res != null),
+            takeUntilDestroyed()
+        ).subscribe(res => {
+            if(res != null) {
+                if(res.includes('iframe')) {
+                    const startIndex = res.indexOf('src="') + 5;
+                    const endIndex = res.indexOf('"', startIndex);
+                    const url = res.slice(startIndex, endIndex);
+
+                    if(url != res) {
+                        vimeoCtrl.setValue(url);
+                    }
+                }
+            }
+        })
+    }
+
 }

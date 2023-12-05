@@ -16,4 +16,6 @@ export interface SocialMedia {
 	vimeo?: string;
 
 	youtube?: string;
+
+	bilibili?: string;
 }

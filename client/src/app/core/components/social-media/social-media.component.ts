@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { faFacebookSquare, faInstagram, faLinkedin, faSoundcloud, faTiktok, faVimeoV, faWeibo, faWeixin, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faBilibili, faFacebookSquare, faInstagram, faLinkedin, faSoundcloud, faTiktok, faVimeoV, faWeibo, faWeixin, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { EditorService } from '../../../admin/services/editor.service';
 import { ProfileService } from '../../services/profile.service';
@@ -23,6 +23,7 @@ export class SocialMediaComponent {
     protected readonly faWeibo = faWeibo;
     protected readonly faVimeoV = faVimeoV;
     protected readonly faYoutube = faYoutube;
+    protected readonly faBilibili = faBilibili;
     protected readonly faEdit = faEdit;
 
     protected readonly socialMedia$ = this.initialiseSocialMedia();
@@ -46,7 +47,8 @@ export class SocialMediaComponent {
                 tiktok: profile.tiktok,
                 weibo: profile.weibo,
                 vimeo: profile.vimeo,
-                youtube: profile.youtube
+                youtube: profile.youtube,
+                bilibili: profile.bilibili
             }))
         );
     }

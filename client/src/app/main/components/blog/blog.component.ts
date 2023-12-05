@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable } from 'rxjs';
 import { filter, map, share, switchMap, tap } from 'rxjs/operators';
-import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
+import { faBilibili, faSoundcloud, faVimeoV, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { SongService } from '../../../shared/services/song.service';
 import { Blog } from '../../../models/blog';
 import { BlogSongView } from '../../interfaces/blog-song-view';
@@ -28,6 +29,9 @@ export class BlogComponent {
     }
 
     protected readonly faSoundcloud = faSoundcloud;
+    protected readonly faYoutube = faYoutube;
+    protected readonly faVimeoV = faVimeoV;
+    protected readonly faBilibili = faBilibili;
 
     protected readonly song$ = this.initialiseSong();
     protected readonly blog$ = this.initialiseBlog();
@@ -35,6 +39,7 @@ export class BlogComponent {
     protected readonly audio = signal<any | null>(null);
 
     constructor(
+        private sanitizer: DomSanitizer,
         private song: SongService,
         private content: ContentService,
         private musicPlayer: MusicPlayerService
@@ -54,9 +59,12 @@ export class BlogComponent {
             )),
             map(song => ({
                 ...song,
-                cover$: this.content.getImage(song?.thumbnail, song?.coverId)
+                cover$: this.content.getImage(song?.thumbnail, song?.coverId),
+                youtubeSanitized: song?.youtube ? this.sanitizer.bypassSecurityTrustResourceUrl(song?.youtube) : '',
+                vimeoSanitized: song?.vimeo ? this.sanitizer.bypassSecurityTrustResourceUrl(song?.vimeo) : '',
+                bilibiliSanitized: song?.bilibili ? this.sanitizer.bypassSecurityTrustResourceUrl(song?.bilibili) : ''
             }) as BlogSongView),
-            tap(({ audioId }) => this.musicPlayer.loadAudio(audioId)),
+            tap(({ audioId, youtube, vimeo, bilibili }) => youtube || vimeo || bilibili || this.musicPlayer.loadAudio(audioId)),
             share()
         );
     }

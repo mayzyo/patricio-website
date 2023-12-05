@@ -72,6 +72,14 @@
                 </a>
             </li>
         }
+        @if (socialMedia.bilibili) {
+            <li class="nav-item">
+                <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.bilibili }}">
+                    <fa-icon [icon]="faBilibili" size="lg" [style.color]="'#00AEEC'" />
+                    <div class="ms-3">哔哩哔哩 | bilibili</div>
+                </a>
+            </li>
+        }
         @if (socialMedia.vimeo) {
             <li class="nav-item">
                 <a class="nav-link px-0 d-flex align-items-center" href="{{ socialMedia.vimeo }}">

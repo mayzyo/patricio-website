@@ -19,7 +19,8 @@ export class SocialMediaFormService {
         tiktok: ['', Validators.pattern(this.urlRegex)],
         weibo: ['', Validators.pattern(this.urlRegex)],
         vimeo: ['', Validators.pattern(this.urlRegex)],
-        youtube: ['', Validators.pattern(this.urlRegex)]
+        youtube: ['', Validators.pattern(this.urlRegex)],
+        bilibili: ['', Validators.pattern(this.urlRegex)],
     });
 
     constructor(private fb: FormBuilder, private firestore: Firestore, private profile: ProfileService) {
@@ -37,7 +38,8 @@ export class SocialMediaFormService {
             tiktok: this.form.get('tiktok')?.value ?? '',
             weibo: this.form.get('weibo')?.value ?? '',
             vimeo: this.form.get('vimeo')?.value ?? '',
-            youtube: this.form.get('youtube')?.value ?? ''
+            youtube: this.form.get('youtube')?.value ?? '',
+            bilibili: this.form.get('bilibili')?.value ?? ''
         };
 
         return this.profile.profile$.pipe(
@@ -60,6 +62,7 @@ export class SocialMediaFormService {
                 weibo: profile.weibo ?? '',
                 vimeo: profile.vimeo ?? '',
                 youtube: profile.youtube ?? '',
+                bilibili: profile.bilibili ?? '',
             }));
     }
 }
