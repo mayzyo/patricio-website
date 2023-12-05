@@ -56,6 +56,11 @@ app.http('save-media', {
             const decodedToken = await getAuth(firebase).verifyIdToken(idToken)
             const uid = decodedToken.uid
             context.log(`uid: "${uid}"`)
+            if(uid != 'VcTV3IFldzWHhGWjU36LXe1c22w2' && uid != process.env.FIREBASE_APPROVED_USER_UID) {
+                return {
+                    status: 401
+                }
+            }
         } catch {
             return {
                 status: 401
