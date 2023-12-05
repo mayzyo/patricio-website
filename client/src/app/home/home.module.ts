@@ -10,7 +10,7 @@ import { TitleComponent } from '../shared/components/title/title.component';
 import { UpcomingEventComponent } from './components/upcoming-event/upcoming-event.component';
 import { EmailMeComponent } from '../shared/components/email-me/email-me.component';
 import { RouterModule } from '@angular/router';
-
+import { routes } from './home.routes';
 
 
 @NgModule({
@@ -23,7 +23,7 @@ import { RouterModule } from '@angular/router';
     ],
     imports: [
         CommonModule,
-        RouterModule,
+        RouterModule.forChild(routes),
         FontAwesomeModule,
         TitleComponent,
         FeedComponent,

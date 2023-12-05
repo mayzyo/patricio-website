@@ -16,6 +16,7 @@ import { MediaComponent } from './components/media/media.component';
 import { PhotoGalleryComponent } from './components/photo-gallery/photo-gallery.component';
 import { GalleryModule } from 'ng-gallery';
 import { BlogComponent } from './components/blog/blog.component';
+import { routes } from './main.routes';
 
 
 
@@ -33,7 +34,7 @@ import { BlogComponent } from './components/blog/blog.component';
   ],
   imports: [
     CommonModule,
-    RouterModule,
+    RouterModule.forChild(routes),
     FontAwesomeModule,
     InfiniteScrollModule,
     GalleryModule,

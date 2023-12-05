@@ -1,30 +1,25 @@
 import { Routes } from '@angular/router';
-import { UpdatesComponent } from './main/components/updates/updates.component';
-import { HomeComponent } from './home/components/home/home.component';
-import { DiscographyComponent } from './main/components/discography/discography.component';
-import { MediaComponent } from './main/components/media/media.component';
-import { BlogComponent } from './main/components/blog/blog.component';
 
 export const routes: Routes = [
     {
         path: 'home',
-        component: HomeComponent,
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
     },
     {
-        path: 'updates',
-        component: UpdatesComponent,
+        path: '',
+        loadChildren: () => import('./main/main.module').then(m => m.MainModule)
     },
     {
-        path: 'discography',
-        component: DiscographyComponent,
+        path: 'privacy-policy',
+        loadComponent: () => import('./misc/components/privacy-policy/privacy-policy.component').then(m =>
+            m.PrivacyPolicyComponent
+        )
     },
     {
-        path: 'media',
-        component: MediaComponent,
-    },
-    {
-        path: 'blog/:id',
-        component: BlogComponent,
+        path: 'terms-of-service',
+        loadComponent: () => import('./misc/components/terms-of-service/terms-of-service.component').then(m =>
+            m.TermsOfServiceComponent
+        )
     },
     {
         path: '',
