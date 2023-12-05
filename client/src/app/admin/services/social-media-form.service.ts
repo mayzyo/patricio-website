@@ -11,11 +11,15 @@ import { SocialMedia } from '../../models/social-media';
 export class SocialMediaFormService {
     private readonly urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     readonly form = this.fb.group({
+        soundCloud: ['', Validators.pattern(this.urlRegex)],
         facebook: ['', Validators.pattern(this.urlRegex)],
         linkedIn: ['', Validators.pattern(this.urlRegex)],
         instagram: ['', Validators.pattern(this.urlRegex)],
         weChatQrCode: [''], 
-        weibo: ['', Validators.pattern(this.urlRegex)]
+        tiktok: ['', Validators.pattern(this.urlRegex)],
+        weibo: ['', Validators.pattern(this.urlRegex)],
+        vimeo: ['', Validators.pattern(this.urlRegex)],
+        youtube: ['', Validators.pattern(this.urlRegex)]
     });
 
     constructor(private fb: FormBuilder, private firestore: Firestore, private profile: ProfileService) {
@@ -25,11 +29,15 @@ export class SocialMediaFormService {
 
     update(): Observable<SocialMedia> {
         const model: SocialMedia = {
+            soundCloud: this.form.get('soundCloud')?.value ?? '',
             facebook: this.form.get('facebook')?.value ?? '',
             linkedIn: this.form.get('linkedIn')?.value ?? '',
             instagram: this.form.get('instagram')?.value ?? '',
             weChatQrCode: this.form.get('weChatQrCode')?.value ?? '',
+            tiktok: this.form.get('tiktok')?.value ?? '',
             weibo: this.form.get('weibo')?.value ?? '',
+            vimeo: this.form.get('vimeo')?.value ?? '',
+            youtube: this.form.get('youtube')?.value ?? ''
         };
 
         return this.profile.profile$.pipe(
@@ -43,11 +51,15 @@ export class SocialMediaFormService {
     private respondToSocialMedia(): void {
         this.profile.profile$.pipe(takeUntilDestroyed())
             .subscribe(profile => this.form.setValue({
+                soundCloud: profile.soundCloud ?? '',
                 facebook: profile.facebook ?? '',
                 linkedIn: profile.linkedIn ?? '',
                 instagram: profile.instagram ?? '',
                 weChatQrCode: profile.weChatQrCode ?? '',
+                tiktok: profile.tiktok ?? '',
                 weibo: profile.weibo ?? '',
+                vimeo: profile.vimeo ?? '',
+                youtube: profile.youtube ?? '',
             }));
     }
 }
