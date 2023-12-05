@@ -8,6 +8,7 @@ import { BacklogView } from '../../interfaces/backlog-view';
 import { MusicPlayerService } from '../../services/music-player.service';
 import { SongService } from '../../../shared/services/song.service';
 import { ContentService } from '../../../shared/services/content.service';
+import { delayInterval } from '../../../shared/operators/delay-interval';
 
 @Component({
     selector: 'app-song-gallery',
@@ -22,7 +23,7 @@ export class SongGalleryComponent {
     protected readonly faCirclePlay = faCirclePlay;
     protected readonly faSoundcloud = faSoundcloud;
 
-    protected readonly songs$ = this.initialiseSongs();
+    protected readonly songs$ = this.initialiseSongsAnimated();
     protected readonly loading$ = this.musicPlayer.loading$;
     protected readonly endReached$ = this.song.endReached$.pipe(startWith(true));
     protected readonly hoverTarget = signal<BacklogView | null>(null);
@@ -50,13 +51,14 @@ export class SongGalleryComponent {
         this.musicPlayer.audio$.pipe(takeUntilDestroyed()).subscribe(res => this.audio.set(res));
     }
 
-    private initialiseSongs(): Observable<BacklogView[]> {
+    private initialiseSongsAnimated(): Observable<BacklogView[]> {
         return this.song.list$.pipe(
             switchMap(res => from(res).pipe(
                 map(res => ({
                     ...res,
                     cover$: this.content.getImage(res.thumbnail, res.coverId)
                 })),
+                delayInterval(),
                 scan((acc, curr) => [...acc, curr], new Array<BacklogView>()),
             ))
         );

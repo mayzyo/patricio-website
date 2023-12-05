@@ -2,6 +2,10 @@ import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/cor
 import { EditorService } from '../../../admin/services/editor.service';
 import { FeedService } from '../../../shared/services/feed.service';
 import { FeedType } from '../../../shared/enums/feed-type';
+import { Observable, from } from 'rxjs';
+import { scan, switchMap } from 'rxjs/operators';
+import { FeedItem } from '../../../models/feed-item';
+import { delayInterval } from '../../../shared/operators/delay-interval';
 
 @Component({
     selector: 'app-updates',
@@ -11,7 +15,7 @@ import { FeedType } from '../../../shared/enums/feed-type';
 })
 export class UpdatesComponent {
     protected readonly selectedFilter = signal(FeedType.ALL);
-    protected readonly recent$ = this.feed.recent$;
+    protected readonly recent$ = this.initialiseRecentAnimated();
     protected readonly archived$ = this.feed.archived$;
 
     constructor(private feed: FeedService, private editor: EditorService) {
@@ -31,5 +35,14 @@ export class UpdatesComponent {
         effect(() => {
             this.feed.refresh(this.selectedFilter());
         });
+    }
+
+    private initialiseRecentAnimated(): Observable<FeedItem[]> {
+        return this.feed.recent$.pipe(
+            switchMap(feed => from(feed).pipe(
+                delayInterval(),
+                scan((acc, curr) => acc.concat(curr), new Array<FeedItem>())
+            )),
+        );
     }
 }
