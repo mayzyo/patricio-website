@@ -39,6 +39,30 @@
                                                 >
                                                     <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'" />
                                                 </a>
+
+                                                <a
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.appleMusic"
+                                                    [href]="song.appleMusic"
+                                                >
+                                                    <fa-icon [icon]="faApple" [style.color]="'#F23A52'" />
+                                                </a>
+
+                                                <a
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.spotify"
+                                                    [href]="song.spotify"
+                                                >
+                                                    <fa-icon [icon]="faSpotify" [style.color]="'#1DB954'" />
+                                                </a>
+
+                                                <a
+                                                    class="btn btn-link text-white"
+                                                    [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                                                    [queryParams]="{ songId: song.id }"
+                                                >
+                                                    <fa-icon [icon]="faCircleInfo" />
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -58,9 +82,6 @@
                                     [queryParams]="{ songId: song.id }"
                                 >
                                     <fa-icon [icon]="faCircleInfo" size="2x" />
-                                </a>
-                                <a class="btn btn-link" [hidden]="!song.soundCloud" [href]="song.soundCloud">
-                                    <fa-icon [icon]="faSoundcloud" size="2x" [style.color]="'#FF4300'" />
                                 </a>
                             </div>
                         }

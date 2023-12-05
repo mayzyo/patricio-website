@@ -19,6 +19,10 @@ export interface Song {
 
 	bilibili?: string;
 
+	appleMusic?: string;
+
+	spotify?: string;
+
 	coverId?: string;
 
 	audioId: string;

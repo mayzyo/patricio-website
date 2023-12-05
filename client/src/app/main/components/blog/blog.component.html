@@ -28,7 +28,7 @@
         </div>
 
         <div class="row my-3">
-            <h2 class="col-auto h5 d-flex align-items-center px-0">Links | 链接</h2>
+            <h2 class="col-auto h5 d-flex align-items-center p-0 m-0 me-3">Links | 链接</h2>
             
             <a
                 class="btn btn-link col-auto"
@@ -36,6 +36,22 @@
                 [hidden]="!song.soundCloud"
             >
                 <fa-icon [icon]="faSoundcloud" size="2x" [style.color]="'#FF4300'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.appleMusic"
+                [hidden]="!song.appleMusic"
+            >
+                <fa-icon [icon]="faApple" size="2x" [style.color]="'#F23A52'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.spotify"
+                [hidden]="!song.spotify"
+            >
+                <fa-icon [icon]="faSpotify" size="2x" [style.color]="'#1DB954'" />
             </a>
 
             <a

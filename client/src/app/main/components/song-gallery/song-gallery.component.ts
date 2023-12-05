@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
 import { map, scan, startWith, switchMap } from 'rxjs/operators';
 import { faCircleInfo, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
-import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
+import { faApple, faSoundcloud, faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { BacklogView } from '../../interfaces/backlog-view';
 import { MusicPlayerService } from '../../services/music-player.service';
 import { SongService } from '../../../shared/services/song.service';
@@ -22,6 +22,8 @@ export class SongGalleryComponent {
     protected readonly faCircleInfo = faCircleInfo;
     protected readonly faCirclePlay = faCirclePlay;
     protected readonly faSoundcloud = faSoundcloud;
+    protected readonly faApple = faApple;
+    protected readonly faSpotify = faSpotify;
 
     protected readonly songs$ = this.initialiseSongsAnimated();
     protected readonly loading$ = this.musicPlayer.loading$;

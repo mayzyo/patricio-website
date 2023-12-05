@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable } from 'rxjs';
 import { filter, map, share, switchMap, tap } from 'rxjs/operators';
-import { faBilibili, faSoundcloud, faVimeoV, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faApple, faBilibili, faSoundcloud, faSpotify, faVimeoV, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { SongService } from '../../../shared/services/song.service';
 import { Blog } from '../../../models/blog';
 import { BlogSongView } from '../../interfaces/blog-song-view';
@@ -29,6 +29,8 @@ export class BlogComponent {
     }
 
     protected readonly faSoundcloud = faSoundcloud;
+    protected readonly faApple = faApple;
+    protected readonly faSpotify = faSpotify;
     protected readonly faYoutube = faYoutube;
     protected readonly faVimeoV = faVimeoV;
     protected readonly faBilibili = faBilibili;
