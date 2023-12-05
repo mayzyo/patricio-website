@@ -41,6 +41,7 @@ export class SongEditorComponent {
 
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
+    protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
     protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
@@ -62,19 +63,30 @@ export class SongEditorComponent {
     protected onSubmit(): void {
         this.validating.set(true);
 
-        if(this.form.valid && !this.submitting() && this.audioSelected()) {
+        if(this.form.valid && !this.submitting()) {
             this.submitting.set(true);
             const uploadCover$ = this.initialiseUploadFile(this.coverUploader$, 'coverId');
             const uploadAudio$ = this.initialiseUploadFile(this.audioUploader$, 'audioId');
-            
-            iif(
-                () => this.coverSelected() == true,
-                forkJoin([uploadCover$, uploadAudio$]),
-                uploadAudio$
-            ).pipe(
-                switchMap(() => this.songForm.save()),
-                takeUntilDestroyed(this.destroyRef)
-            ).subscribe(() => this.onComplete({ clearSelection: false }));
+
+            if(this.audioSelected()) {
+                iif(
+                    () => this.coverSelected() == true,
+                    forkJoin([uploadCover$, uploadAudio$]),
+                    uploadAudio$
+                ).pipe(
+                    switchMap(() => this.songForm.save()),
+                    takeUntilDestroyed(this.destroyRef)
+                ).subscribe(() => this.onComplete({ clearSelection: false }));
+            } else if(this.form.get('audioId')?.value) {
+                iif(
+                    () => this.coverSelected() == true,
+                    uploadCover$,
+                    of(null)
+                ).pipe(
+                    switchMap(() => this.songForm.save()),
+                    takeUntilDestroyed(this.destroyRef)
+                ).subscribe(() => this.onComplete({ clearSelection: false }));
+            }
         }
     }
 

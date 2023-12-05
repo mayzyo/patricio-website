@@ -105,9 +105,13 @@
         <button
             class="btn btn-secondary shadow flex-grow-1 m-2 text-white"
             type="submit"
-            [disabled]="submitting()"
+            [disabled]="submitting() || pristine()"
         >
-            {{ (songSelected$ | async) ? "Change" : "Add" }}
+            @if(submitting()) {
+                <span class="spinner-border spinner-border-sm" role="status"></span>
+            } @else {
+                {{ (songSelected$ | async) ? "Change" : "Add" }}
+            }
         </button>
         @if(songSelected$ | async) {
             <button

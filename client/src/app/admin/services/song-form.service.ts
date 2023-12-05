@@ -12,7 +12,7 @@ export class SongFormService {
         id: [''],
         title: ['', Validators.required],
         genre: ['', Validators.required],
-        date: [''],
+        date: ['', Validators.required],
         soundCloud: [''],
         thumbnail: [''],
         spotlight: [false],
@@ -23,6 +23,8 @@ export class SongFormService {
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
     assign(song: Song): void {
+        this.form.markAsPristine();
+
         this.form.setValue({
             id: song.id ?? '',
             title: song.title,
