@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { EMPTY, Observable, Subject, from, iif, of } from 'rxjs';
+import { Observable, Subject, from, iif, of } from 'rxjs';
 import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
@@ -39,6 +39,7 @@ export class PhotoEditorComponent {
 
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
+    protected readonly pristine = this.initialisePristine(this.imageSelected);
     protected readonly photoSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly imageExists$ = this.form.get('imageId')?.valueChanges.pipe(map(res => res != null));
 
@@ -147,7 +148,7 @@ export class PhotoEditorComponent {
         );
     }
 
-    private initialiseFileSelected(uploader$: Observable<Uppy>) {
+    private initialiseFileSelected(uploader$: Observable<Uppy>): Signal<boolean | undefined> {
         return toSignal(uploader$.pipe(
             switchMap(uploader => new Observable<boolean>(subscriber => {
                 uploader.on('file-added', () => subscriber.next(true));
@@ -165,5 +166,10 @@ export class PhotoEditorComponent {
             switchMap(preview => this.http.get(preview, { responseType: 'blob' })),
             switchMap(blob => ImageConverter.blobToBase64(blob))
         );
+    }
+
+    private initialisePristine(imageSelected: Signal<boolean | undefined>): Signal<boolean | undefined> {
+        const pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
+        return computed(() => pristine() && !imageSelected());
     }
 }

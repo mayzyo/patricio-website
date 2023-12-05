@@ -57,7 +57,7 @@
         <button
             class="btn btn-secondary shadow flex-grow-1 m-2 text-white"
             type="submit"
-            [disabled]="submitting()"
+            [disabled]="submitting() || pristine()"
         >
             {{ (photoSelected$ | async) ? "Change" : "Add" }}
         </button>

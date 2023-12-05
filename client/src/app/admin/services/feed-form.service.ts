@@ -22,6 +22,8 @@ export class FeedFormService {
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
     assign(feed: FeedItem): void {
+        this.form.markAsPristine();
+
         this.form.setValue({
             id: feed.id ?? '',
             title: feed.title,

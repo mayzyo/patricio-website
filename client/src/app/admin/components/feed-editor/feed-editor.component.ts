@@ -37,10 +37,11 @@ export class FeedEditorComponent {
 
     protected readonly form = this.feedForm.form;
 
-    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
-    protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
+    protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
+    protected readonly feedSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
     constructor(

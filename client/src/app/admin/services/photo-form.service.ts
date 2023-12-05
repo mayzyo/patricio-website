@@ -19,6 +19,8 @@ export class PhotoFormService {
     constructor(private fb: FormBuilder, private firestore: Firestore) { }
 
     assign(feed: Photo): void {
+        this.form.markAsPristine();
+        
         this.form.setValue({
             id: feed.id ?? '',
             thumbnail: feed.thumbnail ?? '',

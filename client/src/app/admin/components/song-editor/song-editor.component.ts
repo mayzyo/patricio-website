@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -41,7 +41,7 @@ export class SongEditorComponent {
 
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
-    protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
+    protected readonly pristine = this.initialisePristine(this.audioSelected, this.coverSelected);
     protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
@@ -175,7 +175,7 @@ export class SongEditorComponent {
                 uploader.on('file-added', () => subscriber.next(true));
                 uploader.on('file-removed', () => subscriber.next(false));
             })),
-            startWith(false)
+            startWith(false),
         ));
     }
 
@@ -187,5 +187,10 @@ export class SongEditorComponent {
             switchMap(preview => this.http.get(preview, { responseType: 'blob' })),
             switchMap(blob => ImageConverter.blobToBase64(blob))
         );
+    }
+
+    private initialisePristine(audioSelected: Signal<boolean | undefined>, coverSelected: Signal<boolean | undefined>): Signal<boolean | undefined> {
+        const pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
+        return computed(() => pristine() && !audioSelected() && !coverSelected());
     }
 }
