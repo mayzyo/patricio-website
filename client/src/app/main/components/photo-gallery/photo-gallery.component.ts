@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit, signal } from '@angular/core';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, startWith, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     styleUrl: './photo-gallery.component.scss',
     host: { class: 'container' }
 })
-export class PhotoGalleryComponent {
+export class PhotoGalleryComponent implements OnInit {
     protected readonly faClock = faClock;
 
     protected readonly galleryImages$ = this.initialiseGalleryImages();
@@ -23,10 +23,20 @@ export class PhotoGalleryComponent {
     protected readonly selectedPhoto$ = this.initialiseSelectedPhoto();
     private readonly loadMore$ = new Subject<void>();
     
+    protected readonly mdScreen = signal<boolean | null>(null);
     private total = 0;
 
     constructor(private photo: PhotoService, private content: ContentService) {
         this.respondToLoadMore();
+    }
+
+    ngOnInit() {
+        this.mdScreen.set(this.isTabletScreen(window.innerWidth));
+    }
+    
+    @HostListener('window:resize')
+    onResize() {
+        this.mdScreen.set(this.isTabletScreen(window.innerWidth));
     }
 
     onIndexChange(e: GalleryState): void {
@@ -65,5 +75,9 @@ export class PhotoGalleryComponent {
         }).pipe(
             map(({ photos, selected }) => photos[selected])
         );
+    }
+
+    private isTabletScreen(width: number): boolean {
+        return width < 768;
     }
 }
