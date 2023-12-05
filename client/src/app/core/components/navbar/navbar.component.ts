@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, TemplateRef, signal, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { interval, scan, share } from 'rxjs';
+import { interval } from 'rxjs';
+import { scan, share } from 'rxjs/operators';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -15,7 +16,6 @@ export class NavbarComponent implements OnInit {
         share()
     );
 
-    protected isCollapsed = signal(true);
     protected currentUrl = signal('');
 
     constructor(private location: Location, private offcanvasService: NgbOffcanvas) { }
@@ -23,22 +23,11 @@ export class NavbarComponent implements OnInit {
     ngOnInit(): void {
         this.location.onUrlChange(res => {
             this.currentUrl.set(res);
-            this.isCollapsed.set(true);
+            this.offcanvasService.dismiss();
         });
     }
 
     open(content: TemplateRef<unknown>) {
-        this.isCollapsed.set(false);
-
-		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title', position: 'end' }).result.then(
-			(result) => {
-                this.isCollapsed.set(true);
-				// this.closeResult = `Closed with: ${result}`;
-			},
-			(reason) => {
-                this.isCollapsed.set(true);
-				// this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-			},
-		);
+		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title', position: 'end' });
 	}
 }

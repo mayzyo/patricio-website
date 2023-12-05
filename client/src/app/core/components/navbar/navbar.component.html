@@ -50,12 +50,13 @@
 </ng-template>
 
 <ng-template #content let-offcanvas>
-
     <div class="offcanvas-header text-bg-dark justify-content-end">
 		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
 	</div>
 
-	<div class="offcanvas-body text-bg-dark">
+	<div class="offcanvas-body text-bg-dark d-flex flex-column">
         <ng-template [ngTemplateOutlet]="navmenu"></ng-template>
+        <hr />
+        <app-social-media class="p-3" />
 	</div>
 </ng-template>
