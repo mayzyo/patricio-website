@@ -6,6 +6,8 @@
         linear-gradient(to right, $tertiary 0%, yellow 90%), 
         url('/assets/images/home-banner.jpg') 30px,
         url('/assets/images/home-banner.jpg') 20px;
+
+	animation: focus 8s ease infinite;
     background-blend-mode: screen, difference, lighten;
     background-size: cover;
     background-position: center;
@@ -25,4 +27,22 @@
     90% { transform: translateY(0); opacity: 1; }
     95% { transform: translateY(5vh); opacity: .5; }
     100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes focus {
+	0% {
+		filter: blur(0px);
+	}
+    20% {
+		filter: blur(1.5px);
+    }
+    40% {
+        filter: blur(0px);
+    }
+	80% {
+		filter: blur(.6px);
+	}
+	100% {
+		filter: blur(1.5px);
+	}
 }
