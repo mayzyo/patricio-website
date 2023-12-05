@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp, getApp } from '@angular/fire/app';
@@ -11,7 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideRouter(routes, withComponentInputBinding()),
+        provideRouter(
+            routes,
+            withComponentInputBinding(),
+            withInMemoryScrolling({ scrollPositionRestoration: 'top' , anchorScrolling: 'enabled' })
+        ),
         importProvidersFrom(BrowserAnimationsModule),
         importProvidersFrom(HttpClientModule),
         importProvidersFrom(
