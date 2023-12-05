@@ -7,6 +7,11 @@ export const routes: Routes = [
     },
     {
         path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+    },
+    {
+        path: '',
         loadChildren: () => import('./main/main.module').then(m => m.MainModule)
     },
     {
@@ -20,10 +25,5 @@ export const routes: Routes = [
         loadComponent: () => import('./misc/components/terms-of-service/terms-of-service.component').then(m =>
             m.TermsOfServiceComponent
         )
-    },
-    {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
     }
 ];
