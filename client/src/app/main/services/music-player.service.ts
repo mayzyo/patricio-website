@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, merge, of } from 'rxjs';
-import { delay, map, share, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { generateAudio } from '../../../test/generators/song';
+import { BehaviorSubject, Observable, Subject, merge } from 'rxjs';
+import { map, share, shareReplay, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable()
 export class MusicPlayerService {
@@ -13,6 +14,8 @@ export class MusicPlayerService {
         this.audio$.pipe(map(() => false), shareReplay({ bufferSize: 1, refCount: true }))
     );
     
+    constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
+
     loadAudio(audioId: string): void {
         this.updateLoading$.next(true);
         this.updateAudio$.next(audioId);
@@ -20,7 +23,12 @@ export class MusicPlayerService {
 
     private initialiseAudio(): Observable<any> {
         return this.updateAudio$.pipe(
-            switchMap(audioId => of(generateAudio()).pipe(delay(2000))),
+            switchMap(audioId =>
+                this.http.get('https://patriciowebsite.blob.core.windows.net/dev/'.concat(audioId as string), { responseType: 'blob' }).pipe(
+                    map(res => window.URL.createObjectURL(res)),
+                    map(res => this.sanitizer.bypassSecurityTrustUrl(res))
+                )
+            ),
             share()
         );
     }
