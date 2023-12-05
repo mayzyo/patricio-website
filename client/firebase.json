@@ -19,5 +19,16 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
-  }
+  },
+  "headers": [
+    {
+      "source": "**/*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://patricio-website-admin-dev.azurewebsites.net"
+        }
+      ]
+    }
+  ]
 }
