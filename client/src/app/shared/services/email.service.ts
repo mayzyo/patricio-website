@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Email } from '../../models/email';
 import { Observable, forkJoin, from, iif, of, throwError } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from '../../core/services/profile.service';
 import { AppCheck, getToken } from '@angular/fire/app-check';
+import { API_URL } from '../../app.config';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EmailService {
     constructor(
+        @Inject(API_URL) private apiUrl: string,
         private http: HttpClient,
         private profile: ProfileService,
         private appCheck: AppCheck
@@ -22,7 +24,7 @@ export class EmailService {
             this.profile.profile$.pipe(take(1))
         ]).pipe(
             switchMap(([{ token }, { id }]) => this.http.post(
-                'https://patricio-website-admin-dev.azurewebsites.net/api/send-mail',
+                this.apiUrl.concat('send-mail'),
                 { ...email, id },
                 { headers: { 'Authorization': token ?? '' }, responseType: 'text' }
             )),

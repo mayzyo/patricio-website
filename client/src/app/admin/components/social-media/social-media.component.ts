@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Inject, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -12,6 +12,7 @@ import { EditorModalComponent } from '../editor-modal/editor-modal.component';
 import { SocialMediaFormService } from '../../services/social-media-form.service';
 import { ImageConverter } from '../../classes/image.converter';
 import { EditorService } from '../../services/editor.service';
+import { API_URL } from '../../../app.config';
 
 @Component({
     selector: 'app-social-media',
@@ -40,6 +41,7 @@ export class SocialMediaComponent {
     protected readonly validating = signal(false);
 
     constructor(
+        @Inject(API_URL) private apiUrl: string,
         private destroyRef: DestroyRef,
         private http: HttpClient,
         private editor: EditorService,
@@ -92,7 +94,7 @@ export class SocialMediaComponent {
             map(idToken => new Uppy({ restrictions: { maxNumberOfFiles: 1 }, allowMultipleUploadBatches: false })
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
-                    endpoint: 'https://patricio-website-admin-dev.azurewebsites.net/api/save-media',
+                    endpoint: this.apiUrl.concat('save-media'),
                     getResponseData: responseText => responseText,
                 })
             ),

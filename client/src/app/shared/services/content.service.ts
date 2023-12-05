@@ -1,14 +1,19 @@
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of, iif, concat } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { STORAGE_URL } from '../../app.config';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ContentService {
-    constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
+    constructor(
+        @Inject(STORAGE_URL) private storageUrl: string,
+        private http: HttpClient,
+        private sanitizer: DomSanitizer
+    ) { }
 
     getImage(thumbnail?: string, id?: string): Observable<any> {
         return iif(
@@ -16,7 +21,7 @@ export class ContentService {
             concat(
                 of(thumbnail),
                 // This is preferred to just sending the url because the thumbnail will be displayed while the highres image is still loading.
-                this.http.get('https://patriciowebsite.blob.core.windows.net/dev/'.concat(id as string), { responseType: 'blob' }).pipe(
+                this.http.get(this.storageUrl.concat(id as string), { responseType: 'blob' }).pipe(
                     map(res => window.URL.createObjectURL(res)),
                     map(res => this.sanitizer.bypassSecurityTrustUrl(res))
                 )
@@ -26,7 +31,7 @@ export class ContentService {
     }
 
     getImageUrl(id: string): string {
-        return 'https://patriciowebsite.blob.core.windows.net/dev/'.concat(id as string);
+        return this.storageUrl.concat(id as string);
     }
 
     stockGallery(index?: number) {

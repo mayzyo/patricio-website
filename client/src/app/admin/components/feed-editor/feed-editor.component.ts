@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +13,7 @@ import { EditorService } from '../../services/editor.service';
 import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
 import { FeedFormService } from '../../services/feed-form.service';
+import { API_URL } from '../../../app.config';
 
 @Component({
     selector: 'app-feed-editor',
@@ -45,6 +46,7 @@ export class FeedEditorComponent {
     protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
+        @Inject(API_URL) private apiUrl: string,
         private destroyRef: DestroyRef,
         private http: HttpClient,
         private editor: EditorService,
@@ -143,7 +145,7 @@ export class FeedEditorComponent {
                 .use(ImageEditor)
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
-                    endpoint: 'https://patricio-website-admin-dev.azurewebsites.net/api/save-media',
+                    endpoint: this.apiUrl.concat('save-media'),
                     getResponseData: responseText => responseText,
                 })
             ),

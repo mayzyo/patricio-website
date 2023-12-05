@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +13,7 @@ import { EditorService } from '../../services/editor.service';
 import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
 import { PhotoFormService } from '../../services/photo-form.service';
+import { API_URL } from '../../../app.config';
 
 @Component({
     selector: 'app-photo-editor',
@@ -44,6 +45,7 @@ export class PhotoEditorComponent {
     protected readonly imageExists$ = this.form.get('imageId')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
+        @Inject(API_URL) private apiUrl: string,
         private destroyRef: DestroyRef,
         private http: HttpClient,
         private editor: EditorService,
@@ -127,7 +129,7 @@ export class PhotoEditorComponent {
                 .use(ImageEditor)
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
-                    endpoint: 'https://patricio-website-admin-dev.azurewebsites.net/api/save-media',
+                    endpoint: this.apiUrl.concat('save-media'),
                     getResponseData: responseText => responseText,
                 })
             ),
