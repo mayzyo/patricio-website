@@ -2,7 +2,8 @@ const { app } = require('@azure/functions')
 const { initializeApp, getApps, getApp } = require('firebase-admin/app')
 const { credential } = require('firebase-admin')
 const { getFirestore } = require('firebase-admin/firestore')
-// const sgMail = require('@sendgrid/mail')
+const { getAppCheck } = require('firebase-admin/app-check')
+const sgMail = require('@sendgrid/mail')
 
 app.http('send-mail', {
     methods: ['POST'],
@@ -10,33 +11,15 @@ app.http('send-mail', {
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
 
-        const recaptchaToken = request.headers.get('Authorization');
-        if(!recaptchaToken) {
+        const appCheckToken = request.headers.get('Authorization');
+
+        if (!appCheckToken) {
+            context.log('No app check token found');
             return {
                 status: 401,
                 body: 'forbidden'
             }
         }
-
-        // const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        //     method: 'POST',
-        //     body: {
-        //         secret: process.env.RECAPTCHA_SECRET_KEY,
-        //         response: recaptchaToken,
-        //     }
-        // });
-
-        // const { success } = await response.json();
-        const success = true;
-        context.log('recaptcha check successfull', success);
-        if(!success) {
-            return {
-                status: 401,
-                body: 'forbidden'
-            }
-        }
-
-        const result = await request.json();
 
         // The private key listed in the Firebase JSON file need to be converted to Bas64 via btoa() first.
         // Because the Env variables set in Configuration Settings on Azure reads it wrong.
@@ -52,57 +35,69 @@ app.http('send-mail', {
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_x509_cert_url": process.env.FIREBASE_ADMIN_SDK_CLIENT_X509_CERT_URL,
             "universe_domain": "googleapis.com"
-        }
+        };
 
         const firebaseConfig = {
             credential: credential.cert(serviceAccount)
         };
 
         const firebase = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+        try {
+            const appCheckClaims = await getAppCheck(firebase).verifyToken(appCheckToken);
+            context.log('app check successful', appCheckClaims);
+        } catch (err) {
+            context.log('app check failed', err);
+            return {
+                status: 401,
+                body: 'forbidden'
+            }
+        }
+
+        const emailData = await request.json();
         
         const querySnapshot = await getFirestore(firebase)
-            .collection('profile').doc(result.id).collection('private').get();
+            .collection('profile').doc(emailData.id).collection('private').get();
         const { emailRecipient, emailSender } = querySnapshot.docs[0].data();
         
         context.log('emailRecipient', emailRecipient);
         context.log('emailSender', emailSender);
-        context.log('emailSource', result.sender);
+        context.log('emailSource', emailData.sender);
 
-        // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        // const confirmMsg = {
-        //     from: emailSender,
-        //     subject: 'Thanks for taking an Interest!',
-        //     text: 'This is an automated reply, I have received the message you left me',
-        //     html: `
-        //         <div>
-        //             <h3 style=\"color: #4EBFD9;\">Thanks For Taking an Interest</h3>
-        //             <hr />
-        //             <p>This is an automated reply, I have received the message you left me</p>
-        //             <p>I will get back to you as soon as I can</p>
-        //         </div>
-        //     `,
-        // }
+        // Send mail
+        await sgMail.send({
+            from: emailSender,
+            to: emailRecipient,
+            subject: `${emailData.purpose} - ${emailData.senderType}`,
+            text: emailData.message,
+            html: `
+                <div>
+                    <h3 style=\"color: #4EBFD9;\">Message Received from Personal Website</h3>
+                    <hr />
+                    <p>${ emailData.message }</p>
+                    <hr />
+                    <p>Email from: ${emailData.sender}</p>
+                </div>
+            `
+        });
 
-        // // Send mail
-        // await sgMail.send({
-        //     from: emailSender,
-        //     to: emailRecipient,
-        //     subject: `${result.purpose} - ${result.senderType}`,
-        //     text: result.message,
-        //     html: `
-        //         <div>
-        //             <h3 style=\"color: #4EBFD9;\">Message Received from Personal Website</h3>
-        //             <hr />
-        //             <p>${ result.message }</p>
-        //             <hr />
-        //             <p>Email from: ${result.sender}</p>
-        //         </div>
-        //     `
-        // });
-
-        // // Send confirmation mail
-        // await sgMail.send({ ...confirmMsg, to: result.sender });
+        // Send confirmation mail
+        await sgMail.send({
+            from: emailSender,
+            to: emailData.sender,
+            subject: 'Thanks for taking an Interest!',
+            text: 'This is an automated reply, I have received the message you left me',
+            html: `
+                <div>
+                    <h3 style=\"color: #4EBFD9;\">Thanks For Taking an Interest</h3>
+                    <hr />
+                    <p>This is an automated reply, I have received the message you left me</p>
+                    <p>I will get back to you as soon as I can</p>
+                </div>
+            `,
+        });
 
         return { body: 'success' };
     }
