@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Observable, Subject, from, iif, of } from 'rxjs';
+import { EMPTY, Observable, Subject, from, iif, of } from 'rxjs';
 import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
@@ -41,6 +41,7 @@ export class PhotoEditorComponent {
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
     protected readonly pristine = this.initialisePristine(this.imageSelected);
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly photoSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly imageExists$ = this.form.get('imageId')?.valueChanges.pipe(map(res => res != null));
 
@@ -60,10 +61,17 @@ export class PhotoEditorComponent {
         this.clearUploader$.next();
     }
 
+    protected onRemoveImage(): void {
+        this.form.get('thumbnail')?.setValue('');
+        this.form.get('thumbnail')?.markAsDirty();
+        this.form.get('imageId')?.setValue('');
+        this.form.get('imageId')?.markAsDirty();
+    }
+
     protected onSubmit(): void {
         this.validating.set(true);
 
-        if(this.form.valid && !this.submitting() && this.imageSelected()) {
+        if(this.form.valid && !this.submitting() && this.photoOrVideoLinks()) {
             this.submitting.set(true);
             const uploadImage$ = this.initialiseUploadFile(this.imageUploader$, 'imageId');
             
@@ -97,6 +105,10 @@ export class PhotoEditorComponent {
         }
         
         this.clearUploader();
+    }
+
+    private photoOrVideoLinks(): boolean {
+        return this.imageSelected() || this.form.get('youtube')?.value != '' || this.form.get('bilibili')?.value != '';
     }
 
     private RespondToSetThumbnailValue(): void {

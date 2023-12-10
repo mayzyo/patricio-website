@@ -1,13 +1,15 @@
 <div class="gallery-wrapper row justify-content-center">
-    @if(galleryImages$ | async; as galleryImages) {
+    @if(galleryItems$ | async; as galleryItems) {
         <gallery
+            id="galleryRef"
             [thumbPosition]="mdScreen() ? 'bottom' : 'right'"
             [slidingDirection]="mdScreen() ? 'horizontal' : 'vertical'"
             [autoPlay]="true"
             [playerInterval]="5000"
             [counter]="false"
-            [items]="galleryImages"
+            [items]="galleryItems"
             (indexChange)="onIndexChange($event)"
+            (mouseenter)="onMouseEnter()"
         />
     }
 </div>

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Firestore, Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, from } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { DateConverter } from '../../shared/classes/date-converter';
 import { Photo } from '../../models/photo';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class PhotoFormService {
@@ -13,10 +14,15 @@ export class PhotoFormService {
         thumbnail: [''],
         description: [''],
         date: ['', Validators.required],
+        youtube: [''],
+        bilibili: [''],
         imageId: [''],
     });
 
-    constructor(private fb: FormBuilder, private firestore: Firestore) { }
+    constructor(private fb: FormBuilder, private firestore: Firestore) {
+        this.respondToYoutubeLink();
+        this.respondToBilibiliLink();
+    }
 
     assign(feed: Photo): void {
         this.form.markAsPristine();
@@ -26,6 +32,8 @@ export class PhotoFormService {
             thumbnail: feed.thumbnail ?? '',
             description: feed.description ?? '',
             date: DateConverter.toInput(feed.date.toDate()),
+            youtube: feed.youtube ?? '',
+            bilibili: feed.bilibili ?? '',
             imageId: feed.imageId ?? '',
         });
     }
@@ -38,6 +46,8 @@ export class PhotoFormService {
             thumbnail: this.form.get('thumbnail')?.value ?? '',
             description: this.form.get('description')?.value ?? '',
             date: Timestamp.fromDate(date),
+            youtube: this.form.get('youtube')?.value ?? '',
+            bilibili: this.form.get('bilibili')?.value ?? '',
             imageId: this.form.get('imageId')?.value ?? '',
         };
 
@@ -65,5 +75,49 @@ export class PhotoFormService {
 
     clear(): void {
         this.form.reset();
+    }
+
+    private respondToYoutubeLink(): void {
+        const youtubeCtrl = this.form.get('youtube');
+        youtubeCtrl?.valueChanges.pipe(
+            filter(res => res != null),
+            takeUntilDestroyed()
+        ).subscribe(res => {
+            if(res != null) {
+                if(res.includes('iframe')) {
+                    const startIndex = res.indexOf('src="') + 5;
+                    const endIndex = res.indexOf('"', startIndex);
+                    const url = res.slice(startIndex, endIndex);
+
+                    if(url != res) {
+                        youtubeCtrl.setValue(url);
+                    }
+                }
+            }
+        })
+    }
+
+    private respondToBilibiliLink(): void {
+        const bilibiliCtrl = this.form.get('bilibili');
+        bilibiliCtrl?.valueChanges.pipe(
+            filter(res => res != null),
+            takeUntilDestroyed()
+        ).subscribe(res => {
+            if(res != null) {
+                if(res.includes('iframe')) {
+                    const startIndex = res.indexOf('src="') + 5;
+                    const endIndex = res.indexOf('"', startIndex);
+                    let url = res.slice(startIndex, endIndex);
+
+                    if(!url.includes('https:')) {
+                        url = `https:${url}`;
+                    }
+
+                    if(url != res) {
+                        bilibiliCtrl.setValue(url);
+                    }
+                }
+            }
+        })
     }
 }

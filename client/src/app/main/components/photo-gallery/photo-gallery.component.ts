@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, OnInit, signal } from
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, startWith, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
-import { GalleryState, ImageItem } from 'ng-gallery';
+import { Gallery, GalleryItem, GalleryState } from 'ng-gallery';
 import { Photo } from '../../../models/photo';
 import { PhotoService } from '../../../shared/services/photo.service';
 import { ContentService } from '../../../shared/services/content.service';
@@ -18,7 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class PhotoGalleryComponent implements OnInit {
     protected readonly faClock = faClock;
 
-    protected readonly galleryImages$ = this.initialiseGalleryImages();
+    protected readonly galleryItems$ = this.initialiseGalleryItems();
     private readonly updateSelectedPhoto$ = new Subject<number>();
     protected readonly selectedPhoto$ = this.initialiseSelectedPhoto();
     private readonly loadMore$ = new Subject<void>();
@@ -26,7 +26,7 @@ export class PhotoGalleryComponent implements OnInit {
     protected readonly mdScreen = signal<boolean | null>(null);
     private total = 0;
 
-    constructor(private photo: PhotoService, private content: ContentService) {
+    constructor(private gallery: Gallery, private photo: PhotoService, private content: ContentService) {
         this.respondToLoadMore();
     }
 
@@ -49,6 +49,11 @@ export class PhotoGalleryComponent implements OnInit {
         }
     }
 
+    onMouseEnter(): void {
+        const galleryRef = this.gallery.ref('galleryRef');
+        galleryRef.stop();
+    }
+
     private respondToLoadMore(): void {
         this.loadMore$.pipe(
             switchMap(() => this.photo.endReached$),
@@ -57,13 +62,16 @@ export class PhotoGalleryComponent implements OnInit {
         ).subscribe(() => this.photo.load());
     }
 
-    private initialiseGalleryImages(): Observable<ImageItem[]> {
+    private initialiseGalleryItems(): Observable<GalleryItem[]> {
         return this.photo.list$.pipe(
             map(photos =>
-                photos.map(photo => new ImageItem({
-                    src: this.content.getImageUrl(photo.imageId),
-                    thumb: photo.thumbnail
-                }))
+                photos.map(photo => ({
+                    type: photo.imageId ? 'image' : 'iframe',
+                    data: {
+                      src: photo.imageId ? this.content.getImageUrl(photo.imageId) : photo.youtube ?? photo.bilibili,
+                      thumb: photo.thumbnail ? photo.thumbnail : 'assets/images/video-thumb.png'
+                    }
+                }) satisfies GalleryItem)
             )
         );
     }

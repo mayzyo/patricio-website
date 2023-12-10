@@ -17,7 +17,19 @@
                                 [class.active]="selected()?.id == photo.id" 
                                 (click)="selectPhoto(photo)"
                             >
-                                <img src="{{ photo.thumbnail }}" height="100" width="100">
+                                @if(photo.thumbnail) {
+                                    <img src="{{ photo.thumbnail }}" height="100" width="100">
+                                } @else {
+                                    <div class="d-flex justify-content-end align-items-center bg-dark" style="height: 100px; width: 100px">
+                                        <fa-icon
+                                            [icon]="faVideo"
+                                            size="3x"
+                                            [classes]="['me-3']"
+                                            [styles]="{ 'color': 'white' }"
+                                        >
+                                        </fa-icon>
+                                    </div>
+                                }
                                 <div class="flex-1 mx-2 d-flex flex-column justify-content-end">
                                     <p>{{ photo.description }}</p>
                                     <p><small>{{ photo.date.toDate() | date:'fullDate' }}</small></p>

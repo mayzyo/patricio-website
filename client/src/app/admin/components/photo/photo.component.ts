@@ -7,6 +7,8 @@ import { EditorAction } from '../../interfaces/editor-action';
 import { PhotoFormService } from '../../services/photo-form.service';
 import { PhotoService } from '../../../shared/services/photo.service';
 import { Photo } from '../../../models/photo';
+import { faVideo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'app-photo',
@@ -15,6 +17,7 @@ import { Photo } from '../../../models/photo';
     imports: [
         CommonModule,
         InfiniteScrollModule,
+        FontAwesomeModule,
         EditorModalComponent,
         PhotoEditorComponent
     ],
@@ -23,6 +26,8 @@ import { Photo } from '../../../models/photo';
     providers: [PhotoFormService]
 })
 export class PhotoComponent implements AfterViewInit {
+    protected readonly faVideo = faVideo;
+    
     protected readonly photos$ = this.photo.list$;
 
     protected readonly selected = signal<Photo | null>(null);

@@ -37,20 +37,48 @@
                 Please select a date.
             </div>
         </div>
-        @if(imageUploader$ | async; as imageUploader) {
-            <div class="form-group mb-2">
-                <label class="form-label">Photo</label>
-                <uppy-dashboard
-                    [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
-                    [uppy]="imageUploader"
-                />
-                @if(!(imageExists$ | async) && !imageSelected() && validating()) {
-                    <div class="invalid-feedback d-block">
-                        Please upload a photo.
-                    </div>
+
+        <div class="mb-2">
+            <label for="youtube" class="form-label">YouTube Link</label>
+            <input
+                class="form-control"
+                formControlName="youtube"
+                type="url"
+                id="youtube"
+                name="youtube"
+            >
+        </div>
+
+        <div class="mb-2">
+            <label for="bilibili" class="form-label">Bilibili Link</label>
+            <input
+                class="form-control"
+                formControlName="bilibili"
+                type="url"
+                id="bilibili"
+                name="bilibili"
+            >
+        </div>
+
+        <div class="form-group mb-2">
+            <label class="form-label">Photo</label>
+            @if(thumbnail() && !imageSelected()) {
+                <button
+                    class="btn btn-danger shadow m-2 d-block"
+                    [disabled]="submitting()"
+                    (click)="onRemoveImage()"
+                >
+                    Remove Image
+                </button>
+            } @else {
+                @if(imageUploader$ | async; as imageUploader) {
+                    <uppy-dashboard
+                        [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
+                        [uppy]="imageUploader"
+                    />
                 }
-            </div>
-        }
+            }
+        </div>
     </div>
 
     <div class="d-flex w-100 mt-2">
