@@ -36,7 +36,7 @@ export const appConfig: ApplicationConfig = {
         importProvidersFrom(provideAppCheck(() => initializeAppCheck(getApp(), {
             provider: new ReCaptchaV3Provider('6LeRpSMpAAAAAAR1S4Lb5ehO1igl1XHdASZJH51y'),
         }))),
-        { provide: STORAGE_URL, useValue: 'https://patriciowebsite.blob.core.windows.net/dev/' },
-        { provide: API_URL, useValue: 'https://patricio-website-admin-dev.azurewebsites.net/api/' }
+        { provide: STORAGE_URL, useValue: 'https://patriciowebsitev2.blob.core.windows.net/production/' },
+        { provide: API_URL, useValue: 'https://patricio-website-admin.azurewebsites.net/api/' }
         ]
 };

@@ -26,7 +26,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://patricio-website-admin-dev.azurewebsites.net"
+          "value": "https://patricio-website-admin.azurewebsites.net"
         }
       ]
     }
