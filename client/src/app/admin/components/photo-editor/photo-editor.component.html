@@ -62,14 +62,14 @@
 
         <div class="form-group mb-2">
             <label class="form-label">Photo</label>
-            @if(thumbnail() && !imageSelected()) {
-                <button
-                    class="btn btn-danger shadow m-2 d-block"
+            @if(thumbnail()) {
+                <app-thumb-remove-button
+                    class="d-block"
                     [disabled]="submitting()"
-                    (click)="onRemoveImage()"
+                    (removeClick)="onRemoveImage()"
                 >
-                    Remove Image
-                </button>
+                    Replace Image
+                </app-thumb-remove-button>
             } @else {
                 @if(imageUploader$ | async; as imageUploader) {
                     <uppy-dashboard
@@ -87,9 +87,9 @@
             type="submit"
             [disabled]="submitting() || pristine()"
         >
-            {{ (photoSelected$ | async) ? "Change" : "Add" }}
+            {{ (selected$ | async) ? "Change" : "Add" }}
         </button>
-        @if(photoSelected$ | async) {
+        @if(selected$ | async) {
             <button
                 class="btn btn-danger shadow m-2"
                 type="button"

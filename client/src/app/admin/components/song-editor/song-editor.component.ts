@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Observable, Subject, forkJoin, from, iif, of } from 'rxjs';
+import { EMPTY, Observable, Subject, forkJoin, from, iif, of } from 'rxjs';
 import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
@@ -14,6 +14,7 @@ import { SongFormService } from '../../services/song-form.service';
 import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
 import { API_URL } from '../../../app.config';
+import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-remove-button/thumb-remove-button.component';
 
 @Component({
     selector: 'app-song-editor',
@@ -23,6 +24,7 @@ import { API_URL } from '../../../app.config';
         CommonModule,
         ReactiveFormsModule,
         UppyAngularDashboardModule,
+        ThumbRemoveButtonComponent
     ],
     templateUrl: './song-editor.component.html',
     styleUrl: './song-editor.component.scss',
@@ -34,17 +36,21 @@ export class SongEditorComponent {
     private readonly clearUploaders$ = new Subject<void>();
     protected coverUploader$ = this.initialiseUploader();
     protected audioUploader$ = this.initialiseUploader();
-    protected readonly thumbnail$ = this.initialiseThumbnail(this.coverUploader$);
-    protected readonly audioSelected = this.initialiseFileSelected(this.audioUploader$);
-    private readonly coverSelected = this.initialiseFileSelected(this.coverUploader$);
+    private readonly fileThumbnail$ = this.initialiseFileThumbnail(this.coverUploader$);
+    protected readonly audioSelected = toSignal(
+        this.initialiseFileSelected(this.audioUploader$).pipe(startWith(false))
+    );
+    private readonly coverSelected$ = this.initialiseFileSelected(this.coverUploader$);
+    private readonly coverSelected = toSignal(this.coverSelected$.pipe(startWith(false)));
 
     protected readonly form = this.songForm.form;
 
+    protected readonly audioId = toSignal(this.form.get('audioId')?.valueChanges ?? EMPTY);
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
     protected readonly pristine = this.initialisePristine(this.audioSelected, this.coverSelected);
-    protected readonly songSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
-    protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
+    protected readonly selected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
         @Inject(API_URL) private apiUrl: string,
@@ -60,6 +66,18 @@ export class SongEditorComponent {
 
     clearUploaders(): void {
         this.clearUploaders$.next();
+    }
+
+    protected onRemoveAudioId(): void {
+        this.form.get('audioId')?.markAsDirty();
+        this.form.get('audioId')?.setValue('');
+    }
+
+    protected onRemoveCoverId(): void {
+        this.form.get('coverId')?.markAsDirty();
+        this.form.get('coverId')?.setValue('');
+        this.form.get('thumbnail')?.markAsDirty();
+        this.form.get('thumbnail')?.setValue('');
     }
 
     protected onSubmit(): void {
@@ -78,7 +96,7 @@ export class SongEditorComponent {
                 ).pipe(
                     switchMap(() => this.songForm.save()),
                     takeUntilDestroyed(this.destroyRef)
-                ).subscribe(() => this.onComplete({ clearSelection: false }));
+                ).subscribe(() => this.onComplete({ clearSelection: true }));
             } else if(this.form.get('audioId')?.value) {
                 iif(
                     () => this.coverSelected() == true,
@@ -87,7 +105,7 @@ export class SongEditorComponent {
                 ).pipe(
                     switchMap(() => this.songForm.save()),
                     takeUntilDestroyed(this.destroyRef)
-                ).subscribe(() => this.onComplete({ clearSelection: false }));
+                ).subscribe(() => this.onComplete({ clearSelection: true }));
             }
         }
     }
@@ -118,15 +136,17 @@ export class SongEditorComponent {
     }
 
     private RespondToSetThumbnailValue(): void {
-        effect(() => {
-            if(!this.coverSelected()) {
-                untracked(() => this.form.get('thumbnail')?.setValue(''));
-            }
-        });
-
-        this.thumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
-            this.form.get('thumbnail')?.setValue(thumbnail);
+        this.coverSelected$.pipe(
+            filter(res => !res),
+            takeUntilDestroyed()
+        ).subscribe(() => {
             this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue('');
+        })
+
+        this.fileThumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
+            this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue(thumbnail);
         });
     }
 
@@ -161,7 +181,7 @@ export class SongEditorComponent {
         );
     }
 
-    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string) {
+    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string): Observable<unknown> {
         return uploader$.pipe(
             switchMap(uploader => iif(
                 () => uploader.getFiles().length == 0,
@@ -174,17 +194,16 @@ export class SongEditorComponent {
         );
     }
 
-    private initialiseFileSelected(uploader$: Observable<Uppy>) {
-        return toSignal(uploader$.pipe(
+    private initialiseFileSelected(uploader$: Observable<Uppy>): Observable<boolean> {
+        return uploader$.pipe(
             switchMap(uploader => new Observable<boolean>(subscriber => {
                 uploader.on('file-added', () => subscriber.next(true));
                 uploader.on('file-removed', () => subscriber.next(false));
             })),
-            startWith(false),
-        ));
+        );
     }
 
-    private initialiseThumbnail(uploader: Observable<Uppy>): Observable<string> {
+    private initialiseFileThumbnail(uploader: Observable<Uppy>): Observable<string> {
         return uploader.pipe(
             switchMap(uploader => new Observable<string>(subscriber => {
                 uploader.on('thumbnail:generated', (_, preview) => subscriber.next(preview));

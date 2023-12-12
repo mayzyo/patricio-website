@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
 import { PhotoFormService } from '../../services/photo-form.service';
 import { API_URL } from '../../../app.config';
+import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-remove-button/thumb-remove-button.component';
 
 @Component({
     selector: 'app-photo-editor',
@@ -23,6 +24,7 @@ import { API_URL } from '../../../app.config';
         CommonModule,
         ReactiveFormsModule,
         UppyAngularDashboardModule,
+        ThumbRemoveButtonComponent
     ],
     templateUrl: './photo-editor.component.html',
     styleUrl: './photo-editor.component.scss',
@@ -33,17 +35,19 @@ export class PhotoEditorComponent {
 
     private readonly clearUploader$ = new Subject<void>();
     protected imageUploader$ = this.initialiseUploader();
-    protected readonly thumbnail$ = this.initialiseThumbnail(this.imageUploader$);
-    protected readonly imageSelected = this.initialiseFileSelected(this.imageUploader$);
+    private readonly fileThumbnail$ = this.initialiseFileThumbnail(this.imageUploader$);
+    private readonly imageSelected$ = this.initialiseFileSelected(this.imageUploader$);
+    private readonly imageSelected = toSignal(
+        this.imageSelected$.pipe(startWith(false))
+    );
 
     protected readonly form = this.photoForm.form;
 
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
     protected readonly pristine = this.initialisePristine(this.imageSelected);
-    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
-    protected readonly photoSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
-    protected readonly imageExists$ = this.form.get('imageId')?.valueChanges.pipe(map(res => res != null));
+    protected readonly selected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
         @Inject(API_URL) private apiUrl: string,
@@ -62,10 +66,10 @@ export class PhotoEditorComponent {
     }
 
     protected onRemoveImage(): void {
-        this.form.get('thumbnail')?.setValue('');
         this.form.get('thumbnail')?.markAsDirty();
-        this.form.get('imageId')?.setValue('');
+        this.form.get('thumbnail')?.setValue('');
         this.form.get('imageId')?.markAsDirty();
+        this.form.get('imageId')?.setValue('');
     }
 
     protected onSubmit(): void {
@@ -112,15 +116,17 @@ export class PhotoEditorComponent {
     }
 
     private RespondToSetThumbnailValue(): void {
-        effect(() => {
-            if(!this.imageSelected()) {
-                untracked(() => this.form.get('thumbnail')?.setValue(''));
-            }
-        });
-
-        this.thumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
-            this.form.get('thumbnail')?.setValue(thumbnail);
+        this.imageSelected$.pipe(
+            filter(res => !res),
+            takeUntilDestroyed()
+        ).subscribe(() => {
             this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue('');
+        })
+
+        this.fileThumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
+            this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue(thumbnail);
         });
     }
 
@@ -152,7 +158,7 @@ export class PhotoEditorComponent {
         );
     }
 
-    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string) {
+    private initialiseUploadFile(uploader$: Observable<Uppy>, formKey: string): Observable<unknown> {
         return uploader$.pipe(
             switchMap(uploader => iif(
                 () => uploader.getFiles().length == 0,
@@ -165,17 +171,16 @@ export class PhotoEditorComponent {
         );
     }
 
-    private initialiseFileSelected(uploader$: Observable<Uppy>): Signal<boolean | undefined> {
-        return toSignal(uploader$.pipe(
+    private initialiseFileSelected(uploader$: Observable<Uppy>): Observable<boolean> {
+        return uploader$.pipe(
             switchMap(uploader => new Observable<boolean>(subscriber => {
                 uploader.on('file-added', () => subscriber.next(true));
                 uploader.on('file-removed', () => subscriber.next(false));
             })),
-            startWith(false)
-        ));
+        );
     }
 
-    private initialiseThumbnail(uploader: Observable<Uppy>): Observable<string> {
+    private initialiseFileThumbnail(uploader: Observable<Uppy>): Observable<string> {
         return uploader.pipe(
             switchMap(uploader => new Observable<string>(subscriber => {
                 uploader.on('thumbnail:generated', (_, preview) => subscriber.next(preview));

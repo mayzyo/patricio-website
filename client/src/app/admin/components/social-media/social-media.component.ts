@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Inject, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable } from 'rxjs';
-import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { UppyAngularDashboardModule } from '@uppy/angular';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
@@ -13,6 +13,7 @@ import { SocialMediaFormService } from '../../services/social-media-form.service
 import { ImageConverter } from '../../classes/image.converter';
 import { EditorService } from '../../services/editor.service';
 import { API_URL } from '../../../app.config';
+import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-remove-button/thumb-remove-button.component';
 
 @Component({
     selector: 'app-social-media',
@@ -23,6 +24,7 @@ import { API_URL } from '../../../app.config';
         ReactiveFormsModule,
         UppyAngularDashboardModule,
         EditorModalComponent,
+        ThumbRemoveButtonComponent
     ],
     templateUrl: './social-media.component.html',
     styleUrl: './social-media.component.scss',
@@ -32,8 +34,8 @@ export class SocialMediaComponent {
     protected readonly form = this.socialMediaForm.form;
 
     protected qrCodeUploader$ = this.initialiseUploader();
-    protected readonly thumbnail$ = this.initialiseThumbnail(this.qrCodeUploader$);
-    protected readonly qrCodeSelected = this.initialiseFileSelected(this.qrCodeUploader$);
+    private readonly fileThumbnail$ = this.initialiseFileThumbnail(this.qrCodeUploader$);
+    private readonly qrCodeSelected$ = this.initialiseFileSelected(this.qrCodeUploader$);
 
     protected readonly wechatQrCode = toSignal(this.form.get('weChatQrCode')?.valueChanges ?? EMPTY);
     protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
@@ -51,8 +53,8 @@ export class SocialMediaComponent {
     }
 
     protected onRemoveWeChatQrCode(): void {
-        this.form.get('weChatQrCode')?.setValue('');
         this.form.get('weChatQrCode')?.markAsDirty();
+        this.form.get('weChatQrCode')?.setValue('');
     }
 
     protected onSubmit(): void {
@@ -74,19 +76,18 @@ export class SocialMediaComponent {
     }
 
     private RespondToSetQrCodeValue(): void {
-        effect(() => {
-            if(!this.qrCodeSelected()) {
-                untracked(() => {
-                    this.form.get('weChatQrCode')?.setValue('');
-                });
-            }
-        });
+        this.qrCodeSelected$.pipe(
+            filter(res => !res),
+            takeUntilDestroyed()
+        ).subscribe(() => {
+            this.form.get('weChatQrCode')?.markAsDirty();
+            this.form.get('weChatQrCode')?.setValue('');
+        })
 
-        this.thumbnail$.pipe(takeUntilDestroyed())
-            .subscribe(thumbnail => {
-                this.form.get('weChatQrCode')?.setValue(thumbnail);
-                this.form.get('weChatQrCode')?.markAsDirty();
-            });
+        this.fileThumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
+            this.form.get('weChatQrCode')?.markAsDirty();
+            this.form.get('weChatQrCode')?.setValue(thumbnail);
+        });
     }
 
     private initialiseUploader(): Observable<Uppy> {
@@ -102,17 +103,16 @@ export class SocialMediaComponent {
         );
     }
 
-    private initialiseFileSelected(uploader$: Observable<Uppy>) {
-        return toSignal(uploader$.pipe(
+    private initialiseFileSelected(uploader$: Observable<Uppy>): Observable<boolean> {
+        return uploader$.pipe(
             switchMap(uploader => new Observable<boolean>(subscriber => {
                 uploader.on('file-added', () => subscriber.next(true));
                 uploader.on('file-removed', () => subscriber.next(false));
             })),
-            startWith(false)
-        ));
+        );
     }
 
-    private initialiseThumbnail(uploader: Observable<Uppy>): Observable<string> {
+    private initialiseFileThumbnail(uploader: Observable<Uppy>): Observable<string> {
         return uploader.pipe(
             switchMap(uploader => new Observable<string>(subscriber => {
                 uploader.on('thumbnail:generated', (_, preview) => subscriber.next(preview));

@@ -82,14 +82,15 @@
     
             <div class="form-group mb-2">
                 <label class="form-label">Event Preview Image</label>
-                @if(thumbnail() && !previewSelected()) {
-                    <button
-                        class="btn btn-danger shadow m-2 d-block"
+                @if(thumbnail()) {
+                    <app-thumb-remove-button
+                        class="d-block"
+                        [image]="thumbnail()"
                         [disabled]="submitting()"
-                        (click)="onRemoveThumbnail()"
+                        (removeClick)="onRemoveThumbnail()"
                     >
-                        Remove Image
-                    </button>
+                        Remove / Replace Preview Image
+                    </app-thumb-remove-button>
                 } @else {
                     @if(previewUploader$ | async; as previewUploader) {
                         <uppy-dashboard
@@ -111,10 +112,10 @@
             @if(submitting()) {
                 <span class="spinner-border spinner-border-sm" role="status"></span>
             } @else {
-                {{ (feedSelected$ | async) ? "Change" : "Add" }}
+                {{ (selected$ | async) ? "Change" : "Add" }}
             }
         </button>
-        @if(feedSelected$ | async) {
+        @if(selected$ | async) {
             <button
                 class="btn btn-danger shadow m-2"
                 type="button"

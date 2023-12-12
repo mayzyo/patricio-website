@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, effect, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable, Subject } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
@@ -14,6 +14,7 @@ import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
 import { FeedFormService } from '../../services/feed-form.service';
 import { API_URL } from '../../../app.config';
+import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-remove-button/thumb-remove-button.component';
 
 @Component({
     selector: 'app-feed-editor',
@@ -23,6 +24,7 @@ import { API_URL } from '../../../app.config';
         CommonModule,
         ReactiveFormsModule,
         UppyAngularDashboardModule,
+        ThumbRemoveButtonComponent
     ],
     templateUrl: './feed-editor.component.html',
     styleUrl: './feed-editor.component.scss',
@@ -33,17 +35,16 @@ export class FeedEditorComponent {
 
     private readonly clearUploader$ = new Subject<void>();
     protected previewUploader$ = this.initialiseUploader();
-    protected readonly thumbnail$ = this.initialiseThumbnail(this.previewUploader$);
-    protected readonly previewSelected = this.initialiseFileSelected(this.previewUploader$);
+    private readonly fileThumbnail$ = this.initialiseFileThumbnail(this.previewUploader$);
+    protected readonly previewSelected$ = this.initialiseFileSelected(this.previewUploader$);
 
     protected readonly form = this.feedForm.form;
 
+    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
+    protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
+    protected readonly selected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
-    protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
-    protected readonly thumbnail = toSignal(this.form.get('thumbnail')?.valueChanges ?? EMPTY);
-    protected readonly feedSelected$ = this.form.get('id')?.valueChanges.pipe(map(res => res != null));
-    protected readonly audioIdExists$ = this.form.get('audioId')?.valueChanges.pipe(map(res => res != null));
 
     constructor(
         @Inject(API_URL) private apiUrl: string,
@@ -59,8 +60,8 @@ export class FeedEditorComponent {
     }
 
     protected onRemoveThumbnail(): void {
-        this.form.get('thumbnail')?.setValue('');
         this.form.get('thumbnail')?.markAsDirty();
+        this.form.get('thumbnail')?.setValue('');
     }
 
     protected onSubmit(): void {
@@ -105,15 +106,17 @@ export class FeedEditorComponent {
     }
 
     private respondToSetThumbnailValue(): void {
-        effect(() => {
-            if(!this.previewSelected()) {
-                untracked(() => this.form.get('thumbnail')?.setValue(''));
-            }
-        });
-
-        this.thumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
-            this.form.get('thumbnail')?.setValue(thumbnail);
+        this.previewSelected$.pipe(
+            filter(res => !res),
+            takeUntilDestroyed()
+        ).subscribe(() => {
             this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue('');
+        })
+
+        this.fileThumbnail$.pipe(takeUntilDestroyed()).subscribe(thumbnail => {
+            this.form.get('thumbnail')?.markAsDirty();
+            this.form.get('thumbnail')?.setValue(thumbnail);
         });
     }
 
@@ -156,17 +159,16 @@ export class FeedEditorComponent {
         );
     }
 
-    private initialiseFileSelected(uploader$: Observable<Uppy>) {
-        return toSignal(uploader$.pipe(
+    private initialiseFileSelected(uploader$: Observable<Uppy>): Observable<boolean> {
+        return uploader$.pipe(
             switchMap(uploader => new Observable<boolean>(subscriber => {
                 uploader.on('file-added', () => subscriber.next(true));
                 uploader.on('file-removed', () => subscriber.next(false));
             })),
-            startWith(false)
-        ));
+        );
     }
 
-    private initialiseThumbnail(uploader: Observable<Uppy>): Observable<string> {
+    private initialiseFileThumbnail(uploader: Observable<Uppy>): Observable<string> {
         return uploader.pipe(
             switchMap(uploader => new Observable<string>(subscriber => {
                 uploader.on('thumbnail:generated', (_, preview) => subscriber.next(preview));

@@ -101,14 +101,15 @@
             <hr />
             <div class="mb-2">
                 <label>Wechat QR Code File</label>
-                @if(wechatQrCode() && !qrCodeSelected()) {
-                    <button
-                        class="btn btn-danger shadow m-2 d-block"
+                @if(wechatQrCode()) {
+                    <app-thumb-remove-button
+                        class="d-block"
+                        [image]="wechatQrCode()"
                         [disabled]="submitting()"
-                        (click)="onRemoveWeChatQrCode()"
+                        (removeClick)="onRemoveWeChatQrCode()"
                     >
-                        Remove QR Code
-                    </button>
+                        Remove / Replace QR Code
+                    </app-thumb-remove-button>
                 } @else {
                     @if(qrCodeUploader$ | async; as qrCodeUploader) {
                         <uppy-dashboard
