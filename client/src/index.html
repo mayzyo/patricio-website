@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Kaze Patricio Chan</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root>
+    <p></p>
+    <style>
+      @keyframes loading {
+          from { transform: scale(1); }
+          to { transform: scale(2); }
+      }
+
+      .load-circle {
+          width: 12px;
+          height: 12px;
+          border-radius: 50px;
+          margin: 0 16px;
+
+          animation-name: loading;
+          animation-duration: 0.5s;
+          animation-direction: alternate;
+          animation-iteration-count: infinite;
+      }
+      .load-container {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        position:absolute;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+      }
+    </style>
+    <div class="load-container">
+      <div class="load-circle" style="background:#A69B2B;"></div>
+      <div class="load-circle" style="background:#DF6795; animation-delay: 0.2s"></div>
+      <div class="load-circle" style="background:#A69B2B; animation-delay: 0.4s"></div>
+    </div>
+    <p></p>
+  </app-root>
+</body>
+</html>

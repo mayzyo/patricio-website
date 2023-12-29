@@ -1,0 +1,87 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./mixin.scss";
+/* Importing Bootstrap SCSS file. */
+@import "bootstrap/scss/bootstrap";
+
+h1, h2, h3, h4, p {
+    white-space: pre-line;
+}
+  
+.fade-in {
+    animation: fade-in .8s ease forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+.card-img {
+    object-fit: cover;
+    transition: all .3s ease;
+    height: 100%;
+}
+
+.event-img {
+    object-fit: cover;
+    width: 16rem;
+    height: 4rem;
+}
+
+.infinite-scroll {
+    overflow: hidden;
+    position: relative;
+}
+
+.infinite-scroll > ul {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll;
+    /* Increase/Decrease this value for cross-browser compatibility */
+    left: -17.5px;
+    right: -17.5px;
+    padding-left: 17.5px;
+    padding-right: 17.5px;
+
+    list-style: none;
+}
+
+.infinite-scroll > ul > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.infinite.progress-bar {
+    animation: infinite 3s linear infinite;
+}
+
+@include media-breakpoint-down(md) {
+    .quote.display-4 {
+        font-size: 2rem;
+    }
+
+    .name {
+        top: .75rem;
+    }
+
+    .card-img-overlay {
+        opacity: 1 !important;
+    }
+
+    .card-img {
+        opacity: .5;
+    }
+
+    .event-img {
+        width: 5rem;
+        height: 5rem;
+    }
+}

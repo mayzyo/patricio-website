@@ -1,0 +1,36 @@
+<app-editor-modal>
+    <div class="modal-body container-fluid">
+        <div class="row">
+            <div class="col-6" style="max-height: 75vh;">
+                <div class="infinite-scroll h-100">
+                    <ul
+                        class="list-group"
+                        infiniteScroll
+                        [infiniteScrollDistance]="2"
+                        [infiniteScrollThrottle]="50"
+                        [scrollWindow]="false"
+                        (scrolled)="onScroll()"
+                    >
+                        @for(song of songs$ | async; track song.id) {
+                            <li
+                                class="list-group-item list-group-item-action d-flex"
+                                [ngClass]="selected()?.id == song.id ? 'active' : ''" 
+                                (click)="selectSong(song)"
+                            >
+                                <img [src]="song.thumbnail" height="100" width="100" default="assets/images/record-vinyl-solid.svg">
+
+                                <div class="flex-1 mx-3 d-flex flex-column justify-space-between">
+                                    <h4>{{ song.title }}</h4>
+                                    <p>
+                                        <small>{{ song.date.toDate() | date:'fullDate' }}</small>
+                                    </p>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <app-song-editor class="col-6" style="max-height: 75vh;" (action)="onAction($event)"/>
+        </div>
+    </div>
+</app-editor-modal>

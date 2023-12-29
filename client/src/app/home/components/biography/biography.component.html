@@ -1,0 +1,7 @@
+<div class="row mx-n3">
+    @for(biography of biography$ | async; track biography) {
+        <p class="biography fade-in col-md-6 col-sm-12 px-3 lead">
+            {{ biography }}
+        </p>
+    }
+</div>

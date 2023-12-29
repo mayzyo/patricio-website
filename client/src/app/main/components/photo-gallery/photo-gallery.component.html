@@ -1,0 +1,23 @@
+<div class="gallery-wrapper row justify-content-center">
+    @if(galleryItems$ | async; as galleryItems) {
+        <gallery
+            id="galleryRef"
+            [thumbPosition]="mdScreen() ? 'bottom' : 'right'"
+            [slidingDirection]="mdScreen() ? 'horizontal' : 'vertical'"
+            [autoPlay]="true"
+            [playerInterval]="5000"
+            [counter]="false"
+            [items]="galleryItems"
+            (indexChange)="onIndexChange($event)"
+            (mouseenter)="onMouseEnter()"
+        />
+    }
+</div>
+
+@if(selectedPhoto$ | async; as selectedPhoto) {
+    <div class="d-flex mt-3">
+        <fa-icon [icon]="faClock" size="sm" />
+        <small class="ms-1">{{ selectedPhoto.date.toDate().toDateString() }}</small>
+    </div>
+    <p class="display-6">{{ selectedPhoto.description }}</p>
+}

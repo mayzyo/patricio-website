@@ -1,0 +1,143 @@
+<app-editor-modal>
+    <form
+        class="was-validated"
+        novalidate
+        [class.was-validated]="validating()"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+    >
+
+        <div class="modal-body d-flex flex-column h-100">
+            <div class="mb-3">
+                <label for="soundCloud" class="form-label">Sound Cloud Link</label>
+                <input
+                    formControlName="soundCloud"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="soundCloud" 
+                    name="soundCloud"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="facebook" class="form-label">Facebook Link</label>
+                <input
+                    formControlName="facebook"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="facebook" 
+                    name="facebook"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="linkedIn" class="form-label">LinkedIn Link</label>
+                <input
+                    formControlName="linkedIn"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="linkedIn" 
+                    name="linkedIn"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="instagram" class="form-label">Instagram Link</label>
+                <input
+                    formControlName="instagram"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="instagram" 
+                    name="instagram"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="vimeo" class="form-label">Vimeo Link</label>
+                <input
+                    formControlName="vimeo"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="vimeo" 
+                    name="vimeo"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="youtube" class="form-label">Youtube Link</label>
+                <input
+                    formControlName="youtube"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="youtube" 
+                    name="youtube"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="bilibili" class="form-label">Bilibili Link</label>
+                <input
+                    formControlName="bilibili"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="bilibili" 
+                    name="bilibili"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="tiktok" class="form-label">Tiktok Link</label>
+                <input
+                    formControlName="tiktok"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="tiktok" 
+                    name="tiktok"
+                />
+            </div>
+            <div>
+                <label for="weibo" class="form-label">Weibo Link</label>
+                <input
+                    formControlName="weibo"
+                    class="form-control" 
+                    placeholder="https://..."
+                    id="weibo" 
+                    name="weibo"
+                />
+            </div>
+            <hr />
+            <div class="mb-2">
+                <label>Wechat QR Code File</label>
+                @if(wechatQrCode()) {
+                    <app-thumb-remove-button
+                        class="d-block"
+                        [image]="wechatQrCode()"
+                        [disabled]="submitting()"
+                        (removeClick)="onRemoveWeChatQrCode()"
+                    >
+                        Remove / Replace QR Code
+                    </app-thumb-remove-button>
+                } @else {
+                    @if(qrCodeUploader$ | async; as qrCodeUploader) {
+                        <uppy-dashboard
+                            [props]="{ hideUploadButton: true, height: 400, width: 'auto', disabled: submitting() }"
+                            [uppy]="qrCodeUploader"
+                        />
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                class="btn btn-secondary shadow text-white flex-grow-1 m-2"
+                type="submit"
+                [disabled]="submitting() || pristine()"
+            >
+                @if(submitting()) {
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                } @else {
+                    Change
+                }
+            </button>
+        </div>
+        
+    </form>
+</app-editor-modal>
+
+<ng-template #spinner>
+    <span class="spinner-border spinner-border-sm" role="status"></span>
+</ng-template>

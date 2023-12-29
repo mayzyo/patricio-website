@@ -1,0 +1,14 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button
+            class="btn-close"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+        >
+        </button>
+    </div>
+    <ng-content></ng-content>
+</ng-template>

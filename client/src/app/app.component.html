@@ -1,0 +1,12 @@
+<app-navbar />
+<router-outlet />
+@if(routeLoading$ | async) {
+    <div class="load-container">
+        <div class="load-circle" style="background:#A69B2B;"></div>
+        <div class="load-circle" style="background:#DF6795; animation-delay: 0.2s"></div>
+        <div class="load-circle" style="background:#A69B2B; animation-delay: 0.4s"></div>
+    </div>
+}
+<app-footer />
+
+<ng-template #EditorRef />

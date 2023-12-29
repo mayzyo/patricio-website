@@ -1,0 +1,93 @@
+<!-- Navbar filling -->
+<div style="height: 5rem;"></div>
+
+@if(song$ | async; as song) {
+    <div class="container mt-5">
+        <div class="row">
+            <div class="card bg-dark text-white border-0">
+        
+                @if(song.youtube) {
+                    <iframe class="card-img" style="height: 35rem;" frameborder="0" allowfullscreen [src]="song.youtubeSanitized"></iframe>
+                } @else if(song.vimeo) {
+                    <iframe class="card-img" style="height: 35rem;" frameborder="0" allowfullscreen [src]="song.vimeoSanitized"></iframe>
+                } @else if(song.bilibili) {
+                    <iframe class="card-img" style="height: 35rem;" frameborder="0" allowfullscreen [src]="song.bilibiliSanitized"></iframe>
+                } @else {
+                    <img class="card-img" style="height: 25rem;" [src]="song.cover$ | async" />
+        
+                    <div class="card-img-overlay h-100 d-flex flex-column justify-content-between">
+                        <div class="card-title d-flex justify-content-between align-items-end">
+                            <h1 class="display-4 bg-dark px-2 pb-2">{{ song.title }}</h1>
+                            <p class="d-md-block d-none">{{ song.date.toDate() | date : 'fullDate' }}</p>
+                        </div>
+
+                        <audio class="w-100" autoplay controls [src]="audio()"></audio>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row my-3">
+            <h2 class="col-auto h5 d-flex align-items-center p-0 m-0 me-3">Links | 链接</h2>
+            
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.soundCloud"
+                [hidden]="!song.soundCloud"
+            >
+                <fa-icon [icon]="faSoundcloud" size="2x" [style.color]="'#FF4300'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.appleMusic"
+                [hidden]="!song.appleMusic"
+            >
+                <fa-icon [icon]="faApple" size="2x" [style.color]="'#F23A52'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.spotify"
+                [hidden]="!song.spotify"
+            >
+                <fa-icon [icon]="faSpotify" size="2x" [style.color]="'#1DB954'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.youtube"
+                [hidden]="!song.youtube"
+            >
+                <fa-icon [icon]="faYoutube" size="2x" [style.color]="'#FF0000'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.vimeo"
+                [hidden]="!song.vimeo"
+            >
+                <fa-icon [icon]="faVimeoV" size="2x" [style.color]="'#17D5FF'" />
+            </a>
+
+            <a
+                class="btn btn-link col-auto"
+                [href]="song.bilibili"
+                [hidden]="!song.bilibili"
+            >
+                <fa-icon [icon]="faBilibili" size="2x" [style.color]="'#00AEEC'" />
+            </a>
+        </div>
+    </div>
+}
+
+<main [ngStyle]="{ minHeight: (song$ | async) ? '50vh' : '75vh' }">
+    @if(blog$ | async; as blog) {
+        <div class="container border mb-5">
+            <div class="p-3">
+                <h2>{{ blog.title  }}</h2>
+                <p>{{ blog.content }}</p>
+            </div>
+        </div>
+    }
+</main>

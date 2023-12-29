@@ -1,0 +1,54 @@
+<app-editor-modal>
+    <div class="modal-body container-fluid">
+        <div class="row">
+            <div class="col-6" style="max-height: 75vh;">
+                <div class="infinite-scroll h-100">
+                    <ul
+                        class="list-group"
+                        infiniteScroll
+                        [infiniteScrollDistance]="2"
+                        [infiniteScrollThrottle]="50"
+                        [scrollWindow]="false"
+                        (scrolled)="onScroll()"
+                    >
+                        @for(item of feed$ | async; track item.id) {
+                            <li 
+                                class="list-group-item d-flex align-items-center"
+                                [class.active]="selected()?.id == item.id" 
+                                (click)="selectItem(item)"
+                            >
+                                @if(!item.link) {
+                                    <fa-icon
+                                        [icon]="faBullhorn"
+                                        size="3x"
+                                        [classes]="['me-3']"
+                                        [styles]="{ 'color': '#DF6795' }"
+                                    >
+                                    </fa-icon>
+                                }
+                                <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                    <p class="mb-0" [class.h5]="item.link" [innerHTML]="item.description || item.title"></p>
+                                    @if(item.link) {
+                                        @if(item.date) {
+                                            {{ item.date.toDate() | timeFromNow }} left!
+                                        }
+                                        {{ item.description ? item.title : "event detail here..." }}
+                                    } @else {
+                                        <small class="text-right">
+                                            {{ item.date.toDate().toLocaleString() }}
+                                        </small>
+                                    }
+                                </div>
+                        
+                                @if(item.link) {
+                                    <img class="event-img border border-dark" [src]="item.thumbnail">
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <app-feed-editor class="col-6" style="max-height: 75vh;" (action)="onAction($event)"/>
+        </div>
+    </div>
+</app-editor-modal>

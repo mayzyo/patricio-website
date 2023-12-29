@@ -1,8 +1,0 @@
-.env
-docker-compose.yml
-.gitignore
-**/.git
-
-/dist
-/node_modules
-/e2e

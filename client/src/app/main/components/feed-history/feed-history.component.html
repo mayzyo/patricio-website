@@ -1,0 +1,24 @@
+<h1>
+    <span class="display-4">历史记录</span>
+    <span class="h1 text-monospace text-uppercase">History</span>
+</h1>
+
+<div class="infinite-scroll" style="height: 14rem;">
+    <ul
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        [scrollWindow]="false"
+        (scrolled)="scrolled.emit()"
+    >
+        @for(data of _dataSource(); track data.id) {
+            <li>
+                @if(!data.link) {
+                    {{ data.title }}
+                } @else {
+                    <a href="{{ data.link }}">{{ data.title }}</a>
+                }
+            </li>
+        }
+    </ul>
+</div>

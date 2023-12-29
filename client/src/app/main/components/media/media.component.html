@@ -1,0 +1,15 @@
+<app-banner backgroundUrl="banner-3.jpg" altColour="#6538EE" />
+
+<div class="container my-5 pt-5">
+    <div class="row">
+        <app-title
+            class="flex-row-reverse justify-content-end mb-4"
+            text="Image Gallery | 媒体库"
+            (editClick)="openPhotoEditor()"
+        />
+
+        <hr />
+
+        <app-photo-gallery />
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="container-fluid">
+    <div class="row bg-dark text-white justify-content-center align-items-end pb-3">
+        <div class="col-12">
+
+            <div class="row justify-content-end my-5">
+
+                <div class="col-md-3 col-sm-12">
+                    <h1 class="h4">Navigation</h1>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/home">主页 | Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/updates">动态 | Updates</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/discography">作品集 | Discography</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/media">媒体 | Media</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <app-social-media class="col-md-3 col-sm-12" />
+
+                <div class="col-md-3 col-sm-12">
+                    <h1 class="h4">Legals</h1>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/privacy-policy">Privacy Policy | 隐私条款</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0" routerLink="/terms-of-service">Terms of Service | 条款及规则</a>
+                        </li>
+                        <li class="nav-item">
+                            @if(signedIn$ | async) {
+                                <button class="nav-link px-0 btn btn-link" (click)="signOut()">
+                                    Sign out
+                                </button>
+                            } @else {
+                                <button class="nav-link px-0 btn btn-link" (click)="signIn()">
+                                    Admin Portal
+                                </button>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row justify-content-around">
+                <div class="col-auto">
+                    <small>©2024 Kaze Patricio Chan. All Rights Reserved.</small>
+                </div>
+                <div class="col-auto">
+                    <small>Web Design by Michael May</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<div class="row">
+    @for(song of songs$ | async; track song.id) {
+        <div class="fade-in col-lg-3 col-md-4 col-sm-12 my-3">
+            <div
+                class="card text-bg-dark"
+                (mouseenter)="hoverTarget.set(song)"
+                (mouseleave)="hoverTarget.set(null)"
+            >
+
+                <img
+                    class="card-img square"
+                    default="assets/images/record-vinyl-solid.svg"
+                    [src]="song.cover$ | async"
+                    [style.filter]="hoverTarget() == song || playerTarget() == song ? 'opacity(.5) blur(5px)' : ''"
+                />
+
+                <div class="card-img-overlay">
+                    @if(hoverTarget() == song || playerTarget() == song) {
+                        @if(playerTarget() == song) {
+                            @if((loading$ | async) == true) {
+                                <!-- Loading State -->
+                                <div class="d-flex justify-content-center align-items-center h-100" (click)="cancelLoad()">
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                    <div class="spinner-grow text-primary" role="status"></div>
+                                </div>
+                            } @else {
+                                <!-- Playing State -->
+                                <div class="d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <h5 class="card-title">{{ song.title }}</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="card-text my-2">{{ song.genre }}</p>
+                                            <div>
+                                                <a
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.soundCloud"
+                                                    [href]="song.soundCloud"
+                                                >
+                                                    <fa-icon [icon]="faSoundcloud" [style.color]="'#FF4300'" />
+                                                </a>
+
+                                                <a
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.appleMusic"
+                                                    [href]="song.appleMusic"
+                                                >
+                                                    <fa-icon [icon]="faApple" [style.color]="'#F23A52'" />
+                                                </a>
+
+                                                <a
+                                                    class="btn btn-link"
+                                                    [hidden]="!song.spotify"
+                                                    [href]="song.spotify"
+                                                >
+                                                    <fa-icon [icon]="faSpotify" [style.color]="'#1DB954'" />
+                                                </a>
+
+                                                <a
+                                                    class="btn btn-link text-white"
+                                                    [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                                                    [queryParams]="{ songId: song.id }"
+                                                >
+                                                    <fa-icon [icon]="faCircleInfo" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <audio controls autoplay [src]="audio()"></audio>
+                                </div>
+                            }
+                        } @else {
+                            <!-- Hover State -->
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                                <button class="btn btn-link text-white" (click)="play(song)" [hidden]="!song.audioId">
+                                    <fa-icon [icon]="faCirclePlay" size="2x" />
+                                </button>
+                                <a
+                                    class="btn btn-link text-white"
+                                    [routerLink]="['/blog', song.blogId ? song.blogId : '0']"
+                                    [queryParams]="{ songId: song.id }"
+                                >
+                                    <fa-icon [icon]="faCircleInfo" size="2x" />
+                                </a>
+                            </div>
+                        }
+                    } @else {
+                        <!-- Neutral State -->
+                        <div class="d-flex flex-column justify-content-between h-100">
+                            <div>
+                                <h5 class="card-title">{{ song.title }}</h5>
+                                <p class="card-text my-2">{{ song.genre }}</p>
+                            </div>
+                            <small class="card-text">
+                                {{ song.date.toDate() | date:'fullDate' }}
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mb-5 justify-content-center">
+    <div class="col-auto">
+        <button
+            class="btn btn-secondary btn-lg shadow text-white"
+            [hidden]="endReached$ | async"
+            (click)="showMore()"
+        >
+            Show More
+        </button>
+    </div>
+</div>

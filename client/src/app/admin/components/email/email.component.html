@@ -1,0 +1,67 @@
+<app-editor-modal>
+    <form
+        class="was-validated"
+        novalidate
+        [class.was-validated]="validating()"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+    >
+
+        <div class="modal-body d-flex flex-column h-100">
+            <div class="mb-3">
+                <label for="email" class="form-label">Receiving Email Address</label>
+                <input
+                    formControlName="email"
+                    class="form-control" 
+                    placeholder="name@example.com"
+                    id="email" 
+                    name="email"
+                />
+            </div>
+
+            <hr />
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6 ps-0">
+                        <label for="purpose" class="form-label">Purposes</label>
+                        <app-editable-list
+                            formControlName="purpose"
+                            placeholder="name@example.com"
+                            id="purpose" 
+                            name="purpose"
+                        />
+                    </div>
+                    <div class="col-6 pe-0">
+                        <label for="senderType" class="form-label">Sender Types</label>
+                        <app-editable-list
+                            formControlName="senderType"
+                            placeholder="name@example.com"
+                            id="senderType" 
+                            name="senderType"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                class="btn btn-secondary shadow text-white flex-grow-1 m-2"
+                type="submit"
+                [disabled]="submitting() || pristine()"
+            >
+                @if(submitting()) {
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                } @else {
+                    Change
+                }
+            </button>
+        </div>
+        
+    </form>
+</app-editor-modal>
+
+<ng-template #spinner>
+    <span class="spinner-border spinner-border-sm" role="status"></span>
+</ng-template>
