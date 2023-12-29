@@ -1,5 +1,21 @@
 @import "../../../../mixin.scss";
 
+img {
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-name: placeholder;
+    animation-timing-function: ease-in-out;
+}
+
+p {
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-name: appear;
+    animation-timing-function: ease-in;
+}
+
 .background {
     background:
         linear-gradient($tertiary 0%, red 90%), 
@@ -7,7 +23,6 @@
         url('/assets/images/home-banner.jpg') 30px,
         url('/assets/images/home-banner.jpg') 20px;
 
-	animation: focus 8s ease infinite;
     background-blend-mode: screen, difference, lighten;
     background-size: cover;
     background-position: center;
@@ -29,20 +44,20 @@
     100% { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes focus {
-	0% {
-		filter: blur(0px);
-	}
-    20% {
-		filter: blur(1.5px);
+@keyframes placeholder {
+    0%{
+        opacity: 0.3;
     }
-    40% {
-        filter: blur(0px);
+    100% {
+        opacity: 0.8;
     }
-	80% {
-		filter: blur(.6px);
-	}
-	100% {
-		filter: blur(1.5px);
-	}
+}
+
+@keyframes appear {
+    0%{
+        opacity: 0.3;
+    }
+    100%{
+        opacity: 1;
+    }
 }

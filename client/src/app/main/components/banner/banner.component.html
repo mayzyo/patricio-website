@@ -3,17 +3,17 @@
     [style.background-image]="_backgroundUrl()"
 >
     <div class="container h-100 d-flex flex-column justify-content-end align-items-end">
-        <figure class="text-end p-5">
             @if(quote$ | async; as quote) {
-                <blockquote class="blockquote mb-4 text-white">
-                    <p class="h3">"{{ quote.message }}"</p>
-                </blockquote>
-                @if(quote.author) {
-                    <figcaption class="blockquote-footer">
-                        {{ quote.author }}
-                    </figcaption>
-                }
-            }  
-        </figure>
+                <figure class="text-end p-5">
+                    <blockquote class="blockquote mb-4 text-white">
+                        <p class="h3">"{{ quote.message }}"</p>
+                    </blockquote>
+                    @if(quote.author) {
+                        <figcaption class="blockquote-footer">
+                            {{ quote.author }}
+                        </figcaption>
+                    }
+                </figure>
+            }
     </div>
 </div>

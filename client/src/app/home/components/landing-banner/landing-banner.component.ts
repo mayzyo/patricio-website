@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild, signal } from '@angular/core';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { QuoteService } from '../../../shared/services/quote.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
     selector: 'app-landing-banner',
@@ -18,7 +19,7 @@ export class LandingBannerComponent {
     @Output() scrolldownChange = new EventEmitter<void>();
 
     protected readonly faArrowDown = faArrowDown;
-    protected readonly quote$ = this.quote.unique$('landing');
+    protected readonly quote$ = this.quote.unique$('landing').pipe(delay(1000));
   
     constructor(private quote: QuoteService) { }
   

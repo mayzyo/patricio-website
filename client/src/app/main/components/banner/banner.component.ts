@@ -22,7 +22,7 @@ export class BannerComponent {
 
     protected readonly quote$ = toObservable(this._backgroundUrl).pipe(
         filter(bgUrl => bgUrl != ''),
-        switchMap(bgUrl => this.quote.unique$(bgUrl))
+        switchMap(bgUrl => this.quote.unique$(bgUrl)),
     );
 
     constructor(private quote: QuoteService) { }
