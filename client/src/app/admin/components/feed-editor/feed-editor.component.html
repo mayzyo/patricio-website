@@ -82,7 +82,7 @@
     
             <div class="form-group mb-2">
                 <label class="form-label">Event Preview Image</label>
-                @if(thumbnail()) {
+                @if((selected$ | async) && thumbnail()) {
                     <app-thumb-remove-button
                         class="d-block"
                         [image]="thumbnail()"

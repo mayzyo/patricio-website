@@ -62,7 +62,7 @@
 
         <div class="form-group mb-2">
             <label class="form-label">Photo</label>
-            @if(thumbnail()) {
+            @if((selected$ | async) && thumbnail()) {
                 <app-thumb-remove-button
                     class="d-block"
                     [disabled]="submitting()"
