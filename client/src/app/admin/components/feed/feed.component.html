@@ -35,7 +35,7 @@
                                         {{ item.description ? item.title : "event detail here..." }}
                                     } @else {
                                         <small class="text-right">
-                                            {{ item.date.toString() }}
+                                            {{ item.date.toDate().toLocaleString() }}
                                         </small>
                                     }
                                 </div>
