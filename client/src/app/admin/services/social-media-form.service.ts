@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { ProfileService } from '../../core/services/profile.service';
 import { SocialMedia } from '../../models/social-media';
+import { urlValidator } from '../directives/url.directive';
 
 @Injectable()
 export class SocialMediaFormService {
-    private readonly urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     readonly form = this.fb.group({
-        soundCloud: ['', Validators.pattern(this.urlRegex)],
-        facebook: ['', Validators.pattern(this.urlRegex)],
-        linkedIn: ['', Validators.pattern(this.urlRegex)],
-        instagram: ['', Validators.pattern(this.urlRegex)],
+        soundCloud: ['', urlValidator],
+        facebook: ['', urlValidator],
+        linkedIn: ['', urlValidator],
+        instagram: ['', urlValidator],
         weChatQrCode: [''], 
-        tiktok: ['', Validators.pattern(this.urlRegex)],
-        weibo: ['', Validators.pattern(this.urlRegex)],
-        vimeo: ['', Validators.pattern(this.urlRegex)],
-        youtube: ['', Validators.pattern(this.urlRegex)],
-        bilibili: ['', Validators.pattern(this.urlRegex)],
+        tiktok: ['', urlValidator],
+        weibo: ['', urlValidator],
+        vimeo: ['', urlValidator],
+        youtube: ['', urlValidator],
+        bilibili: ['', urlValidator],
     });
 
     constructor(private fb: FormBuilder, private firestore: Firestore, private profile: ProfileService) {
