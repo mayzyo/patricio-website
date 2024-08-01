@@ -1,4 +1,12 @@
-<div class="gallery-wrapper row justify-content-center">
+@if(selectedPhoto$ | async; as selectedPhoto) {
+    <p class="display-6">{{ selectedPhoto.description }}</p>
+    <div class="d-flex my-3 ms-1">
+        <fa-icon [icon]="faClock" size="sm" />
+        <small class="ms-2">{{ selectedPhoto.date.toDate().toDateString() }}</small>
+    </div>
+}
+
+<div class="gallery-wrapper row justify-content-center mx-1">
     @if(galleryItems$ | async; as galleryItems) {
         <gallery
             id="galleryRef"
@@ -13,11 +21,3 @@
         />
     }
 </div>
-
-@if(selectedPhoto$ | async; as selectedPhoto) {
-    <div class="d-flex mt-3">
-        <fa-icon [icon]="faClock" size="sm" />
-        <small class="ms-1">{{ selectedPhoto.date.toDate().toDateString() }}</small>
-    </div>
-    <p class="display-6">{{ selectedPhoto.description }}</p>
-}

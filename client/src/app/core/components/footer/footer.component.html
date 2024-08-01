@@ -35,11 +35,11 @@
                         </li>
                         <li class="nav-item">
                             @if(signedIn$ | async) {
-                                <button class="nav-link px-0 btn btn-link" (click)="signOut()">
+                                <button class="nav-link px-0" (click)="signOut()">
                                     Sign out
                                 </button>
                             } @else {
-                                <button class="nav-link px-0 btn btn-link" (click)="signIn()">
+                                <button class="nav-link px-0" (click)="signIn()">
                                     Admin Portal
                                 </button>
                             }
