@@ -1,4 +1,4 @@
-import { ApplicationConfig, InjectionToken, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, InjectionToken, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,6 +9,7 @@ import { provideAppCheck, initializeAppCheck, ReCaptchaV3Provider } from '@angul
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
+(<any>window).FIREBASE_APPCHECK_DEBUG_TOKEN = isDevMode();
 export const STORAGE_URL = new InjectionToken<string>('https://url-to-blob-storage/');
 export const API_URL = new InjectionToken<string>('https://url-to-api/');
 
