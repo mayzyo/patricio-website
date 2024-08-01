@@ -134,7 +134,7 @@ export class PhotoEditorComponent {
         this.clearUploader$.pipe(
             switchMap(() => this.imageUploader$.pipe(take(1))),
             takeUntilDestroyed()
-        ).subscribe(imageUploader => imageUploader.cancelAll({ reason: 'user' }));
+        ).subscribe(imageUploader => imageUploader.cancelAll());
     }
 
     private RespondToFormPristine(): void {
@@ -151,7 +151,7 @@ export class PhotoEditorComponent {
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
                     endpoint: this.apiUrl.concat('save-media'),
-                    getResponseData: responseText => responseText,
+                    // getResponseData: responseText => responseText,
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })

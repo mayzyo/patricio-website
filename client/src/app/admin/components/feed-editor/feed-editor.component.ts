@@ -124,7 +124,7 @@ export class FeedEditorComponent {
         this.clearUploader$.pipe(
             switchMap(() => this.previewUploader$.pipe(take(1))),
             takeUntilDestroyed()
-        ).subscribe(previewUploader => previewUploader.cancelAll({ reason: 'user' }));
+        ).subscribe(previewUploader => previewUploader.cancelAll());
     }
 
     private respondToFormPristine(): void {
@@ -152,7 +152,7 @@ export class FeedEditorComponent {
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
                     endpoint: this.apiUrl.concat('save-media'),
-                    getResponseData: responseText => responseText,
+                    // getResponseData: responseText => responseText,
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })

@@ -155,8 +155,8 @@ export class SongEditorComponent {
             switchMap(() => forkJoin([this.coverUploader$.pipe(take(1)), this.audioUploader$.pipe(take(1))])),
             takeUntilDestroyed()
         ).subscribe(([coverUploader, audioUploader]) => {
-            coverUploader.cancelAll({ reason: 'user' });
-            audioUploader.cancelAll({ reason: 'user' });
+            coverUploader.cancelAll();
+            audioUploader.cancelAll();
         });
     }
 
@@ -174,7 +174,7 @@ export class SongEditorComponent {
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
                     endpoint: this.apiUrl.concat('save-media'),
-                    getResponseData: responseText => responseText,
+                    // getResponseData: responseText => responseText,
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })

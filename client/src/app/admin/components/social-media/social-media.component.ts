@@ -96,7 +96,7 @@ export class SocialMediaComponent {
                 .use(XHR, {
                     headers: { 'Authorization': idToken },
                     endpoint: this.apiUrl.concat('save-media'),
-                    getResponseData: responseText => responseText,
+                    // getResponseData: responseText => responseText,
                 })
             ),
             shareReplay({ bufferSize: 1, refCount: true })
