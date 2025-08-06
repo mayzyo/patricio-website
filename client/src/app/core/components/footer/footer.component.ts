@@ -6,7 +6,8 @@ import { map } from 'rxjs/operators';
     selector: 'app-footer',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './footer.component.html',
-    styleUrl: './footer.component.scss'
+    styleUrl: './footer.component.scss',
+    standalone: false
 })
 export class FooterComponent {
     readonly signedIn$ = user(this.auth).pipe(map(res => res != null));

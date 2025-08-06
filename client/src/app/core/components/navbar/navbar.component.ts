@@ -8,7 +8,8 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
     selector: 'app-navbar',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './navbar.component.html',
-    styleUrl: './navbar.component.scss'
+    styleUrl: './navbar.component.scss',
+    standalone: false
 })
 export class NavbarComponent implements OnInit {
     protected readonly animState$ = interval(20000).pipe(

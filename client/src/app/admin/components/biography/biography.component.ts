@@ -9,7 +9,6 @@ import { BiographyFormService } from '../../services/biography-form.service';
 @Component({
     selector: 'app-biography',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

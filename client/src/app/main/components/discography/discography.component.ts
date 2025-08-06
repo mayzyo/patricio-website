@@ -5,7 +5,8 @@ import { EditorService } from '../../../admin/services/editor.service';
     selector: 'app-discography',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './discography.component.html',
-    styleUrl: './discography.component.scss'
+    styleUrl: './discography.component.scss',
+    standalone: false
 })
 export class DiscographyComponent {
     protected readonly viewOnly$ = this.editor.viewOnly$;

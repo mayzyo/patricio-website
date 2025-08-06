@@ -9,7 +9,8 @@ import { FeedService } from '../../../shared/services/feed.service';
 @Component({
     selector: 'app-upcoming-event',
     templateUrl: './upcoming-event.component.html',
-    styleUrl: './upcoming-event.component.scss'
+    styleUrl: './upcoming-event.component.scss',
+    standalone: false
 })
 export class UpcomingEventComponent {
     private readonly _triggered = signal(false);

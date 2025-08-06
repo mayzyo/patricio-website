@@ -8,7 +8,6 @@ import { FeedItem } from '../../../models/feed-item';
 @Component({
     selector: 'app-feed',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [CommonModule, FontAwesomeModule, TimeFromNowPipe],
     templateUrl: './feed.component.html',
     styleUrl: './feed.component.scss'

@@ -19,7 +19,6 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
 @Component({
     selector: 'app-feed-editor',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

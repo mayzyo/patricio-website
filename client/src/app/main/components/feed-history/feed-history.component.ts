@@ -4,7 +4,8 @@ import { FeedItem } from '../../../models/feed-item';
 @Component({
     selector: 'app-feed-history',
     templateUrl: './feed-history.component.html',
-    styleUrl: './feed-history.component.scss'
+    styleUrl: './feed-history.component.scss',
+    standalone: false
 })
 export class FeedHistoryComponent {
     protected readonly _dataSource = signal(new Array<FeedItem>());

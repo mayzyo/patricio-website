@@ -5,7 +5,8 @@ import { EditorService } from '../../../admin/services/editor.service';
     selector: 'app-media',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './media.component.html',
-    styleUrl: './media.component.scss'
+    styleUrl: './media.component.scss',
+    standalone: false
 })
 export class MediaComponent {
     constructor(private editor: EditorService) { }

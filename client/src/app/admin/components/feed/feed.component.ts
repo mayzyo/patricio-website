@@ -15,7 +15,6 @@ import { TimeFromNowPipe } from '../../../shared/pipes/time-from-now.pipe';
 @Component({
     selector: 'app-feed',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         InfiniteScrollModule,

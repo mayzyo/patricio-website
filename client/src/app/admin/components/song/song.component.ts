@@ -11,7 +11,6 @@ import { EditorAction } from '../../interfaces/editor-action';
 
 @Component({
     selector: 'app-song',
-    standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
@@ -22,7 +21,7 @@ import { EditorAction } from '../../interfaces/editor-action';
     ],
     templateUrl: './song.component.html',
     styleUrl: './song.component.scss',
-    providers: [SongFormService],
+    providers: [SongFormService]
 })
 export class SongComponent implements AfterViewInit {
     protected readonly songs$ = this.song.list$;

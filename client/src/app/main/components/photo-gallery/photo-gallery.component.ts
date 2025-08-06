@@ -13,7 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './photo-gallery.component.html',
     styleUrl: './photo-gallery.component.scss',
-    host: { class: 'container' }
+    host: { class: 'container' },
+    standalone: false
 })
 export class PhotoGalleryComponent implements OnInit {
     protected readonly faClock = faClock;

@@ -8,11 +8,10 @@ import { EditorService } from './admin/services/editor.service';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, CoreModule, HomeModule, MainModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    imports: [CommonModule, RouterOutlet, CoreModule, HomeModule, MainModule],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
     @ViewChild("EditorRef", { read: ViewContainerRef }) editorRef?: ViewContainerRef;

@@ -6,7 +6,8 @@ import { FeedType } from '../../../shared/enums/feed-type';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './feed-filter.component.html',
     styleUrl: './feed-filter.component.scss',
-    host: { class: 'd-flex justify-content-end' }
+    host: { class: 'd-flex justify-content-end' },
+    standalone: false
 })
 export class FeedFilterComponent {
     protected readonly FeedType = FeedType;

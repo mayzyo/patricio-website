@@ -15,7 +15,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
     selector: 'app-email-me',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

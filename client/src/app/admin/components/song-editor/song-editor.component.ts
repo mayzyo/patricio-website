@@ -19,7 +19,6 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
 @Component({
     selector: 'app-song-editor',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

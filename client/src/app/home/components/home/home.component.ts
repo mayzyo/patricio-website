@@ -6,7 +6,8 @@ import { EditorService } from '../../../admin/services/editor.service';
     selector: 'app-home',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './home.component.html',
-    styleUrl: './home.component.scss'
+    styleUrl: './home.component.scss',
+    standalone: false
 })
 export class HomeComponent {
     @ViewChild('SpotlightRef', { static: true }) spotlightRef?: ElementRef<HTMLElement>;

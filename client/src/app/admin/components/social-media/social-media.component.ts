@@ -18,7 +18,6 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
 @Component({
     selector: 'app-social-media',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

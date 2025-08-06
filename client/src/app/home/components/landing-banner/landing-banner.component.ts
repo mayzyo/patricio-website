@@ -7,7 +7,8 @@ import { delay } from 'rxjs/operators';
     selector: 'app-landing-banner',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './landing-banner.component.html',
-    styleUrl: './landing-banner.component.scss'
+    styleUrl: './landing-banner.component.scss',
+    standalone: false
 })
 export class LandingBannerComponent {
     @ViewChild('ScrollAnchor', { static: true }) scrollAnchor?: ElementRef<HTMLElement>;

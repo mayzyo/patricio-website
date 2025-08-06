@@ -11,7 +11,6 @@ import { ProfilePrivateService } from '../../services/profile-private.service';
 @Component({
     selector: 'app-email',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, EditorModalComponent, EditableListComponent],
     templateUrl: './email.component.html',
     styleUrl: './email.component.scss',

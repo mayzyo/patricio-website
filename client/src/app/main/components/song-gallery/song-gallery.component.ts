@@ -16,7 +16,8 @@ import { delayInterval } from '../../../shared/operators/delay-interval';
     templateUrl: './song-gallery.component.html',
     styleUrl: './song-gallery.component.scss',
     providers: [MusicPlayerService],
-    host: { class: 'container' }
+    host: { class: 'container' },
+    standalone: false
 })
 export class SongGalleryComponent {
     protected readonly faCircleInfo = faCircleInfo;

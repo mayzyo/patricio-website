@@ -7,7 +7,6 @@ import { IconDefinition, faEdit } from '@fortawesome/free-regular-svg-icons';
 @Component({
     selector: 'app-title',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [CommonModule, FontAwesomeModule],
     templateUrl: './title.component.html',
     styleUrl: './title.component.scss',

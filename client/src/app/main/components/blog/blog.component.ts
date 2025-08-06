@@ -15,7 +15,8 @@ import { MusicPlayerService } from '../../services/music-player.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './blog.component.html',
     styleUrl: './blog.component.scss',
-    providers: [MusicPlayerService]
+    providers: [MusicPlayerService],
+    standalone: false
 })
 export class BlogComponent {
     private readonly _id = signal<string | null>(null);

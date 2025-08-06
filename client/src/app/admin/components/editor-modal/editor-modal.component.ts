@@ -4,7 +4,6 @@ import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-editor-modal',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [NgbModalModule],
     templateUrl: './editor-modal.component.html',
     styleUrl: './editor-modal.component.scss'

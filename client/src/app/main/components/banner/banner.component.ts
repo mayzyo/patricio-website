@@ -7,7 +7,8 @@ import { toObservable } from '@angular/core/rxjs-interop';
     selector: 'app-banner',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './banner.component.html',
-    styleUrl: './banner.component.scss'
+    styleUrl: './banner.component.scss',
+    standalone: false
 })
 export class BannerComponent {
     protected readonly _backgroundUrl = signal('');

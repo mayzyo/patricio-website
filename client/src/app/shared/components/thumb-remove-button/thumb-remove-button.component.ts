@@ -5,7 +5,6 @@ import { IconDefinition, faRecordVinyl } from '@fortawesome/free-solid-svg-icons
 @Component({
     selector: 'app-thumb-remove-button',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     templateUrl: './thumb-remove-button.component.html',
     styleUrl: './thumb-remove-button.component.scss',
     imports: [FontAwesomeModule]

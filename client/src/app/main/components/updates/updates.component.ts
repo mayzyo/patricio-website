@@ -11,7 +11,8 @@ import { delayInterval } from '../../../shared/operators/delay-interval';
     selector: 'app-updates',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './updates.component.html',
-    styleUrl: './updates.component.scss'
+    styleUrl: './updates.component.scss',
+    standalone: false
 })
 export class UpdatesComponent {
     protected readonly selectedFilter = signal(FeedType.ALL);

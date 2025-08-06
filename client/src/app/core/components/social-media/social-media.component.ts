@@ -11,7 +11,8 @@ import { SocialMedia } from '../../../models/social-media';
     selector: 'app-social-media',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './social-media.component.html',
-    styleUrl: './social-media.component.scss'
+    styleUrl: './social-media.component.scss',
+    standalone: false
 })
 export class SocialMediaComponent {
     protected readonly faSoundcloud = faSoundcloud;

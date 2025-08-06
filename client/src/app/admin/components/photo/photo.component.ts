@@ -13,7 +13,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'app-photo',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         CommonModule,
         InfiniteScrollModule,

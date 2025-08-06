@@ -11,7 +11,8 @@ import { ContentService } from '../../../shared/services/content.service';
     selector: 'app-spotlight',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './spotlight.component.html',
-    styleUrl: './spotlight.component.scss'
+    styleUrl: './spotlight.component.scss',
+    standalone: false
 })
 export class SpotlightComponent {
     private _triggered = signal(false);

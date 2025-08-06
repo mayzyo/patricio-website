@@ -9,7 +9,8 @@ import { ProfileService } from '../../../core/services/profile.service';
     selector: 'app-biography',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './biography.component.html',
-    styleUrl: './biography.component.scss'
+    styleUrl: './biography.component.scss',
+    standalone: false
 })
 export class BiographyComponent implements AfterViewInit {
     protected readonly faPortrait = faPortrait;

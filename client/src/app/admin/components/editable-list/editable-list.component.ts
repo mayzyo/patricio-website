@@ -5,7 +5,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
     selector: 'app-editable-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [CommonModule],
     templateUrl: './editable-list.component.html',
     styleUrl: './editable-list.component.scss',
