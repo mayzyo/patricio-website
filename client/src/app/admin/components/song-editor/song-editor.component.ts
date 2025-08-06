@@ -8,7 +8,7 @@ import { filter, map, shareReplay, startWith, switchMap, take, tap } from 'rxjs/
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
-import { UppyAngularDashboardModule } from '@uppy/angular';
+import { DashboardComponent } from '@uppy/angular';
 import { EditorService } from '../../services/editor.service';
 import { SongFormService } from '../../services/song-form.service';
 import { EditorAction } from '../../interfaces/editor-action';
@@ -22,7 +22,7 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        UppyAngularDashboardModule,
+        DashboardComponent,
         ThumbRemoveButtonComponent
     ],
     templateUrl: './song-editor.component.html',

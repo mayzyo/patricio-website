@@ -8,7 +8,7 @@ import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
-import { UppyAngularDashboardModule } from '@uppy/angular';
+import { DashboardComponent } from '@uppy/angular';
 import { EditorService } from '../../services/editor.service';
 import { EditorAction } from '../../interfaces/editor-action';
 import { ImageConverter } from '../../classes/image.converter';
@@ -22,7 +22,7 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        UppyAngularDashboardModule,
+        DashboardComponent,
         ThumbRemoveButtonComponent
     ],
     templateUrl: './feed-editor.component.html',

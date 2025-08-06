@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-import { UppyAngularDashboardModule } from '@uppy/angular';
+import { DashboardComponent } from '@uppy/angular';
 import Uppy from '@uppy/core';
 import XHR from '@uppy/xhr-upload';
 import { EditorModalComponent } from '../editor-modal/editor-modal.component';
@@ -21,7 +21,7 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        UppyAngularDashboardModule,
+        DashboardComponent,
         EditorModalComponent,
         ThumbRemoveButtonComponent
     ],
