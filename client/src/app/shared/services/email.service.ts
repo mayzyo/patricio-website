@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Email } from '../../models/email';
 import { Observable, forkJoin, from, iif, of, throwError } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
@@ -11,12 +11,10 @@ import { API_URL } from '../../app.config';
     providedIn: 'root'
 })
 export class EmailService {
-    constructor(
-        @Inject(API_URL) private apiUrl: string,
-        private http: HttpClient,
-        private profile: ProfileService,
-        private appCheck: AppCheck
-    ) { }
+    private readonly apiUrl = inject(API_URL);
+    private readonly http = inject(HttpClient);
+    private readonly profile = inject(ProfileService);
+    private readonly appCheck = inject(AppCheck);
 
     sendEmail(email: Email): Observable<string> {
         return forkJoin([

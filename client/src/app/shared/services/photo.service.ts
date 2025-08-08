@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from } from 'rxjs';
 import { map, scan, shareReplay, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
@@ -8,6 +8,8 @@ import { Photo } from '../../models/photo';
     providedIn: 'root'
 })
 export class PhotoService {
+    private readonly firestore = inject(Firestore);
+
     private readonly load$ = new Subject<void>();
     private readonly refresh$ = new Subject<void>();
     private readonly pageSize = 10;
@@ -16,8 +18,6 @@ export class PhotoService {
     readonly list$ = this.initialiseList();
     readonly endReached$ = this.initialiseEndReached();
     
-    constructor(private firestore: Firestore) { }
-
     refresh(): void {
         this.refresh$.next();
     }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { DocumentData, Firestore, Query, and, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from, zip } from 'rxjs';
 import { map, scan, shareReplay, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
@@ -9,6 +9,8 @@ import { FeedType } from '../enums/feed-type';
     providedIn: 'root'
 })
 export class FeedService {
+    private readonly firestore = inject(Firestore);
+
     private readonly refresh$ = new Subject<FeedType>();
     private readonly load$ = new Subject<void>();
     private readonly loadArchived$ = new Subject<void>();
@@ -19,8 +21,6 @@ export class FeedService {
     readonly archived$ = this.initialiseArchived();;
     readonly upcoming$ = this.initialiseUpcoming();
     
-    constructor(private firestore: Firestore) {}
-
     refresh(feedType = FeedType.ALL): void {
         this.refresh$.next(feedType);
     }

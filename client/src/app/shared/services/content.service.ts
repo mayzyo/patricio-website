@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of, iif, concat } from 'rxjs';
@@ -9,11 +9,9 @@ import { STORAGE_URL } from '../../app.config';
     providedIn: 'root'
 })
 export class ContentService {
-    constructor(
-        @Inject(STORAGE_URL) private storageUrl: string,
-        private http: HttpClient,
-        private sanitizer: DomSanitizer
-    ) { }
+    private readonly storageUrl = inject(STORAGE_URL);
+    private readonly http = inject(HttpClient);
+    private readonly sanitizer = inject(DomSanitizer);
 
     getImage(thumbnail?: string, id?: string): Observable<any> {
         return iif(

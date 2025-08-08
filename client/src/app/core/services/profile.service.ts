@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable, Subject } from 'rxjs';
 import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
@@ -9,13 +9,13 @@ import { EmailConfig } from '../../models/email-config';
     providedIn: 'root'
 })
 export class ProfileService {
+    private readonly firestore: Firestore = inject(Firestore);
+
     private readonly refresh$ = new Subject<void>();
 
     readonly profile$ = this.initialiseProfile();
     readonly biography$ = this.initialiseBiography(this.profile$);
     readonly emailConfig$ = this.initialiseEmailConfig(this.profile$);
-
-    constructor(private firestore: Firestore) { }
 
     refresh(): void {
         this.refresh$.next();

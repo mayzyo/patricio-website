@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -8,10 +8,10 @@ import { Quote } from '../../models/quote';
     providedIn: 'root'
 })
 export class QuoteService {
+    private readonly firestore = inject(Firestore);
+
     private readonly list$ = this.initialiseList();
     private readonly tracker = new Map<string, Quote>();
-
-    constructor(private firestore: Firestore) { }
 
     unique$(pageName: string) {
         return this.list$.pipe(

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, merge } from 'rxjs';
 import { map, share, shareReplay, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,10 @@ import { STORAGE_URL } from '../../app.config';
 
 @Injectable()
 export class MusicPlayerService {
+    private readonly storageUrl = inject(STORAGE_URL);
+    private readonly http = inject(HttpClient);
+    private readonly sanitizer = inject(DomSanitizer);
+
     private readonly updateAudio$ = new Subject<string>();
     readonly audio$ = this.initialiseAudio();
     private readonly updateLoading$ = new BehaviorSubject<boolean>(false);
@@ -15,12 +19,6 @@ export class MusicPlayerService {
         this.audio$.pipe(map(() => false), shareReplay({ bufferSize: 1, refCount: true }))
     );
     
-    constructor(
-        @Inject(STORAGE_URL) private storageUrl: string,
-        private http: HttpClient,
-        private sanitizer: DomSanitizer
-    ) { }
-
     loadAudio(audioId: string): void {
         this.updateLoading$.next(true);
         this.updateAudio$.next(audioId);

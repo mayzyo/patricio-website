@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, inject, viewChild, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
@@ -14,18 +14,20 @@ import { filter, map } from 'rxjs/operators';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
-    @ViewChild("EditorRef", { read: ViewContainerRef }) editorRef?: ViewContainerRef;
+    private router = inject(Router);
+    private editor = inject(EditorService);
+    private editorRef = viewChild("EditorRef", { read: ViewContainerRef });
 
     routeLoading$ = this.router.events.pipe(
         filter(event => event instanceof RouteConfigLoadStart || event instanceof RouteConfigLoadEnd),
         map(event => event instanceof RouteConfigLoadStart)
     );
 
-    constructor(private router: Router, private editor: EditorService) {}
 
     ngAfterViewInit(): void {
-        if(this.editorRef) {
-            this.editor.initialise(this.editorRef);
+        const ref = this.editorRef();
+        if(ref) {
+            this.editor.initialise(ref);
         } else {
             console.error('Editor not initialised!');
         }
