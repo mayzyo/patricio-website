@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { Component, input, Input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { EMPTY, Observable } from 'rxjs';
@@ -12,22 +12,14 @@ import { MusicPlayerService } from '../../services/music-player.service';
 
 @Component({
     selector: 'app-blog',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './blog.component.html',
     styleUrl: './blog.component.scss',
     providers: [MusicPlayerService],
     standalone: false
 })
 export class BlogComponent {
-    private readonly _id = signal<string | null>(null);
-    @Input() set id(value: string) {
-        this._id.set(value);
-    }
-
-    private readonly _songId = signal<string | null>(null);
-    @Input() set songId(value: string) {
-        this._songId.set(value);
-    }
+    id = input<string | null>();
+    songId = input<string | null>();
 
     protected readonly faSoundcloud = faSoundcloud;
     protected readonly faApple = faApple;
@@ -55,7 +47,7 @@ export class BlogComponent {
     }
 
     private initialiseSong(): Observable<BlogSongView | undefined> {
-        return toObservable(this._songId).pipe(
+        return toObservable(this.songId).pipe(
             filter(id => id != null),
             switchMap(selectedId => this.song.list$.pipe(
                 map(songs => songs.find(({ id }) => id == selectedId))
@@ -73,7 +65,7 @@ export class BlogComponent {
     }
 
     private initialiseBlog(): Observable<Blog> {
-        return toObservable(this._id).pipe(
+        return toObservable(this.id).pipe(
             filter(id => id != null && id != '0'),
             switchMap(selectedId => {
                 console.error('Blog not yet implemented');

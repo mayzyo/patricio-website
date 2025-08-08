@@ -11,7 +11,7 @@
         [scrollWindow]="false"
         (scrolled)="scrolled.emit()"
     >
-        @for(data of _dataSource(); track data.id) {
+        @for(data of dataSource(); track data.id) {
             <li>
                 @if(!data.link) {
                     {{ data.title }}

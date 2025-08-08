@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { faBilibili, faFacebookSquare, faInstagram, faLinkedin, faSoundcloud, faTiktok, faVimeoV, faWeibo, faWeixin, faYoutube } from '@fortawesome/free-brands-svg-icons';
@@ -9,12 +9,14 @@ import { SocialMedia } from '../../../models/social-media';
 
 @Component({
     selector: 'app-social-media',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './social-media.component.html',
     styleUrl: './social-media.component.scss',
     standalone: false
 })
 export class SocialMediaComponent {
+    private profile = inject(ProfileService);
+    private editor = inject(EditorService);
+
     protected readonly faSoundcloud = faSoundcloud;
     protected readonly faFacebookSquare = faFacebookSquare;
     protected readonly faLinkedin = faLinkedin;
@@ -30,8 +32,6 @@ export class SocialMediaComponent {
     protected readonly socialMedia$ = this.initialiseSocialMedia();
     protected readonly viewOnly$ = this.editor.viewOnly$;
     
-    constructor(private profile: ProfileService, private editor: EditorService) { }
-
     protected async openSocialMediaEditor() {
         const { SocialMediaComponent } = await import("../../../admin/components/social-media/social-media.component");
         this.editor.open(SocialMediaComponent);

@@ -4,9 +4,9 @@
             #valueInput
             class="form-control border-0 px-0"
             type="text"
-            [id]="id"
-            [name]="name"
-            [placeholder]="placeholder"
+            [id]="id()"
+            [name]="name()"
+            [placeholder]="placeholder()"
             [value]="editedValue"
             [disabled]="disabled()"
             (blur)="onAdd($event, valueInput)"

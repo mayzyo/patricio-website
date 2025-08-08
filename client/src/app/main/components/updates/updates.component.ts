@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, Injector, signal } from '@angular/core';
 import { EditorService } from '../../../admin/services/editor.service';
 import { FeedService } from '../../../shared/services/feed.service';
 import { FeedType } from '../../../shared/enums/feed-type';
@@ -9,22 +9,31 @@ import { delayInterval } from '../../../shared/operators/delay-interval';
 
 @Component({
     selector: 'app-updates',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './updates.component.html',
     styleUrl: './updates.component.scss',
     standalone: false
 })
-export class UpdatesComponent {
+export class UpdatesComponent implements AfterViewInit {
+    private feed = inject(FeedService);
+    private editor = inject(EditorService);
+    private injector = inject(Injector);
+
     protected readonly selectedFilter = signal(FeedType.ALL);
     protected readonly recent$ = this.initialiseRecentAnimated();
     protected readonly archived$ = this.feed.archived$;
 
-    constructor(private feed: FeedService, private editor: EditorService) {
+    ngAfterViewInit(): void {
         this.respondToFilterChange();
     }
 
     onScroll(): void {
         this.feed.loadArchived();
+    }
+
+    private respondToFilterChange(): void {
+        effect(() => {
+            this.feed.refresh(this.selectedFilter());
+        }, { injector: this.injector });
     }
     
     async openFeedEditor() {
@@ -32,18 +41,12 @@ export class UpdatesComponent {
         this.editor.open(FeedComponent);
     }
 
-    private respondToFilterChange(): void {
-        effect(() => {
-            this.feed.refresh(this.selectedFilter());
-        });
-    }
-
     private initialiseRecentAnimated(): Observable<FeedItem[]> {
         return this.feed.recent$.pipe(
-            switchMap(feed => from(feed).pipe(
+            switchMap(feed => feed.length != 0 ? from(feed).pipe(
                 delayInterval(),
                 scan((acc, curr) => acc.concat(curr), new Array<FeedItem>())
-            )),
+            ) : [[]]),
         );
     }
 }

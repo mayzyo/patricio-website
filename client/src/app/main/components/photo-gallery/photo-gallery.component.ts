@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnInit, signal } from '@angular/core';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, startWith, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-photo-gallery',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './photo-gallery.component.html',
     styleUrl: './photo-gallery.component.scss',
     host: { class: 'container' },
@@ -27,7 +26,11 @@ export class PhotoGalleryComponent implements OnInit {
     protected readonly mdScreen = signal<boolean | null>(null);
     private total = 0;
 
-    constructor(private gallery: Gallery, private photo: PhotoService, private content: ContentService) {
+    constructor(
+        private gallery: Gallery,
+        private photo: PhotoService,
+        private content: ContentService
+    ) {
         this.respondToLoadMore();
     }
 

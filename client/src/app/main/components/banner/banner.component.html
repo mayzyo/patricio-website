@@ -1,6 +1,6 @@
 <div class="background"
-    [style.background-color]="_altColour()"
-    [style.background-image]="_backgroundUrl()"
+    [style.background-color]="altColour()"
+    [style.background-image]="backgroundFullPath()"
 >
     <div class="container h-100 d-flex flex-column justify-content-end align-items-end">
             @if(quote$ | async; as quote) {

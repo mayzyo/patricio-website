@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { FeedItem } from '../../../models/feed-item';
 import { Observable, from } from 'rxjs';
 import { filter, map, scan, share, switchMap, take } from 'rxjs/operators';
@@ -13,17 +13,13 @@ import { FeedService } from '../../../shared/services/feed.service';
     standalone: false
 })
 export class UpcomingEventComponent {
-    private readonly _triggered = signal(false);
-    @Input() set triggered(value: boolean) {
-        this._triggered.set(value);
-    }
+    private feed = inject(FeedService);
+    triggered = input<boolean>(false);
 
-    protected readonly upcomingEvents$ = this.initialiseUpcomingEvents();
-
-    constructor(private feed: FeedService) { }
+    protected upcomingEvents$ = this.initialiseUpcomingEvents();
 
     private initialiseUpcomingEvents(): Observable<FeedItem[]> {
-        const triggered$ = toObservable(this._triggered).pipe(
+        const triggered$ = toObservable(this.triggered).pipe(
             filter(res => res),
             map<boolean, void>(() => null),
             share()

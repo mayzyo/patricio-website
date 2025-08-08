@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, signal, untracked } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { EditorModalComponent } from '../editor-modal/editor-modal.component';
 import { SongEditorComponent } from '../song-editor/song-editor.component';
 import { SongService } from '../../../shared/services/song.service';
@@ -14,7 +14,7 @@ import { EditorAction } from '../../interfaces/editor-action';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
-        InfiniteScrollModule,
+        InfiniteScrollDirective,
         EditorModalComponent,
         SongEditorComponent,
         ImageDefaultDirective
@@ -24,15 +24,15 @@ import { EditorAction } from '../../interfaces/editor-action';
     providers: [SongFormService]
 })
 export class SongComponent implements AfterViewInit {
+    private song = inject(SongService);
+    private songForm = inject(SongFormService);
+
     protected readonly songs$ = this.song.list$;
 
     protected readonly selected = signal<Song | null>(null);
 
-    constructor(private song: SongService, private songForm: SongFormService) {
-        this.RespondToSelection();
-    }
-
     ngAfterViewInit(): void {
+        this.RespondToSelection();
         this.song.refresh();
     }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -8,7 +8,6 @@ import { BiographyFormService } from '../../services/biography-form.service';
 
 @Component({
     selector: 'app-biography',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -19,13 +18,14 @@ import { BiographyFormService } from '../../services/biography-form.service';
     providers: [BiographyFormService]
 })
 export class BiographyComponent {
+    private destroyRef = inject(DestroyRef);
+    private biographyForm = inject(BiographyFormService);
+    
     protected readonly form = this.biographyForm.form;
 
     protected readonly pristine = toSignal(this.form.statusChanges.pipe(map(() => this.form.pristine)));
     protected readonly submitting = signal(false);
     protected readonly validating = signal(false);
-
-    constructor(private destroyRef: DestroyRef, private biographyForm: BiographyFormService) { }
 
     protected onSubmit(): void {
         this.validating.set(true);

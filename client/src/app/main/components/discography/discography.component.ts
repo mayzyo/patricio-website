@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { EditorService } from '../../../admin/services/editor.service';
 
 @Component({
     selector: 'app-discography',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './discography.component.html',
     styleUrl: './discography.component.scss',
     standalone: false
 })
 export class DiscographyComponent {
-    protected readonly viewOnly$ = this.editor.viewOnly$;
+    private editor = inject(EditorService);
 
-    constructor(private editor: EditorService) { }
+    protected readonly viewOnly$ = this.editor.viewOnly$;
 
     async openSongEditor() {
         const { SongComponent } = await import("../../../admin/components/song/song.component");

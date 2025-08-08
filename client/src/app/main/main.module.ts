@@ -8,7 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TitleComponent } from '../shared/components/title/title.component';
 import { FeedComponent } from '../shared/components/feed/feed.component';
 import { FeedHistoryComponent } from './components/feed-history/feed-history.component';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { SongGalleryComponent } from './components/song-gallery/song-gallery.component';
 import { DiscographyComponent } from './components/discography/discography.component';
 import { RouterModule } from '@angular/router';
@@ -36,7 +36,7 @@ import { routes } from './main.routes';
     CommonModule,
     RouterModule.forChild(routes),
     FontAwesomeModule,
-    InfiniteScrollModule,
+    InfiniteScrollDirective,
     GalleryModule,
     TitleComponent,
     FeedComponent,

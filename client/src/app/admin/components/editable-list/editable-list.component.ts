@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { Component, input, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
     selector: 'app-editable-list',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [CommonModule],
     templateUrl: './editable-list.component.html',
     styleUrl: './editable-list.component.scss',
@@ -17,14 +16,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     ]
 })
 export class EditableListComponent implements ControlValueAccessor {
-    @Input() name = '';
-    @Input() id = '';
-    @Input() placeholder = '';
+    name = input<string>('');
+    id = input<string>('');
+    placeholder = input<string>('');
 
+    value = input<string[]>();
     protected _value = signal(new Array<string>());
-    @Input() set value(value: string[]) {
-        this._value.set(value);
-    }
 
     protected onChange = (arr: string[]) => { };
     protected onTouched = () => { };

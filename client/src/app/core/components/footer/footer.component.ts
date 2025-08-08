@@ -1,18 +1,17 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auth, signInWithPopup, user, GoogleAuthProvider } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-footer',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
     standalone: false
 })
 export class FooterComponent {
-    readonly signedIn$ = user(this.auth).pipe(map(res => res != null));
+    private auth = inject(Auth);
 
-    constructor(private auth: Auth) { }
+    readonly signedIn$ = user(this.auth).pipe(map(res => res != null));
 
     signIn(): void {
         const provider = new GoogleAuthProvider();

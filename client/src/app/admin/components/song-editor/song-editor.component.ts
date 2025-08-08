@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Inject, Output, Signal, computed, signal, untracked } from '@angular/core';
+import { Component, DestroyRef, Inject, Signal, computed, output, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,7 +18,6 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
 
 @Component({
     selector: 'app-song-editor',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -30,7 +29,7 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
     host: { class: 'card' }
 })
 export class SongEditorComponent {
-    @Output() action = new EventEmitter<EditorAction>();
+    action = output<EditorAction>();
 
     private readonly clearUploaders$ = new Subject<void>();
     protected coverUploader$ = this.initialiseUploader();

@@ -1,19 +1,20 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal, viewChild } from '@angular/core';
 import { faPortrait, faRecordVinyl } from '@fortawesome/free-solid-svg-icons';
 import { EditorService } from '../../../admin/services/editor.service';
 
 @Component({
     selector: 'app-home',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
     standalone: false
 })
 export class HomeComponent {
-    @ViewChild('SpotlightRef', { static: true }) spotlightRef?: ElementRef<HTMLElement>;
-    @ViewChild('UpcomingRef', { static: true }) upcomingRef?: ElementRef<HTMLElement>;
-    @ViewChild('BiographyRef', { static: true }) biographyRef?: ElementRef<HTMLElement>;
-    
+    private readonly editor = inject(EditorService);
+
+    spotlightRef = viewChild<ElementRef<HTMLElement>>('SpotlightRef');
+    upcomingRef = viewChild<ElementRef<HTMLElement>>('UpcomingRef');
+    biographyRef = viewChild<ElementRef<HTMLElement>>('BiographyRef');
+
     protected readonly faRecordVinyl = faRecordVinyl;
     protected readonly faPortrait = faPortrait;
     
@@ -22,20 +23,21 @@ export class HomeComponent {
     protected readonly upcomingTriggered = signal(false);
     protected readonly biographyTriggered = signal(false);
 
-    constructor(private editor: EditorService) { }
-
     @HostListener('window:scroll')
     onScrollEvent(): void {
-        if (this.spotlightRef && this.scrollOffset(this.spotlightRef)) {
+        const _spotlightRef = this.spotlightRef();
+        if (_spotlightRef && this.scrollOffset(_spotlightRef)) {
             this.spotlightTriggered.set(true);
             this.arrowDisabled.set(true);
         }
 
-        if (this.upcomingRef && this.scrollOffset(this.upcomingRef)) {
+        const _upcomingRef = this.upcomingRef();
+        if (_upcomingRef && this.scrollOffset(_upcomingRef)) {
             this.upcomingTriggered.set(true);
         }
 
-        if (this.biographyRef && this.scrollOffset(this.biographyRef)) {
+        const _biographyRef = this.biographyRef();
+        if (_biographyRef && this.scrollOffset(_biographyRef)) {
             this.biographyTriggered.set(true);
         }
     }

@@ -2,7 +2,7 @@
     <button
         type="button"
         class="btn btn-outline-secondary"
-        [class.active]="_selected() == FeedType.ALL"
+        [class.active]="selected() == FeedType.ALL"
         (click)="filterChange.emit(FeedType.ALL)"
     >
         All
@@ -10,7 +10,7 @@
     <button
         type="button"
         class="btn btn-outline-secondary"
-        [class.active]="_selected() == FeedType.EVENT"
+        [class.active]="selected() == FeedType.EVENT"
         (click)="filterChange.emit(FeedType.EVENT)"
     >
         Events
@@ -18,7 +18,7 @@
     <button
         type="button"
         class="btn btn-outline-secondary"
-        [class.active]="_selected() == FeedType.POST"
+        [class.active]="selected() == FeedType.POST"
         (click)="filterChange.emit(FeedType.POST)"
     >
         Posts

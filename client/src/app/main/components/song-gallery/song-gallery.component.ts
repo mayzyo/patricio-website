@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, DestroyRef, inject, Injector, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
 import { map, scan, startWith, switchMap } from 'rxjs/operators';
@@ -12,14 +12,18 @@ import { delayInterval } from '../../../shared/operators/delay-interval';
 
 @Component({
     selector: 'app-song-gallery',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './song-gallery.component.html',
     styleUrl: './song-gallery.component.scss',
     providers: [MusicPlayerService],
     host: { class: 'container' },
     standalone: false
 })
-export class SongGalleryComponent {
+export class SongGalleryComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
+    private song = inject(SongService);
+    private musicPlayer = inject(MusicPlayerService);
+    private content = inject(ContentService);
+
     protected readonly faCircleInfo = faCircleInfo;
     protected readonly faCirclePlay = faCirclePlay;
     protected readonly faSoundcloud = faSoundcloud;
@@ -33,7 +37,7 @@ export class SongGalleryComponent {
     protected readonly playerTarget = signal<BacklogView | null>(null);
     protected readonly audio = signal<any | null>(null);
 
-    constructor(private song: SongService, private musicPlayer: MusicPlayerService, private content: ContentService) {
+    ngOnInit(): void {
         this.respondToMusicPlayerAudio();
     }
 
@@ -51,7 +55,8 @@ export class SongGalleryComponent {
     }
 
     private respondToMusicPlayerAudio(): void {
-        this.musicPlayer.audio$.pipe(takeUntilDestroyed()).subscribe(res => this.audio.set(res));
+        this.musicPlayer.audio$.pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(res => this.audio.set(res));
     }
 
     private initialiseSongsAnimated(): Observable<BacklogView[]> {

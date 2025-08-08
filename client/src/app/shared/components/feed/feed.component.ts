@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { Component, input, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
@@ -7,7 +7,6 @@ import { FeedItem } from '../../../models/feed-item';
 
 @Component({
     selector: 'app-feed',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [CommonModule, FontAwesomeModule, TimeFromNowPipe],
     templateUrl: './feed.component.html',
     styleUrl: './feed.component.scss'
@@ -15,10 +14,6 @@ import { FeedItem } from '../../../models/feed-item';
 export class FeedComponent {
     protected readonly faBullhorn = faBullhorn;
 
-    @Input() showDate?: boolean;
-
-    protected readonly _dataSource = signal(new Array<FeedItem>());
-    @Input() set dataSource(value: FeedItem[] | null) {
-        value && this._dataSource.set(value);
-    }
+    showDate = input<boolean>(false);
+    dataSource = input<FeedItem[] | null>(new Array<FeedItem>());
 }

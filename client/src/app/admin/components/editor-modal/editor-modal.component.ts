@@ -1,17 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, inject, viewChild } from '@angular/core';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-editor-modal',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [NgbModalModule],
     templateUrl: './editor-modal.component.html',
     styleUrl: './editor-modal.component.scss'
 })
 export class EditorModalComponent implements AfterViewInit {
-    @ViewChild('content') content?: ComponentRef<HTMLElement>;
+    private modal = inject(NgbModal);
 
-    constructor(protected modal: NgbModal) { }
+    content = viewChild<ComponentRef<HTMLElement>>('content');
 
     ngAfterViewInit() {
         if (!this.content) {

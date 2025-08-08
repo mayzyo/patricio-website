@@ -1,5 +1,5 @@
 <ul class="list-group list-group-flush">
-    @for(data of _dataSource(); track data.id) {
+    @for(data of dataSource(); track data.id) {
         <li class="fade-in list-group-item d-flex align-items-center">
             @if(!data.link) {
                 <fa-icon
@@ -17,7 +17,7 @@
                     </small>
                 }
                 @if(data.link) {
-                    @if(showDate) {
+                    @if(showDate()) {
                         <a [href]="data.link" target="_blank">
                             {{ data.date.toDate() | timeFromNow }} left! {{ data.description ? data.title : "event detail here..." }}
                         </a>

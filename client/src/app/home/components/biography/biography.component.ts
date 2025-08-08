@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { AfterViewInit, Component, input } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { delayWhen, filter, map, share } from 'rxjs/operators';
@@ -7,30 +7,26 @@ import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
     selector: 'app-biography',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './biography.component.html',
     styleUrl: './biography.component.scss',
     standalone: false
 })
 export class BiographyComponent implements AfterViewInit {
+    private readonly profile = new ProfileService();
+
     protected readonly faPortrait = faPortrait;
     protected readonly faEdit = faEdit;
 
-    private _triggered = signal(false);
-    @Input() set triggered(value: boolean) {
-        this._triggered.set(value);
-    }
+    readonly triggered = input<boolean>(false);
 
     protected readonly biography$ = this.initialiseBiography();
-
-    constructor(private profile: ProfileService) { }
 
     ngAfterViewInit(): void {
         this.profile.refresh();
     }
 
     private initialiseBiography(): Observable<string[]> {
-        const triggered$ = toObservable(this._triggered).pipe(
+        const triggered$ = toObservable(this.triggered).pipe(
             filter(res => res),
             map<boolean, void>(() => null),
             share()

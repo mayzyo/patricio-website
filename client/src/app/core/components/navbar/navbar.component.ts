@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, TemplateRef, signal, OnInit } from '@angular/core';
+import { Component, TemplateRef, signal, OnInit, inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { interval } from 'rxjs';
 import { scan, share } from 'rxjs/operators';
@@ -6,20 +6,20 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-navbar',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './navbar.component.html',
     styleUrl: './navbar.component.scss',
     standalone: false
 })
 export class NavbarComponent implements OnInit {
+    private location = inject(Location);
+    private offcanvasService = inject(NgbOffcanvas);
+
     protected readonly animState$ = interval(20000).pipe(
         scan(acc => !acc, false),
         share()
     );
 
     protected currentUrl = signal('');
-
-    constructor(private location: Location, private offcanvasService: NgbOffcanvas) { }
 
     ngOnInit(): void {
         this.location.onUrlChange(res => {

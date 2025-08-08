@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Observable, from } from 'rxjs';
 import { filter, map, scan, share, switchMap } from 'rxjs/operators';
@@ -9,25 +9,21 @@ import { ContentService } from '../../../shared/services/content.service';
 
 @Component({
     selector: 'app-spotlight',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './spotlight.component.html',
     styleUrl: './spotlight.component.scss',
     standalone: false
 })
 export class SpotlightComponent {
-    private _triggered = signal(false);
-    @Input() set triggered(value: boolean) {
-        this._triggered.set(value);
-    }
+    private song = inject(SongService);
+    private content = inject(ContentService);
 
-    protected readonly songs$ = this.initialiseSongs();
+    triggered = input<boolean>(false);
 
-    protected readonly hoverTarget = signal<SpotlightView | null>(null);
-
-    constructor(private song: SongService, private content: ContentService) { }
+    protected songs$ = this.initialiseSongs();
+    protected hoverTarget = signal<SpotlightView | null>(null);
 
     private initialiseSongs(): Observable<SpotlightView[]> {
-        const triggered$ = toObservable(this._triggered).pipe(
+        const triggered$ = toObservable(this.triggered).pipe(
             filter(res => res),
             map<boolean, void>(() => null),
             share()

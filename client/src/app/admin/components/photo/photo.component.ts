@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, signal, untracked } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { EditorModalComponent } from '../editor-modal/editor-modal.component';
 import { PhotoEditorComponent } from '../photo-editor/photo-editor.component';
 import { EditorAction } from '../../interfaces/editor-action';
@@ -15,7 +15,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
-        InfiniteScrollModule,
+        InfiniteScrollDirective,
         FontAwesomeModule,
         EditorModalComponent,
         PhotoEditorComponent
@@ -25,17 +25,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     providers: [PhotoFormService]
 })
 export class PhotoComponent implements AfterViewInit {
+    private photo = inject(PhotoService);
+    private photoForm = inject(PhotoFormService);
+
     protected readonly faVideo = faVideo;
     
     protected readonly photos$ = this.photo.list$;
 
     protected readonly selected = signal<Photo | null>(null);
 
-    constructor(private photo: PhotoService, private photoForm: PhotoFormService) {
-        this.RespondToSelection();
-    }
-
     ngAfterViewInit(): void {
+        this.RespondToSelection();
         this.photo.refresh();
     }
 

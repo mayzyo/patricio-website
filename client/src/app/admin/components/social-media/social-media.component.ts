@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Inject, signal } from '@angular/core';
+import { Component, DestroyRef, Inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -17,7 +17,6 @@ import { ThumbRemoveButtonComponent } from '../../../shared/components/thumb-rem
 
 @Component({
     selector: 'app-social-media',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         ReactiveFormsModule,

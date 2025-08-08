@@ -1,15 +1,15 @@
-<button class="btn shadow my-2 p-0" [disabled]="disabled" (click)="removeClick.emit()">
+<button class="btn shadow my-2 p-0" [disabled]="disabled()" (click)="removeClick.emit()">
     @if(!image) {
         <div class="d-flex flex-column align-items-center py-3 px-4 bg-dark">
             <fa-icon
                 class="mb-1 text-white"
                 size="10x"
-                [icon]="icon ?? faRecordVinyl"
+                [icon]="icon() ?? faRecordVinyl"
             />
             <span class="text-success">Uploaded File</span>
         </div>
     } @else {
-        <img [src]="image" width="100%" />
+        <img [src]="image()" width="100%" />
     }
 
     <!-- Overlay -->

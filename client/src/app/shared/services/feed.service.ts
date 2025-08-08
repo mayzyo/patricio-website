@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { DocumentData, Firestore, Query, and, collection, collectionData, getCountFromServer, limit, orderBy, query, startAt, where } from '@angular/fire/firestore';
 import { Observable, Subject, combineLatest, from, zip } from 'rxjs';
-import { map, scan, shareReplay, startWith, switchMap, take, takeWhile } from 'rxjs/operators';
+import { map, scan, shareReplay, startWith, switchMap, take, takeWhile, tap } from 'rxjs/operators';
 import { FeedItem } from '../../models/feed-item';
 import { FeedType } from '../enums/feed-type';
 
